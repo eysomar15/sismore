@@ -16,7 +16,9 @@
 
                        
                             <h4 class=" text-center mb-0 "  >
-                                 <br> Sistema de Monitoreo Regional desde no se<br><br>
+                                 <br>
+                                 <p class="text-primary">Sistema de Monitoreo Regional</p>
+                                 <br><br>
                                 <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                              </h4>
                               
@@ -62,7 +64,7 @@
                                 </div>
 
                                 <div class="form-group text-center mt-5 mb-4">
-                                    <button class="btn btn-primary waves-effect width-md waves-light" type="submit"> Iniciar login con Ronald dfsdonsdjfdnsfjsnfjksfnd</button>
+                                    <button class="btn btn-primary waves-effect width-md waves-light" type="submit"> Iniciar </button>
                                 </div>
 
                                 <br>
