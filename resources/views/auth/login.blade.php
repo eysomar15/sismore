@@ -68,7 +68,7 @@
                                 </div>
 
                                 <div class="form-group text-center mt-5 mb-4">
-                                    <button class="btn btn-primary waves-effect width-md waves-light" type="submit"> Iniciar </button>
+                                    <button class="btn btn-primary waves-effect width-md waves-light" type="submit"> Iniciar login con Ronald </button>
                                 </div>
 
                                 <br>
