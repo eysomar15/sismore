@@ -16,7 +16,7 @@
 
                        
                             <h4 class=" text-center mb-0 "  >
-                                 <br> Sistema de Monitoreo Regional <br><br>
+                                 <br> Sistema de Monitoreo Regional desde no se<br><br>
                                 <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                              </h4>
                               
