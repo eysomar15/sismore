@@ -41,6 +41,25 @@
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
+                        <i class="mdi mdi-folder-upload-outline"></i>
+                        <span> Importar </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="tables-basic.html">Padron Web - Inst. Educativas</a></li>
+                        <li><a href="tables-datatable.html">Asignacion de Personal</a></li>
+                        <li><a href="tables-editable.html">Eval. Censal de Estudiantes</a></li>                     
+                    </ul>
+                </li>
+
+
+
+
+
+
+
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
                         <i class="mdi mdi-email"></i>
                         <span> Mail </span>
                         <span class="menu-arrow"></span>

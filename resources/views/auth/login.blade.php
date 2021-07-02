@@ -16,7 +16,9 @@
 
                        
                             <h4 class=" text-center mb-0 "  >
-                                 <br> Sistema de Monitoreo Regional <br><br>
+                                 <br>
+                                 <p class="text-primary">Sistema de Monitoreo Regional</p>
+                                 <br><br>
                                 <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                              </h4>
                               
@@ -34,9 +36,9 @@
                                 @csrf
 
                                 <div class="form-group mb-3">
-                                    {{-- <input class="form-control" type="email" required="" placeholder="Username"> --}}
-
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                    
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
+                                    name="email" value="{{ old('email') }}" required autocomplete="email"  placeholder="email" autofocus>
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -44,9 +46,9 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    {{-- <input class="form-control" type="password" required="" placeholder="Password"> --}}
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <div class="form-group mb-3">                                   
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                                    name="password" required autocomplete="current-password" placeholder="Password">
                                     @error('password')
                                     <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
