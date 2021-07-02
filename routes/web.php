@@ -21,3 +21,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/PadronWeb/Importar',[App\Http\Controllers\PadronWebController::class, 'importar'])->name('PadronWeb.importar');
