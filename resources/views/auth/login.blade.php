@@ -17,7 +17,7 @@
                        
                             <h4 class=" text-center mb-0 "  >
                                  <br>
-                                 <p class="text-primary">Sistema de Monitoreo Regional</p>
+                                 <p class="text-primary">Sistema de Monitoreo Regional xxxx</p>
                                  <br><br>
                                 <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                              </h4>
