@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Educacion;
+use App\Http\Controllers\Controller;
+
+
 use App\Models\NivelModalidad;
 use App\Models\Forma;
 use App\Models\Caracteristica;
@@ -34,7 +37,7 @@ class PadronWebController extends Controller
 
     public function importar()
     {  
-        return view('PadronWeb.importar');
+        return view('Educacion.PadronWeb.Importar');
     }  
   
     public function guardar(Request $request)

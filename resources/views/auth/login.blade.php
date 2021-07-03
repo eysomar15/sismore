@@ -18,7 +18,7 @@
                             <h4 class=" text-center mb-0 "  >
                                  <br>
                                  <p class="text-primary">Sistema de Monitoreo Regional</p>
-                                 <br><br>
+                                 
                                 <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                              </h4>
                               
@@ -36,7 +36,7 @@
                                 @csrf
 
                                 <div class="form-group mb-3">
-                                    
+                                    <label for="exampleInputEmail1">Correo Electronico</label>
                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
                                     name="email" value="{{ old('email') }}" required autocomplete="email"  placeholder="email" autofocus>
                                     @error('email')
@@ -46,7 +46,8 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group mb-3">                                   
+                                <div class="form-group mb-3">   
+                                    <label for="exampleInputPassword1">Password</label>                                
                                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
                                     name="password" required autocomplete="current-password" placeholder="Password">
                                     @error('password')
@@ -64,7 +65,7 @@
                                 </div>
 
                                 <div class="form-group text-center mt-5 mb-4">
-                                    <button class="btn btn-primary waves-effect width-md waves-light" type="submit"> Iniciar session desde casa</button>
+                                    <button class="btn btn-primary waves-effect width-md waves-light" type="submit"> Iniciar</button>
                                 </div>
 
                                 <br>

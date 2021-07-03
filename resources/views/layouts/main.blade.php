@@ -10,15 +10,15 @@
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link rel="shortcut icon" href="{{ asset('/') }}assets/images/favicon.ico">
 
         <!-- Plugins css-->
-        <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('/') }}assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
         <!-- App css -->
-        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet" />
-        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-stylesheet" />
+        <link href="{{ asset('/') }}assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet" />
+        <link href="{{ asset('/') }}assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('/') }}assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-stylesheet" />
         {{-- {{assets('/')}} --}}
     </head>
 
@@ -31,9 +31,20 @@
                 @include('layouts.navbars.navs.auth')
                 @include('layouts.navbars.sidebar')
                 {{-- @include('layouts.navbars.sidebarRight') --}}
+                   <!-- start page title -->
+                
                 <div class="content-page">
                     <div class="content">
                         <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="page-title-box">
+                                        <h4 class="page-title">{{ $titlePage }}</h4>                
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+
                             @yield('content')  
                         </div>
                     </div>
@@ -61,17 +72,17 @@
         
        
         <!-- Vendor js -->
-        <script src="assets/js/vendor.min.js"></script>
+        <script src="{{ asset('/') }}assets/js/vendor.min.js"></script>
 
-        <script src="assets/libs/moment/moment.min.js"></script>
-        <script src="assets/libs/jquery-scrollto/jquery.scrollTo.min.js"></script>
-        <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+        <script src="{{ asset('/') }}assets/libs/moment/moment.min.js"></script>
+        <script src="{{ asset('/') }}assets/libs/jquery-scrollto/jquery.scrollTo.min.js"></script>
+        <script src="{{ asset('/') }}assets/libs/sweetalert2/sweetalert2.min.js"></script>
         
         <!-- Chat app -->
-        <script src="assets/js/pages/jquery.chat.js"></script>
+        <script src="{{ asset('/') }}assets/js/pages/jquery.chat.js"></script>
 
         <!-- Todo app -->
-        <script src="assets/js/pages/jquery.todo.js"></script>
+        <script src="{{ asset('/') }}assets/js/pages/jquery.todo.js"></script>
 
         <!-- flot chart -->
         {{-- <script src="assets/libs/flot-charts/jquery.flot.js"></script>
@@ -87,7 +98,7 @@
         {{-- <script src="assets/js/pages/dashboard.init.js"></script> --}}
 
         <!-- App js -->
-        <script src="assets/js/app.min.js"></script>
+        <script src="{{ asset('/') }}assets/js/app.min.js"></script>
         @yield('js')
     </body>
 

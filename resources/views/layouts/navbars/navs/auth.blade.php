@@ -84,23 +84,23 @@
     <div class="logo-box">
         <a href="{{ route('home') }}" class="logo text-center logo-dark">
             <span class="logo-lg">
-                <img src="assets/images/logo-dark.png" alt="" height="16">
+                <img src="{{ asset('/') }}assets/images/logo-dark.png" alt="" height="16">
                 <!-- <span class="logo-lg-text-dark">SISMORE</span> -->
             </span>
             <span class="logo-sm">
                 <!-- <span class="logo-lg-text-dark">M</span> -->
-                <img src="assets/images/logo-sm.png" alt="" height="25">
+                <img src="{{ asset('/') }}assets/images/logo-sm.png" alt="" height="25">
             </span>
         </a>
 
         <a href="{{ route('home') }}" class="logo text-center logo-light">
             <span class="logo-lg">
-                <img src="assets/images/logo-light.png" alt="" height="16">
+                <img src="{{ asset('/') }}assets/images/logo-light.png" alt="" height="16">
                 <!-- <span class="logo-lg-text-dark">SISMORE</span> -->
             </span>
             <span class="logo-sm">
                 <!-- <span class="logo-lg-text-dark">M</span> -->
-                <img src="assets/images/logo-sm.png" alt="" height="25">
+                <img src="{{ asset('/') }}assets/images/logo-sm.png" alt="" height="25">
             </span>
         </a>
     </div>
