@@ -3,28 +3,25 @@
 namespace App\Http\Controllers\Educacion;
 use App\Http\Controllers\Controller;
 
-
-use App\Models\NivelModalidad;
-use App\Models\Forma;
-use App\Models\Caracteristica;
-use App\Models\Genero;
-use App\Models\TipoGestion;
-use App\Models\TipoPrograma;
+use App\Models\Educacion\NivelModalidad;
+use App\Models\Educacion\Forma;
+use App\Models\Educacion\Caracteristica;
+use App\Models\Educacion\Genero;
+use App\Models\Educacion\TipoGestion;
+use App\Models\Educacion\TipoPrograma;
 use App\Models\Ubigeo;
-use App\Models\CentroPoblado;
-use App\Models\EstadoInsEdu;
-use App\Models\Ugel;
-use App\Models\Area;
-use App\Models\Importacion;
-use App\Models\Turno;
-use App\Models\PadronWeb;
-
-
-use App\Models\InstitucionEducativa;
-use App\Repositories\PadronWebRepositorio;
+use App\Models\Educacion\CentroPoblado;
+use App\Models\Educacion\EstadoInsEdu;
+use App\Models\Educacion\Ugel;
+use App\Models\Educacion\Area;
+use App\Models\Educacion\Importacion;
+use App\Models\Educacion\Turno;
+use App\Models\Educacion\PadronWeb;
+use App\Models\Educacion\InstitucionEducativa;
+use App\Repositories\Educacion\PadronWebRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
-use App\Repositories\ImportacionRepositorio;
+use App\Repositories\Educacion\ImportacionRepositorio;
 
 use Illuminate\Http\Request;
 
@@ -39,6 +36,15 @@ class PadronWebController extends Controller
     {  
         return view('Educacion.PadronWeb.Importar');
     }  
+
+    // public function guardar(Request $request)
+    // { 
+    //     $file = $request->file('file');        
+    //     $lines = file($file);
+    //     $utf8_lines = array_map('utf8_encode',$lines);            
+    //     $array = array_map('str_getcsv',$utf8_lines);
+    //     return redirect()->route('PadronWeb.PadronWeb_Lista',55);
+    // }
   
     public function guardar(Request $request)
     {      
@@ -111,7 +117,7 @@ class PadronWebController extends Controller
                 'tDocente'=>$array[$i][46],
                 'tSeccion'=>$array[$i][47],
                 'fechaReg'=>null,
-                'fecha_Act'=>Utilitario::Fecha_ConFormato_DMY($array[$i][49]),
+                'fecha_Act'=>date('Y-m-d H:i:s'),//Utilitario::Fecha_ConFormato_DMY($array[$i][49]),
             ]);    
         }
 
@@ -125,7 +131,7 @@ class PadronWebController extends Controller
         //$padronWebLista = PadronWeb::all();                
         //return view('ImportarEducacion.PadronWebList',compact('padronWebLista'));
 
-        return view('PadronWeb.ListaImportada',compact('importacion_id'));
+        return view('Educacion.PadronWeb.ListaImportada',compact('importacion_id'));
     }
 
     public function ListaImportada_DataTable($importacion_id)
