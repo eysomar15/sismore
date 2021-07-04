@@ -1,97 +1,96 @@
-@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>''])
+@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>'DATOS IMPORTADOS - PADRON WEB'])
 
 @section('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+   
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> --}}
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css"> --}}
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css"> --}}
+
+     <!-- Table datatable css -->
+     <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+
 @endsection
 
 @section('content') 
 <div class="content">
-    <div class="container-fluid">
 
-           <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header card-header-primary">
-                                <h4 class="card-title">Relacion de Instituciones Educativas </h4>
-                                <p class="card-category">IMPORTADAS DEL PADRON WEB
-                                      
-                                </p>
-                            </div>                      
-                          
-                            <div class="card-body">
-                                
-                                <div class="table-responsive">
-                                    <table id="PadronWeb" class="table table-striped table-bordered" style="width:6900px">
-                                        <thead class="text-primary">                                       
-                                           
-                                            <th style="width:100px">CodModular</th>
-                                            <th style="width:80px">Anexo</th>
-                                            <th style="width:100px">CodLocal</th>
-                                            <th style="width:300px">Nombre</th>
-                                            <th style="width:60px">CodNivel</th>
-                                            <th style="width:240px">Nivel</th>
-                                            <th style="width:80px">Forma</th>
-                                            <th style="width:80px">cod_Car</th>
-                                            <th style="width:160px">d_Cod_Car</th>
-                                            <th style="width:80px">TipsSexo</th>
-                                            <th style="width:80px">d_TipsSexo</th>
-                                            <th style="width:80px">gestion</th>
-                                            <th style="width:160px">d_Gestion</th>
-                                            <th style="width:180px">ges_Dep</th>
-                                            <th style="width:200px">d_Ges_Dep</th>                                            
-                                            <th style="width:260px">director</th>
-                                            <th style="width:80px">telefono</th>
-                                            <th style="width:100px">email</th>
-                                            <th style="width:80px">pagWeb</th>
-                                            <th style="width:300px">dir_Cen</th>
-                                            <th style="width:380px">referencia</th>
-                                            <th style="width:180px">localidad</th>
-                                            <th style="width:80px">codcp_Inei</th>
-                                            <th style="width:80px">codccpp</th>
-                                            <th style="width:280px">cen_Pob</th>
-                                            <th style="width:80px">area_Censo</th>
-                                            <th style="width:80px">d_areaCenso</th>
-                                            <th style="width:80px">codGeo</th>
-                                            <th style="width:180px">d_Dpto</th>
-                                            <th style="width:180px">d_Prov</th>
-                                            <th style="width:180px">d_Dist</th>
-                                            <th style="width:120px">d_Region</th>
-                                            <th style="width:80px">codOOII</th>
-                                            <th style="width:180px">d_DreUgel</th>
-                                            <th style="width:80px">tipoProg</th>
-                                            <th style="width:140px">d_TipoProg</th>
-                                            <th style="width:80px">cod_Tur</th>
-                                            <th style="width:180px">D_Cod_Tur</th>
-                                            <th style="width:80px">estado</th>
-                                            <th style="width:80px">d_Estado</th>
-                                            <th style="width:180px">fecha_Act</th>                                          
-                                            
-                                        </thead>
-                                     
-                                    </table>
-                                </div>
-                                
-                            </div>
-
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Relacion de Instituciones Educativas</h3>
+                    {{-- <p class="card-category">IMPORTADAS DEL PADRON WEB</p> --}}
                 </div>
-            </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="PadronWeb" class="table table-striped table-bordered" style="width:7200px">
+                            <thead class="text-primary">                                       
+                               
+                                <th style="width:100px">CodModular</th>
+                                <th style="width:80px">Anexo</th>
+                                <th style="width:100px">CodLocal</th>
+                                <th style="width:300px">Nombre</th>
+                                <th style="width:60px">CodNivel</th>
+                                <th style="width:240px">Nivel</th>
+                                <th style="width:80px">Forma</th>
+                                <th style="width:80px">cod_Car</th>
+                                <th style="width:160px">d_Cod_Car</th>
+                                <th style="width:80px">TipsSexo</th>
+                                <th style="width:80px">d_TipsSexo</th>
+                                <th style="width:80px">gestion</th>
+                                <th style="width:200px">d_Gestion</th>
+                                <th style="width:80px">ges_Dep</th>
+                                <th style="width:200px">d_Ges_Dep</th>                                            
+                                <th style="width:360px">director</th>
+                                <th style="width:80px">telefono</th>
+                                <th style="width:100px">email</th>
+                                <th style="width:80px">pagWeb</th>
+                                <th style="width:400px">dir_Cen</th>
+                                <th style="width:380px">referencia</th>
+                                <th style="width:180px">localidad</th>
+                                <th style="width:80px">codcp_Inei</th>
+                                <th style="width:80px">codccpp</th>
+                                <th style="width:280px">cen_Pob</th>
+                                <th style="width:80px">area_Censo</th>
+                                <th style="width:80px">d_areaCenso</th>
+                                <th style="width:80px">codGeo</th>
+                                <th style="width:180px">d_Dpto</th>
+                                <th style="width:180px">d_Prov</th>
+                                <th style="width:180px">d_Dist</th>
+                                <th style="width:120px">d_Region</th>
+                                <th style="width:80px">codOOII</th>
+                                <th style="width:180px">d_DreUgel</th>
+                                <th style="width:80px">tipoProg</th>
+                                <th style="width:140px">d_TipoProg</th>
+                                <th style="width:80px">cod_Tur</th>
+                                <th style="width:180px">D_Cod_Tur</th>
+                                <th style="width:80px">estado</th>
+                                <th style="width:80px">d_Estado</th>
+                                <th style="width:180px">fecha_Act</th>                                          
+                                
+                            </thead>
+                         
+                        </table>
+                    </div>
+                    
+                </div>
+                <!-- card-body -->
+            </div> 
+            <!-- card -->
         </div>
+        <!-- col -->
     </div>
-</div>
+    <!-- row -->
 @endsection 
 
 @section('js')
-    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+  
+    <script src="{{ asset('/') }}assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+
     <script>
         $('#PadronWeb').DataTable({
             "ajax": "{{route('PadronWeb.ListaImportada_DataTable',$importacion_id)}}",

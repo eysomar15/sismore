@@ -117,7 +117,7 @@ class PadronWebController extends Controller
                 'tDocente'=>$array[$i][46],
                 'tSeccion'=>$array[$i][47],
                 'fechaReg'=>null,
-                'fecha_Act'=>date('Y-m-d H:i:s'),//Utilitario::Fecha_ConFormato_DMY($array[$i][49]),
+                'fecha_Act'=>Utilitario::Fecha_ConFormato_DMY($array[$i][49]),
             ]);    
         }
 
