@@ -146,7 +146,7 @@ class PadronWebController extends Controller
         $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
         //Importacion::where('id',$importacion_id)->first();  
 
-        return view('PadronWeb.Aprobar',compact('importacion_id','importacion'));
+        return view('educacion.PadronWeb.Aprobar',compact('importacion_id','importacion'));
     }  
 
     public function procesar($importacion_id)

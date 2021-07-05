@@ -60,7 +60,7 @@
                                 <th style="width:180px">d_Dist</th>
                                 <th style="width:120px">d_Region</th>
                                 <th style="width:80px">codOOII</th>
-                                <th style="width:180px">d_DreUgel</th>
+                                <th style="width:220px">d_DreUgel</th>
                                 <th style="width:80px">tipoProg</th>
                                 <th style="width:140px">d_TipoProg</th>
                                 <th style="width:80px">cod_Tur</th>

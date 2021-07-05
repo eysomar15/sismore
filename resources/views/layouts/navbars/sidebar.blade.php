@@ -33,7 +33,7 @@
             <ul class="metismenu" id="side-menu">
 
                 <li>
-                    <a href="index.html" class="waves-effect">
+                    <a href="{{route('home')}}" class="waves-effect">
                         <i class="mdi mdi-home"></i>
                         <span> Dashboard </span>
                     </a>
@@ -52,10 +52,14 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="{{route('importacion.inicio')}}" class="waves-effect">
+                        <i class="mdi mdi-check-bold"></i>
+                        <span> Aprobar Importación</span>                  
+                    </a>                   
+                </li>
 
-
-
-
+           
 
 
                 <li>
