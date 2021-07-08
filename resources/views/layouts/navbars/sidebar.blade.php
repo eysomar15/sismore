@@ -59,8 +59,55 @@
                     </a>                   
                 </li>
 
-           
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="mdi mdi-poll-box"></i>
+                        <span> Indicadores </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="charts-morris.html">Morris Chart</a></li>
+                        <li><a href="charts-chartjs.html">Chartjs</a></li>
+                        <li><a href="charts-flot.html">Flot Chart</a></li>
+                        <li><a href="charts-peity.html">Peity Charts</a></li>
+                        <li><a href="charts-sparkline.html">Sparkline Charts</a></li>
+                        <li><a href="charts-radial.html">Radial charts</a></li>
+                        <li><a href="charts-other.html">Other Chart</a></li>
+                    </ul>
+                </li>
 
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="mdi mdi-view-list"></i>
+                        <span> Inst. Educativas </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="tables-basic.html">Basic Tables</a></li>
+                        <li><a href="tables-datatable.html">Data Table</a></li>
+                        <li><a href="tables-editable.html">Editable Table</a></li>
+                        <li><a href="tables-responsive.html">Responsive Table</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="mdi mdi-view-list"></i>
+                        <span> Objetivos Instit. </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a href="tables-basic.html">Basic Tables</a></li>
+                        <li><a href="tables-datatable.html">Data Table</a></li>
+                        <li><a href="tables-editable.html">Editable Table</a></li>
+                        <li><a href="tables-responsive.html">Responsive Table</a></li>
+                    </ul>
+                </li>
+
+                
+
+           
+{{-- 
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
@@ -149,36 +196,9 @@
                     </ul>
                 </li>
 
-                <li>
-                    <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-view-list"></i>
-                        <span> Tables </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="tables-basic.html">Basic Tables</a></li>
-                        <li><a href="tables-datatable.html">Data Table</a></li>
-                        <li><a href="tables-editable.html">Editable Table</a></li>
-                        <li><a href="tables-responsive.html">Responsive Table</a></li>
-                    </ul>
-                </li>
+                
 
-                <li>
-                    <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-poll-box"></i>
-                        <span> Charts </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="charts-morris.html">Morris Chart</a></li>
-                        <li><a href="charts-chartjs.html">Chartjs</a></li>
-                        <li><a href="charts-flot.html">Flot Chart</a></li>
-                        <li><a href="charts-peity.html">Peity Charts</a></li>
-                        <li><a href="charts-sparkline.html">Sparkline Charts</a></li>
-                        <li><a href="charts-radial.html">Radial charts</a></li>
-                        <li><a href="charts-other.html">Other Chart</a></li>
-                    </ul>
-                </li>
+                
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
@@ -258,7 +278,7 @@
                         </li>
                     </ul>
                 </li>
-            </ul>
+            </ul> --}}
 
         </div>
         <!-- End Sidebar -->

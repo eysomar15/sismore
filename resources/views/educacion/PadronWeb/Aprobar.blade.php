@@ -1,8 +1,8 @@
 @extends('layouts.main',['activePage'=>'importacion','titlePage'=>'APROBAR IMPORTACION'])
 
 @section('css')
-<!-- Table datatable css -->
-<link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Table datatable css -->
+    <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content') 
@@ -60,52 +60,11 @@
                         <div class="form-group row mb-0">
                             <div class="offset-lg-2 col-lg-10">
                                 <button class="btn btn-success waves-effect waves-light mr-1" type="submit">Guardar</button>
-                                <button class="btn btn-secondary waves-effect" type="button">Cancelar</button>
+                                <button class="btn btn-secondary waves-effect" id="btnEliminar" type="button" 
+                                onClick="{{route('importacion.inicio')}}">Cancelar</button>
                             </div>
                         </div>
-                        
-                        {{-- <div class="card-body">
-                            
-                            <div class="row">
-                                <label for="name" class="col-sm-2 col-form-label"> Fuente de datos</label>
-                                <div class="col-sm-7">
-                                    <label for="name" class="form-control">{{$importacion->formato}} - {{$importacion->nombre}}</label>                                          
-                                </div>                                   
-                            </div>  
-                            
-                            <div class="row">
-                                <label for="name" class="col-sm-2 col-form-label"> Fecha Versión </label>
-                                <div class="col-sm-7">                                            
-                                    <label for="name" class="form-control"> {{$importacion->fechaActualizacion}}  </label>
-                                </div>
-                            </div>
-            
-                            <div class="row">
-                                <label for="name" class="col-sm-2 col-form-label"> Comentario </label>
-                                <div class="col-sm-7">
-                                    <label for="name" class="form-control"> {{$importacion->comentario}} </label>                                            
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <label for="name" class="col-sm-2 col-form-label"> Usuario Creación </label>
-                                <div class="col-sm-7">                                            
-                                    <label for="name" class="form-control"> {{$importacion->name}}  </label>
-                                </div>
-                            </div>
-            
-                            <div class="row">
-                                <label for="name" class="col-sm-2 col-form-label"> Fecha Creación</label>
-                                <div class="col-sm-7">
-                                    <label for="name" class="form-control"> {{$importacion->created_at}} </label>                                            
-                                </div>
-                            </div>
-            
-                            <div class="card-footer ml-auto mr-auto">
-                                <button type="submit" class="btn btn-success">Guardar</button>
-                                
-                            </div>                    
-                        </div>                            --}}
+                      
                     </form>
 
                     </div>
@@ -227,4 +186,7 @@
 
         );
     </script>
+
+
+
 @endsection
