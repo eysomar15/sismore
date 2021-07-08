@@ -15,8 +15,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header card-header-primary">
-                            <h4 class="card-title">Relacion de Importaciones </h4>
-                            
+                            <h4 class="card-title">Relacion de Importaciones </h4>                            
                         </div>                      
                         
                         <div class="card-body">                                

@@ -4,7 +4,6 @@
 
 <div class="content">
 
-
     @if(count($errors)>0)
         <div class="alert alert-danger">
             Error al Cargar Archivo <br><br>
@@ -14,6 +13,14 @@
                 @endforeach
             </ul>
         </div>           
+    @endif
+
+    @if($mensaje!='')
+    <div class="alert alert-danger">
+        <ul>
+            <li>{{$mensaje}}</li>            
+        </ul>
+    </div>
     @endif
 
     <div class="row">
