@@ -9,12 +9,12 @@
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-info rounded-circle mr-2">
-                            <i class="ion-logo-usd avatar-title font-26 text-white"></i>
+                            <i class=" ion-md-home avatar-title font-26 text-white"></i>
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">15852</span></h4>
-                                <p class="mb-0 mt-1 text-truncate">Total Sales</p>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">2369</span></h4>
+                                <p class="mb-0 mt-1 text-truncate">Total Instituciones</p>
                             </div>
                         </div>
                     </div>
@@ -34,12 +34,12 @@
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-purple rounded-circle">
-                            <i class="ion-md-cart avatar-title font-26 text-white"></i>
+                            <i class=" ion-ios-people avatar-title font-26 text-white"></i>
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">956</span></h4>
-                                <p class="mb-0 mt-1 text-truncate">New Orders</p>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">5056</span></h4>
+                                <p class="mb-0 mt-1 text-truncate">Profesores titulados</p>
                             </div>
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">5210</span></h4>
-                                <p class="mb-0 mt-1 text-truncate">New Users</p>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">25210</span></h4>
+                                <p class="mb-0 mt-1 text-truncate">Alumnos Matriculados</p>
                             </div>
                         </div>
                     </div>
@@ -84,12 +84,12 @@
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-primary rounded-circle">
-                            <i class="ion-md-eye avatar-title font-26 text-white"></i>
+                            <i class=" ion-md-hammer avatar-title font-26 text-white"></i>
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">20544</span></h4>
-                                <p class="mb-0 mt-1 text-truncate">Unique Visitors</p>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">244</span></h4>
+                                <p class="mb-0 mt-1 text-truncate">Instituciones Para Mantenimiento</p>
                             </div>
                         </div>
                     </div>
@@ -187,199 +187,7 @@
         </div>
         <!-- End row -->
 
-        <div class="row">
-            <!-- INBOX -->
-            <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Inbox</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="inbox-widget slimscroll" style="min-height: 384px;">
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-1.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Chadengle</p>
-                                    <p class="inbox-item-text">Hey! there I'm available...</p>
-                                    <p class="inbox-item-date">13:40 PM</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-2.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Tomaslau</p>
-                                    <p class="inbox-item-text">I've finished it! See you so...</p>
-                                    <p class="inbox-item-date">13:34 PM</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-3.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Stillnotdavid</p>
-                                    <p class="inbox-item-text">This theme is awesome!</p>
-                                    <p class="inbox-item-date">13:17 PM</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-4.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Kurafire</p>
-                                    <p class="inbox-item-text">Nice to meet you</p>
-                                    <p class="inbox-item-date">12:20 PM</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-5.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Shahedk</p>
-                                    <p class="inbox-item-text">Hey! there I'm available...</p>
-                                    <p class="inbox-item-date">10:15 AM</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-6.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Adhamdannaway</p>
-                                    <p class="inbox-item-text">This theme is awesome!</p>
-                                    <p class="inbox-item-date">9:56 AM</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-8.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Arashasghari</p>
-                                    <p class="inbox-item-text">Hey! there I'm available...</p>
-                                    <p class="inbox-item-date">10:15 AM</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div class="inbox-item">
-                                    <div class="inbox-item-img"><img src="assets/images/users/avatar-9.jpg" class="rounded-circle" alt=""></div>
-                                    <p class="inbox-item-author">Joshaustin</p>
-                                    <p class="inbox-item-text">I've finished it! See you so...</p>
-                                    <p class="inbox-item-date">9:56 AM</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end col -->
-
-            <!-- CHAT -->
-            <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Chat</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="chat-conversation">
-                            <ul class="conversation-list slimscroll" style="min-height: 330px;">
-                                <li class="clearfix">
-                                    <div class="chat-avatar">
-                                        <img src="assets/images/users/avatar-1.jpg" alt="male">
-                                        <i>10:00</i>
-                                    </div>
-                                    <div class="conversation-text">
-                                        <div class="ctext-wrap">
-                                            <i>John Deo</i>
-                                            <p>
-                                                Hello!
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="clearfix odd">
-                                    <div class="chat-avatar">
-                                        <img src="assets/images/users/avatar-5.jpg" alt="Female">
-                                        <i>10:01</i>
-                                    </div>
-                                    <div class="conversation-text">
-                                        <div class="ctext-wrap">
-                                            <i>Smith</i>
-                                            <p>
-                                                Hi, How are you? What about our next meeting?
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="clearfix">
-                                    <div class="chat-avatar">
-                                        <img src="assets/images/users/avatar-1.jpg" alt="male">
-                                        <i>10:01</i>
-                                    </div>
-                                    <div class="conversation-text">
-                                        <div class="ctext-wrap">
-                                            <i>John Deo</i>
-                                            <p>
-                                                Yeah everything is fine
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="clearfix odd">
-                                    <div class="chat-avatar">
-                                        <img src="assets/images/users/avatar-5.jpg" alt="male">
-                                        <i>10:02</i>
-                                    </div>
-                                    <div class="conversation-text">
-                                        <div class="ctext-wrap">
-                                            <i>Smith</i>
-                                            <p>
-                                                Wow that's great
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="row">
-                                <div class="col-sm-9 chat-inputbar">
-                                    <input type="text" class="form-control chat-input" placeholder="Enter your text">
-                                </div>
-                                <div class="col-sm-3 chat-send">
-                                    <button type="submit" class="btn btn-info btn-block waves-effect waves-light">Send</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end col-->
-
-            <!-- TODOs -->
-            <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="m-0 card-title">Todo</h3>
-                    </div>
-                    <div class="card-body todoapp">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h5 id="todo-message" class="mt-0"><span id="todo-remaining"></span> of <span id="todo-total"></span> remaining</h5>
-                            </div>
-                            <div class="col-sm-6">
-                                <a href="" class="float-right btn btn-primary btn-sm waves-effect waves-light" id="btn-archive">Archive</a>
-                            </div>
-                        </div>
-
-                        <ul class="list-group slimscroll todo-list" style="max-height: 290px" id="todo-list"></ul>
-
-                        <form name="todo-form" id="todo-form" class="mt-4">
-                            <div class="row">
-                                <div class="col-sm-9 todo-inputbar">
-                                    <input type="text" id="todo-input-text" name="todo-input-text" class="form-control" placeholder="Add new todo">
-                                </div>
-                                <div class="col-sm-3 todo-send">
-                                    <button class="btn-primary btn-block btn waves-effect waves-light" type="button" id="todo-btn-submit">Add</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- end col -->
-        </div>
-        <!-- end row -->
+      
     </div>
     
 @endsection

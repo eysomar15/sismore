@@ -50,10 +50,7 @@
             </a>
         </li> --}}
 
-
-    </ul>
-
-    
+    </ul>    
 
 
     <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
@@ -63,8 +60,11 @@
             </button>
         </li>
 
-        {{--  BUSQUEDA
-            <li class="d-none d-sm-block">
+        {{-- <br>         --}}
+        {{-- <p style="color: white"> <font SIZE=4>SISTEMA DE MONITOREO REGIONAL - SISMORE</font></p> --}}
+
+        {{-- BUSQUEDA--}}
+        {{-- <li class="d-none d-sm-block">
             <form class="app-search">
                 <div class="app-search-box">
                     <div class="input-group">
@@ -77,33 +77,40 @@
                     </div>
                 </div>
             </form>
-        </li> --}}
+        </li>  --}}
     </ul>
 
     <!-- LOGO -->
     <div class="logo-box">
         <a href="{{ route('home') }}" class="logo text-center logo-dark">
             <span class="logo-lg">
-                <img src="{{ asset('/') }}assets/images/logo-dark.png" alt="" height="16">
+                <img src="{{ asset('/') }}assets/images/logo-GRU-a1.png" alt="" height="16">
                 <!-- <span class="logo-lg-text-dark">SISMORE</span> -->
             </span>
             <span class="logo-sm">
                 <!-- <span class="logo-lg-text-dark">M</span> -->
-                <img src="{{ asset('/') }}assets/images/logo-sm.png" alt="" height="25">
+                <img src="{{ asset('/') }}assets/images/logo-GRU-a1.png" alt="" height="25">
             </span>
         </a>
 
         <a href="{{ route('home') }}" class="logo text-center logo-light">
             <span class="logo-lg">
-                <img src="{{ asset('/') }}assets/images/logo-light.png" alt="" height="16">
+                <img src="{{ asset('/') }}assets/images/logo-light-blanco.png" alt="" height="28"> 
+                {{-- inicial --}}
                 <!-- <span class="logo-lg-text-dark">SISMORE</span> -->
             </span>
             <span class="logo-sm">
                 <!-- <span class="logo-lg-text-dark">M</span> -->
-                <img src="{{ asset('/') }}assets/images/logo-sm.png" alt="" height="25">
+                <img src="{{ asset('/') }}assets/images/logo-light-blanco.png" alt="" height="28">
             </span>
         </a>
+    </div> 
+
+
+    {{-- <div>
+        <br><h3>SISTEMA DE MONITOREO REGIONAL </h3>
     </div>
+    --}}
 
 <!-- LOGO -->
 </div>
