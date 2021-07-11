@@ -66,13 +66,13 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="charts-morris.html">Morris Chart</a></li>
-                        <li><a href="charts-chartjs.html">Chartjs</a></li>
-                        <li><a href="charts-flot.html">Flot Chart</a></li>
-                        <li><a href="charts-peity.html">Peity Charts</a></li>
-                        <li><a href="charts-sparkline.html">Sparkline Charts</a></li>
-                        <li><a href="charts-radial.html">Radial charts</a></li>
-                        <li><a href="charts-other.html">Other Chart</a></li>
+                        <li><a href="{{route('indicadores.importar')}}">Importar Indicadores</a></li>
+                        <li><a href="{{route('indicadores.primerindicador')}}">Primer Indicador</a></li>
+                        <li><a href="{{route('indicadores.primerindicador')}}">Segundo Indicador</a></li>
+                        <li><a href="{{route('indicadores.primerindicador')}}">Tercer Indicador</a></li>
+                        <li><a href="{{route('indicadores.primerindicador')}}">Cuarto Indicador</a></li>
+                        <li><a href="{{route('indicadores.primerindicador')}}">Quinto Indicador</a></li>
+                        <li><a href="{{route('indicadores.primerindicador')}}">Sexto Indicador</a></li>
                     </ul>
                 </li>
 
