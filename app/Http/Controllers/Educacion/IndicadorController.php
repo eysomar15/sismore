@@ -23,6 +23,7 @@ class IndicadorController extends Controller
         $archivo=$request->file('file');
         $array=(new IndicadoresImport)->toArray($archivo);
 
+
         return $array;
     }
     public function primerIndicador(){

@@ -32,21 +32,31 @@
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Tipo</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" readonly="readonly" value="ESCALE">
+                                    <select name="tipo" id="tipo" required>
+                                        <option value="">Seleccionar</option>
+                                        <option value="0">SIN IEB</option>
+                                        <option value="1">CON IEB</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Anio</label>
                                 <div class="col-md-10">
-                                    <input type="date" class="form-control" name="fechaActualizacion" placeholder="Ingrese fecha actualizacion" autofocus required>
+                                    <select name="anio" id="anio" required>
+                                        <option value="">Seleccionar</option>
+                                        @for ($i = 2018; $i <= date('Y'); $i++)
+                                        <option value="{{$i}}">{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                    
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Grado</label>
                                 <div class="col-md-10">
-                                    <select name="grado" id="grado">
+                                    <select name="grado" id="grado" required>
                                         <option value="">Seleccionar</option>
                                         @foreach ($grados as $item)
                                         <option value="{{$item->id}}">{{$item->descripcion}} - {{$item->nombre}}</option>
@@ -57,7 +67,7 @@
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Materia</label>
                                 <div class="col-md-10">
-                                    <select name="materia" id="materia">
+                                    <select name="materia" id="materia" required>
                                         <option value="">Seleccionar</option>
                                         @foreach ($materias as $item)
                                         <option value="{{$item->id}}">{{$item->descripcion}}</option>
