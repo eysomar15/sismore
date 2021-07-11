@@ -30,25 +30,41 @@
                             @csrf
 
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Fuente de datos</label>
+                                <label class="col-md-2 col-form-label">Tipo</label>
                                 <div class="col-md-10">
                                     <input type="text" class="form-control" readonly="readonly" value="ESCALE">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Fecha Versión</label>
+                                <label class="col-md-2 col-form-label">Anio</label>
                                 <div class="col-md-10">
                                     <input type="date" class="form-control" name="fechaActualizacion" placeholder="Ingrese fecha actualizacion" autofocus required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Comentario</label>
+                                <label class="col-md-2 col-form-label">Grado</label>
                                 <div class="col-md-10">
-                                    <textarea class="form-control" placeholder="comentario opcional" id="ccomment" name="comentario" ></textarea>
+                                    <select name="grado" id="grado">
+                                        <option value="">Seleccionar</option>
+                                        @foreach ($grados as $item)
+                                        <option value="{{$item->id}}">{{$item->descripcion}} - {{$item->nombre}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Materia</label>
+                                <div class="col-md-10">
+                                    <select name="materia" id="materia">
+                                        <option value="">Seleccionar</option>
+                                        @foreach ($materias as $item)
+                                        <option value="{{$item->id}}">{{$item->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>                            
 
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Archivo</label>

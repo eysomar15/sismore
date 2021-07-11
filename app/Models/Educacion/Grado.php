@@ -4,6 +4,7 @@ namespace App\Models\Educacion;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use illuminate\support\facades\DB;
 
 class Grado extends Model
 {
@@ -15,4 +16,5 @@ class Grado extends Model
         'nivelmodalidad_id',
         'descripcion',
     ];
+
 }
