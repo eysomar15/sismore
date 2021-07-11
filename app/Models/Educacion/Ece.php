@@ -11,6 +11,7 @@ class Ece extends Model
     protected $table='edu_ece';
 
     protected $fillable=[
+        'institucioneducativa_id',
         'grado_id',
         'anio',
         'tipo',
