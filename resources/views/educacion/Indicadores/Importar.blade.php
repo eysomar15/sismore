@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - PADRON WEB DE INSTITUCIONES EDUCATIVAS'])
+@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - EXCEL DE INDICADORES'])
 
 @section('content')
 
@@ -15,14 +15,6 @@
         </div>           
     @endif
 
-    @if($mensaje!='')
-    <div class="alert alert-danger">
-        <ul>
-            <li>{{$mensaje}}</li>            
-        </ul>
-    </div>
-    @endif
-
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -33,7 +25,7 @@
                 <div class="card-body">
                     <div class="form">
 
-                        <form action="{{route('PadronWeb.guardar')}}" method="post" enctype='multipart/form-data'
+                        <form action="{{route('indicadores.importar.store')}}" method="post" enctype='multipart/form-data'
                             class="cmxform form-horizontal tasi-form"  >                            
                             @csrf
 
