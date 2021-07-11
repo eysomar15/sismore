@@ -21,6 +21,5 @@ class EceResultado extends Model
         'proceso',
         'mediapromedio',
         'satisfactorio',
-
     ];
 }
