@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TipoGestion extends Model
 {
     use HasFactory;
-    protected $table = "TipoGestion"; 
+    protected $table = "edu_tipoGestion"; 
     
     protected $fillable = [
         'codigo',

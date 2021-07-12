@@ -9,7 +9,7 @@ class PadronWeb extends Model
 {
     use HasFactory;
 
-    protected $table = "padronweb"; 
+    protected $table = "edu_padronweb"; 
 
     /**
      * The attributes that are mass assignable.

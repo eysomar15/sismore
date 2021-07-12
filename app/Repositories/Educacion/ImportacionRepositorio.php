@@ -7,13 +7,13 @@ class ImportacionRepositorio
 {
     public static function Listar_Importaciones()
     { 
-        $data = Importacion::select('Importacion.id','Importacion.comentario',
-                                    'Importacion.fechaActualizacion','Importacion.estado',
+        $data = Importacion::select('par_importacion.id','par_importacion.comentario',
+                                    'par_importacion.fechaActualizacion','par_importacion.estado',
                                     // 'case when Importacion.estado = '.'PE'.'then'.'pendiente'.'else Importacion.estado end as estado', 
-                                    'users.name','fuenteimportacion.nombre','fuenteimportacion.formato')
-                ->join('users', 'users.id', '=', 'Importacion.usuarioId_crea')
-                ->join('fuenteimportacion', 'fuenteimportacion.id', '=', 'Importacion.fuenteImportacion_id')
-                ->where("importacion.estado", "=", "PE")
+                                    'users.name','par_fuenteimportacion.nombre','par_fuenteimportacion.formato')
+                ->join('users', 'users.id', '=', 'par_importacion.usuarioId_crea')
+                ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'par_importacion.fuenteImportacion_id')
+                ->where("par_importacion.estado", "=", "PE")
                 ->get();
 
         return $data;
@@ -21,12 +21,12 @@ class ImportacionRepositorio
     
     public static function ImportacionPor_Id($id)
     { 
-        $entidad = Importacion::select('Importacion.id','Importacion.comentario',
-                                    'Importacion.fechaActualizacion','Importacion.estado',
-                                    'users.name','fuenteimportacion.nombre','fuenteimportacion.formato','Importacion.created_at')
-                ->join('users', 'users.id', '=', 'Importacion.usuarioId_crea')
-                ->join('fuenteimportacion', 'fuenteimportacion.id', '=', 'Importacion.fuenteImportacion_id')
-                ->where("importacion.id", "=", $id)
+        $entidad = Importacion::select('par_importacion.id','par_importacion.comentario',
+                                    'par_importacion.fechaActualizacion','par_importacion.estado',
+                                    'users.name','par_fuenteimportacion.nombre','par_fuenteimportacion.formato','par_importacion.created_at')
+                ->join('users', 'users.id', '=', 'par_importacion.usuarioId_crea')
+                ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'par_importacion.fuenteImportacion_id')
+                ->where("par_importacion.id", "=", $id)
                 ->first();
 
         return $entidad;

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Importacion extends Model
 {
     use HasFactory;
-    protected $table = "Importacion"; 
+    protected $table = "par_importacion"; 
     
     protected $fillable = [
         'fuenteImportacion_id',
