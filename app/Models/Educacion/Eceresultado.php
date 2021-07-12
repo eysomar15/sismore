@@ -12,8 +12,8 @@ class EceResultado extends Model
     protected $table='edu_eceresultado';
 
     protected $fillable=[
-        'institucioneducativa_id',
         'ece_id',        
+        'institucioneducativa_id',
         'materia_id',
         'programados',
         'evaluados',

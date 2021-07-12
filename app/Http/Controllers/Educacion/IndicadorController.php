@@ -34,6 +34,7 @@ class IndicadorController extends Controller
                     ->where('v2.codModular',intval($row['codigo_modular']))->first();
                     if(!$ece){
                         $insedu=InstitucionEducativa::where('codModular',intval($row['codigo_modular']))->first();
+                        return $insedu;
                         $ece=Ece::Create([
                             'institucioneducativa_id'=>$insedu->id,
                             'anio'=>$request->anio,
@@ -50,6 +51,7 @@ class IndicadorController extends Controller
                         'inicio'=>$row['inicio'],
                         'proceso'=>$row['proceso'],
                         'satisfactorio'=>$row['satisfactorio'],
+                        'mediapromedio'=>$row['media_promedio'],
                         'materia'=>$request->materia,
                     ]);
                 }
