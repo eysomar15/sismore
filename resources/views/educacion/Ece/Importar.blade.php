@@ -29,7 +29,7 @@
                     @endif  
                     <div class="form">
 
-                        <form action="{{route('indicadores.importar.store')}}" method="post" enctype='multipart/form-data'
+                        <form action="{{route('ece.importar.store')}}" method="post" enctype='multipart/form-data'
                             class="cmxform form-horizontal tasi-form"  >                            
                             @csrf
 
