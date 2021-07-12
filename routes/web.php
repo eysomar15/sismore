@@ -36,5 +36,6 @@ Route::get('/Importacion',[App\Http\Controllers\Educacion\ImportacionController:
 Route::get('/Importacion/importaciones_DataTable/',[App\Http\Controllers\Educacion\ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
 Route::get('/Importacion/Eliminar/{id}',[App\Http\Controllers\Educacion\ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
 Route::get('/Indicadores/Importar',[IndicadorController::class, 'importar'])->name('indicadores.importar');
+Route::get('/Indicadores/ImportarMenu',[IndicadorController::class, 'importarMenu'])->name('indicadores.importar.menu');
 Route::post('/Indicadores/ImportarStore',[IndicadorController::class, 'importarStore'])->name('indicadores.importar.store');
 Route::get('/Indicadores/PrimerIndicador',[IndicadorController::class, 'primerIndicador'])->name('indicadores.primerindicador');

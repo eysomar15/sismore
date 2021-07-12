@@ -67,7 +67,7 @@
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="{{route('indicadores.importar')}}">Importar Indicadores</a></li>
-                        <li><a href="{{route('indicadores.primerindicador')}}">Primer Indicador</a></li>
+                        <li><a href="{{route('indicadores.importar.menu')}}">Indicadores Educacion</a></li>
                         <li><a href="{{route('indicadores.primerindicador')}}">Segundo Indicador</a></li>
                         <li><a href="{{route('indicadores.primerindicador')}}">Tercer Indicador</a></li>
                         <li><a href="{{route('indicadores.primerindicador')}}">Cuarto Indicador</a></li>

@@ -59,6 +59,9 @@ class IndicadorController extends Controller
         }  
         return back()->with('message','importacion exitosa');
     }
+    public function importarMenu(){
+        return view('educacion.indicadores.menu');
+    }    
     public function primerIndicador(){
         return 'jajaja te la creiste';
     }
