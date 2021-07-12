@@ -29,36 +29,35 @@ class IndicadorController extends Controller
         if(count($array)>0){
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    $ece=DB::table('edu_ece as v1')->select('v1.*')
-                    ->join('edu_institucioneducativa as v2','v2.id','=','v1.institucioneducativa_id')
-                    ->where('v2.codModular',intval($row['codigo_modular']))->first();
+                    $ece=Ece::where('anio',$request->anio)
+                                ->where('tipo',$request->tipo)
+                                ->where('grado_id',$request->grado)->first();
                     if(!$ece){
-                        $insedu=InstitucionEducativa::where('codModular',intval($row['codigo_modular']))->first();
-                        return $insedu;
                         $ece=Ece::Create([
-                            'institucioneducativa_id'=>$insedu->id,
                             'anio'=>$request->anio,
                             'tipo'=>$request->tipo,
                             'grado_id'=>$request->grado,
                         ]);
                     }
+                    $insedu=InstitucionEducativa::where('codModular',intval($row['codigo_modular']))->first();
                     $eceresultado=EceResultado::Create([
                         'ece_id'=>$ece->id,
+                        'institucioneducativa_id'=>$insedu->id,
+                        'materia_id'=>$request->materia,
                         'programados'=>$row['programados'],
                         'evaluados'=>$row['evaluados'],
-                        'cobertura'=>$row['cobertura'],
                         'previo'=>$row['previo'],
                         'inicio'=>$row['inicio'],
                         'proceso'=>$row['proceso'],
-                        'satisfactorio'=>$row['satisfactorio'],
                         'mediapromedio'=>$row['media_promedio'],
-                        'materia'=>$request->materia,
+                        'satisfactorio'=>$row['satisfactorio'],
+                        
                     ]);
                 }
                 
             }
         }  
-        return $array;
+        return back()->with('message','importacion exitosa');
     }
     public function primerIndicador(){
         return 'jajaja te la creiste';

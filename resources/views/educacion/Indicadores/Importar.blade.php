@@ -15,6 +15,7 @@
         </div>           
     @endif
 
+
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -23,6 +24,9 @@
                 </div>
              
                 <div class="card-body">
+                    @if (Session::has('message'))
+                    <p>{{Session::get('message')}}</p>
+                    @endif  
                     <div class="form">
 
                         <form action="{{route('indicadores.importar.store')}}" method="post" enctype='multipart/form-data'
