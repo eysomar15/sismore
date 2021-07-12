@@ -27,32 +27,39 @@ class EceController extends Controller
         $array=(new IndicadoresImport)->toArray($archivo);
 
         if(count($array)>0){
+            $ece=Ece::where('anio',$request->anio)
+                    ->where('tipo',$request->tipo)
+                    ->where('grado_id',$request->grado)->first();
+            if(!$ece){
+                $ece=Ece::Create([
+                    'anio'=>$request->anio,
+                    'tipo'=>$request->tipo,
+                    'grado_id'=>$request->grado,
+                        
+                ]);
+            }        
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    $ece=Ece::where('anio',$request->anio)
-                                ->where('tipo',$request->tipo)
-                                ->where('grado_id',$request->grado)->first();
-                    if(!$ece){
-                        $ece=Ece::Create([
-                            'anio'=>$request->anio,
-                            'tipo'=>$request->tipo,
-                            'grado_id'=>$request->grado,
-                        ]);
+                    $insedu=InstitucionEducativa::where('codModular',$row['codigo_modular'])->first();
+                    if($insedu){
+                        $eceresultado=EceResultado::Create([
+                            'ece_id'=>$ece->id,
+                            'institucioneducativa_id'=>$insedu->id,
+                            'materia_id'=>$request->materia,
+                            'programados'=>$row['programados'],
+                            'evaluados'=>$row['evaluados'],
+                            'previo'=>$row['previo'],
+                            'inicio'=>$row['inicio'],
+                            'proceso'=>$row['proceso'],
+                            'mediapromedio'=>$row['media_promedio'],
+                            'satisfactorio'=>$row['satisfactorio'],
+                            
+                        ]);  
                     }
-                    $insedu=InstitucionEducativa::where('codModular',intval($row['codigo_modular']))->first();
-                    $eceresultado=EceResultado::Create([
-                        'ece_id'=>$ece->id,
-                        'institucioneducativa_id'=>$insedu->id,
-                        'materia_id'=>$request->materia,
-                        'programados'=>$row['programados'],
-                        'evaluados'=>$row['evaluados'],
-                        'previo'=>$row['previo'],
-                        'inicio'=>$row['inicio'],
-                        'proceso'=>$row['proceso'],
-                        'mediapromedio'=>$row['media_promedio'],
-                        'satisfactorio'=>$row['satisfactorio'],
-                        
-                    ]);
+                    //return $row['codigo_modular'];
+                    //return $insedu;
+
+                    
                 }
                 
             }
