@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ubigeo extends Model
 {
     use HasFactory;
-    protected $table = "Ubigeo"; 
+    protected $table = "par_ubigeo"; 
     
     protected $fillable = [
         'codigo',
