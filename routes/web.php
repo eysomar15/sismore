@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Educacion\ImportacionController;
+use App\Http\Controllers\Educacion\IndicadorController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +21,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/xxx', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/PadronWeb/Importar',[App\Http\Controllers\Educacion\PadronWebController::class, 'importar'])->name('PadronWeb.importar');
 Route::post('/PadronWeb/Importar',[App\Http\Controllers\Educacion\PadronWebController::class, 'guardar'])->name('PadronWeb.guardar');
@@ -33,3 +35,6 @@ Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[App\Http\Controllers
 Route::get('/Importacion',[App\Http\Controllers\Educacion\ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/',[App\Http\Controllers\Educacion\ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
 Route::get('/Importacion/Eliminar/{id}',[App\Http\Controllers\Educacion\ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
+Route::get('/Indicadores/Importar',[IndicadorController::class, 'importar'])->name('indicadores.importar');
+Route::post('/Indicadores/ImportarStore',[IndicadorController::class, 'importarStore'])->name('indicadores.importar.store');
+Route::get('/Indicadores/PrimerIndicador',[IndicadorController::class, 'primerIndicador'])->name('indicadores.primerindicador');
