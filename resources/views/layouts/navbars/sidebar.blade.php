@@ -48,7 +48,7 @@
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="{{route('PadronWeb.importar')}}">Padron Web - Inst. Educativas</a></li>
                         <li><a href="tables-datatable.html">Asignacion de Personal</a></li>
-                        <li><a href="tables-editable.html">Eval. Censal de Estudiantes</a></li>                     
+                        <li><a href="{{route('indicadores.importar')}}">Eval. Censal de Estudiantes</a></li>                     
                     </ul>
                 </li>
 
@@ -60,20 +60,10 @@
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{route('indicadores.importar.menu')}}" class="waves-effect">
                         <i class="mdi mdi-poll-box"></i>
                         <span> Indicadores </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="{{route('indicadores.importar')}}">Importar Indicadores</a></li>
-                        <li><a href="{{route('indicadores.importar.menu')}}">Indicadores Educacion</a></li>
-                        <li><a href="{{route('indicadores.primerindicador')}}">Segundo Indicador</a></li>
-                        <li><a href="{{route('indicadores.primerindicador')}}">Tercer Indicador</a></li>
-                        <li><a href="{{route('indicadores.primerindicador')}}">Cuarto Indicador</a></li>
-                        <li><a href="{{route('indicadores.primerindicador')}}">Quinto Indicador</a></li>
-                        <li><a href="{{route('indicadores.primerindicador')}}">Sexto Indicador</a></li>
-                    </ul>
+                    </a>                    
                 </li>
 
                 <li>
