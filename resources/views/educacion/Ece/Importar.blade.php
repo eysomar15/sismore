@@ -49,7 +49,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Anio</label>
+                                <label class="col-md-2 col-form-label">Año</label>
                                 <div class="col-md-10">
                                     <select class="form-control" name="anio" id="anio" required>
                                         <option value="">Seleccionar</option>

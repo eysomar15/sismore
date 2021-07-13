@@ -79,7 +79,21 @@ class EceController extends Controller
     public function importarMenu(){
         return view('educacion.ece.menu');
     }    
-    public function primerIndicador(){
-        return 'jajaja te la creiste';
+    public function indicador1(){
+
+        return view('educacion.ece.indicador1');
+    }
+    public function indicador5(){
+        $grado=DB::table('edu_grado as v1')->select('v1.*','v2.nombre')
+                    ->join('edu_nivelmodalidad as v2','v2.id','=','v1.nivelmodalidad_id')
+                    ->where('v1.descripcion','2do')
+                    ->where('v2.nombre','Secundaria')->first();
+        $materias=DB::table('edu_materia as v1')
+                    ->select('v1.*')
+                    ->join('edu_eceresultado as v2','v2.materia_id','=','v1.id')
+                    ->join('edu_ece as v3','v3.id','=','v2.ece_id')
+                    ->where('v3.grado_id',$grado->id)
+                    ->distinct()->get();
+        return view('educacion.ece.indicador5',compact('grado','materias'));
     }
 }

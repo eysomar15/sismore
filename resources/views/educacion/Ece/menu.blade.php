@@ -48,7 +48,7 @@
                                         </tr>
                                         <tr>
                                             <td>5</td>
-                                            <td><a href="#">Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de secundaria participantes en evaluación censal)</a></td>
+                                            <td><a href="{{route('ece.indicador.5')}}">Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de secundaria participantes en evaluación censal)</a></td>
                                         </tr>
                                         <tr>
                                             <td>6</td>
