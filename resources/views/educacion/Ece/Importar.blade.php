@@ -25,11 +25,24 @@
              
                 <div class="card-body">
                     @if (Session::has('message'))
-                    <p>{{Session::get('message')}}</p>
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{Session::get('message')}}.
+                    </div>
                     @endif  
+                    @if (Session::has('noAgregados'))
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{Session::get('noAgregados')}}.
+                    </div>
+                    @endif 
                     <div class="form">
 
-                        <form action="{{route('indicadores.importar.store')}}" method="post" enctype='multipart/form-data'
+                        <form action="{{route('ece.importar.store')}}" method="post" enctype='multipart/form-data'
                             class="cmxform form-horizontal tasi-form"  >                            
                             @csrf
 
