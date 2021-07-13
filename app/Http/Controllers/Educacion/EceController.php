@@ -25,7 +25,19 @@ class EceController extends Controller
         $this->validate($request,['file'=>'required|mimes:xls,xlsx',]);
         $archivo=$request->file('file');
         $array=(new IndicadoresImport)->toArray($archivo);
-
+        /*Buscar colegios no agregados*/
+        $noAgregados=[];
+        foreach ($array as $key => $value) {
+            foreach ($value as $key2 => $row) {
+                $insedu=InstitucionEducativa::where('codModular',$row['codigo_modular'])->first();
+                if(!$insedu){
+                    $noAgregados[]=$row['codigo_modular'];
+                }
+            }            
+        }
+        if(count($noAgregados)>0)
+        return back()->with('message','Error en la importacion')->with('noAgregados',$noAgregados);
+        /** agregar excel al sistema */
         if(count($array)>0){
             $ece=Ece::where('anio',$request->anio)
                     ->where('tipo',$request->tipo)
@@ -35,13 +47,12 @@ class EceController extends Controller
                     'anio'=>$request->anio,
                     'tipo'=>$request->tipo,
                     'grado_id'=>$request->grado,
-                        
                 ]);
             }        
             foreach ($array as $key => $value) {
-                foreach ($value as $row) {
+                foreach ($value as $key2 => $row) {
                     $insedu=InstitucionEducativa::where('codModular',$row['codigo_modular'])->first();
-                    if($insedu){
+                    //echo ''.($key2+1).': '.$insedu->id.' - '.$insedu->codModular.'<br>';
                         $eceresultado=EceResultado::Create([
                             'ece_id'=>$ece->id,
                             'institucioneducativa_id'=>$insedu->id,
@@ -52,14 +63,8 @@ class EceController extends Controller
                             'inicio'=>$row['inicio'],
                             'proceso'=>$row['proceso'],
                             'mediapromedio'=>$row['media_promedio'],
-                            'satisfactorio'=>$row['satisfactorio'],
-                            
-                        ]);  
-                    }
-                    //return $row['codigo_modular'];
-                    //return $insedu;
-
-                    
+                            'satisfactorio'=>$row['satisfactorio'],                            
+                        ]);                      
                 }
                 
             }

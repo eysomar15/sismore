@@ -17,6 +17,7 @@ class EceResultado extends Model
         'materia_id',
         'programados',
         'evaluados',
+        'previo',
         'inicio',
         'proceso',
         'mediapromedio',
