@@ -339,10 +339,10 @@ class PadronWebController extends Controller
                 $tipoGestionDet->save();
             }
 
-            $tipoPrograma = TipoPrograma::where('codigo',$padronWeb->tipoPro)->first();
+            $tipoPrograma = TipoPrograma::where('codigo',$padronWeb->tipoProg)->first();
             if($tipoPrograma==null){
                 $tipoPrograma = TipoPrograma::firstOrCreate([
-                    'codigo'=>$padronWeb->tipoPro,
+                    'codigo'=>$padronWeb->tipoProg,
                     'nombre'=>$padronWeb->d_TipoProg
                 ]);            
             } 
