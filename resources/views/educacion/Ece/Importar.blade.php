@@ -25,21 +25,13 @@
              
                 <div class="card-body">
                     @if (Session::has('message'))
-                    <div class="alert alert-danger alert-dismissible fade show">
+                    <div class="alert alert-success alert-dismissible fade show">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         {{Session::get('message')}}.
                     </div>
                     @endif  
-                    @if (Session::has('noAgregados'))
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        {{Session::get('noAgregados')}}.
-                    </div>
-                    @endif 
                     <div class="form">
 
                         <form action="{{route('ece.importar.store')}}" method="post" enctype='multipart/form-data'
@@ -47,12 +39,11 @@
                             @csrf
 
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Tipo</label>
+                                <label class="col-md-2 col-form-label">Alumno EIB</label>
                                 <div class="col-md-10">
-                                    <select name="tipo" id="tipo" required>
-                                        <option value="">Seleccionar</option>
-                                        <option value="0">SIN IEB</option>
-                                        <option value="1">CON IEB</option>
+                                    <select  class="form-control" name="tipo" id="tipo" required>
+                                        <option value="0">NO</option>
+                                        <option value="1">SI</option>
                                     </select>
                                 </div>
                             </div>
@@ -60,7 +51,7 @@
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Anio</label>
                                 <div class="col-md-10">
-                                    <select name="anio" id="anio" required>
+                                    <select class="form-control" name="anio" id="anio" required>
                                         <option value="">Seleccionar</option>
                                         @for ($i = 2018; $i <= date('Y'); $i++)
                                         <option value="{{$i}}">{{$i}}</option>
@@ -73,7 +64,7 @@
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Grado</label>
                                 <div class="col-md-10">
-                                    <select name="grado" id="grado" required>
+                                    <select class="form-control" name="grado" id="grado" required>
                                         <option value="">Seleccionar</option>
                                         @foreach ($grados as $item)
                                         <option value="{{$item->id}}">{{$item->descripcion}} - {{$item->nombre}}</option>
@@ -84,7 +75,7 @@
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Materia</label>
                                 <div class="col-md-10">
-                                    <select name="materia" id="materia" required>
+                                    <select class="form-control" name="materia" id="materia" required>
                                         <option value="">Seleccionar</option>
                                         @foreach ($materias as $item)
                                         <option value="{{$item->id}}">{{$item->descripcion}}</option>
@@ -115,8 +106,9 @@
           <!-- card -->
       </div>
       <!-- col -->
-  </div>
-  <!-- End row -->
+    </div>
+    <!-- End row -->
+    <div class="row"></div>
 
 </div>
 

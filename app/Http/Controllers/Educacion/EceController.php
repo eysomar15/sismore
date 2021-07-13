@@ -25,18 +25,24 @@ class EceController extends Controller
         $this->validate($request,['file'=>'required|mimes:xls,xlsx',]);
         $archivo=$request->file('file');
         $array=(new IndicadoresImport)->toArray($archivo);
+        $errores['tipo']='1';
+        $errores['msn']='Importacion Exitosa';
         /*Buscar colegios no agregados*/
-        $noAgregados=[];
+        $noagregados=[];
         foreach ($array as $key => $value) {
             foreach ($value as $key2 => $row) {
                 $insedu=InstitucionEducativa::where('codModular',$row['codigo_modular'])->first();
                 if(!$insedu){
-                    $noAgregados[]=$row['codigo_modular'];
+                    $noagregados[]=$row['codigo_modular'];
                 }
             }            
         }
-        if(count($noAgregados)>0)
-        return back()->with('message','Error en la importacion')->with('noAgregados',$noAgregados);
+        if(count($noagregados)>0){
+            $errores['tipo']='0';
+            $errores['msn']='ERROR EN LA IMPORTACION';
+            return view('educacion.Ece.Error1',compact('noagregados','errores'));
+        }
+        
         /** agregar excel al sistema */
         if(count($array)>0){
             $ece=Ece::where('anio',$request->anio)
@@ -52,7 +58,6 @@ class EceController extends Controller
             foreach ($array as $key => $value) {
                 foreach ($value as $key2 => $row) {
                     $insedu=InstitucionEducativa::where('codModular',$row['codigo_modular'])->first();
-                    //echo ''.($key2+1).': '.$insedu->id.' - '.$insedu->codModular.'<br>';
                         $eceresultado=EceResultado::Create([
                             'ece_id'=>$ece->id,
                             'institucioneducativa_id'=>$insedu->id,
@@ -69,7 +74,7 @@ class EceController extends Controller
                 
             }
         }  
-        return back()->with('message','importacion exitosa');
+        return back()->with('message','IMPORTACION EXITOSA');
     }
     public function importarMenu(){
         return view('educacion.ece.menu');
