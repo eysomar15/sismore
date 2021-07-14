@@ -1,7 +1,7 @@
 @extends('layouts.main',['titlePage'=>'Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de secundaria participantes en evaluación censal)'])
 
 @section('content')
-
+{{--<meta name="csrf-token" content="{{ csrf_token() }}"/>--}}
 <div class="content">
     <div class="row">
         <div class="col-lg-12">
@@ -10,12 +10,13 @@
                     <div class="card-title text-primary">Filtro</div>
                 </div>
                 <div class="card-body">
-                    <form action="" method="post" name="form1">
+                    <form action="" method="post" name="form_filtro" id="form_filtro">
                         @csrf
+                        
                         <div class="row">
                             <div class="col-sm-3">
                                 <label class="form-label">AÑO</label>
-                                <select id="anio" name="anio" class="form-control">
+                                <select id="anio" name="anio" class="form-control" onchange="vistaindicador()">
                                     @for ($i = 2018; $i < date('Y'); $i++)
                                     <option value="{{$i}}">{{$i}}</option>    
                                     @endfor
@@ -24,17 +25,17 @@
                             </div>
                             <div class="col-sm-3">
                                 <label class="form-label">PROVINCIA</label>
-                                <select id="grado" name="grado" class="form-control">
+                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos()">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincias as $prov)
-                                    <option value="">{!!$prov->nombre!!}</option>
+                                    <option value="{{$prov->codigo}}">{!!$prov->nombre!!}</option>
                                     @endforeach
                                 </select>
                                 <span class="held-block"></span>
                             </div>
                             <div class="col-sm-3">
                                 <label class="form-label">DISTRITO</label>
-                                <select id="seccion" name="seccion" class="form-control input-sm"><option value="0">TODOS</option></select>
+                                <select id="distrito" name="distrito" class="form-control input-sm"><option value="0">TODOS</option></select>
                                 <span class="held-block"></span>
                             </div> 
                             <!--div class="col-sm-6">
@@ -62,7 +63,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive">
+                            <div class="table-responsive" id="vistatabla">
                                 {!! $tabla!!}
                             </div>
                         </div>
@@ -80,5 +81,57 @@
       <script src="{{ asset('/') }}assets/libs/jquery-validation/jquery.validate.min.js"></script>
       <!-- Validation init js-->
       <script src="{{ asset('/') }}assets/js/pages/form-validation.init.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            vistaindicador();
+              /*$('#anio').change(function(){
+                  alert('ronald');
+              });*/
+        });
+        function vistaindicador() {
+            //alert($("#form_filtro").serialize());
+            if(true){
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
+                    url: "{{route('ece.indicador.5.show')}}",
+                    type: 'post',
+                    data: $("#form_filtro").serialize(),
+                    beforeSend: function() {
+                        $("#vistatabla").html('<br><h3>Cargando datos...</h3>');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $("#vistatabla").html(data);
+                    },
+                    error:function(jqXHR,textStatus,errorThrown){
+                        console.log(jqXHR);
+                    },
+                });
+            }
+        }
+
+        function cargardistritos() {//alert($('#provincia').val());
+            $.ajax({
+                headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
+                //url: "{{route('ece.indicador.cargardistritos',"+$('#provincia').val()+")}}",
+                url:"{{url('/')}}/ECE/IndicadorDistritos/"+$('#provincia').val(),
+                type: 'post',
+                dataType:'JSON',
+                success: function(data) {
+                    console.log(data);
+                    $("#distrito option").remove();
+                    var options = '<option value="">SELECCIONAR</option>';
+                    $.each(data.distritos, function(index, value) {
+                        options += "<option value='" + value.codigo + "'>" + value.nombre +"</option>"
+                    });
+                    $("#distrito").append(options);
+                },
+                error:function(jqXHR,textStatus,errorThrown){
+                    console.log(jqXHR);
+                },
+            });                
+        }
+    </script>
 
 @endsection
