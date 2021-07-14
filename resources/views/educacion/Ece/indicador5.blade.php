@@ -24,9 +24,13 @@
                     <div class="card-title text-primary">Indicador</div>
                 </div>
                 <div class="card-body">
-                    @foreach ($materias as $key => $item)
-                        {{$key+1}}-{{$item->descripcion}}<br>
-                    @endforeach
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                {!! $tabla!!}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
