@@ -248,7 +248,7 @@ class EceController extends Controller
                     if (is_numeric($resultado[0]->evaluados)) {
                         $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                     } else $indicador = 0.0;
-                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
+                    $tabla .= '<td>' . round($indicador, 2) .'-'.$resultado[0]->satisfactorio.'-'.$resultado[0]->evaluados. '</td>';
                 }
                 $tabla .= '</tr>';
             }
