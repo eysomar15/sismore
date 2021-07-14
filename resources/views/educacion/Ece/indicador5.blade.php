@@ -25,7 +25,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <label class="form-label">PROVINCIA</label>
-                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos()">
+                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos();vistaindicador();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincias as $prov)
                                     <option value="{{$prov->codigo}}">{!!$prov->nombre!!}</option>
@@ -35,7 +35,8 @@
                             </div>
                             <div class="col-sm-3">
                                 <label class="form-label">DISTRITO</label>
-                                <select id="distrito" name="distrito" class="form-control input-sm"><option value="0">TODOS</option></select>
+                                <select id="distrito" name="distrito" class="form-control input-sm" onchange="vistaindicador();">
+                                    <option value="0">TODOS</option></select>
                                 <span class="held-block"></span>
                             </div> 
                             <!--div class="col-sm-6">
@@ -121,7 +122,7 @@
                 success: function(data) {
                     console.log(data);
                     $("#distrito option").remove();
-                    var options = '<option value="">SELECCIONAR</option>';
+                    var options = '<option value="">TODOS</option>';
                     $.each(data.distritos, function(index, value) {
                         options += "<option value='" + value.codigo + "'>" + value.nombre +"</option>"
                     });

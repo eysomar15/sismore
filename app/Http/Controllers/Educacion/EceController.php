@@ -143,14 +143,14 @@ class EceController extends Controller
             $resultado = DB::table('edu_eceresultado as v1')
                 ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
                 ->where('v2.grado_id', $grado->id)
-                ->where('v2.anio', 'sdsad')
+                ->where('v2.anio', '2018')
                 ->where('v1.materia_id', $materia->id)
                 ->get([
                     DB::raw('sum(v1.programados) as programados'),
                     DB::raw('sum(v1.evaluados) as evaluados'),
                     DB::raw('sum(v1.satisfactorio) as satisfactorio')
                 ]);
-                //return $resultado[0]->programados==null;
+            //return $resultado[0]->programados==null;
             $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
             $tabla .= '<td>' . round($indicador, 2) . '</td>';
         }
@@ -226,26 +226,52 @@ class EceController extends Controller
             $tabla .= '<th>' . $value->descripcion . '</th>';
         }
         $tabla .= '</tr></thead><tbody>';
-        $tabla .= '<tr><td>TODOS</td>';
-        foreach ($materias as $materia) {
-            $resultado = DB::table('edu_eceresultado as v1')
-                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-                ->where('v2.grado_id', $grado->id)
-                ->where('v2.anio', $request->anio)
-                ->where('v1.materia_id', $materia->id)
-                ->get([
-                    DB::raw('sum(v1.programados) as programados'),
-                    DB::raw('sum(v1.evaluados) as evaluados'),
-                    DB::raw('sum(v1.satisfactorio) as satisfactorio')
-                ]);
-            if($resultado[0]->evaluados){
-                $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
-            }else $indicador=0.0;            
-            $tabla .= '<td>' . round($indicador, 2) . '</td>';
+        if ($request->provincia == 0) {
+            $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+            foreach ($provincias as $provincia) {
+                $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
+                foreach ($materias as $materia) {
+                    $resultado = DB::table('edu_eceresultado as v1')
+                        ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                        ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                        ->join('centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                        ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+                        ->where('v2.grado_id', $grado->id)
+                        ->where('v2.anio', $request->anio)
+                        ->where('v1.materia_id', $materia->id)
+                        ->where('v5.dependencia',$provincia->id)
+                        ->get([
+                            DB::raw('sum(v1.programados) as programados'),
+                            DB::raw('sum(v1.evaluados) as evaluados'),
+                            DB::raw('sum(v1.satisfactorio) as satisfactorio')
+                        ]);
+                    if (is_numeric($resultado[0]->evaluados)) {
+                        $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                    } else $indicador = 0.0;
+                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
+                }
+                $tabla .= '</tr>';
+            }
+            $tabla .= '<tr><td>TOTAL</td>';
+            foreach ($materias as $materia) {
+                $resultado = DB::table('edu_eceresultado as v1')
+                    ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                    ->where('v2.grado_id', $grado->id)
+                    ->where('v2.anio', $request->anio)
+                    ->where('v1.materia_id', $materia->id)
+                    ->get([
+                        DB::raw('sum(v1.programados) as programados'),
+                        DB::raw('sum(v1.evaluados) as evaluados'),
+                        DB::raw('sum(v1.satisfactorio) as satisfactorio')
+                    ]);
+                if (is_numeric($resultado[0]->evaluados)) {
+                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                } else $indicador = 0.0;
+                $tabla .= '<td>' . round($indicador, 2) . '</td>';
+            }
+            $tabla .= '</tr>';
+        } else {
         }
-        $tabla .= '</tr>';
-
-
         $tabla .= '</tbody></table>';
         return $tabla;
     }
