@@ -28,7 +28,7 @@
                                 <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos();vistaindicador();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincias as $prov)
-                                    <option value="{{$prov->codigo}}">{!!$prov->nombre!!}</option>
+                                    <option value="{{$prov->id}}">{!!$prov->nombre!!}</option>
                                     @endforeach
                                 </select>
                                 <span class="held-block"></span>
@@ -124,7 +124,7 @@
                     $("#distrito option").remove();
                     var options = '<option value="">TODOS</option>';
                     $.each(data.distritos, function(index, value) {
-                        options += "<option value='" + value.codigo + "'>" + value.nombre +"</option>"
+                        options += "<option value='" + value.id + "'>" + value.nombre +"</option>"
                     });
                     $("#distrito").append(options);
                 },

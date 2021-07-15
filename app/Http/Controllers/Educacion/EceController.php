@@ -10,6 +10,7 @@ use App\Models\Educacion\Grado;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
 use App\Models\Ubigeo;
+use App\Repositories\Educacion\EceRepositorio;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -199,27 +200,19 @@ class EceController extends Controller
 
     public function cargarprovincias()
     {
-        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $provincias = EceRepositorio::buscar_provincia1();
         return response()->json($provincias);
     }
     public function cargardistritos($provincia)
     {
-        $distritos = Ubigeo::where('codigo', 'like', $provincia . '%')->whereRaw('LENGTH(codigo)=6')->get();
+        //$distritos = Ubigeo::where('codigo', 'like', $provincia . '%')->whereRaw('LENGTH(codigo)=6')->get();
+        $distritos = EceRepositorio::buscar_distrito1($provincia);
         return response()->json(compact('distritos'));
     }
     public function indicador5Show(Request $request)
     {
-        $grado = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
-            ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
-            ->where('v1.descripcion', '2do')
-            ->where('v2.nombre', 'Secundaria')->first();
-        $materias = DB::table('edu_materia as v1')
-            ->select('v1.*')
-            ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
-            ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
-            ->where('v3.grado_id', $grado->id)
-            ->distinct()->get();
-
+        $grado = EceRepositorio::buscar_grado1('2do', 'Secundaria');
+        $materias = EceRepositorio::buscar_materia1($grado->id);
         $tabla = '<table class="table mb-0">';
         $tabla .= '<thead><tr><th></th>';
         foreach ($materias as $key => $value) {
@@ -227,50 +220,51 @@ class EceController extends Controller
         }
         $tabla .= '</tr></thead><tbody>';
         if ($request->provincia == 0) {
-            $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+            $provincias = EceRepositorio::buscar_provincia1(); //Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
             foreach ($provincias as $provincia) {
                 $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
                 foreach ($materias as $materia) {
-                    $resultado = DB::table('edu_eceresultado as v1')
-                        ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-                        ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-                        ->join('centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
-                        ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
-                        ->where('v2.grado_id', $grado->id)
-                        ->where('v2.anio', $request->anio)
-                        ->where('v1.materia_id', $materia->id)
-                        ->where('v5.dependencia',$provincia->id)
-                        ->get([
-                            DB::raw('sum(v1.programados) as programados'),
-                            DB::raw('sum(v1.evaluados) as evaluados'),
-                            DB::raw('sum(v1.satisfactorio) as satisfactorio')
-                        ]);
-                    if (is_numeric($resultado[0]->evaluados)) {
+                    $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $materia->id, $provincia->id);
+                    if ($resultado[0]->evaluados) {
                         $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                     } else $indicador = 0.0;
-                    $tabla .= '<td>' . round($indicador, 2) .'-'.$resultado[0]->satisfactorio.'-'.$resultado[0]->evaluados. '</td>';
+                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
                 }
                 $tabla .= '</tr>';
             }
             $tabla .= '<tr><td>TOTAL</td>';
             foreach ($materias as $materia) {
-                $resultado = DB::table('edu_eceresultado as v1')
-                    ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-                    ->where('v2.grado_id', $grado->id)
-                    ->where('v2.anio', $request->anio)
-                    ->where('v1.materia_id', $materia->id)
-                    ->get([
-                        DB::raw('sum(v1.programados) as programados'),
-                        DB::raw('sum(v1.evaluados) as evaluados'),
-                        DB::raw('sum(v1.satisfactorio) as satisfactorio')
-                    ]);
-                if (is_numeric($resultado[0]->evaluados)) {
+                $resultado = EceRepositorio::buscar_resultado2($request->anio, $grado->id, $materia->id);
+                if ($resultado[0]->evaluados) {
                     $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                 } else $indicador = 0.0;
                 $tabla .= '<td>' . round($indicador, 2) . '</td>';
             }
             $tabla .= '</tr>';
         } else {
+            $provincia = Ubigeo::find($request->provincia);
+
+            $distritos = Ubigeo::where('dependencia', $provincia->id)->get();
+            foreach ($distritos as  $distrito) {
+                $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
+                foreach ($materias as $materia) {
+                    $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $materia->id, $distrito->id);
+                    if ($resultado[0]->evaluados) {
+                        $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                    } else $indicador = 0.0;
+                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
+                }
+                $tabla .= '</tr>';
+            }
+            $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
+            foreach ($materias as $materia) {
+                $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $materia->id, $provincia->id);
+                if ($resultado[0]->evaluados) {
+                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                } else $indicador = 0.0;
+                $tabla .= '<td>' . round($indicador, 2) . '</td>';
+            }
+            $tabla .= '</tr>';
         }
         $tabla .= '</tbody></table>';
         return $tabla;
