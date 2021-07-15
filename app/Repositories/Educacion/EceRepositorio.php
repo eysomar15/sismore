@@ -72,4 +72,23 @@ class EceRepositorio
             ]);
         return $query;
     }
+
+    public static function buscar_resultado3($anio, $grado, $materia, $distrito)
+    {
+        $query = DB::table('edu_eceresultado as v1')
+            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+            ->join('centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', $anio)
+            ->where('v1.materia_id', $materia)
+            ->where('v5.id', $distrito)
+            ->get([
+                DB::raw('sum(v1.programados) as programados'),
+                DB::raw('sum(v1.evaluados) as evaluados'),
+                DB::raw('sum(v1.satisfactorio) as satisfactorio')
+            ]);
+        return $query;
+    }    
 }
