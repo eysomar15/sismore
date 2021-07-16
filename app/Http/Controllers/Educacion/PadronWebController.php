@@ -402,7 +402,15 @@ class PadronWebController extends Controller
                 $ubigeoC->save();
             }
 
-            $centroPoblado = CentroPoblado::where('nombre',$padronWeb->cen_Pob)->first();
+            $centroPoblado = CentroPoblado::where
+            (                
+                [
+                    ['nombre',$padronWeb->cen_Pob],
+                    ['codUEMinedu',$padronWeb->codccpp],
+                    ['codInei',$padronWeb->codcp_Inei]
+                ]
+            )->first();
+
             if($centroPoblado==null){
                 $centroPoblado = CentroPoblado::firstOrCreate([  
                     'codINEI'=>$padronWeb->codcp_Inei,
@@ -491,7 +499,7 @@ class PadronWebController extends Controller
                         'Forma_id'=>$forma->id,
                         'Caracteristica_id'=>$caracteristica->id,
                         'Genero_id'=>$genero->id,
-                        'TipoGestion_id'=>$tipoGestion->id,
+                        'TipoGestion_id'=>$tipoGestionDet->id,
                         'TipoPrograma_id'=>$tipoPrograma->id,
                         'Ugel_id'=>$ugel->id,
                         'Area_id'=>$area->id,
@@ -511,7 +519,8 @@ class PadronWebController extends Controller
                         'coorGeoLatitud'=>1,//$padronWeb->[34],
                         'coordGeoLongitud'=>2,//$padronWeb->[35],
                         'fechaReg'=>Carbon::now(),//$padronWeb->[48],
-                        'fechaAct'=>Carbon::now(),//$padronWeb->[49],                        
+                        'fechaAct'=>Carbon::now(),//$padronWeb->[49],
+                        'estado'=> "AC"
                     ]);            
                 } 
                 else
@@ -520,7 +529,7 @@ class PadronWebController extends Controller
                     $institucionEducativa->Forma_id = $forma->id;
                     $institucionEducativa->Caracteristica_id = $caracteristica->id;
                     $institucionEducativa->Genero_id = $genero->id;
-                    $institucionEducativa->TipoGestion_id = $tipoGestion->id;
+                    $institucionEducativa->TipoGestion_id = $tipoGestionDet->id;
                     $institucionEducativa->TipoPrograma_id = $tipoPrograma->id;
                     $institucionEducativa->Ugel_id = $ugel->id;
                     $institucionEducativa->Area_id = $area->id;
