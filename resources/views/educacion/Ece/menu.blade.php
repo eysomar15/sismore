@@ -42,21 +42,21 @@
                                         <tr>
                                             <td>4</td>
                                             <td rowspan="4">LOGROS DE APRENDIZAJE</td>
-                                            <td><a href="#">Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de primaria participantes en evaluaciones censal)</a></td>
+                                            <td><a href="{{route('ece.indicador.4')}}">Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de primaria participantes en evaluaciones censal)</a></td>
                                             <td rowspan="4">Base de datos de la Evaluación Censal De Estudiantes (ECE) del Ministerio 
                                                 de Educación-Oficina de Medición de Calidad de los Aprendizajes</td>
                                         </tr>
                                         <tr>
                                             <td>5</td>
-                                            <td><a href="#">Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de secundaria participantes en evaluación censal)</a></td>
+                                            <td><a href="{{route('ece.indicador.5')}}">Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de secundaria participantes en evaluación censal)</a></td>
                                         </tr>
                                         <tr>
                                             <td>6</td>
-                                            <td><a href="#">Alumnos que logran los aprendizajes del grado (% de alumnos de 4° grado de primaria participantes en evaluación censal)</a></td>
+                                            <td><a href="{{route('ece.indicador.6')}}">Alumnos que logran los aprendizajes del grado (% de alumnos de 4° grado de primaria participantes en evaluación censal)</a></td>
                                         </tr>
                                         <tr>
                                             <td>7</td>
-                                            <td><a href="#">Alumnos de EIB que logran los aprendizajes del 4° grado en lengua materna y en castellano como segunda lengua.</a></td>
+                                            <td><a href="{{route('ece.indicador.7')}}">Alumnos de EIB que logran los aprendizajes del 4° grado en lengua materna y en castellano como segunda lengua.</a></td>
                                         </tr>
                                         <tr>
                                             <td>8</td>

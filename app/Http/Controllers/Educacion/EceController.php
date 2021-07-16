@@ -9,72 +9,298 @@ use App\Models\Educacion\EceResultado;
 use App\Models\Educacion\Grado;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
+use App\Models\Ubigeo;
+use App\Repositories\Educacion\EceRepositorio;
+use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isNull;
+
 class EceController extends Controller
 {
-    public function importar(){
-        $materias=Materia::all();
-        $grados=DB::table('edu_grado as v1')->select('v1.*','v2.nombre')
-                    ->join('edu_nivelmodalidad as v2','v2.id','=','v1.nivelmodalidad_id')
-                    ->whereIn('v1.nivelmodalidad_id',['37','38'])->get();
-        return view('educacion.ece.importar',compact('grados','materias'));
+    public function importar()
+    {
+        $fuentes=DB::table('par_fuenteimportacion')->get();
+        $materias = Materia::all();
+        $grados = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
+            ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
+            ->whereIn('v1.nivelmodalidad_id', ['37', '38'])->get();
+        return view('educacion.ece.importar', compact('grados', 'materias','fuentes'));
     }
-    public function importarStore(Request $request){
-        $this->validate($request,['file'=>'required|mimes:xls,xlsx',]);
-        $archivo=$request->file('file');
-        $array=(new IndicadoresImport)->toArray($archivo);
+    public function importarStore(Request $request)
+    {
+        $this->validate($request, ['file' => 'required|mimes:xls,xlsx',]);
+        $archivo = $request->file('file');
+        $array = (new IndicadoresImport)->toArray($archivo);
+        $errores['tipo'] = '1';
+        $errores['msn'] = 'Importacion Exitosa';
         /*Buscar colegios no agregados*/
-        $noAgregados=[];
+        $noagregados = [];
         foreach ($array as $key => $value) {
             foreach ($value as $key2 => $row) {
-                $insedu=InstitucionEducativa::where('codModular',$row['codigo_modular'])->first();
-                if(!$insedu){
-                    $noAgregados[]=$row['codigo_modular'];
+                $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
+                if (!$insedu) {
+                    $noagregados[] = $row['codigo_modular'];
                 }
-            }            
+            }
         }
-        if(count($noAgregados)>0)
-        return back()->with('message','Error en la importacion')->with('noAgregados',$noAgregados);
+        if (count($noagregados) > 0) {
+            $errores['tipo'] = '0';
+            $errores['msn'] = 'ERROR EN LA IMPORTACION';
+            return view('educacion.Ece.Error1', compact('noagregados', 'errores'));
+        }
+
         /** agregar excel al sistema */
-        if(count($array)>0){
-            $ece=Ece::where('anio',$request->anio)
-                    ->where('tipo',$request->tipo)
-                    ->where('grado_id',$request->grado)->first();
-            if(!$ece){
-                $ece=Ece::Create([
-                    'anio'=>$request->anio,
-                    'tipo'=>$request->tipo,
-                    'grado_id'=>$request->grado,
+        if (count($array) > 0) {
+            $ece = Ece::where('anio', $request->anio)
+                ->where('tipo', $request->tipo)
+                ->where('grado_id', $request->grado)->first();
+            if (!$ece) {
+                $ece = Ece::Create([
+                    'anio' => $request->anio,
+                    'tipo' => $request->tipo,
+                    'grado_id' => $request->grado,
                 ]);
-            }        
+            }
             foreach ($array as $key => $value) {
                 foreach ($value as $key2 => $row) {
-                    $insedu=InstitucionEducativa::where('codModular',$row['codigo_modular'])->first();
-                    //echo ''.($key2+1).': '.$insedu->id.' - '.$insedu->codModular.'<br>';
-                        $eceresultado=EceResultado::Create([
-                            'ece_id'=>$ece->id,
-                            'institucioneducativa_id'=>$insedu->id,
-                            'materia_id'=>$request->materia,
-                            'programados'=>$row['programados'],
-                            'evaluados'=>$row['evaluados'],
-                            'previo'=>$row['previo'],
-                            'inicio'=>$row['inicio'],
-                            'proceso'=>$row['proceso'],
-                            'mediapromedio'=>$row['media_promedio'],
-                            'satisfactorio'=>$row['satisfactorio'],                            
-                        ]);                      
+                    $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
+                    $eceresultado = EceResultado::Create([
+                        'ece_id' => $ece->id,
+                        'institucioneducativa_id' => $insedu->id,
+                        'materia_id' => $request->materia,
+                        'programados' => $row['programados'],
+                        'evaluados' => $row['evaluados'],
+                        'previo' => $row['previo'],
+                        'inicio' => $row['inicio'],
+                        'proceso' => $row['proceso'],
+                        'mediapromedio' => $row['media_promedio'],
+                        'satisfactorio' => $row['satisfactorio'],
+                    ]);
                 }
-                
             }
-        }  
-        return back()->with('message','importacion exitosa');
+        }
+        return back()->with('message', 'IMPORTACION EXITOSA');
     }
-    public function importarMenu(){
+    public function importarMenu()
+    {
         return view('educacion.ece.menu');
-    }    
-    public function primerIndicador(){
-        return 'jajaja te la creiste';
+    }
+    public function indicador1()
+    {
+        return view('educacion.ece.indicador1');
+    }
+
+    public function indicadorx()
+    {
+        $grado = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
+            ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
+            ->where('v1.descripcion', '2do')
+            ->where('v2.nombre', 'Secundaria')->first();
+        //->where('v2.nombre','Primaria')->first();
+        $materias = DB::table('edu_materia as v1')
+            ->select('v1.*')
+            ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
+            ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+            ->where('v3.grado_id', $grado->id)
+            ->distinct()->get();
+        $distritos = DB::table('par_ubigeo as v1')
+            ->select('v1.*')
+            ->join('centropoblado as v2', 'v2.Ubigeo_id', '=', 'v1.id')
+            ->join('edu_institucioneducativa as v3', 'v3.CentroPoblado_id', '=', 'v2.id')
+            ->join('edu_eceresultado as v4', 'v4.institucioneducativa_id', '=', 'v3.id')
+            ->join('edu_ece as v5', 'v5.id', '=', 'v4.ece_id')
+            ->where('v5.grado_id', $grado->id)
+            ->distinct()->get();
+        $provincias2 = DB::table('par_ubigeo as v1')
+            ->select('v1.*')
+            ->join('centropoblado as v2', 'v2.Ubigeo_id', '=', 'v1.id')
+            ->join('edu_institucioneducativa as v3', 'v3.CentroPoblado_id', '=', 'v2.id')
+            ->join('edu_eceresultado as v4', 'v4.institucioneducativa_id', '=', 'v3.id')
+            ->join('edu_ece as v5', 'v5.id', '=', 'v4.ece_id')
+            ->where('v5.grado_id', $grado->id)
+            ->where('v1.codigo', 'like', '2501' . '%')
+            ->distinct()->get();
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $departamentos = DB::table('par_ubigeo as v1')
+            ->select('v1.*')
+            ->join('centropoblado as v2', 'v2.Ubigeo_id', '=', 'v1.id')
+            ->join('edu_institucioneducativa as v3', 'v3.CentroPoblado_id', '=', 'v2.id')
+            ->join('edu_eceresultado as v4', 'v4.institucioneducativa_id', '=', 'v3.id')
+            ->join('edu_ece as v5', 'v5.id', '=', 'v4.ece_id')
+            ->where('v5.grado_id', $grado->id)
+            ->where('v1.codigo', 'like', '25' . '%')
+            ->distinct()->get();
+        $tabla = '<table class="table mb-0">';
+        $tabla .= '<thead><tr><th></th>';
+        foreach ($materias as $key => $value) {
+            $tabla .= '<th>' . $value->descripcion . '</th>';
+        }
+        $tabla .= '</tr></thead><tbody>';
+        //oreach ($distritos as $distrito) {
+        $tabla .= '<tr><td>TODOS</td>';
+        foreach ($materias as $materia) {
+            $resultado = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->where('v2.grado_id', $grado->id)
+                ->where('v2.anio', '2018')
+                ->where('v1.materia_id', $materia->id)
+                ->get([
+                    DB::raw('sum(v1.programados) as programados'),
+                    DB::raw('sum(v1.evaluados) as evaluados'),
+                    DB::raw('sum(v1.satisfactorio) as satisfactorio')
+                ]);
+            $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+            $tabla .= '<td>' . round($indicador, 2) . '</td>';
+        }
+        $tabla .= '</tr>';
+
+        //}
+
+        $tabla .= '</tbody></table>';
+        return view('educacion.ece.indicadorlogro', compact('grado', 'materias', 'provincias', 'tabla'));
+    }
+
+    public function indicador4()
+    {
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $title = 'Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de primaria participantes en evaluaciones censal)';
+        $ngrado = '2do';
+        $nnivel = 'Primaria';
+        $tipo = '';
+        $ruta = 'ece.indicador.4.show';
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'ngrado', 'nnivel', 'tipo', 'ruta'));
+    }
+    public function indicador5()
+    {
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $title = 'Alumnos que logran los aprendizajes del grado (% de alumnos de 2° grado de secundaria participantes en evaluación censal)';
+        $ngrado = '2do';
+        $nnivel = 'Secundaria';
+        $tipo = '';
+        $ruta = 'ece.indicador.5.show';
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'ngrado', 'nnivel', 'tipo', 'ruta'));
+    }
+    public function indicador6()
+    {
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $title = 'Alumnos que logran los aprendizajes del grado (% de alumnos de 4° grado de primaria participantes en evaluación censal)';
+        $ngrado = '4to';
+        $nnivel = 'Primaria';
+        $tipo = '';
+        $ruta = 'ece.indicador.6.show';
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'ngrado', 'nnivel', 'tipo', 'ruta'));
+    }
+    public function indicador7()
+    {
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $title = 'Alumnos de EIB que logran los aprendizajes del 4° grado en lengua materna y en castellano como segunda lengua.';
+        $ngrado = '4to';
+        $nnivel = 'Primaria';
+        $tipo = 'EIB';
+        $ruta = 'ece.indicador.7.show';
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'ngrado', 'nnivel', 'tipo', 'ruta'));
+    }
+
+    public function cargarprovincias()
+    {
+        $provincias = EceRepositorio::buscar_provincia1();
+        return response()->json($provincias);
+    }
+    public function cargardistritos($provincia)
+    {
+        //$distritos = Ubigeo::where('codigo', 'like', $provincia . '%')->whereRaw('LENGTH(codigo)=6')->get();
+        $distritos = EceRepositorio::buscar_distrito1($provincia);
+        return response()->json(compact('distritos'));
+    }
+
+    public function indicadorLOGROS(Request $request, $grado, $nivel, $tipo)
+    {
+        $grado = EceRepositorio::buscar_grado1($grado, $nivel);
+        $materias = EceRepositorio::buscar_materia1($grado->id);
+        $tabla = '<table class="table mb-0">';
+        $tabla .= '<thead><tr><th></th>';
+        foreach ($materias as $key => $value) {
+            $tabla .= '<th>' . $value->descripcion . '</th>';
+        }
+        $tabla .= '</tr></thead><tbody>';
+        if ($request->provincia == 0 && $request->distrito == 0) {
+            $provincias = EceRepositorio::buscar_provincia1(); //Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+            foreach ($provincias as $provincia) {
+                $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
+                foreach ($materias as $materia) {
+                    $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $materia->id, $provincia->id);
+                    if ($resultado[0]->evaluados) {
+                        $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                    } else $indicador = 0.0;
+                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
+                }
+                $tabla .= '</tr>';
+            }
+            $tabla .= '<tr><td>TOTAL</td>';
+            foreach ($materias as $materia) {
+                $resultado = EceRepositorio::buscar_resultado2($request->anio, $grado->id, $materia->id);
+                if ($resultado[0]->evaluados) {
+                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                } else $indicador = 0.0;
+                $tabla .= '<td>' . round($indicador, 2) . '</td>';
+            }
+            $tabla .= '</tr>';
+        } else if ($request->provincia > 0 && $request->distrito == 0) {
+            $provincia = Ubigeo::find($request->provincia);
+
+            $distritos = Ubigeo::where('dependencia', $provincia->id)->get();
+            foreach ($distritos as  $distrito) {
+                $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
+                foreach ($materias as $materia) {
+                    $resultado = EceRepositorio::buscar_resultado3($request->anio, $grado->id, $materia->id, $distrito->id);
+                    if ($resultado[0]->evaluados) {
+                        $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                    } else $indicador = 0.0;
+                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
+                }
+                $tabla .= '</tr>';
+            }
+            $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
+            foreach ($materias as $materia) {
+                $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $materia->id, $provincia->id);
+                if ($resultado[0]->evaluados) {
+                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                } else $indicador = 0.0;
+                $tabla .= '<td>' . round($indicador, 2) . '</td>';
+            }
+            $tabla .= '</tr>';
+        } else if ($request->provincia > 0 && $request->distrito > 0) {
+            $distrito = Ubigeo::find($request->distrito);
+            $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
+            foreach ($materias as $materia) {
+                $resultado = EceRepositorio::buscar_resultado3($request->anio, $grado->id, $materia->id, $distrito->id);
+                if ($resultado[0]->evaluados) {
+                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
+                } else $indicador = 0.0;
+                $tabla .= '<td>' . round($indicador, 2) . '</td>';
+            }
+            $tabla .= '</tr>';
+        } else {
+        }
+        $tabla .= '</tbody></table>';
+        return $tabla;
+    }
+    public function indicador4Show(Request $request)
+    {
+        return $this->indicadorLOGROS($request, '2do', 'Primaria', '');
+    }
+    public function indicador5Show(Request $request)
+    {
+        return $this->indicadorLOGROS($request, '2do', 'Secundaria', '');
+    }
+    public function indicador6Show(Request $request)
+    {
+        return $this->indicadorLOGROS($request, '4to', 'Primaria', '');
+    }
+    public function indicador7Show(Request $request)
+    {
+        return $this->indicadorLOGROS($request, '4to', 'Primaria', 'eib');
     }
 }
