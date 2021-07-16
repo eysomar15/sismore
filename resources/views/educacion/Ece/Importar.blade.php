@@ -62,8 +62,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Comentario</label>
                                         <div class="col-md-9">
-                                            <textarea class="form-control" placeholder="comentario opcional" id="comentario"
-                                                name="comentario"></textarea>
+                                            <textarea class="form-control" placeholder="comentario opcional" id="comentario" name="comentario"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group row">

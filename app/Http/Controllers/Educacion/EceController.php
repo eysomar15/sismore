@@ -7,6 +7,7 @@ use App\Imports\IndicadoresImport;
 use App\Models\Educacion\Ece;
 use App\Models\Educacion\EceResultado;
 use App\Models\Educacion\Grado;
+use App\Models\Educacion\Importacion;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
 use App\Models\Ubigeo;
@@ -39,7 +40,7 @@ class EceController extends Controller
         $noagregados = [];
         foreach ($array as $key => $value) {
             foreach ($value as $key2 => $row) {
-                $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
+                $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->where('estado','AC')->first();
                 if (!$insedu) {
                     $noagregados[] = $row['codigo_modular'];
                 }
@@ -50,26 +51,30 @@ class EceController extends Controller
             $errores['msn'] = 'ERROR EN LA IMPORTACION';
             return view('educacion.Ece.Error1', compact('noagregados', 'errores'));
         }
-
         /** agregar excel al sistema */
         if (count($array) > 0) {
-            $ece = Ece::where('anio', $request->anio)
-                ->where('tipo', $request->tipo)
-                ->where('grado_id', $request->grado)->first();
-            if (!$ece) {
-                $ece = Ece::Create([
-                    'anio' => $request->anio,
-                    'tipo' => $request->tipo,
-                    'grado_id' => $request->grado,
-                ]);
-            }
+            $importacion = Importacion::Create([
+                'fuenteImportacion_id'=>$request->fuenteImportacion, // valor predeterminado
+                'usuarioId_Crea'=> auth()->user()->id,
+                'usuarioId_Aprueba'=>null,
+                'fechaActualizacion'=>$request->fechaActualizacion,
+                'comentario'=>$request->comentario,
+                'estado'=>'PE'
+            ]); 
+            $ece = Ece::Create([
+                'anio' => $request->anio,
+                'tipo' => $request->tipo,
+                'grado_id' => $request->grado,
+                'importacion_id'=>$importacion->id,
+                'estado'=>'PE',
+            ]);
             foreach ($array as $key => $value) {
                 foreach ($value as $key2 => $row) {
                     $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
                     $eceresultado = EceResultado::Create([
                         'ece_id' => $ece->id,
                         'institucioneducativa_id' => $insedu->id,
-                        'materia_id' => $request->materia,
+                        'materia_id' => $row['materia'],
                         'programados' => $row['programados'],
                         'evaluados' => $row['evaluados'],
                         'previo' => $row['previo'],
