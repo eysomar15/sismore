@@ -21,11 +21,12 @@ class EceController extends Controller
 {
     public function importar()
     {
+        $fuentes=DB::table('par_fuenteimportacion')->get();
         $materias = Materia::all();
         $grados = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
             ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
             ->whereIn('v1.nivelmodalidad_id', ['37', '38'])->get();
-        return view('educacion.ece.importar', compact('grados', 'materias'));
+        return view('educacion.ece.importar', compact('grados', 'materias','fuentes'));
     }
     public function importarStore(Request $request)
     {
