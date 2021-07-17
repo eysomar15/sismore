@@ -3,17 +3,28 @@
 namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\Ece;
+use App\Models\Educacion\Grado;
+use App\Models\Educacion\NivelModalidad;
 use App\Models\Ubigeo;
 use Illuminate\Support\Facades\DB;
 
 class EceRepositorio
 {
+    public static function buscar_nivel1(){
+        $query=NivelModalidad::all();
+        return $query;
+    }
     public static function buscar_grado1($grado, $nivel)
     {
         $query = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
             ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
             ->where('v1.descripcion', $grado)
             ->where('v2.nombre', $nivel)->first();
+        return $query;
+    }
+    public static function buscar_grados1($nivel)
+    {
+        $query = Grado::where('nivelmodalidad_id',$nivel)->get();
         return $query;
     }
 

@@ -24,10 +24,11 @@ class EceController extends Controller
     {
         $fuentes=DB::table('par_fuenteimportacion')->get();
         $materias = Materia::all();
+        $nivels=EceRepositorio::buscar_nivel1();
         $grados = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
             ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
             ->whereIn('v1.nivelmodalidad_id', ['37', '38'])->get();
-        return view('educacion.ece.importar', compact('grados', 'materias','fuentes'));
+        return view('educacion.ece.importar', compact('nivels','grados', 'materias','fuentes'));
     }
     public function importarStore(Request $request)
     {
@@ -96,7 +97,6 @@ class EceController extends Controller
     {
         return view('educacion.ece.indicador1');
     }
-
     public function indicadorx()
     {
         $grado = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
@@ -166,7 +166,6 @@ class EceController extends Controller
         $tabla .= '</tbody></table>';
         return view('educacion.ece.indicadorlogro', compact('grado', 'materias', 'provincias', 'tabla'));
     }
-
     public function indicador4()
     {
         $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
@@ -207,7 +206,6 @@ class EceController extends Controller
         $ruta = 'ece.indicador.7.show';
         return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'ngrado', 'nnivel', 'tipo', 'ruta'));
     }
-
     public function cargarprovincias()
     {
         $provincias = EceRepositorio::buscar_provincia1();
@@ -219,11 +217,16 @@ class EceController extends Controller
         $distritos = EceRepositorio::buscar_distrito1($provincia);
         return response()->json(compact('distritos'));
     }
-
+    public function cargargrados(Request $request)
+    {
+        $grados = EceRepositorio::buscar_grados1($request->nivel);
+        return response()->json(compact('grados'));
+    }
     public function indicadorLOGROS(Request $request, $grado, $nivel, $tipo)
     {
         $grado = EceRepositorio::buscar_grado1($grado, $nivel);
         $materias = EceRepositorio::buscar_materia1($grado->id);
+        //return $materias;
         $tabla = '<table class="table mb-0">';
         $tabla .= '<thead><tr><th></th>';
         foreach ($materias as $key => $value) {

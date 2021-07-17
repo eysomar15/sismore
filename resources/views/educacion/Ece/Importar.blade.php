@@ -34,8 +34,7 @@
                         @endif
                         <div class="form">
 
-                            <form action="{{ route('ece.importar.store') }}" method="post" enctype='multipart/form-data'
-                                class="cmxform form-horizontal tasi-form">
+                            <form action="{{ route('ece.importar.store') }}" method="post" enctype='multipart/form-data' class="cmxform form-horizontal tasi-form" id="form_importar_indicador">
                                 @csrf
                                 <div class="col-lg-6">
                                     <div class="form-group row">
@@ -87,16 +86,26 @@
 
                                         </div>
                                     </div>
-
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label">Nivel</label>
+                                        <div class="col-md-9">
+                                            <select class="form-control" name="nivel" id="nivel" onchange="cargargrados()" required>
+                                                <option value="">Seleccionar</option>
+                                                @foreach ($nivels as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Grado</label>
                                         <div class="col-md-9">
                                             <select class="form-control" name="grado" id="grado" required>
                                                 <option value="">Seleccionar</option>
-                                                @foreach ($grados as $item)
+                                                {{--@foreach ($grados as $item)
                                                     <option value="{{ $item->id }}">{{ $item->descripcion }} -
                                                         {{ $item->nombre }}</option>
-                                                @endforeach
+                                                @endforeach--}}
                                             </select>
                                         </div>
                                     </div>
@@ -148,5 +157,29 @@
     <script src="{{ asset('/') }}assets/libs/jquery-validation/jquery.validate.min.js"></script>
     <!-- Validation init js-->
     <script src="{{ asset('/') }}assets/js/pages/form-validation.init.js"></script>
-
+    <script>
+        $(document).ready(function(){
+        });
+        function cargargrados() {
+            $.ajax({
+                headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
+                url:"{{url('/')}}/ECE/IndicadorGrados",
+                type: 'post',
+                dataType:'JSON',
+                data:{'nivel':$('#nivel').val()},
+                success: function(data) {
+                    console.log(data);
+                    $("#grado option").remove();
+                    var options = '<option value="">SELECCIONAR</option>';
+                    $.each(data.grados, function(index, value) {
+                        options += "<option value='" + value.id + "'>" + value.descripcion +"</option>"
+                    });
+                    $("#grado").append(options);
+                },
+                error:function(jqXHR,textStatus,errorThrown){
+                    console.log(jqXHR);
+                },
+            });                
+        }
+    </script>
 @endsection
