@@ -15,6 +15,7 @@ class EceResultado extends Model
         'ece_id',        
         'institucioneducativa_id',
         'materia_id',
+        'lengua',
         'programados',
         'evaluados',
         'previo',
