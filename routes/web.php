@@ -47,4 +47,6 @@ Route::post('/ECE/Indicador4Show',[EceController::class, 'indicador4Show'])->nam
 Route::post('/ECE/Indicador5Show',[EceController::class, 'indicador5Show'])->name('ece.indicador.5.show');
 Route::post('/ECE/Indicador6Show',[EceController::class, 'indicador6Show'])->name('ece.indicador.6.show');
 Route::post('/ECE/Indicador7Show',[EceController::class, 'indicador7Show'])->name('ece.indicador.7.show');
-Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])->name('ece.indicador.cargardistritos');
+Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])
+->name('ece.indicador.cargardistritos');
+Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');

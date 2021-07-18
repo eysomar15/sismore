@@ -7,6 +7,7 @@ use App\Imports\IndicadoresImport;
 use App\Models\Educacion\Ece;
 use App\Models\Educacion\EceResultado;
 use App\Models\Educacion\Grado;
+use App\Models\Educacion\Importacion;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
 use App\Models\Ubigeo;
@@ -21,12 +22,13 @@ class EceController extends Controller
 {
     public function importar()
     {
-        $fuentes=DB::table('par_fuenteimportacion')->get();
+        $fuentes = DB::table('par_fuenteimportacion')->get();
         $materias = Materia::all();
+        $nivels = EceRepositorio::buscar_nivel1();
         $grados = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
             ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
             ->whereIn('v1.nivelmodalidad_id', ['37', '38'])->get();
-        return view('educacion.ece.importar', compact('grados', 'materias','fuentes'));
+        return view('educacion.ece.importar', compact('nivels', 'grados', 'materias', 'fuentes'));
     }
     public function importarStore(Request $request)
     {
@@ -39,7 +41,7 @@ class EceController extends Controller
         $noagregados = [];
         foreach ($array as $key => $value) {
             foreach ($value as $key2 => $row) {
-                $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
+                $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->where('estado', 'AC')->first();
                 if (!$insedu) {
                     $noagregados[] = $row['codigo_modular'];
                 }
@@ -50,34 +52,56 @@ class EceController extends Controller
             $errores['msn'] = 'ERROR EN LA IMPORTACION';
             return view('educacion.Ece.Error1', compact('noagregados', 'errores'));
         }
-
         /** agregar excel al sistema */
         if (count($array) > 0) {
-            $ece = Ece::where('anio', $request->anio)
-                ->where('tipo', $request->tipo)
-                ->where('grado_id', $request->grado)->first();
-            if (!$ece) {
-                $ece = Ece::Create([
-                    'anio' => $request->anio,
-                    'tipo' => $request->tipo,
-                    'grado_id' => $request->grado,
-                ]);
-            }
+            $importacion = Importacion::Create([
+                'fuenteImportacion_id' => $request->fuenteImportacion, // valor predeterminado
+                'usuarioId_Crea' => auth()->user()->id,
+                'usuarioId_Aprueba' => null,
+                'fechaActualizacion' => $request->fechaActualizacion,
+                'comentario' => $request->comentario,
+                'estado' => 'PE'
+            ]);
+            $ece = Ece::Create([
+                'anio' => $request->anio,
+                'tipo' => $request->tipo,
+                'grado_id' => $request->grado,
+                'importacion_id' => $importacion->id,
+                'estado' => 'PE',
+            ]);
             foreach ($array as $key => $value) {
                 foreach ($value as $key2 => $row) {
                     $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
-                    $eceresultado = EceResultado::Create([
-                        'ece_id' => $ece->id,
-                        'institucioneducativa_id' => $insedu->id,
-                        'materia_id' => $request->materia,
-                        'programados' => $row['programados'],
-                        'evaluados' => $row['evaluados'],
-                        'previo' => $row['previo'],
-                        'inicio' => $row['inicio'],
-                        'proceso' => $row['proceso'],
-                        'mediapromedio' => $row['media_promedio'],
-                        'satisfactorio' => $row['satisfactorio'],
-                    ]);
+                    if ($request->tipo == 0) {
+                        $eceresultado = EceResultado::Create([
+                            'ece_id' => $ece->id,
+                            'institucioneducativa_id' => $insedu->id,
+                            'materia_id' => $row['materia'],
+                            'programados' => $row['programados'],
+                            'evaluados' => $row['evaluados'],
+                            'previo' => $row['previo'],
+                            'inicio' => $row['inicio'],
+                            'proceso' => $row['proceso'],
+                            'mediapromedio' => $row['media_promedio'],
+                            'satisfactorio' => $row['satisfactorio'],
+                        ]);
+                    } else {
+                        if ($row['programados'] != null)
+                            if ($row['programados'] != '') {
+                                $eceresultado = EceResultado::Create([
+                                    'ece_id' => $ece->id,
+                                    'institucioneducativa_id' => $insedu->id,
+                                    'materia_id' => $row['materia'],
+                                    'lengua' => $row['lengua_evaluada'],
+                                    'programados' => $row['programados'],
+                                    'evaluados' => $row['evaluados'],
+                                    'inicio' => $row['inicio'],
+                                    'proceso' => $row['proceso'],
+                                    'mediapromedio' => $row['media_promedio'],
+                                    'satisfactorio' => $row['satisfactorio'],
+                                ]);
+                            }
+                    }
                 }
             }
         }
@@ -91,7 +115,6 @@ class EceController extends Controller
     {
         return view('educacion.ece.indicador1');
     }
-
     public function indicadorx()
     {
         $grado = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
@@ -161,7 +184,6 @@ class EceController extends Controller
         $tabla .= '</tbody></table>';
         return view('educacion.ece.indicadorlogro', compact('grado', 'materias', 'provincias', 'tabla'));
     }
-
     public function indicador4()
     {
         $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
@@ -202,7 +224,6 @@ class EceController extends Controller
         $ruta = 'ece.indicador.7.show';
         return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'ngrado', 'nnivel', 'tipo', 'ruta'));
     }
-
     public function cargarprovincias()
     {
         $provincias = EceRepositorio::buscar_provincia1();
@@ -214,11 +235,16 @@ class EceController extends Controller
         $distritos = EceRepositorio::buscar_distrito1($provincia);
         return response()->json(compact('distritos'));
     }
-
-    public function indicadorLOGROS(Request $request, $grado, $nivel, $tipo)
+    public function cargargrados(Request $request)
     {
+        $grados = EceRepositorio::buscar_grados1($request->nivel);
+        return response()->json(compact('grados'));
+    }
+    public function indicadorLOGROS(Request $request, $grado, $nivel, $EIB)
+    {
+        $tipo = strlen($EIB) == 0 ? 0 : 1;
         $grado = EceRepositorio::buscar_grado1($grado, $nivel);
-        $materias = EceRepositorio::buscar_materia1($grado->id);
+        $materias = EceRepositorio::buscar_materia1($grado->id, $tipo);
         $tabla = '<table class="table mb-0">';
         $tabla .= '<thead><tr><th></th>';
         foreach ($materias as $key => $value) {
@@ -230,7 +256,7 @@ class EceController extends Controller
             foreach ($provincias as $provincia) {
                 $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
                 foreach ($materias as $materia) {
-                    $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $materia->id, $provincia->id);
+                    $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $tipo, $materia->id, $provincia->id);
                     if ($resultado[0]->evaluados) {
                         $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                     } else $indicador = 0.0;
@@ -240,7 +266,7 @@ class EceController extends Controller
             }
             $tabla .= '<tr><td>TOTAL</td>';
             foreach ($materias as $materia) {
-                $resultado = EceRepositorio::buscar_resultado2($request->anio, $grado->id, $materia->id);
+                $resultado = EceRepositorio::buscar_resultado2($request->anio, $grado->id, $tipo, $materia->id);
                 if ($resultado[0]->evaluados) {
                     $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                 } else $indicador = 0.0;
@@ -254,7 +280,7 @@ class EceController extends Controller
             foreach ($distritos as  $distrito) {
                 $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
                 foreach ($materias as $materia) {
-                    $resultado = EceRepositorio::buscar_resultado3($request->anio, $grado->id, $materia->id, $distrito->id);
+                    $resultado = EceRepositorio::buscar_resultado3($request->anio, $grado->id, $tipo, $materia->id, $distrito->id);
                     if ($resultado[0]->evaluados) {
                         $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                     } else $indicador = 0.0;
@@ -264,7 +290,7 @@ class EceController extends Controller
             }
             $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
             foreach ($materias as $materia) {
-                $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $materia->id, $provincia->id);
+                $resultado = EceRepositorio::buscar_resultado1($request->anio, $grado->id, $tipo, $materia->id, $provincia->id);
                 if ($resultado[0]->evaluados) {
                     $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                 } else $indicador = 0.0;
@@ -275,7 +301,7 @@ class EceController extends Controller
             $distrito = Ubigeo::find($request->distrito);
             $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
             foreach ($materias as $materia) {
-                $resultado = EceRepositorio::buscar_resultado3($request->anio, $grado->id, $materia->id, $distrito->id);
+                $resultado = EceRepositorio::buscar_resultado3($request->anio, $grado->id, $tipo, $materia->id, $distrito->id);
                 if ($resultado[0]->evaluados) {
                     $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                 } else $indicador = 0.0;
@@ -301,6 +327,6 @@ class EceController extends Controller
     }
     public function indicador7Show(Request $request)
     {
-        return $this->indicadorLOGROS($request, '4to', 'Primaria', 'eib');
+        return $this->indicadorLOGROS($request, '4to', 'Primaria', 'EIB');
     }
 }
