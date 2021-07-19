@@ -29,12 +29,13 @@ Route::post('/PadronWeb/Importar',[App\Http\Controllers\Educacion\PadronWebContr
 Route::get('/PadronWeb/ListaImportada/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'ListaImportada'])->name('PadronWeb.PadronWeb_Lista');
 Route::get('/PadronWeb/ListaImportada_DataTable/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'ListaImportada_DataTable'])->name('PadronWeb.ListaImportada_DataTable');
 Route::get('/PadronWeb/Aprobar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'aprobar'])->name('PadronWeb.aprobar');
-Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'procesar'])->name('PadronWeb.procesar');
+Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'procesar_conPA'])->name('PadronWeb.procesar');
 
 
 Route::get('/Importacion',[App\Http\Controllers\Educacion\ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/',[App\Http\Controllers\Educacion\ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
 Route::get('/Importacion/Eliminar/{id}',[App\Http\Controllers\Educacion\ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
+
 Route::get('/ECE/Importar',[EceController::class, 'importar'])->name('ece.importar');
 Route::get('/ECE/ImportarMenu',[EceController::class, 'importarMenu'])->name('ece.importar.menu');
 Route::post('/ECE/ImportarStore',[EceController::class, 'importarStore'])->name('ece.importar.store');

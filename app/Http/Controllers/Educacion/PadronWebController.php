@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isNull;
 
@@ -245,6 +246,11 @@ class PadronWebController extends Controller
         return view('educacion.PadronWeb.Aprobar',compact('importacion_id','importacion'));
     }  
 
+    public function procesar_conPA($importacion_id)
+    {
+        $procesar = DB::select('call edu_pa_procesarPadronWeb(?)', [$importacion_id]);
+        return 'Procesado';
+    }
     public function procesar($importacion_id)
     {
         $ListaPadronWeb = PadronWebRepositorio::Listar_Por_Importacion_id($importacion_id);  
@@ -561,7 +567,7 @@ class PadronWebController extends Controller
         return  $dato;
     }  
 
-    public function importarPadronWeb_ProcesarB(Request $request)
+    public function importarPadronWeb_CON_CSV(Request $request)
     {      
         $this->validate($request,['file' => 'required|mimes:csv']);
       
