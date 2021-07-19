@@ -84,7 +84,7 @@
                 {data:'id'},
                 {data:'nombre'},
                 {data:'formato'}, 
-                {data:'name'},                 
+                {data:'usuario'},                 
                 {data:'fechaActualizacion'},
                 {data:'estado'}, 
                 // {data:'comentario'},
