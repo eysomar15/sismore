@@ -35,6 +35,7 @@ class EceController extends Controller
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx',]);
         $archivo = $request->file('file');
         $array = (new IndicadoresImport)->toArray($archivo);
+        
         $errores['tipo'] = '1';
         $errores['msn'] = 'Importacion Exitosa';
         /*Buscar colegios no agregados*/
@@ -52,6 +53,7 @@ class EceController extends Controller
             $errores['msn'] = 'ERROR EN LA IMPORTACION';
             return view('educacion.Ece.Error1', compact('noagregados', 'errores'));
         }
+
         /** agregar excel al sistema */
         if (count($array) > 0) {
             $importacion = Importacion::Create([
