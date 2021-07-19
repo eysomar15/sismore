@@ -41,7 +41,7 @@
                         <div class="form-group row">
                             <label class="col-md-2 col-form-label">Usuario Creación</label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" readonly="readonly" value="{{$importacion->name}}">                                
+                                <input type="text" class="form-control" readonly="readonly" value="{{$importacion->usuario}}">                                
                             </div>
                        
                             <label class="col-md-2 col-form-label">Fecha Creación</label>
