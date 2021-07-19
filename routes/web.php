@@ -29,7 +29,7 @@ Route::post('/PadronWeb/Importar',[App\Http\Controllers\Educacion\PadronWebContr
 Route::get('/PadronWeb/ListaImportada/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'ListaImportada'])->name('PadronWeb.PadronWeb_Lista');
 Route::get('/PadronWeb/ListaImportada_DataTable/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'ListaImportada_DataTable'])->name('PadronWeb.ListaImportada_DataTable');
 Route::get('/PadronWeb/Aprobar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'aprobar'])->name('PadronWeb.aprobar');
-Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'procesar_conPA'])->name('PadronWeb.procesar');
+Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'procesar'])->name('PadronWeb.procesar');
 
 
 Route::get('/Importacion',[App\Http\Controllers\Educacion\ImportacionController::class, 'inicio'])->name('importacion.inicio');
