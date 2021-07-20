@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Educacion;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use Illuminate\Support\Facades\DB;
 
 class ImportacionController extends Controller
 {
@@ -49,4 +50,10 @@ class ImportacionController extends Controller
 
         return back();
     }
+<<<<<<< HEAD
+
+   
 }
+=======
+}
+>>>>>>> e83e9f6eb337dfc2a8a257a1eda49113ae4783ad

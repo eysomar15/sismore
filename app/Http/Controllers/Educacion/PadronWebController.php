@@ -244,14 +244,15 @@ class PadronWebController extends Controller
         //Importacion::where('id',$importacion_id)->first();  
 
         return view('educacion.PadronWeb.Aprobar',compact('importacion_id','importacion'));
-    }  
+    } 
 
-    public function procesar_conPA($importacion_id)
+    public function procesar($importacion_id)
     {
         $procesar = DB::select('call edu_pa_procesarPadronWeb(?)', [$importacion_id]);
-        return 'Procesado';
+        return 'Procesado : ';
     }
-    public function procesar($importacion_id)
+
+    public function procesarb($importacion_id)
     {
         $ListaPadronWeb = PadronWebRepositorio::Listar_Por_Importacion_id($importacion_id);  
         $dato=0;
