@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
+use App\Http\Controllers\Educacion\PadronWebController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,19 +25,20 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/PadronWeb/Importar',[App\Http\Controllers\Educacion\PadronWebController::class, 'importar'])->name('PadronWeb.importar');
-Route::post('/PadronWeb/Importar',[App\Http\Controllers\Educacion\PadronWebController::class, 'guardar'])->name('PadronWeb.guardar');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/PadronWeb/Importar',[PadronWebController::class, 'importar'])->name('PadronWeb.importar');
+Route::post('/PadronWeb/Importar',[PadronWebController::class, 'guardar'])->name('PadronWeb.guardar');
+Route::get('/PadronWeb/ListaImportada/{importacion_id}',[PadronWebController::class, 'ListaImportada'])->name('PadronWeb.PadronWeb_Lista');
+Route::get('/PadronWeb/ListaImportada_DataTable/{importacion_id}',[PadronWebController::class, 'ListaImportada_DataTable'])->name('PadronWeb.ListaImportada_DataTable');
+Route::get('/PadronWeb/Aprobar/{importacion_id}',[PadronWebController::class, 'aprobar'])->name('PadronWeb.aprobar');
+Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[PadronWebController::class, 'procesar'])->name('PadronWeb.procesar');
 
-Route::get('/PadronWeb/ListaImportada/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'ListaImportada'])->name('PadronWeb.PadronWeb_Lista');
-Route::get('/PadronWeb/ListaImportada_DataTable/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'ListaImportada_DataTable'])->name('PadronWeb.ListaImportada_DataTable');
-Route::get('/PadronWeb/Aprobar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'aprobar'])->name('PadronWeb.aprobar');
-Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[App\Http\Controllers\Educacion\PadronWebController::class, 'procesar'])->name('PadronWeb.procesar');
+Route::get('/CuadroAsigPersonal/Importar',[CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
+Route::post('/CuadroAsigPersonal/Importar',[CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
 
-
-Route::get('/Importacion',[App\Http\Controllers\Educacion\ImportacionController::class, 'inicio'])->name('importacion.inicio');
-Route::get('/Importacion/importaciones_DataTable/',[App\Http\Controllers\Educacion\ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
-Route::get('/Importacion/Eliminar/{id}',[App\Http\Controllers\Educacion\ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
+Route::get('/Importacion',[ImportacionController::class, 'inicio'])->name('importacion.inicio');
+Route::get('/Importacion/importaciones_DataTable/',[ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
+Route::get('/Importacion/Eliminar/{id}',[ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
 
 Route::get('/ECE/Importar',[EceController::class, 'importar'])->name('ece.importar');
 Route::get('/ECE/ImportarMenu',[EceController::class, 'importarMenu'])->name('ece.importar.menu');

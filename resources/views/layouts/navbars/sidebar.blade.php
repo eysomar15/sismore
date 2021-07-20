@@ -47,7 +47,7 @@
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li><a href="{{route('PadronWeb.importar')}}">Padron Web - Inst. Educativas</a></li>
-                        <li><a href="tables-datatable.html">Asignacion de Personal</a></li>
+                        <li><a href="{{route('CuadroAsigPersonal.importar')}}">Asignacion de Personal</a></li>
                         <li><a href="{{route('ece.importar')}}">Eval. Censal de Estudiantes</a></li>                     
                     </ul>
                 </li>
