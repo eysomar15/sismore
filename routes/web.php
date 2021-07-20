@@ -39,7 +39,7 @@ Route::get('/Importacion/Eliminar/{id}',[App\Http\Controllers\Educacion\Importac
 Route::get('/ECE/Importar',[EceController::class, 'importar'])->name('ece.importar');
 Route::get('/ECE/ImportarMenu',[EceController::class, 'importarMenu'])->name('ece.importar.menu');
 Route::get('/ECE/Aprobar/{importacion_id}',[EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
-Route::post('/ECE/ImportarStore',[EceController::class, 'importarStore'])->name('ece.importar.store');
+Route::post('/ECE/ImportarStore',[EceController::class, 'importarGuardar'])->name('ece.importar.store');
 Route::get('/ECE/Indicador1',[EceController::class, 'indicador1'])->name('ece.indicador.1');
 Route::get('/ECE/Indicador4',[EceController::class, 'indicador4'])->name('ece.indicador.4');
 Route::get('/ECE/Indicador5',[EceController::class, 'indicador5'])->name('ece.indicador.5');
