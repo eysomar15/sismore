@@ -52,14 +52,12 @@
                                 
                                     <div class="form-group row">
                                         <label class="col-md-2 col-form-label">Fecha Versión</label>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <input type="date" class="form-control" name="fechaActualizacion"
                                                 id="fechaActualizacion" placeholder="Ingrese fecha actualizacion" autofocus
                                                 required>
                                         </div>
-                                    </div>
-                                
-                                    <div class="form-group row">
+                                    
                                         <label class="col-md-2 col-form-label">Comentario</label>
                                         <div class="col-md-4">
                                             <textarea class="form-control" placeholder="comentario opcional" id="comentario" name="comentario"></textarea>
@@ -68,30 +66,27 @@
                                
 
                                     <div class="form-group row">
-                                        <label class="col-md-2 col-form-label">Alumno EIB</label>
-                                        <div class="col-md-2">
-                                            <select class="form-control" name="tipo" id="tipo" required>
-                                                <option value="0">NO</option>
-                                                <option value="1">SI</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
                                         <label class="col-md-2 col-form-label">Año</label>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <select class="form-control" name="anio" id="anio" required>
                                                 <option value="">Seleccionar</option>
                                                 @for ($i = 2018; $i <= date('Y'); $i++)
                                                     <option value="{{ $i }}">{{ $i }}</option>
                                                 @endfor
                                             </select>
+                                        </div>
 
+                                        <label class="col-md-2 col-form-label">Alumno EIB</label>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="tipo" id="tipo" required>
+                                                <option value="0">NO</option>
+                                                <option value="1">SI</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-md-2 col-form-label">Nivel</label>
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <select class="form-control" name="nivel" id="nivel" onchange="cargargrados()" required>
                                                 <option value="">Seleccionar</option>
                                                 @foreach ($nivels as $item)
@@ -99,10 +94,9 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
+                                    
                                         <label class="col-md-2 col-form-label">Grado</label>
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <select class="form-control" name="grado" id="grado" required>
                                                 <option value="">Seleccionar</option>
                                             </select>
