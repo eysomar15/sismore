@@ -12,6 +12,7 @@ use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
 use App\Models\Ubigeo;
 use App\Repositories\Educacion\EceRepositorio;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,17 +25,22 @@ class EceController extends Controller
     {
         $fuentes = DB::table('par_fuenteimportacion')->get();
         $materias = Materia::all();
-        $nivels = EceRepositorio::buscar_nivel1();
-        $grados = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
-            ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
-            ->whereIn('v1.nivelmodalidad_id', ['37', '38'])->get();
-        return view('educacion.ece.importar', compact('nivels', 'grados', 'materias', 'fuentes'));
+        $nivels = EceRepositorio::buscar_nivel1();        
+        return view('educacion.Ece.importar', compact('nivels', 'materias', 'fuentes'));
+    }
+    public function importarAprobar($importacion_id)
+    {
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
+        $ece=EceRepositorio::buscar_ece1($importacion_id);
+        $resultados=EceRepositorio::listar_eceresultado1($ece->id);
+        return view('educacion.Ece.Aprobar',compact('importacion','ece','resultados','importacion_id'));
     }
     public function importarStore(Request $request)
     {
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx',]);
         $archivo = $request->file('file');
         $array = (new IndicadoresImport)->toArray($archivo);
+        
         $errores['tipo'] = '1';
         $errores['msn'] = 'Importacion Exitosa';
         /*Buscar colegios no agregados*/
@@ -52,6 +58,7 @@ class EceController extends Controller
             $errores['msn'] = 'ERROR EN LA IMPORTACION';
             return view('educacion.Ece.Error1', compact('noagregados', 'errores'));
         }
+
         /** agregar excel al sistema */
         if (count($array) > 0) {
             $importacion = Importacion::Create([

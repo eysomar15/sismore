@@ -36,10 +36,10 @@
 
                             <form action="{{ route('ece.importar.store') }}" method="post" enctype='multipart/form-data' class="cmxform form-horizontal tasi-form" id="form_importar_indicador">
                                 @csrf
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Fuente de datos</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-2 col-form-label">Fuente de datos</label>
+                                        <div class="col-md-10">
                                             <select class="form-control" name="fuenteImportacion" id="fuenteImportacion"
                                                 required>
                                                 <option value="">Seleccionar</option>
@@ -49,46 +49,44 @@
                                             </select>
                                         </div>
                                     </div>
-
+                                
                                     <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Fecha Versión</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-2 col-form-label">Fecha Versión</label>
+                                        <div class="col-md-4">
                                             <input type="date" class="form-control" name="fechaActualizacion"
                                                 id="fechaActualizacion" placeholder="Ingrese fecha actualizacion" autofocus
                                                 required>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Comentario</label>
-                                        <div class="col-md-9">
+                                    
+                                        <label class="col-md-2 col-form-label">Comentario</label>
+                                        <div class="col-md-4">
                                             <textarea class="form-control" placeholder="comentario opcional" id="comentario" name="comentario"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Alumno EIB</label>
-                                        <div class="col-md-9">
-                                            <select class="form-control" name="tipo" id="tipo" required>
-                                                <option value="0">NO</option>
-                                                <option value="1">SI</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                               
 
                                     <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Año</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-2 col-form-label">Año</label>
+                                        <div class="col-md-4">
                                             <select class="form-control" name="anio" id="anio" required>
                                                 <option value="">Seleccionar</option>
                                                 @for ($i = 2018; $i <= date('Y'); $i++)
                                                     <option value="{{ $i }}">{{ $i }}</option>
                                                 @endfor
                                             </select>
+                                        </div>
 
+                                        <label class="col-md-2 col-form-label">Alumno EIB</label>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="tipo" id="tipo" required>
+                                                <option value="0">NO</option>
+                                                <option value="1">SI</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Nivel</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-2 col-form-label">Nivel</label>
+                                        <div class="col-md-4">
                                             <select class="form-control" name="nivel" id="nivel" onchange="cargargrados()" required>
                                                 <option value="">Seleccionar</option>
                                                 @foreach ($nivels as $item)
@@ -96,46 +94,27 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Grado</label>
-                                        <div class="col-md-9">
+                                    
+                                        <label class="col-md-2 col-form-label">Grado</label>
+                                        <div class="col-md-4">
                                             <select class="form-control" name="grado" id="grado" required>
                                                 <option value="">Seleccionar</option>
-                                                {{--@foreach ($grados as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->descripcion }} -
-                                                        {{ $item->nombre }}</option>
-                                                @endforeach--}}
                                             </select>
                                         </div>
                                     </div>
-                                    {{-- <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Materia</label>
-                                <div class="col-md-10">
-                                    <select class="form-control" name="materia" id="materia" required>
-                                        <option value="">Seleccionar</option>
-                                        @foreach ($materias as $item)
-                                        <option value="{{$item->id}}">{{$item->descripcion}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div> --}}
-
                                     <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Archivo</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-2 col-form-label">Archivo</label>
+                                        <div class="col-md-10">
                                             <input type="file" name="file" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-0">
                                     <div class="offset-lg-2 col-lg-10">
-                                        <button class="btn btn-success waves-effect waves-light mr-1"
-                                            type="submit">Importar</button>
+                                        <button class="btn btn-success waves-effect waves-light mr-1" type="submit">Importar</button>
                                         <button class="btn btn-secondary waves-effect" type="button">Cancelar</button>
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                         <!-- .form -->
