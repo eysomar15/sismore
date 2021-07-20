@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Educacion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
+use App\Models\Educacion\CuadroAsigPersonal;
 use App\Models\Educacion\Importacion;
+use App\Utilities\Utilitario;
 use Exception;
 
 class CuadroAsigPersonalController extends Controller
@@ -21,11 +23,12 @@ class CuadroAsigPersonalController extends Controller
     } 
          
     public function guardar(Request $request)
-    {      
+    {    
+        
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
         $archivo = $request->file('file');
         $array = (new tablaXImport )-> toArray($archivo);
-
+       
         try{
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
@@ -59,67 +62,64 @@ class CuadroAsigPersonalController extends Controller
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
                     // echo $row['cen_edu'].'<br>';
-                    $padronWeb = PadronWeb::Create([
+                    $CuadroAsigPersonal = CuadroAsigPersonal::Create([
                         'importacion_id'=>$importacion->id,
-                        'cod_Mod'=>$row['cod_mod'],
-                        'anexo'=>$row['anexo'],
-                        'cod_Local'=>$row['codlocal'],
-                        'cen_Edu'=>$row['cen_edu'],
-                        'niv_Mod'=>$row['niv_mod'],
-                        'd_Niv_Mod'=>$row['d_niv_mod'],
-                        'd_Forma'=>$row['d_forma'],
-                        'cod_Car'=>$row['cod_car'],
-                        'd_Cod_Car'=>$row['d_cod_car'],
-                        'TipsSexo'=>$row['tipssexo'],
-                        'd_TipsSexo'=>$row['d_tipssexo'],
+                        'region'=>$row['region'],
+                        'unidad_ejecutora'=>$row['unidad_ejecutora'],
+                        'organo_intermedio'=>$row['organo_intermedio'],
+                        'provincia'=>$row['provincia'],
+                        'distrito'=>$row['distrito'],
+                        'tipo_ie'=>$row['tipo_ie'],
                         'gestion'=>$row['gestion'],
-                        'd_Gestion'=>$row['d_gestion'],
-                        'ges_Dep'=>$row['ges_dep'],
-                        'd_Ges_Dep'=>$row['d_ges_dep'],
-                        'director'=>$row['director'],
-                        'telefono'=>$row['telefono'],
-                        'email'=>$row['email'],
-                        'pagWeb'=>$row['pagweb'],
-                        'dir_Cen'=>$row['dir_cen'],
-                        'referencia'=>$row['referencia'],
-                        'localidad'=>$row['localidad'],
-                        'codcp_Inei'=>$row['codcp_inei'],
-                        'codccpp'=>$row['codccpp'],
-                        'cen_Pob'=>$row['cen_pob'],
-                        'area_Censo'=>$row['area_censo'],
-                        'd_areaCenso'=>$row['dareacenso'],
-                        'codGeo'=>$row['codgeo'],
-                        'd_Dpto'=>$row['d_dpto'],
-                        'd_Prov'=>$row['d_prov'],
-                        'd_Dist'=>$row['d_dist'],
-                        'd_Region'=>$row['d_region'],
-                        'codOOII'=>$row['codooii'],
-                        'd_DreUgel'=>$row['d_dreugel'],
-                        'nLat_IE'=>1,
-                        'nLong_IE'=>2,
-                        'tipoProg'=>is_null($row['tipoprog'])? '':$row['tipoprog'],
-                        'd_TipoProg'=>is_null($row['d_tipoprog'])? '':$row['d_tipoprog'],
-                        'cod_Tur'=>$row['cod_tur'],
-                        'D_Cod_Tur'=>$row['d_cod_tur'],
+                        'zona'=>$row['zona'],
+                        'codmod_ie'=>$row['codmod_ie'],
+                        'codigo_local'=>$row['codigo_local'],
+                        'clave8'=>$row['clave8'],
+                        'nivel_educativo'=>$row['nivel_educativo'],
+                        'institucion_educativa'=>$row['institucion_educativa'],
+                        'codigo_plaza'=>$row['codigo_plaza'],
+                        'tipo_trabajador'=>$row['tipo_trabajador'],
+                        'sub_tipo_trabajador'=>$row['sub_tipo_trabajador'],
+                        'cargo'=>$row['cargo'],
+                        'situacion_laboral'=>$row['situacion_laboral'],
+                        'motivo_vacante'=>$row['motivo_vacante'],
+                        'documento_identidad'=>$row['documento_identidad'],
+                        'codigo_modular'=>$row['codigo_modular'],
+                        'apellido_paterno'=>$row['apellido_paterno'],
+                        'apellido_materno'=>$row['apellido_materno'],
+                        'nombres'=>$row['nombres'],
+                        'fecha_ingreso'=>$row['fecha_ingreso'],
+                        'categoria_remunerativa'=>$row['categoria_remunerativa'],
+                        'jornada_laboral'=>$row['jornada_laboral'],
                         'estado'=>$row['estado'],
-                        'd_Estado'=>$row['d_estado'],
-                        'd_Fte_Dato'=>$row['d_fte_dato'],
-                        'tAlum_Hom'=>$row['talum_hom'],
-                        'tAlum_Muj'=>$row['talum_muj'],
-                        'tAlumno'=>$row['talumno'],
-                        'tDocente'=>$row['tdocente'],
-                        'tSeccion'=>$row['tseccion'],
-                        'fechaReg'=>null,//$row['fechareg']
-                        'fecha_Act'=>Utilitario::Fecha_ConFormato_DMY($row['fecha_act']),
+                        'fecha_nacimiento'=>$row['fecha_nacimiento'],
+                        'fecha_inicio'=>$row['fecha_inicio'],
+                        'fecha_termino'=>$row['fecha_termino'],
+                        'tipo_registro'=>$row['tipo_registro'],
+                        'ley'=>$row['ley'],
+                        'preventiva'=>$row['preventiva'],
+                        'referencia_preventiva'=>$row['referencia_preventiva'],
+                        'especialidad'=>$row['especialidad'],
+                        'tipo_estudios'=>$row['tipo_estudios'],
+                        'estado_estudios'=>$row['estado_estudios'],
+                        'grado'=>$row['grado'],
+                        'mencion'=>$row['mencion'],
+                        'especialidad_profesional'=>$row['especialidad_profesional'],
+                        'fecha_resolucion'=>$row['fecha_resolucion'],
+                        'numero_resolucion'=>$row['numero_resolucion'],
+                        'centro_estudios'=>$row['centro_estudios'],
+                        'celular'=>$row['celular'],
+                        'email'=>$row['email'],
+                        
                     ]);
                 }
             }
         }catch (Exception $e) {
             $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema";           
-            return view('Educacion.PadronWeb.Importar',compact('mensaje'));            
+            return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
         }
 
-        return redirect()->route('PadronWeb.PadronWeb_Lista',$importacion->id);
+        return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista',$importacion->id);
        
     }
 }
