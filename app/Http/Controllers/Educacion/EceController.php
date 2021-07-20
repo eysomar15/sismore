@@ -35,7 +35,7 @@ class EceController extends Controller
         $resultados=EceRepositorio::listar_eceresultado1($ece->id);
         return view('educacion.Ece.Aprobar',compact('importacion','ece','resultados','importacion_id'));
     }
-    public function importarStore(Request $request)
+    public function importarGuardar(Request $request)
     {
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx',]);
         $archivo = $request->file('file');
@@ -116,7 +116,7 @@ class EceController extends Controller
     }
     public function importarMenu()
     {
-        return view('educacion.ece.menu');
+        return view('educacion.menu');
     }
     public function indicador1()
     {
