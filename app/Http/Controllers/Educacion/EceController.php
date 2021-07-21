@@ -254,7 +254,7 @@ class EceController extends Controller
     }
     public function indicadorLOGROS(Request $request)
     {
-        $materias = EceRepositorio::buscar_materia1($request->grado, $request->tipo);
+        $materias = EceRepositorio::buscar_materia1($request->anio,$request->grado, $request->tipo);
         $tabla = '<table class="table mb-0">';
         $tabla .= '<thead><tr><th></th>';
         foreach ($materias as $key => $value) {
