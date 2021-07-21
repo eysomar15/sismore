@@ -10,6 +10,7 @@ class CuadroAsigPersonal extends Model
     use HasFactory;
 
     protected $table = "edu_cuadroasigpersonal"; 
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable,
