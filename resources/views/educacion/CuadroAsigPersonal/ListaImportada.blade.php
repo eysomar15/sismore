@@ -17,8 +17,8 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="PadronWeb" class="table table-striped table-bordered" style="width:9500px">
-                            <thead class="text-primary">                                       
+                        <table id="PadronWeb" class="table table-striped table-bordered" style="width:9900px">
+                            <thead class="text-primary">                              
                                
                                 <th style="width:80px">region</th>
                                 <th style="width:18px">unidad_ejecutora</th>
@@ -38,7 +38,7 @@
                                 <th style="width:80px">sub_tipo_trabajador</th>
                                 <th style="width:300px">cargo</th>
                                 <th style="width:80px">situacion_laboral</th>
-                                <th style="width:380px">motivo_vacante</th>
+                                <th style="width:480px">motivo_vacante</th>
                                 <th style="width:80px">documento_identidad</th>
                                 <th style="width:80px">codigo_modular</th>
                                 <th style="width:80px">apellido_paterno</th>
@@ -59,7 +59,7 @@
                                 <th style="width:160px">tipo_estudios</th>
                                 <th style="width:80px">estado_estudios</th>
                                 <th style="width:80px">grado</th>
-                                <th style="width:300px">mencion</th>
+                                <th style="width:460px">mencion</th>
                                 <th style="width:300px">especialidad_profesional</th>
                                 <th style="width:80px">fecha_resolucion</th>
                                 <th style="width:80px">numero_resolucion</th>

@@ -46,11 +46,11 @@ class PadronWebController extends Controller
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
         $archivo = $request->file('file');
         $array = (new tablaXImport )-> toArray($archivo);
-
+        $i = 0;
         try{
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    // echo $row['cen_edu'].'<br>';
+                    if(++$i > 1) break;
                     $cadena = $row['cod_mod'].$row['anexo'].$row['codlocal'].$row['cen_edu'].$row['niv_mod'].$row['d_niv_mod'].$row['d_forma'].
                         $row['cod_car'].$row['d_cod_car'].$row['tipssexo'].$row['d_tipssexo'].$row['gestion'].$row['d_gestion'].$row['ges_dep'].
                         $row['d_ges_dep'].$row['director'].$row['telefono'].$row['email'].$row['pagweb'].$row['dir_cen'].$row['referencia'].
