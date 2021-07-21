@@ -35,6 +35,9 @@ Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[PadronWebController:
 
 Route::get('/CuadroAsigPersonal/Importar',[CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
 Route::post('/CuadroAsigPersonal/Importar',[CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
+//Route::get('/CuadroAsigPersonal/ListaImportada/{importacion_id}',[CuadroAsigPersonalController::class, 'ListaImportada'])->name('CuadroAsigPersonal.CuadroAsigPersonal_Lista');
+Route::get('/CuadroAsigPersonal/ListaImportada_DataTable/{importacion_id}',[CuadroAsigPersonalController::class, 'ListaImportada_DataTable'])->name('CuadroAsigPersonal.ListaImportada_DataTable');
+
 
 Route::get('/Importacion',[ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/',[ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
