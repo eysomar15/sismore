@@ -44,18 +44,17 @@ Route::get('/Importacion/importaciones_DataTable/',[ImportacionController::class
 Route::get('/Importacion/Eliminar/{id}',[ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
 
 Route::get('/ECE/Importar',[EceController::class, 'importar'])->name('ece.importar');
-Route::get('/ECE/ImportarMenu',[EceController::class, 'importarMenu'])->name('ece.importar.menu');
-Route::get('/ECE/Aprobar/{importacion_id}',[EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
-Route::post('/ECE/ImportarStore',[EceController::class, 'importarGuardar'])->name('ece.importar.store');
+Route::get('/ECE/Importar/Menu',[EceController::class, 'importarMenu'])->name('ece.importar.menu');
+Route::get('/ECE/Importar/Aprobar/{importacion_id}',[EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
+Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}',[EceController::class, 'importarAprobarGuardar'])
+->name('ece.importar.aprobar.guardar');
+Route::post('/ECE/ImportarGuardar',[EceController::class, 'importarGuardar'])->name('ece.importar.store');
 Route::get('/ECE/Indicador1',[EceController::class, 'indicador1'])->name('ece.indicador.1');
 Route::get('/ECE/Indicador4',[EceController::class, 'indicador4'])->name('ece.indicador.4');
 Route::get('/ECE/Indicador5',[EceController::class, 'indicador5'])->name('ece.indicador.5');
 Route::get('/ECE/Indicador6',[EceController::class, 'indicador6'])->name('ece.indicador.6');
 Route::get('/ECE/Indicador7',[EceController::class, 'indicador7'])->name('ece.indicador.7');
-Route::post('/ECE/Indicador4Show',[EceController::class, 'indicador4Show'])->name('ece.indicador.4.show');
-Route::post('/ECE/Indicador5Show',[EceController::class, 'indicador5Show'])->name('ece.indicador.5.show');
-Route::post('/ECE/Indicador6Show',[EceController::class, 'indicador6Show'])->name('ece.indicador.6.show');
-Route::post('/ECE/Indicador7Show',[EceController::class, 'indicador7Show'])->name('ece.indicador.7.show');
+Route::post('/ECE/IndicadorVista',[EceController::class, 'indicadorLOGROS'])->name('ece.indicador.vista');
 Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])
 ->name('ece.indicador.cargardistritos');
 Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');

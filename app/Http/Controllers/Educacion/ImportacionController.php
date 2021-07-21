@@ -29,7 +29,7 @@ class ImportacionController extends Controller
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {
                 if ($data->nombre == 'ECE')
-                    $acciones = '<a href="ECE/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';
+                    $acciones = '<a href="ECE/Importar/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';
                 else
                     $acciones = '<a href="PadronWeb/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';
                 $acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm"> Eliminar </button>';
@@ -50,10 +50,6 @@ class ImportacionController extends Controller
 
         return back();
     }
-<<<<<<< HEAD
 
    
 }
-=======
-}
->>>>>>> e83e9f6eb337dfc2a8a257a1eda49113ae4783ad

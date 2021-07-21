@@ -12,15 +12,16 @@ class EceRepositorio
 {
     public static function buscar_nivel1()
     {
-        $query = NivelModalidad::all();
+        $query = NivelModalidad::whereIn('id',['37','38'])->get();
         return $query;
     }
-    public static function buscar_grado1($grado, $nivel)
+    public static function buscar_grado1($grado, $nivel)//no usado todavia
     {
-        $query = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
+        /*$query = DB::table('edu_grado as v1')->select('v1.*', 'v2.nombre')
             ->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')
             ->where('v1.descripcion', $grado)
-            ->where('v2.nombre', $nivel)->first();
+            ->where('v2.nombre', $nivel)->first();*/
+            $query = Grado::where('id',$grado)->where('nivelmodalidad_id',$nivel)->first();
         return $query;
     }
     public static function buscar_grados1($nivel)
@@ -112,6 +113,18 @@ class EceRepositorio
             ->first();
         return $query;
     }
+    public static function buscar_anios1($grado,$tipo)
+    {
+        $query = DB::table('edu_ece as v1')
+            ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
+            ->where('v1.grado_id',$grado)
+            ->where('v1.tipo',$tipo)
+            ->where('v2.estado','PR')
+            ->select('v1.anio')
+            ->distinct('v1.anio')
+            ->get();
+        return $query;
+    }    
     public static function listar_eceresultado1($ece)
     {
         $query = DB::table('edu_eceresultado as v1')

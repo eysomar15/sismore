@@ -14,6 +14,7 @@ class ImportacionRepositorio
                 ->join('adm_usuario', 'adm_usuario.id', '=', 'par_importacion.usuarioId_crea')
                 ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'par_importacion.fuenteImportacion_id')
                 ->where("par_importacion.estado", "=", "PE")
+                ->orderBy('par_importacion.id','desc')
                 ->get();
 
         return $data;

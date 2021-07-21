@@ -11,14 +11,15 @@
                 <div class="card-body">
                     <form action="" method="post" name="form_filtro" id="form_filtro">
                         @csrf
-                        
+                        <input type="hidden" name="grado" value="{{$grado}}">
+                        <input type="hidden" name="tipo" value="{{$tipo}}">
                         <div class="row">
                             <div class="col-sm-3">
                                 <label class="form-label">AÑO</label>
                                 <select id="anio" name="anio" class="form-control" onchange="vistaindicador()">
-                                    @for ($i = 2018; $i < date('Y'); $i++)
-                                    <option value="{{$i}}">{{$i}}</option>    
-                                    @endfor
+                                    @foreach ($anios as $item)
+                                        <option value="{{$item->anio}}">{{$item->anio}}</option>
+                                    @endforeach
                                 </select>
                                 <span class="held-block"></span>
                             </div>
@@ -38,16 +39,6 @@
                                     <option value="0">TODOS</option></select>
                                 <span class="held-block"></span>
                             </div> 
-                            <!--div class="col-sm-6">
-                                <label class="form-label">GRADO</label>
-                                <select id="grado" name="grado" class="form-control input-sm"><option value="">SELECCIONAR</option></select>
-                                <span class="held-block"></span>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="form-label">SECCION</label>
-                                <select id="seccion" name="seccion" class="form-control input-sm"><option value="">SELECCIONAR</option></select>
-                                <span class="held-block"></span>
-                            </div--> 
                         </div>
                     </form>
                 </div>

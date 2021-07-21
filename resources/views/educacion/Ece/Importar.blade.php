@@ -36,17 +36,12 @@
 
                             <form action="{{ route('ece.importar.store') }}" method="post" enctype='multipart/form-data' class="cmxform form-horizontal tasi-form" id="form_importar_indicador">
                                 @csrf
+                                <input type="hidden" name="fuenteImportacion" value="3">
                                 <div class="col-lg-12">
                                     <div class="form-group row">
                                         <label class="col-md-2 col-form-label">Fuente de datos</label>
                                         <div class="col-md-10">
-                                            <select class="form-control" name="fuenteImportacion" id="fuenteImportacion"
-                                                required>
-                                                <option value="">Seleccionar</option>
-                                                @foreach ($fuentes as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control" readonly="readonly" value="ECE">
                                         </div>
                                     </div>
                                 
@@ -70,7 +65,7 @@
                                         <div class="col-md-4">
                                             <select class="form-control" name="anio" id="anio" required>
                                                 <option value="">Seleccionar</option>
-                                                @for ($i = 2018; $i <= date('Y'); $i++)
+                                                @for ($i = 2016; $i <= date('Y'); $i++)
                                                     <option value="{{ $i }}">{{ $i }}</option>
                                                 @endfor
                                             </select>
