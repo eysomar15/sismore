@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
 use App\Models\Educacion\CuadroAsigPersonal;
 use App\Models\Educacion\Importacion;
+use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Utilities\Utilitario;
 use Exception;
 
@@ -27,28 +28,31 @@ class CuadroAsigPersonalController extends Controller
         
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
         $archivo = $request->file('file');
-        $array = (new tablaXImport )-> toArray($archivo);
-       
-        try{
-            foreach ($array as $key => $value) {
-                foreach ($value as $row) {
-                    // echo $row['cen_edu'].'<br>';
-                    $cadena = $row['region'].$row['unidad_ejecutora'].$row['organo_intermedio'].$row['provincia'].$row['distrito'].$row['tipo_ie'].
-                              $row['gestion'].$row['zona'].$row['codmod_ie'].$row['codigo_local'].$row['clave8'].$row['nivel_educativo'].
-                              $row['institucion_educativa'].$row['codigo_plaza'].$row['tipo_trabajador'].$row['sub_tipo_trabajador'].$row['cargo'].
-                              $row['situacion_laboral'].$row['motivo_vacante'].$row['documento_identidad'].$row['codigo_modular'].$row['apellido_paterno'].
-                              $row['apellido_materno'].$row['nombres'].$row['fecha_ingreso'].$row['categoria_remunerativa'].$row['jornada_laboral'].
-                              $row['estado'].$row['fecha_nacimiento'].$row['fecha_inicio'].$row['fecha_termino'].$row['tipo_registro'].$row['ley'].
-                              $row['preventiva'].$row['referencia_preventiva'].$row['especialidad'].$row['tipo_estudios'].$row['estado_estudios'].
-                              $row['grado'].$row['mencion'].$row['especialidad_profesional'].$row['fecha_resolucion'].$row['numero_resolucion'].
-                              $row['centro_estudios'].$row['celular'].$row['email'];               
-                            }
-            }
-        }catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";           
-            return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
-        }
-               
+        $array = (new tablaXImport )-> toArray($archivo);        
+
+        $i = 0;
+        $cadena ='';
+
+        // try{
+             foreach ($array as $key => $value) {
+                 foreach ($value as $row) {
+                    if(++$i > 1) break;
+                    $cadena =  $cadena.$row['region']
+                    .$row['unidad_ejecutora'].$row['organo_intermedio'].$row['provincia'].$row['distrito'].$row['tipo_ie'].$row['gestion']
+                    .$row['zona'].$row['codmod_ie'].$row['codigo_local'].$row['clave8'].$row['nivel_educativo'].$row['institucion_educativa']
+                    .$row['codigo_plaza'].$row['tipo_trabajador'].$row['sub_tipo_trabajador'].$row['cargo'].$row['situacion_laboral'].$row['motivo_vacante']
+                    .$row['documento_identidad'].$row['codigo_modular'].$row['apellido_paterno'].$row['apellido_materno'].$row['nombres'].$row['fecha_ingreso']
+                    .$row['categoria_remunerativa'].$row['jornada_laboral'].$row['estado'].$row['fecha_nacimiento'].$row['fecha_inicio'].$row['fecha_termino']
+                    .$row['tipo_registro'].$row['ley'].$row['preventiva'].$row['referencia_preventiva'].$row['especialidad'].$row['tipo_estudios']
+                    .$row['estado_estudios'].$row['grado'].$row['mencion'].$row['especialidad_profesional'].$row['fecha_resolucion']
+                    .$row['numero_resolucion'].$row['centro_estudios'].$row['celular'].$row['email'];               
+                    }
+             }
+        // }catch (Exception $e) {
+        //     $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";           
+        //     return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
+        // }
+             //return  $cadena;  
         try{
             $importacion = Importacion::Create([
                 'fuenteImportacion_id'=>2, // valor predeterminado
@@ -119,7 +123,20 @@ class CuadroAsigPersonalController extends Controller
             return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
         }
 
-        return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista',$importacion->id);
+        return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_lista',$importacion->id);
        
     }
+
+    public function ListaImportada($importacion_id)
+    {
+        return view('Educacion.CuadroAsigPersonal.ListaImportada',compact('importacion_id'));
+    }
+
+    public function ListaImportada_DataTable($importacion_id)
+    {
+        $Lista = CuadroAsigPersonalRepositorio::Listar_Por_Importacion_id($importacion_id);
+                
+        return  datatables()->of($Lista)->toJson();;
+    }
+    
 }
