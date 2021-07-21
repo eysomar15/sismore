@@ -70,7 +70,7 @@
                                         <div class="col-md-4">
                                             <select class="form-control" name="anio" id="anio" required>
                                                 <option value="">Seleccionar</option>
-                                                @for ($i = 2018; $i <= date('Y'); $i++)
+                                                @for ($i = 2016; $i <= date('Y'); $i++)
                                                     <option value="{{ $i }}">{{ $i }}</option>
                                                 @endfor
                                             </select>
