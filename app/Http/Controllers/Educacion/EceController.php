@@ -23,23 +23,9 @@ class EceController extends Controller
 {
     public function importar()
     {
-        $fuentes = DB::table('par_fuenteimportacion')->get();
         $materias = Materia::all();
         $nivels = EceRepositorio::buscar_nivel1();
-        return view('educacion.Ece.importar', compact('nivels', 'materias', 'fuentes'));
-    }
-    public function importarAprobar($importacion_id)
-    {
-        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
-        $ece = EceRepositorio::buscar_ece1($importacion_id);
-        $resultados = EceRepositorio::listar_eceresultado1($ece->id);
-        return view('educacion.Ece.Aprobar', compact('importacion', 'ece', 'resultados', 'importacion_id'));
-    }
-    public function importarAprobarGuardar(Importacion $importacion)
-    {
-        $importacion->estado = 'PR';
-        $importacion->save();
-        return back()->with('message', 'Importacion Aprobada Correctamente');
+        return view('educacion.Ece.importar', compact('nivels', 'materias'));
     }
     public function importarGuardar(Request $request)
     {
@@ -120,6 +106,19 @@ class EceController extends Controller
         }
         return back()->with('message', 'IMPORTACION EXITOSA');
     }
+    public function importarAprobar($importacion_id)
+    {
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
+        $ece = EceRepositorio::buscar_ece1($importacion_id);
+        $resultados = EceRepositorio::listar_eceresultado1($ece->id);
+        return view('educacion.Ece.Aprobar', compact('importacion', 'ece', 'resultados', 'importacion_id'));
+    }
+    public function importarAprobarGuardar(Importacion $importacion)
+    {
+        $importacion->estado = 'PR';
+        $importacion->save();
+        return back()->with('message', 'Importacion Aprobada Correctamente');
+    }    
     public function importarMenu()
     {
         return view('educacion.menu');
