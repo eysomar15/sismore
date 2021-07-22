@@ -2,6 +2,87 @@
 
 @section('content')
 <div class="content">
+    <form id="form_indicadores" action="#">
+        @csrf
+        <input type="hidden" name="grado" value="{{$grado}}">
+        <input type="hidden" name="tipo" value="{{$tipo}}">
+        <!--input type="hidden" name="anio" value="2018"-->
+        <div class="col-sm-3">
+            <label class="form-label">AÑO</label>
+            <select id="anio" name="anio" class="form-control input-xs" onchange="satisfactorios()">
+                @foreach ($anios as $item)
+                    <option value="{{$item->anio}}">{{$item->anio}}</option>
+                @endforeach
+            </select>
+            <span class="held-block"></span>
+        </div>
+        <div class="row">        
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Resultados de los indicadores</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="vistaindicadores">
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card-box">
+                                    <div class="media">
+                                        <div class="avatar-md bg-info rounded-circle mr-2">
+                                            <i class="ion-logo-usd avatar-title font-26 text-white"></i>
+                                        </div>
+                                        <div class="media-body align-self-center">
+                                            <div class="text-right">
+                                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">20.5</span>%</h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total Sales</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>   
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card-box">
+                                    <div class="media">
+                                        <div class="avatar-md bg-info rounded-circle mr-2">
+                                            <i class="ion-logo-usd avatar-title font-26 text-white"></i>
+                                        </div>
+                                        <div class="media-body align-self-center">
+                                            <div class="text-right">
+                                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">20.5</span>%</h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total Sales</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card-box">
+                                    <div class="media">
+                                        <div class="avatar-md bg-info rounded-circle mr-2">
+                                            <i class="ion-logo-usd avatar-title font-26 text-white"></i>
+                                        </div>
+                                        <div class="media-body align-self-center">
+                                            <div class="text-right">
+                                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">20.5</span>%</h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total Sales</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>                     
+                        </div>
+                    </div>
+                    <!-- End card-body -->
+                </div>
+                <!-- End card -->
+    
+            </div>
+            <!-- end col -->
+        </form>
+    </div>
+    <!-- End row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-border">
@@ -75,6 +156,7 @@
 
     <script>
         $(document).ready(function(){
+            satisfactorios();
             vistaindicador();
         });
         function vistaindicador() {
@@ -117,6 +199,26 @@
                     console.log(jqXHR);
                 },
             });                
+        }
+        function satisfactorios() {
+            if(true){
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
+                    url: "{{route('ece.indicador.satisfactorio')}}",
+                    type: 'post',
+                    data: $("#form_indicadores").serialize(),
+                    beforeSend: function() {
+                        $("#vistaindicadores").html('<br><h3>Cargando datos...</h3>');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $("#vistaindicadores").html(data);
+                    },
+                    error:function(jqXHR,textStatus,errorThrown){
+                        console.log(jqXHR);
+                    },
+                });
+            }
         }
     </script>
 
