@@ -118,7 +118,7 @@ class EceController extends Controller
         $importacion->estado = 'PR';
         $importacion->save();
         return back()->with('message', 'Importacion Aprobada Correctamente');
-    }    
+    }
     public function importarMenu()
     {
         return view('educacion.menu');
@@ -203,8 +203,8 @@ class EceController extends Controller
         $grado = 2; //'2do';
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
-        $anios = EceRepositorio::buscar_anios1($grado,$tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado','tipo', 'ruta', 'anios'));
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios'));
     }
     public function indicador5()
     {
@@ -213,7 +213,7 @@ class EceController extends Controller
         $grado = 8; // '2do';
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
-        $anios = EceRepositorio::buscar_anios1($grado,$tipo);
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios'));
     }
     public function indicador6()
@@ -223,7 +223,7 @@ class EceController extends Controller
         $grado = 4; //'4to';
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
-        $anios = EceRepositorio::buscar_anios1($grado,$tipo);
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios'));
     }
     public function indicador7()
@@ -231,9 +231,9 @@ class EceController extends Controller
         $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
         $title = 'Alumnos de EIB que logran los aprendizajes del 4° grado en lengua materna y en castellano como segunda lengua.';
         $grado = 4; //'4to';
-        $tipo = 1;//EIB
+        $tipo = 1; //EIB
         $ruta = 'ece.indicador.vista';
-        $anios = EceRepositorio::buscar_anios1($grado,$tipo);
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios'));
     }
     public function cargarprovincias()
@@ -254,7 +254,7 @@ class EceController extends Controller
     }
     public function indicadorLOGROS(Request $request)
     {
-        $materias = EceRepositorio::buscar_materia1($request->anio,$request->grado, $request->tipo);
+        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
         $tabla = '<table class="table mb-0">';
         $tabla .= '<thead><tr><th></th>';
         foreach ($materias as $key => $value) {
@@ -262,7 +262,7 @@ class EceController extends Controller
         }
         $tabla .= '</tr></thead><tbody>';
         if ($request->provincia == 0 && $request->distrito == 0) {
-            $provincias = EceRepositorio::buscar_provincia1(); 
+            $provincias = EceRepositorio::buscar_provincia1();
             foreach ($provincias as $provincia) {
                 $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
                 foreach ($materias as $materia) {
@@ -322,5 +322,29 @@ class EceController extends Controller
         }
         $tabla .= '</tbody></table>';
         return $tabla;
+    }
+    public function indicadorSatisfactorio(Request $request)
+    {
+        $inds = EceRepositorio::listar_indicadorsatisfactorio($request->anio, $request->grado, $request->tipo);
+        $card = '';
+        foreach ($inds as $ind) {
+                $card .= '<div class="col-md-6 col-xl-3">
+                <div class="card-box">
+                    <div class="media">
+                        <div class="avatar-md bg-info rounded-circle mr-2">
+                            <i class="ion-logo-usd avatar-title font-26 text-white"></i>
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">'.round($ind->satisfactorio*100/$ind->evaluados,2).'</span>%</h4>
+                                <p class="mb-0 mt-1 text-truncate">'.$ind->materia.'</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   ';
+        }
+
+        return $card;
     }
 }

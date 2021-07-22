@@ -132,14 +132,60 @@ class EceRepositorio
             ->get();
         return $query;
     }
-    public static function listar_indicadorcurso($anio,$grado,$tipo,$materia)
+    public static function listar_indicadorsatisfactorio1($anio,$grado,$tipo,$materia)//no usado
+    {
+        $query = DB::table('edu_eceresultado as v1')
+            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->where('v2.grado_id',$grado)
+            ->where('v2.anio',$anio)
+            ->where('v2.tipo',$tipo)
+            ->where('v1.materia_id',$materia)
+            ->groupBy('v1.materia_id')
+            ->get(['v1.materia_id',
+                DB::raw('sum(evaluados)'),
+                DB::raw('sum(previo)'),
+                DB::raw('sum(inicio)'),
+                DB::raw('sum(proceso)'),
+                DB::raw('sum(satisfactorio)'),
+            ]);
+        return $query;
+    }
+    public static function listar_indicadorsatisfactorio($anio,$grado,$tipo)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
-            ->where('v1.ece_id',)
-            ->select('v1.*', 'v2.codModular as codigo_modular', 'v3.descripcion as materia')
-            ->get();
+            ->where('v2.grado_id',$grado)
+            ->where('v2.anio',$anio)
+            ->where('v2.tipo',$tipo)
+            ->groupBy('v3.descripcion')
+            ->get(['v3.descripcion as materia',
+                DB::raw('sum(evaluados) as evaluados'),
+                DB::raw('sum(previo)'),
+                DB::raw('sum(inicio)'),
+                DB::raw('sum(proceso)'),
+                DB::raw('sum(satisfactorio) as satisfactorio'),
+            ]);
+        return $query;
+    }
+    public static function listar_indicadorcurso($anio,$grado,$tipo,$materia)//no usado
+    {
+        $query = DB::table('edu_eceresultado as v1')
+            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            //->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
+            ->where('v2.grado_id',$grado)
+            //->where('v2.anio',$anio)
+            ->where('v2.tipo',$tipo)
+            ->where('v1.materia_id',$materia)
+            ->groupBy('v2.anio')
+            //->select('v1.*')
+            ->get(['v2.anio',
+                DB::raw('sum(evaluados)'),
+                DB::raw('sum(previo)'),
+                DB::raw('sum(inicio)'),
+                DB::raw('sum(proceso)'),
+                DB::raw('sum(satisfactorio)'),
+            ]);
         return $query;
     }
 

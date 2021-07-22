@@ -55,6 +55,7 @@ Route::get('/ECE/Indicador5',[EceController::class, 'indicador5'])->name('ece.in
 Route::get('/ECE/Indicador6',[EceController::class, 'indicador6'])->name('ece.indicador.6');
 Route::get('/ECE/Indicador7',[EceController::class, 'indicador7'])->name('ece.indicador.7');
 Route::post('/ECE/IndicadorVista',[EceController::class, 'indicadorLOGROS'])->name('ece.indicador.vista');
+Route::post('/ECE/IndicadorSatisfactorio',[EceController::class, 'indicadorSatisfactorio'])->name('ece.indicador.satisfactorio');
 Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])
 ->name('ece.indicador.cargardistritos');
 Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');
