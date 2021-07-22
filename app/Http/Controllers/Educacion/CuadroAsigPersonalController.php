@@ -33,7 +33,7 @@ class CuadroAsigPersonalController extends Controller
         $i = 0;
         $cadena ='';
 
-        // try{
+        try{
              foreach ($array as $key => $value) {
                  foreach ($value as $row) {
                     if(++$i > 1) break;
@@ -48,10 +48,10 @@ class CuadroAsigPersonalController extends Controller
                     .$row['numero_resolucion'].$row['centro_estudios'].$row['celular'].$row['email'];               
                     }
              }
-        // }catch (Exception $e) {
-        //     $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";           
-        //     return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
-        // }
+        }catch (Exception $e) {
+            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";           
+            return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
+        }
              //return  $cadena;  
         try{
             $importacion = Importacion::Create([
@@ -123,7 +123,7 @@ class CuadroAsigPersonalController extends Controller
             return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
         }
 
-        return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_lista',$importacion->id);
+        return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista',$importacion->id);
        
     }
 
