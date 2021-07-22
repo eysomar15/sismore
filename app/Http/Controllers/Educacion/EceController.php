@@ -328,21 +328,70 @@ class EceController extends Controller
         $inds = EceRepositorio::listar_indicadorsatisfactorio($request->anio, $request->grado, $request->tipo);
         $card = '';
         foreach ($inds as $ind) {
-                $card .= '<div class="col-md-6 col-xl-3">
+            $card .= '<div class="col-md-6 col-xl-' . ($inds->count() == 1 ? '12' : ($inds->count() == 2 ? '6' : ($inds->count() == 3 ? '4' : '6'))) . '">
                 <div class="card-box">
                     <div class="media">
-                        <div class="avatar-md bg-info rounded-circle mr-2">
-                            <i class="ion-logo-usd avatar-title font-26 text-white"></i>
+                        <div class="avatar-md bg-success rounded-circle mr-2">
+                            <i class="ion-md-contacts avatar-title font-26 text-white"></i>
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">'.round($ind->satisfactorio*100/$ind->evaluados,2).'</span>%</h4>
-                                <p class="mb-0 mt-1 text-truncate">'.$ind->materia.'</p>
+                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '</span>%</h4>
+                                <p class="mb-0 mt-1 text-truncate">' . $ind->materia . '</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>   ';
+        }
+        return $card;
+    }
+
+    public function indicadorMateria(Request $request)
+    {
+        $card = '';
+        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        foreach ($materias as $key => $materia) {
+
+            $card .= '<div class="col-md-6">
+            <div class="card card-border">
+                <div class="card-header border-primary bg-transparent pb-0">
+                    <h3 class="card-title">Resultados de la materia ' . $materia->descripcion . '</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row" >
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th class="text-secondary">PREVIO</th>
+                                            <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">SATISFACTORIO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
+            $inds = EceRepositorio::listar_indicadoranio($request->anio, $request->grado, $request->tipo, $materia->id);
+            foreach ($inds as $ind) {
+                $card .= '<tr>
+                            <td><span class="'.($ind->anio==$request->anio?'bg-info text-white':'text-primary').'">'.$ind->anio.'</span></td>
+                            <td class="text-secondary">'.round($ind->previo*100/$ind->evaluados,1).'%</td>
+                            <td class="text-danger">'.round($ind->inicio*100/$ind->evaluados,1).'%</td>
+                            <td class="text-warning">'.round($ind->proceso*100/$ind->evaluados,1).'%</td>
+                            <td class="text-success">'.round($ind->satisfactorio*100/$ind->evaluados,1).'%</td>
+                        </tr>';
+            }
+
+            $card .= '              </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>';
         }
 
         return $card;
