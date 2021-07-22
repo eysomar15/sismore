@@ -66,7 +66,6 @@ class EceController extends Controller
                 'tipo' => $request->tipo,
                 'grado_id' => $request->grado,
                 'importacion_id' => $importacion->id,
-                'estado' => 'PE',
             ]);
             foreach ($array as $key => $value) {
                 foreach ($value as $key2 => $row) {

@@ -15,6 +15,5 @@ class Ece extends Model
         'grado_id',
         'anio',
         'tipo',
-        'estado',
     ];
 }
