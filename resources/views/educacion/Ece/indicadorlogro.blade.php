@@ -2,6 +2,26 @@
 
 @section('content')
 <div class="content">
+    @if ($sinaprobar->count()>0)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border">
+                <div class="card-header border-danger bg-transparent pb-0">
+                    <div class="card-title">Importaciones sin aprobar</div>
+                </div>
+                <div class="card-body">
+                    @foreach ($sinaprobar as $item)
+                    <div class="alert alert-danger">
+                        {{$item->comentario}}, de la fecha {{$item->created_at}}
+                    </div>
+                    @endforeach
+                    
+                </div>
+            </div>
+        </div>
+    </div> 
+    @endif
+
     <form id="form_indicadores" action="#">
         @csrf
         <input type="hidden" name="grado" value="{{$grado}}">
