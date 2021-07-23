@@ -203,7 +203,8 @@ class EceController extends Controller
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios'));
+        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios','sinaprobar'));
     }
     public function indicador5()
     {
@@ -213,7 +214,8 @@ class EceController extends Controller
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios'));
+        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios','sinaprobar'));
     }
     public function indicador6()
     {
@@ -223,7 +225,8 @@ class EceController extends Controller
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios'));
+        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios','sinaprobar'));
     }
     public function indicador7()
     {
@@ -233,7 +236,8 @@ class EceController extends Controller
         $tipo = 1; //EIB
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios'));
+        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios','sinaprobar'));
     }
     public function cargarprovincias()
     {
@@ -335,7 +339,7 @@ class EceController extends Controller
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '</span>%</h4>
+                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '</span>%</h4>
                                 <p class="mb-0 mt-1 text-truncate">' . $ind->materia . '</p>
                             </div>
                         </div>
