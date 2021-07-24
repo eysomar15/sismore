@@ -25,13 +25,17 @@ class ImportacionController extends Controller
         //  ->get();
 
         $data = ImportacionRepositorio::Listar_Importaciones();
-
+       
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {
-                if ($data->nombre == 'ECE')
-                    $acciones = '<a href="ECE/Importar/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';
-                else
-                    $acciones = '<a href="PadronWeb/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';
+
+                switch ($data->abreviado) {
+                    case('ECE'): $acciones = '<a href="ECE/Importar/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
+                    case('PW'):  $acciones = '<a href="PadronWeb/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
+        
+                    default: $acciones = '<a href="PadronWeb/Aprobarxx/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
+                }                
+                
                 $acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm"> Eliminar </button>';
                 return $acciones;
             })
