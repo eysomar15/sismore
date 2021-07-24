@@ -13,6 +13,7 @@ use App\Models\Educacion\Materia;
 use App\Models\Ubigeo;
 use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use Exception;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +33,21 @@ class EceController extends Controller
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx',]);
         $archivo = $request->file('file');
         $array = (new IndicadoresImport)->toArray($archivo);
-
+        if (count($array) > 1)
+            return back()->with('messageError', 'Por favor considere solo una hoja de excel en el libro');
+        if (count($array) < 1)
+            return back()->with('messageError', 'El  libro no tiene hojas');
+        try {
+            foreach ($array as $value) {
+                foreach ($value as $key => $row) {
+                    $cadena = $row['codigo_modular'] . $row['programados'] . $row['materia'] . $row['evaluados'] . $row['previo'] . $row['inicio'] . $row['proceso'] . $row['satisfactorio'] . $row['media_promedio'];
+                    if ($key > 0) break;
+                }
+            }
+        } catch (Exception $e) {
+            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
+            return back()->with('messageError', $mensaje);
+        }
         $errores['tipo'] = '1';
         $errores['msn'] = 'Importacion Exitosa';
         /*Buscar colegios no agregados*/
@@ -203,8 +218,9 @@ class EceController extends Controller
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios','sinaprobar'));
+        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        //return EceRepositorio::listar_indicadordepartamento('2016',$grado, $tipo,'1');
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar'));
     }
     public function indicador5()
     {
@@ -214,8 +230,8 @@ class EceController extends Controller
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios','sinaprobar'));
+        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios', 'sinaprobar'));
     }
     public function indicador6()
     {
@@ -225,8 +241,8 @@ class EceController extends Controller
         $tipo = 0;
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios','sinaprobar'));
+        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar'));
     }
     public function indicador7()
     {
@@ -236,8 +252,8 @@ class EceController extends Controller
         $tipo = 1; //EIB
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
-        $sinaprobar=EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios','sinaprobar'));
+        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar'));
     }
     public function cargarprovincias()
     {
@@ -379,11 +395,11 @@ class EceController extends Controller
             $inds = EceRepositorio::listar_indicadoranio($request->anio, $request->grado, $request->tipo, $materia->id);
             foreach ($inds as $ind) {
                 $card .= '<tr>
-                            <td><span class="'.($ind->anio==$request->anio?'bg-info text-white':'text-primary').'">'.$ind->anio.'</span></td>
-                            <td class="text-secondary">'.round($ind->previo*100/$ind->evaluados,1).'%</td>
-                            <td class="text-danger">'.round($ind->inicio*100/$ind->evaluados,1).'%</td>
-                            <td class="text-warning">'.round($ind->proceso*100/$ind->evaluados,1).'%</td>
-                            <td class="text-success">'.round($ind->satisfactorio*100/$ind->evaluados,1).'%</td>
+                            <td><span class="' . ($ind->anio == $request->anio ? 'bg-info text-white' : 'text-primary') . '">' . $ind->anio . '</span></td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
             }
 
