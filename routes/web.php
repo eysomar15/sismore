@@ -44,7 +44,7 @@ Route::get('/Importacion/importaciones_DataTable/',[ImportacionController::class
 Route::get('/Importacion/Eliminar/{id}',[ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
 
 Route::get('/ECE/Importar',[EceController::class, 'importar'])->name('ece.importar');
-Route::get('/ECE/Importar/Menu',[EceController::class, 'importarMenu'])->name('ece.importar.menu');
+
 Route::get('/ECE/Importar/Aprobar/{importacion_id}',[EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
 Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}',[EceController::class, 'importarAprobarGuardar'])
 ->name('ece.importar.aprobar.guardar');
@@ -60,3 +60,5 @@ Route::post('/ECE/IndicadorMateria',[EceController::class, 'indicadorMateria'])-
 Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])
 ->name('ece.indicador.cargardistritos');
 Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');
+
+Route::get('/INDICADOR/Menu/{calificador}',[EceController::class, 'indicadorMenu'])->name('indicador.menu');
