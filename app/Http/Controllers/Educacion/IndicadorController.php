@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 
 class IndicadorController extends Controller
 {
-    public function indicadorMenu($calificador){
-        $inds=Indicador::where('calificador_id',$calificador)->get();
+    public function indicadorMenu($clasificador){
+        $inds=Indicador::where('clasificador_id',$clasificador)->get();
         return view('educacion.menu',compact('inds'));
     }
 }

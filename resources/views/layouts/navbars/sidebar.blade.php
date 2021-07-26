@@ -60,7 +60,7 @@
                 </li>
 
                 <li>
-                    <a href="{{route('ece.importar.menu')}}" class="waves-effect">
+                    <a href="{{route('indicador.menu','1')}}" class="waves-effect">
                         <i class="mdi mdi-poll-box"></i>
                         <span> Indicadores </span>
                     </a>                    

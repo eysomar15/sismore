@@ -3,6 +3,7 @@
 use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
+use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -61,4 +62,4 @@ Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargar
 ->name('ece.indicador.cargardistritos');
 Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');
 
-Route::get('/INDICADOR/Menu/{calificador}',[EceController::class, 'indicadorMenu'])->name('indicador.menu');
+Route::get('/INDICADOR/Menu/{clasificador}',[IndicadorController::class, 'indicadorMenu'])->name('indicador.menu');
