@@ -63,3 +63,6 @@ Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargar
 Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');
 
 Route::get('/INDICADOR/Menu/{clasificador}',[IndicadorController::class, 'indicadorMenu'])->name('indicador.menu');
+Route::get('/INDICADOR/SINRUTA', function () {
+    return 'Ruta no definida';
+})->name('indicador.sinruta');

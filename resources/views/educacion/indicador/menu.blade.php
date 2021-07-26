@@ -13,6 +13,9 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <ul class="mb-0">
+                                @php
+                                    $i=1;
+                                @endphp
                                 @foreach ($clas as $key=> $item)
                                 <li>{{$item->nombre}}</li>
                                 @php
@@ -20,7 +23,7 @@
                                 @endphp
                                 <ul>
                                     @foreach ($inds as $key2=> $item2)
-                                    <li>{{$key+$key2+1}}.-<a href="#">{{$item2->nombre}}</a></li>
+                                    <li>{{$i++}}.-<a href="{{route($item2->url)}}">{{$item2->nombre}}</a></li>
                                     @endforeach
                                 </ul>
                                 @endforeach
