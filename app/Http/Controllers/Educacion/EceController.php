@@ -296,7 +296,6 @@ class EceController extends Controller
         }
         return $card;
     }
-
     public function indicadorMateria(Request $request)
     {
         $card = '';
@@ -327,6 +326,104 @@ class EceController extends Controller
             foreach ($inds as $ind) {
                 $card .= '<tr>
                             <td><span class="' . ($ind->anio == $request->anio ? 'bg-info text-white' : 'text-primary') . '">' . $ind->anio . '</span></td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                        </tr>';
+            }
+
+            $card .= '              </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>';
+        }
+
+        return $card;
+    }
+    public function indicadorUgel(Request $request)
+    {
+        $card = '';
+        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        foreach ($materias as $key => $materia) {
+
+            $card .= '<div class="col-md-12">
+            <div class="card card-border">
+                <div class="card-header border-primary bg-transparent pb-0">
+                    <h3 class="card-title">Resultados de la materia ' . $materia->descripcion . '</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row" >
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>UGEL</th>
+                                            <th class="text-secondary">PREVIO</th>
+                                            <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">SATISFACTORIO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
+            $inds = EceRepositorio::listar_indicadorugel($request->anio, $request->grado, $request->tipo, $materia->id);
+            foreach ($inds as $ind) {
+                $card .= '<tr>
+                            <td><span>' . $ind->ugel . '</span></td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                        </tr>';
+            }
+
+            $card .= '              </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>';
+        }
+
+        return $card;
+    }
+    public function indicadorProvincia(Request $request)
+    {
+        $card = '';
+        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        foreach ($materias as $key => $materia) {
+
+            $card .= '<div class="col-md-12">
+            <div class="card card-border">
+                <div class="card-header border-primary bg-transparent pb-0">
+                    <h3 class="card-title">Resultados de la materia ' . $materia->descripcion . '</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row" >
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th class="text-secondary">PREVIO</th>
+                                            <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">SATISFACTORIO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
+            $inds = EceRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
+            foreach ($inds as $ind) {
+                $card .= '<tr>
+                            <td><span>' . $ind->provincia . '</span></td>
                             <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
