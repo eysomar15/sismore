@@ -17,25 +17,25 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="PadronWeb" class="table table-striped table-bordered" style="width:9900px">
+                        <table id="PadronWeb" class="table table-striped table-bordered" style="width:10500px">
                             <thead class="text-primary">                              
                                
                                 <th style="width:80px">region</th>
-                                <th style="width:18px">unidad_ejecutora</th>
+                                <th style="width:180px">unidad_ejecutora</th>
                                 <th style="width:100px">organo_intermedio</th>
                                 <th style="width:100px">provincia</th>
                                 <th style="width:100px">distrito</th>
                                 <th style="width:200px">tipo_ie</th>
-                                <th style="width:100px">gestion</th>
+                                <th style="width:160px">gestion</th>
                                 <th style="width:200px">zona</th>
                                 <th style="width:80px">codmod_ie</th>
                                 <th style="width:80px">codigo_local</th>
                                 <th style="width:80px">clave8</th>
                                 <th style="width:80px">nivel_educativo</th>
-                                <th style="width:80px">institucion_educativa</th>
+                                <th style="width:200px">institucion_educativa</th>
                                 <th style="width:80px">codigo_plaza</th>
                                 <th style="width:80px">tipo_trabajador</th>
-                                <th style="width:80px">sub_tipo_trabajador</th>
+                                <th style="width:280px">sub_tipo_trabajador</th>
                                 <th style="width:300px">cargo</th>
                                 <th style="width:80px">situacion_laboral</th>
                                 <th style="width:480px">motivo_vacante</th>
@@ -47,7 +47,7 @@
                                 <th style="width:80px">fecha_ingreso</th>
                                 <th style="width:80px">categoria_remunerativa</th>
                                 <th style="width:80px">jornada_laboral</th>
-                                <th style="width:80px">estado</th>
+                                <th style="width:260px">estado</th>
                                 <th style="width:80px">fecha_nacimiento</th>
                                 <th style="width:80px">fecha_inicio</th>
                                 <th style="width:80px">fecha_termino</th>

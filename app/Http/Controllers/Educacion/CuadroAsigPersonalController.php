@@ -24,8 +24,7 @@ class CuadroAsigPersonalController extends Controller
     } 
          
     public function guardar(Request $request)
-    {    
-        
+    {  
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
         $archivo = $request->file('file');
         $array = (new tablaXImport )-> toArray($archivo);        
@@ -49,10 +48,10 @@ class CuadroAsigPersonalController extends Controller
                     }
              }
         }catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";           
+            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
             return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
         }
-             //return  $cadena;  
+           
         try{
             $importacion = Importacion::Create([
                 'fuenteImportacion_id'=>2, // valor predeterminado
@@ -124,6 +123,7 @@ class CuadroAsigPersonalController extends Controller
         }
 
         return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista',$importacion->id);
+        
        
     }
 
@@ -138,5 +138,6 @@ class CuadroAsigPersonalController extends Controller
                 
         return  datatables()->of($Lista)->toJson();;
     }
+    
     
 }
