@@ -3,6 +3,7 @@
 use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
+use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +45,7 @@ Route::get('/Importacion/importaciones_DataTable/',[ImportacionController::class
 Route::get('/Importacion/Eliminar/{id}',[ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
 
 Route::get('/ECE/Importar',[EceController::class, 'importar'])->name('ece.importar');
-Route::get('/ECE/Importar/Menu',[EceController::class, 'importarMenu'])->name('ece.importar.menu');
+
 Route::get('/ECE/Importar/Aprobar/{importacion_id}',[EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
 Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}',[EceController::class, 'importarAprobarGuardar'])
 ->name('ece.importar.aprobar.guardar');
@@ -57,6 +58,13 @@ Route::get('/ECE/Indicador7',[EceController::class, 'indicador7'])->name('ece.in
 Route::post('/ECE/IndicadorVista',[EceController::class, 'indicadorLOGROS'])->name('ece.indicador.vista');
 Route::post('/ECE/IndicadorSatisfactorio',[EceController::class, 'indicadorSatisfactorio'])->name('ece.indicador.satisfactorio');
 Route::post('/ECE/IndicadorMateria',[EceController::class, 'indicadorMateria'])->name('ece.indicador.materia');
+Route::post('/ECE/IndicadorUgel',[EceController::class, 'indicadorUgel'])->name('ece.indicador.ugel');
+Route::post('/ECE/IndicadorProvincia',[EceController::class, 'indicadorProvincia'])->name('ece.indicador.provincia');
 Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])
 ->name('ece.indicador.cargardistritos');
 Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');
+
+Route::get('/INDICADOR/Menu/{clasificador}',[IndicadorController::class, 'indicadorMenu'])->name('indicador.menu');
+Route::get('/INDICADOR/SINRUTA', function () {
+    return 'Ruta no definida';
+})->name('indicador.sinruta');

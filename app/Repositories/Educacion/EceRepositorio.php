@@ -34,7 +34,7 @@ class EceRepositorio
             ->where('v3.grado_id', $grado)
             ->where('v3.tipo', $tipo)
             ->where('v3.anio', $anio)
-            ->orderBy('v1.id','asc')
+            ->orderBy('v1.id', 'asc')
             ->distinct()->get();
         return $query;
     }
@@ -120,7 +120,7 @@ class EceRepositorio
             ->where('v2.estado', 'PR')
             ->select('v1.anio')
             ->distinct('v1.anio')
-            ->orderBy('v1.anio','desc')
+            ->orderBy('v1.anio', 'desc')
             ->get();
         return $query;
     }
@@ -134,16 +134,17 @@ class EceRepositorio
             ->get();
         return $query;
     }
-    public static function listar_indicadorsatisfactorio1($anio,$grado,$tipo,$materia)//no usado
+    public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia) //no usado
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-            ->where('v2.grado_id',$grado)
-            ->where('v2.anio',$anio)
-            ->where('v2.tipo',$tipo)
-            ->where('v1.materia_id',$materia)            
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', $anio)
+            ->where('v2.tipo', $tipo)
+            ->where('v1.materia_id', $materia)
             ->groupBy('v1.materia_id')
-            ->get(['v1.materia_id',
+            ->get([
+                'v1.materia_id',
                 DB::raw('sum(evaluados)'),
                 DB::raw('sum(previo)'),
                 DB::raw('sum(inicio)'),
@@ -152,17 +153,18 @@ class EceRepositorio
             ]);
         return $query;
     }
-    public static function listar_indicadorsatisfactorio($anio,$grado,$tipo)
+    public static function listar_indicadorsatisfactorio($anio, $grado, $tipo)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
-            ->where('v2.grado_id',$grado)
-            ->where('v2.anio',$anio)
-            ->where('v2.tipo',$tipo)
-            ->orderBy('v1.id','asc')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', $anio)
+            ->where('v2.tipo', $tipo)
+            ->orderBy('v1.id', 'asc')
             ->groupBy('v3.descripcion')
-            ->get(['v3.descripcion as materia',
+            ->get([
+                'v3.descripcion as materia',
                 DB::raw('sum(evaluados) as evaluados'),
                 DB::raw('sum(previo)'),
                 DB::raw('sum(inicio)'),
@@ -171,19 +173,20 @@ class EceRepositorio
             ]);
         return $query;
     }
-    public static function listar_indicadoranio($anio,$grado,$tipo,$materia)
+    public static function listar_indicadoranio($anio, $grado, $tipo, $materia)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             //->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
-            ->where('v2.grado_id',$grado)
-            ->where('v2.anio','<=',$anio)
-            ->where('v2.tipo',$tipo)
-            ->where('v1.materia_id',$materia)
-            ->orderBy('v2.anio','desc')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', '<=', $anio)
+            ->where('v2.tipo', $tipo)
+            ->where('v1.materia_id', $materia)
+            ->orderBy('v2.anio', 'desc')
             ->groupBy('v2.anio')
             //->select('v1.*')
-            ->get(['v2.anio',
+            ->get([
+                'v2.anio',
                 DB::raw('sum(evaluados) as evaluados'),
                 DB::raw('sum(previo) as previo'),
                 DB::raw('sum(inicio) as inicio'),
@@ -193,19 +196,22 @@ class EceRepositorio
         return $query;
     }
 
-    public static function listar_indicadorugel($anio,$grado,$tipo,$materia)
+    public static function listar_indicadorugel($anio, $grado, $tipo, $materia)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-            //->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
-            ->where('v2.grado_id',$grado)
-            ->where('v2.anio','<=',$anio)
-            ->where('v2.tipo',$tipo)
-            ->where('v1.materia_id',$materia)
-            ->orderBy('v2.anio','desc')
-            ->groupBy('v2.anio')
-            //->select('v1.*')
-            ->get(['v2.anio',
+            ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+            ->join('edu_ugel as v4', 'v4.id', '=', 'v3.Ugel_id')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', $anio)
+            ->where('v2.tipo', $tipo)
+            ->where('v1.materia_id', $materia)
+            ->orderBy('v4.id', 'asc')
+            ->groupBy('v4.nombre')
+            ->groupBy('v4.id')
+            ->get([
+                'v4.id',
+                'v4.nombre as ugel',
                 DB::raw('sum(evaluados) as evaluados'),
                 DB::raw('sum(previo) as previo'),
                 DB::raw('sum(inicio) as inicio'),
@@ -215,17 +221,73 @@ class EceRepositorio
         return $query;
     }
 
-    public static function listar_importacionsinaprobar1($grado,$tipo)
+    public static function listar_indicadorprovincia($anio, $grado, $tipo, $materia)
+    {
+        $id = 34;
+        $query = DB::table('edu_eceresultado as v1')
+            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', $anio)
+            ->where('v2.tipo', $tipo)
+            ->where('v1.materia_id', $materia)
+            ->groupBy('v5.dependencia')
+            ->get([
+                'v5.dependencia as id',
+                'v5.dependencia as provincia',
+                DB::raw('sum(evaluados) as evaluados'),
+                DB::raw('sum(previo) as previo'),
+                DB::raw('sum(inicio) as inicio'),
+                DB::raw('sum(proceso) as proceso'),
+                DB::raw('sum(satisfactorio) as satisfactorio'),
+            ]);
+        //$provs = Ubigeo::where('dependencia', $id)->get();
+        foreach ($query as $key => $value) {
+            $prov=Ubigeo::find($value->id);
+            $value->provincia=$prov->nombre;
+        }
+        return $query;
+    }
+    public static function listar_indicadordepartamento($anio, $grado, $tipo, $materia)
+    {
+        $id = 34;
+        $query = DB::table('edu_eceresultado as v1')
+            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', $anio)
+            ->where('v2.tipo', $tipo)
+            ->where('v1.materia_id', $materia)
+            ->groupBy('v5.id')
+            ->get([
+                DB::raw('sum(evaluados) as evaluados'),
+                DB::raw('sum(previo) as previo'),
+                DB::raw('sum(inicio) as inicio'),
+                DB::raw('sum(proceso) as proceso'),
+                DB::raw('sum(satisfactorio) as satisfactorio'),
+            ]);
+        //$provs = Ubigeo::where('dependencia', $id)->get();
+        foreach ($query as $key => $value) {
+            $prov=Ubigeo::find($value->id);
+            $value->provincia=$prov->nombre;
+        }
+        return $query;
+    }
+
+    public static function listar_importacionsinaprobar1($grado, $tipo)
     {
         $query = DB::table('par_importacion as v1')
             ->join('edu_ece as v2', 'v2.importacion_id', '=', 'v1.id')
-            ->where('v2.grado_id',$grado)
-            ->where('v2.tipo',$tipo)
-            ->where('v1.estado','PE')
-            ->orderBy('v1.id','desc')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.tipo', $tipo)
+            ->where('v1.estado', 'PE')
+            ->orderBy('v1.id', 'desc')
             ->select('v1.*')
             ->get();
         return $query;
     }
-
 }

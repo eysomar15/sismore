@@ -32,6 +32,14 @@
                                 {{ Session::get('message') }}.
                             </div>
                         @endif
+                        @if (Session::has('messageError'))
+                            <div class="alert alert-danger alert-dismissible fade show">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                {{ Session::get('messageError') }}.
+                            </div>
+                        @endif
                         <div class="form">
 
                             <form action="{{ route('ece.importar.store') }}" method="post" enctype='multipart/form-data' class="cmxform form-horizontal tasi-form" id="form_importar_indicador">
