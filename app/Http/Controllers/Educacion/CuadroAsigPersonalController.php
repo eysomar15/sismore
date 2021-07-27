@@ -7,8 +7,10 @@ use App\Imports\tablaXImport;
 use App\Models\Educacion\CuadroAsigPersonal;
 use App\Models\Educacion\Importacion;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class CuadroAsigPersonalController extends Controller
 {
@@ -24,8 +26,7 @@ class CuadroAsigPersonalController extends Controller
     } 
          
     public function guardar(Request $request)
-    {    
-        
+    {  
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
         $archivo = $request->file('file');
         $array = (new tablaXImport )-> toArray($archivo);        
@@ -49,10 +50,10 @@ class CuadroAsigPersonalController extends Controller
                     }
              }
         }catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";           
+            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
             return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
         }
-             //return  $cadena;  
+           
         try{
             $importacion = Importacion::Create([
                 'fuenteImportacion_id'=>2, // valor predeterminado
@@ -124,7 +125,6 @@ class CuadroAsigPersonalController extends Controller
         }
 
         return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista',$importacion->id);
-       
     }
 
     public function ListaImportada($importacion_id)
@@ -137,6 +137,19 @@ class CuadroAsigPersonalController extends Controller
         $Lista = CuadroAsigPersonalRepositorio::Listar_Por_Importacion_id($importacion_id);
                 
         return  datatables()->of($Lista)->toJson();;
+    }
+    
+    public function aprobar($importacion_id)
+    {
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
+
+        return view('educacion.CuadroAsigPersonal.Aprobar',compact('importacion_id','importacion'));
+    } 
+
+    public function procesar($importacion_id)
+    {
+        $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?)', [$importacion_id]);
+        return  $importacion_id;
     }
     
 }
