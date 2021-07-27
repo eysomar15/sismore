@@ -244,7 +244,7 @@
                 
             </div>
             <div class="card-body">
-                <div class="row" id="vistaindicadores">
+                <div class="row" id="vistatabla">
                 </div>
             </div>
             <!-- End card-body -->
