@@ -7,8 +7,10 @@ use App\Imports\tablaXImport;
 use App\Models\Educacion\CuadroAsigPersonal;
 use App\Models\Educacion\Importacion;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class CuadroAsigPersonalController extends Controller
 {
@@ -123,8 +125,6 @@ class CuadroAsigPersonalController extends Controller
         }
 
         return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista',$importacion->id);
-        
-       
     }
 
     public function ListaImportada($importacion_id)
@@ -139,5 +139,17 @@ class CuadroAsigPersonalController extends Controller
         return  datatables()->of($Lista)->toJson();;
     }
     
+    public function aprobar($importacion_id)
+    {
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
+
+        return view('educacion.CuadroAsigPersonal.Aprobar',compact('importacion_id','importacion'));
+    } 
+
+    public function procesar($importacion_id)
+    {
+        $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?)', [$importacion_id]);
+        return  $importacion_id;
+    }
     
 }

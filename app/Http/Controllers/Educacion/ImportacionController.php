@@ -29,11 +29,12 @@ class ImportacionController extends Controller
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {
 
-                switch ($data->abreviado) {
-                    case('ECE'): $acciones = '<a href="ECE/Importar/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
-                    case('PW'):  $acciones = '<a href="PadronWeb/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
+                switch ($data->codigo) {
+                    case('COD01'):  $acciones = '<a href="PadronWeb/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
+                    case('COD02'): $acciones = '<a href="CuadroAsigPersonal/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
+                    case('COD03'): $acciones = '<a href="ECE/Importar/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;                    
         
-                    default: $acciones = '<a href="PadronWeb/Aprobarxx/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
+                    default: $acciones = '<a href="PadronWeb/AprobarNN/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
                 }                
                 
                 $acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm"> Eliminar </button>';
