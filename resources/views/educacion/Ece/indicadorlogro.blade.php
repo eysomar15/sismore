@@ -231,13 +231,13 @@
             <div class="card-header border-primary bg-transparent pb-0">
                 <h3 class="card-title">Resultados de los indicadores
                     <div class="float-right">
-                        <select id="provincia" name="provincia" class="form-control form-control-sm" onchange="cargardistritos();">
+                        <select id="provincia" name="provincia" class="form-control form-control-sm" onchange="cargardistritos();vistaindicador();">
                             <option value="0">TODOS</option>
                             @foreach ($provincias as $prov)
                             <option value="{{$prov->id}}">{!!$prov->nombre!!}</option>
                             @endforeach
                         </select>
-                        <select id="distrito" name="distrito" class="form-control input-sm" onchange="vistaindicador();">
+                        <select id="distrito" name="distrito" class="form-control form-control-sm" onchange="vistaindicador();">
                             <option value="0">TODOS</option></select>
                     </div>
                 </h3>
@@ -332,20 +332,22 @@
             indicadormaterias();
             indicadorugel();
             indicadorprovincia();
-            //vistaindicador();
+            vistaindicador();
         });
         function vistaindicador() {
+            datos=$("#form_indicadores").serialize()+'&provincia='+$('#provincia').val()+'&distrito='+$('#distrito').val();
+            console.log(datos);
             if(true){
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
-                    url: "{{route($ruta)}}",
+                    url: "{{route('ece.indicador.derivados')}}",
                     type: 'post',
-                    data: $("#form_filtro").serialize(),
+                    data: datos,
                     beforeSend: function() {
                         $("#vistatabla").html('<br><h3>Cargando datos...</h3>');
                     },
                     success: function(data) {
-                        console.log(data);
+                        //  console.log(data);
                         $("#vistatabla").html(data);
                     },
                     error:function(jqXHR,textStatus,errorThrown){
@@ -362,7 +364,7 @@
                 type: 'post',
                 dataType:'JSON',
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     $("#distrito option").remove();
                     var options = '<option value="">TODOS</option>';
                     $.each(data.distritos, function(index, value) {
@@ -386,7 +388,7 @@
                         $("#vistaindicadores").html('<br><h3>Cargando datos...</h3>');
                     },
                     success: function(data) {
-                        console.log(data);
+                        //console.log(data);
                         $("#vistaindicadores").html(data);
                     },
                     error:function(jqXHR,textStatus,errorThrown){
@@ -406,7 +408,7 @@
                         $("#vistaindcurso").html('<br><h3>Cargando datos...</h3>');
                     },
                     success: function(data) {
-                        console.log(data);
+                        //console.log(data);
                         $("#vistaindcurso").html(data);
                     },
                     error:function(jqXHR,textStatus,errorThrown){
@@ -426,7 +428,7 @@
                         $("#vistaugel").html('<br><h3>Cargando datos...</h3>');
                     },
                     success: function(data) {
-                        console.log(data);
+                        //console.log(data);
                         $("#vistaugel").html(data);
                     },
                     error:function(jqXHR,textStatus,errorThrown){
@@ -446,7 +448,7 @@
                         $("#vistaprovincia").html('<br><h3>Cargando datos...</h3>');
                     },
                     success: function(data) {
-                        console.log(data);
+                        //console.log(data);
                         $("#vistaprovincia").html(data);
                     },
                     error:function(jqXHR,textStatus,errorThrown){

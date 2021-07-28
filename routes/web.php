@@ -61,6 +61,7 @@ Route::post('/ECE/IndicadorVista',[EceController::class, 'indicadorLOGROS'])->na
 Route::post('/ECE/IndicadorSatisfactorio',[EceController::class, 'indicadorSatisfactorio'])->name('ece.indicador.satisfactorio');
 Route::post('/ECE/IndicadorMateria',[EceController::class, 'indicadorMateria'])->name('ece.indicador.materia');
 Route::post('/ECE/IndicadorUgel',[EceController::class, 'indicadorUgel'])->name('ece.indicador.ugel');
+Route::post('/ECE/IndicadorDerivados',[EceController::class, 'indicadorDerivados'])->name('ece.indicador.derivados');
 Route::post('/ECE/IndicadorProvincia',[EceController::class, 'indicadorProvincia'])->name('ece.indicador.provincia');
 Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])
 ->name('ece.indicador.cargardistritos');
