@@ -37,16 +37,30 @@ class EceController extends Controller
             return back()->with('messageError', 'Por favor considere solo una hoja de excel en el libro');
         if (count($array) < 1)
             return back()->with('messageError', 'El  libro no tiene hojas');
-        try {
-            foreach ($array as $value) {
-                foreach ($value as $key => $row) {
-                    $cadena = $row['codigo_modular'] . $row['programados'] . $row['materia'] . $row['evaluados'] . $row['previo'] . $row['inicio'] . $row['proceso'] . $row['satisfactorio'] . $row['media_promedio'];
-                    if ($key > 0) break;
+        if ($request->tipo == 0) {
+            try {
+                foreach ($array as $value) {
+                    foreach ($value as $key => $row) {
+                        $cadena = $row['codigo_modular'] . $row['programados'] . $row['materia'] . $row['evaluados'] . $row['previo'] . $row['inicio'] . $row['proceso'] . $row['satisfactorio'] . $row['media_promedio'];
+                        if ($key > 0) break;
+                    }
                 }
+            } catch (Exception $e) {
+                $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
+                return back()->with('messageError', $mensaje);
             }
-        } catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
-            return back()->with('messageError', $mensaje);
+        }else{
+            try {
+                foreach ($array as $value) {
+                    foreach ($value as $key => $row) {
+                        $cadena = $row['codigo_modular'] . $row['programados'] . $row['materia'] . $row['evaluados'] . $row['inicio'] . $row['proceso'] . $row['lengua_evaluada'] . $row['satisfactorio'] . $row['media_promedio'];
+                        if ($key > 0) break;
+                    }
+                }
+            } catch (Exception $e) {
+                $mensaje = "Formato de archivo EIB no reconocido, porfavor verifique si el formato es el correcto";
+                return back()->with('messageError', $mensaje);
+            }
         }
         $errores['tipo'] = '1';
         $errores['msn'] = 'Importacion Exitosa';
@@ -108,6 +122,7 @@ class EceController extends Controller
                                     'lengua' => $row['lengua_evaluada'],
                                     'programados' => $row['programados'],
                                     'evaluados' => $row['evaluados'],
+                                    'previo' => '0',
                                     'inicio' => $row['inicio'],
                                     'proceso' => $row['proceso'],
                                     'mediapromedio' => $row['media_promedio'],
