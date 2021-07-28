@@ -135,6 +135,7 @@ class PadronWebController extends Controller
                 }
             }
         }catch (Exception $e) {
+            $importacion->delete(); // elimina la importacion creada
             $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema";           
             return view('Educacion.PadronWeb.Importar',compact('mensaje'));            
         }
