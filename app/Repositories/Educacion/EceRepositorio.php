@@ -220,39 +220,114 @@ class EceRepositorio
             ]);
         return $query;
     }
-
-    public static function listar_indicadorprovincia($anio, $grado, $tipo, $materia)
+    public static function listar_indicadordistrito($anio, $grado, $tipo, $materia, $provincia, $id = null)
     {
-        $id = 34;
-        $query = DB::table('edu_eceresultado as v1')
-            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-            ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
-            ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
-            ->where('v2.grado_id', $grado)
-            ->where('v2.anio', $anio)
-            ->where('v2.tipo', $tipo)
-            ->where('v1.materia_id', $materia)
-            ->groupBy('v5.dependencia')
-            ->get([
-                'v5.dependencia as id',
-                'v5.dependencia as provincia',
-                DB::raw('sum(evaluados) as evaluados'),
-                DB::raw('sum(previo) as previo'),
-                DB::raw('sum(inicio) as inicio'),
-                DB::raw('sum(proceso) as proceso'),
-                DB::raw('sum(satisfactorio) as satisfactorio'),
-            ]);
+        if ($id) {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->where('v1.materia_id', $materia)
+                ->where('v5.dependencia', $provincia)
+                ->where('v5.id', $id)
+                ->groupBy('v5.id')
+                ->get([
+                    'v5.id',
+                    'v5.id as distrito',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        } else {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->where('v1.materia_id', $materia)
+                ->where('v5.dependencia', $provincia)
+                ->groupBy('v5.id')
+                ->get([
+                    'v5.id',
+                    'v5.id as distrito',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        }
+
         //$provs = Ubigeo::where('dependencia', $id)->get();
         foreach ($query as $key => $value) {
-            $prov=Ubigeo::find($value->id);
-            $value->provincia=$prov->nombre;
+            $prov = Ubigeo::find($value->id);
+            $value->distrito = $prov->nombre;
+        }
+        return $query;
+    }
+    public static function listar_indicadorprovincia($anio, $grado, $tipo, $materia, $dependencia = null)
+    {
+        if ($dependencia) {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->where('v1.materia_id', $materia)
+                ->where('v5.dependencia', $dependencia)
+                ->groupBy('v5.dependencia')
+                ->get([
+                    'v5.dependencia as id',
+                    'v5.dependencia as provincia',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        } else {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->where('v1.materia_id', $materia)
+
+                ->groupBy('v5.dependencia')
+                ->get([
+                    'v5.dependencia as id',
+                    'v5.dependencia as provincia',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        }
+        //$provs = Ubigeo::where('dependencia', $id)->get();
+        foreach ($query as $key => $value) {
+            $prov = Ubigeo::find($value->id);
+            $value->provincia = $prov->nombre;
         }
         return $query;
     }
     public static function listar_indicadordepartamento($anio, $grado, $tipo, $materia)
     {
-        $id = 34;
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
@@ -262,7 +337,6 @@ class EceRepositorio
             ->where('v2.anio', $anio)
             ->where('v2.tipo', $tipo)
             ->where('v1.materia_id', $materia)
-            ->groupBy('v5.id')
             ->get([
                 DB::raw('sum(evaluados) as evaluados'),
                 DB::raw('sum(previo) as previo'),
@@ -271,10 +345,10 @@ class EceRepositorio
                 DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
         //$provs = Ubigeo::where('dependencia', $id)->get();
-        foreach ($query as $key => $value) {
+        /*foreach ($query as $key => $value) {
             $prov=Ubigeo::find($value->id);
             $value->provincia=$prov->nombre;
-        }
+        }*/
         return $query;
     }
 
