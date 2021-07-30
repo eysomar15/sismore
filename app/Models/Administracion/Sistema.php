@@ -12,5 +12,6 @@ class Sistema extends Model
     
     protected $fillable = [
         'nombre',
+        'icono',
         'estado'];
 }

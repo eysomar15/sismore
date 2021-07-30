@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="" style="background:linear-gradient(60deg, #0539a8, #00030a)">
+<div class="" style="background:linear-gradient(60deg, #165588, #011646)">
 {{-- <div class="" style="background-image: url('{{ asset('img/fondo.PNG') }}'); background-size: cover; background-position: top center;align-items: center;"> --}}
     {{-- style="background-image: url('{{ asset('img/login.jpg') }}'); background-size: cover; background-position: top center;align-items: center;" --}}
      
@@ -19,7 +19,7 @@
                     
                     <h4 class=" text-center mb-0 "  >
                         <br>
-                        <p class="text-primary">Sistema de Monitoreo Regional</p>
+                        <p  class="font-weight-bold">Sistema de Monitoreo Regional</p>
                             
                         <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                     </h4>
