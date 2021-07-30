@@ -20,7 +20,8 @@ class IndicadorController extends Controller
 
     public function indicadorEducacion1()
     {
-        $title = 'Tasa de conclusión, primaria, grupo de edades 12-13 años (% del total)';
+        $indicadorx = Indicador::find(1);
+        $title = $indicadorx->nombre; 
         $nivel = 37;
         $inds = DB::table('par_indicador_resultado as v1')
             ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
@@ -45,7 +46,8 @@ class IndicadorController extends Controller
     }
     public function indicadorEducacion2()
     {
-        $title = 'Tasa de conclusión, secundaria, grupo de edades 17-18 años (% del total)';
+        $indicadorx = Indicador::find(2);
+        $title = $indicadorx->nombre; 
         $nivel = 38;
         $inds = DB::table('par_indicador_resultado as v1')
             ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
@@ -70,8 +72,9 @@ class IndicadorController extends Controller
     }
     public function indicadorEducacion3()
     {
-        $title = 'Tasa de conclusión, educación superior, grupo de edades 22-24 años (% del total)';
-        $nivel = 38;
+        $indicadorx = Indicador::find(3);
+        $title = $indicadorx->nombre; 
+        $nivel = 0;// ES MUY VARIBLE
         $inds = DB::table('par_indicador_resultado as v1')
             ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
             ->join('par_anio as v3', 'v3.id', '=', 'v1.anio_id')
@@ -92,5 +95,49 @@ class IndicadorController extends Controller
         $datas .= ']';
         $info = ['labels' => $labels, 'datas' => $datas];
         return view('educacion.indicador.contenedor', compact('title', 'nivel', 'inds', 'minds', 'info'));
+    }
+/******* */
+    public function indicadorEducacion8()
+    {
+        $indicadorx = Indicador::find(8);
+        $title = $indicadorx->nombre; 
+        $nivel = 1;
+        return 'sin informacion 8';
+    }
+    public function indicadorEducacion9()
+    {
+        $indicadorx = Indicador::find(9);
+        $title = $indicadorx->nombre; 
+        $nivel = 37;
+        return 'sin informacion 9';
+    }
+    public function indicadorEducacion10()
+    {
+        $indicadorx = Indicador::find(10);
+        $title = $indicadorx->nombre; 
+        $nivel = 38;
+        return 'sin informacion 10';
+    }
+    //****** */
+    public function indicadorEducacion11()
+    {
+        $indicadorx = Indicador::find(11);
+        $title = $indicadorx->nombre; 
+        $nivel = 1;
+        return 'sin informacion 11';
+    }
+    public function indicadorEducacion12()
+    {
+        $indicadorx = Indicador::find(12);
+        $title = $indicadorx->nombre; 
+        $nivel = 37;
+        return 'sin informacion 12';
+    }
+    public function indicadorEducacion13()
+    {
+        $indicadorx = Indicador::find(13);
+        $title = $indicadorx->nombre; 
+        $nivel = 38;
+        return 'sin informacion 13';
     }
 }

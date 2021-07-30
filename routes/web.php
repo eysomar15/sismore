@@ -70,6 +70,12 @@ Route::get('/INDICADOR/Menu/{clasificador}', [IndicadorController::class, 'indic
 Route::get('/INDICADOR/Indicador1', [IndicadorController::class, 'indicadorEducacion1'])->name('indicador.1');
 Route::get('/INDICADOR/Indicador2', [IndicadorController::class, 'indicadorEducacion2'])->name('indicador.2');
 Route::get('/INDICADOR/Indicador3', [IndicadorController::class, 'indicadorEducacion3'])->name('indicador.3');
+Route::get('/INDICADOR/Indicador8', [IndicadorController::class, 'indicadorEducacion8'])->name('indicador.8');
+Route::get('/INDICADOR/Indicador9', [IndicadorController::class, 'indicadorEducacion9'])->name('indicador.9');
+Route::get('/INDICADOR/Indicador10', [IndicadorController::class, 'indicadorEducacion10'])->name('indicador.10');
+Route::get('/INDICADOR/Indicador11', [IndicadorController::class, 'indicadorEducacion11'])->name('indicador.11');
+Route::get('/INDICADOR/Indicador12', [IndicadorController::class, 'indicadorEducacion12'])->name('indicador.12');
+Route::get('/INDICADOR/Indicador13', [IndicadorController::class, 'indicadorEducacion13'])->name('indicador.13');
 Route::get('/INDICADOR/SINRUTA', function () {
     return 'Ruta no definida';
 })->name('indicador.sinruta');
