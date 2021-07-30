@@ -27,47 +27,48 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/PadronWeb/Importar',[PadronWebController::class, 'importar'])->name('PadronWeb.importar');
-Route::post('/PadronWeb/Importar',[PadronWebController::class, 'guardar'])->name('PadronWeb.guardar');
-Route::get('/PadronWeb/ListaImportada/{importacion_id}',[PadronWebController::class, 'ListaImportada'])->name('PadronWeb.PadronWeb_Lista');
-Route::get('/PadronWeb/ListaImportada_DataTable/{importacion_id}',[PadronWebController::class, 'ListaImportada_DataTable'])->name('PadronWeb.ListaImportada_DataTable');
-Route::get('/PadronWeb/Aprobar/{importacion_id}',[PadronWebController::class, 'aprobar'])->name('PadronWeb.aprobar');
-Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}',[PadronWebController::class, 'procesar'])->name('PadronWeb.procesar');
+Route::get('/PadronWeb/Importar', [PadronWebController::class, 'importar'])->name('PadronWeb.importar');
+Route::post('/PadronWeb/Importar', [PadronWebController::class, 'guardar'])->name('PadronWeb.guardar');
+Route::get('/PadronWeb/ListaImportada/{importacion_id}', [PadronWebController::class, 'ListaImportada'])->name('PadronWeb.PadronWeb_Lista');
+Route::get('/PadronWeb/ListaImportada_DataTable/{importacion_id}', [PadronWebController::class, 'ListaImportada_DataTable'])->name('PadronWeb.ListaImportada_DataTable');
+Route::get('/PadronWeb/Aprobar/{importacion_id}', [PadronWebController::class, 'aprobar'])->name('PadronWeb.aprobar');
+Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}', [PadronWebController::class, 'procesar'])->name('PadronWeb.procesar');
 
-Route::get('/CuadroAsigPersonal/Importar',[CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
-Route::post('/CuadroAsigPersonal/Importar',[CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
-Route::get('/CuadroAsigPersonal/ListaImportada/{importacion_id}',[CuadroAsigPersonalController::class, 'ListaImportada'])->name('CuadroAsigPersonal.CuadroAsigPersonal_Lista');
-Route::get('/CuadroAsigPersonal/ListaImportada_DataTable/{importacion_id}',[CuadroAsigPersonalController::class, 'ListaImportada_DataTable'])->name('CuadroAsigPersonal.ListaImportada_DataTable');
-Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}',[CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
-Route::post('/CuadroAsigPersonal/Aprobar/procesar/{importacion_id}',[CuadroAsigPersonalController::class, 'procesar'])->name('CuadroAsigPersonal.procesar');
+Route::get('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
+Route::post('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
+Route::get('/CuadroAsigPersonal/ListaImportada/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada'])->name('CuadroAsigPersonal.CuadroAsigPersonal_Lista');
+Route::get('/CuadroAsigPersonal/ListaImportada_DataTable/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada_DataTable'])->name('CuadroAsigPersonal.ListaImportada_DataTable');
+Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}', [CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
+Route::post('/CuadroAsigPersonal/Aprobar/procesar/{importacion_id}', [CuadroAsigPersonalController::class, 'procesar'])->name('CuadroAsigPersonal.procesar');
 
 
-Route::get('/Importacion',[ImportacionController::class, 'inicio'])->name('importacion.inicio');
-Route::get('/Importacion/importaciones_DataTable/',[ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
-Route::get('/Importacion/Eliminar/{id}',[ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
+Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
+Route::get('/Importacion/importaciones_DataTable/', [ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
+Route::get('/Importacion/Eliminar/{id}', [ImportacionController::class, 'eliminar'])->name('importacion.Eliminar');
 
-Route::get('/ECE/Importar',[EceController::class, 'importar'])->name('ece.importar');
+Route::get('/ECE/Importar', [EceController::class, 'importar'])->name('ece.importar');
+Route::get('/ECE/Importar/Aprobar/{importacion_id}', [EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
+Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}', [EceController::class, 'importarAprobarGuardar'])
+    ->name('ece.importar.aprobar.guardar');
+Route::post('/ECE/ImportarGuardar', [EceController::class, 'importarGuardar'])->name('ece.importar.store');
+Route::get('/ECE/Indicador4', [EceController::class, 'indicador4'])->name('ece.indicador.4');
+Route::get('/ECE/Indicador5', [EceController::class, 'indicador5'])->name('ece.indicador.5');
+Route::get('/ECE/Indicador6', [EceController::class, 'indicador6'])->name('ece.indicador.6');
+Route::get('/ECE/Indicador7', [EceController::class, 'indicador7'])->name('ece.indicador.7');
+Route::post('/ECE/IndicadorVista', [EceController::class, 'indicadorLOGROS'])->name('ece.indicador.vista');
+Route::post('/ECE/IndicadorSatisfactorio', [EceController::class, 'indicadorSatisfactorio'])->name('ece.indicador.satisfactorio');
+Route::post('/ECE/IndicadorMateria', [EceController::class, 'indicadorMateria'])->name('ece.indicador.materia');
+Route::post('/ECE/IndicadorUgel', [EceController::class, 'indicadorUgel'])->name('ece.indicador.ugel');
+Route::post('/ECE/IndicadorDerivados', [EceController::class, 'indicadorDerivados'])->name('ece.indicador.derivados');
+Route::post('/ECE/IndicadorProvincia', [EceController::class, 'indicadorProvincia'])->name('ece.indicador.provincia');
+Route::post('/ECE/IndicadorDistritos/{provincia}', [EceController::class, 'cargardistritos'])
+    ->name('ece.indicador.cargardistritos');
+Route::post('/ECE/IndicadorGrados', [EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');
 
-Route::get('/ECE/Importar/Aprobar/{importacion_id}',[EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
-Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}',[EceController::class, 'importarAprobarGuardar'])
-->name('ece.importar.aprobar.guardar');
-Route::post('/ECE/ImportarGuardar',[EceController::class, 'importarGuardar'])->name('ece.importar.store');
-Route::get('/ECE/Indicador1',[EceController::class, 'indicador1'])->name('ece.indicador.1');
-Route::get('/ECE/Indicador4',[EceController::class, 'indicador4'])->name('ece.indicador.4');
-Route::get('/ECE/Indicador5',[EceController::class, 'indicador5'])->name('ece.indicador.5');
-Route::get('/ECE/Indicador6',[EceController::class, 'indicador6'])->name('ece.indicador.6');
-Route::get('/ECE/Indicador7',[EceController::class, 'indicador7'])->name('ece.indicador.7');
-Route::post('/ECE/IndicadorVista',[EceController::class, 'indicadorLOGROS'])->name('ece.indicador.vista');
-Route::post('/ECE/IndicadorSatisfactorio',[EceController::class, 'indicadorSatisfactorio'])->name('ece.indicador.satisfactorio');
-Route::post('/ECE/IndicadorMateria',[EceController::class, 'indicadorMateria'])->name('ece.indicador.materia');
-Route::post('/ECE/IndicadorUgel',[EceController::class, 'indicadorUgel'])->name('ece.indicador.ugel');
-Route::post('/ECE/IndicadorDerivados',[EceController::class, 'indicadorDerivados'])->name('ece.indicador.derivados');
-Route::post('/ECE/IndicadorProvincia',[EceController::class, 'indicadorProvincia'])->name('ece.indicador.provincia');
-Route::post('/ECE/IndicadorDistritos/{provincia}',[EceController::class, 'cargardistritos'])
-->name('ece.indicador.cargardistritos');
-Route::post('/ECE/IndicadorGrados',[EceController::class, 'cargargrados'])->name('ece.indicador.cargargrados');
-
-Route::get('/INDICADOR/Menu/{clasificador}',[IndicadorController::class, 'indicadorMenu'])->name('indicador.menu');
+Route::get('/INDICADOR/Menu/{clasificador}', [IndicadorController::class, 'indicadorEducacionMenu'])->name('indicador.menu');
+Route::get('/INDICADOR/Indicador1', [IndicadorController::class, 'indicadorEducacion1'])->name('indicador.1');
+Route::get('/INDICADOR/Indicador2', [IndicadorController::class, 'indicadorEducacion2'])->name('indicador.2');
+Route::get('/INDICADOR/Indicador3', [IndicadorController::class, 'indicadorEducacion3'])->name('indicador.3');
 Route::get('/INDICADOR/SINRUTA', function () {
     return 'Ruta no definida';
 })->name('indicador.sinruta');
