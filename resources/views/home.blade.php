@@ -2,6 +2,8 @@
 
 @section('content')
 <div class="content">
+
+   
     <div class="container-fluid">
      <!--Widget-4 -->
         <div class="row">
@@ -194,19 +196,19 @@
 
 @section('js')
  <!-- flot chart -->
-        <script src="assets/libs/flot-charts/jquery.flot.js"></script>
-         <script src="assets/libs/flot-charts/jquery.flot.time.js"></script>
-        <script src="assets/libs/flot-charts/jquery.flot.tooltip.min.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.time.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.tooltip.min.js"></script>
         
         {{-- este scrip genera conflicto con el <script src="assets/js/pages/dashboard.init.js"></script> --}}
         {{-- <script src="assets/libs/flot-charts/jquery.flot.resize.js"></script> --}}
         
         
-        <script src="assets/libs/flot-charts/jquery.flot.pie.js"></script>
-        <script src="assets/libs/flot-charts/jquery.flot.selection.js"></script>
-        <script src="assets/libs/flot-charts/jquery.flot.stack.js"></script>
-        <script src="assets/libs/flot-charts/jquery.flot.crosshair.js"></script> 
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.pie.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.selection.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.stack.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.crosshair.js"></script> 
 
         <!-- Dashboard init JS -->
-        <script src="assets/js/pages/dashboard.init.js"></script>
+        <script src="{{asset('/')}}assets/js/pages/dashboard.init.js"></script>
 @endsection

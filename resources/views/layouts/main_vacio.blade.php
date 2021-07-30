@@ -20,13 +20,8 @@
         {{-- {{assets('/')}} --}}
     </head>
 
-    <body>
-
-            @guest()                        
-                @yield('content')
-            @endguest
-       
-       
+    <body>                 
+            @yield('content')
     </body>
 
 </html>
