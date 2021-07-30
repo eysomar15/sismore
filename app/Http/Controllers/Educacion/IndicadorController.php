@@ -113,6 +113,7 @@ class IndicadorController extends Controller
         $indicadorx = Indicador::find(11);
         $title = $indicadorx->nombre; 
         $nivel = 1;
+        
         return view('educacion.indicador.educat4', compact('title', 'nivel'));
     }
     public function indicadorEducacion12()
