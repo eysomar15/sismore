@@ -3,8 +3,8 @@
 @section('content')
 
 
-{{-- <div class="" style="background:linear-gradient(60deg, #0539a8, #00030a)"> --}}
-<div class="" style="background-image: url('{{ asset('img/fondo.PNG') }}'); background-size: cover; background-position: top center;align-items: center;">
+<div class="" style="background:linear-gradient(60deg, #0539a8, #00030a)">
+{{-- <div class="" style="background-image: url('{{ asset('img/fondo.PNG') }}'); background-size: cover; background-position: top center;align-items: center;"> --}}
     {{-- style="background-image: url('{{ asset('img/login.jpg') }}'); background-size: cover; background-position: top center;align-items: center;" --}}
      
     <div class="container">

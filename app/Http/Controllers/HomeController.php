@@ -24,12 +24,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $sistemas = SistemaRepositorio::Listar_porUsuario(auth()->user()->id);
+        return view('home');  
 
-        if($sistemas->count()==1)
-            return $this->sistema_acceder(1);
+        // $sistemas = SistemaRepositorio::Listar_porUsuario(auth()->user()->id);
 
-        return view('Access',compact(('sistemas')));   
+        // if($sistemas->count()==1)
+        //     return $this->sistema_acceder(1);
+
+        // return view('Access',compact(('sistemas')));   
             
     }
 
