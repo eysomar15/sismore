@@ -2,6 +2,15 @@
 
 @section('content')
     <div class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-fill bg-success">
+                    <div class="card-header bg-transparent">
+                        <h3 class="card-title text-white">{{$title}}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
         @if ($sinaprobar->count() > 0)
             <div class="row">
                 <div class="col-lg-12">
@@ -31,7 +40,7 @@
                 <div class="col-md-12">
                     <div class="card card-border">
                         <div class="card-header border-primary bg-transparent pb-0">
-                            <h3 class="card-title">Resultados de los indicadores
+                            <h3 class="card-title">Resultados
                                 <div class="float-right">
                                     <select id="anio" name="anio" class="form-control form-control-sm"
                                         onchange="satisfactorios();indicadormaterias();">

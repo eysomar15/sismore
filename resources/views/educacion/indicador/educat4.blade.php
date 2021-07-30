@@ -31,14 +31,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($inds as $item)
-                                                <tr>
-                                                    <!--td>{{ $item->departamento }}</td-->
-                                                    <td>{{ $item->anio }}</td>
-                                                    <td>{{ $item->resultado }}</td>
-                                                    <td>{{ $item->nota }}</td>
-                                                </tr>
-                                            @endforeach
+                                             
                                         </tbody>
                                     </table>
                                 </div>
@@ -50,7 +43,7 @@
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">GRAFICA 2</h3>
+                        <h3 class="card-title text-primary">GRAFICA</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="indicador2" data-type="Bar" height="300" width="800"></canvas>
@@ -74,10 +67,10 @@
         var myChart = new Chart($('#indicador2'), {
             type: 'bar',
             data: {
-                labels: {{$info['labels']}},//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ,//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
                     label: 'RESULTADOS',
-                    data: {{$info['datas']}},
+                    data: ,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
