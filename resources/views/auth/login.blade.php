@@ -18,8 +18,8 @@
                 <div class="card mt-4">
                     
                     <h4 class=" text-center mb-0 "  >
-                            <br>
-                            <p class="text-primary">Sistema de Monitoreo Regional</p>
+                        <br>
+                        <p class="text-primary">Sistema de Monitoreo Regional</p>
                             
                         <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                     </h4>
@@ -62,8 +62,7 @@
                                 <button class="btn btn-primary waves-effect width-md waves-light" type="submit"> Iniciar Sesión</button>
                             </div>
 
-                            <br>
-                            
+                            <br>                            
         
                         </form>
 
@@ -81,6 +80,5 @@
         <!-- end row -->
     </div>
 </div>
-
 
 @endsection

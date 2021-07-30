@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Administracion\SistemaRepositorio;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data = SistemaRepositorio::Listar_porUsuario(auth()->user()->id);
+
+        if($data->count()==1)
+            return view('home');
+
+        return $data->count();
+        //return view('home');
     }
+   
 }
