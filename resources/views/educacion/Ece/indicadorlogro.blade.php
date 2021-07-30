@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>$title])
+@extends('layouts.main',['titlePage'=>'Indicadores'])
 
 @section('content')
 <div class="content">
@@ -146,43 +146,6 @@
     </div>
 <!-- End row -->
 <div class="row" id="vistaugel">        
-    <div class="col-md-6">
-        <div class="card card-border">
-            <div class="card-header border-primary bg-transparent pb-0">
-                <h3 class="card-title">Indicador Curso</h3>
-            </div>
-            <div class="card-body">
-                <div class="row" >
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>PREVIO</th>
-                                        <th>INICIO</th>
-                                        <th>PROCESO</th>
-                                        <th>SATISFACTORIO</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                        <td>20</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end col -->
-
 </div>
 <!-- End row -->
 <div class="row" id="vistaprovincia">        
