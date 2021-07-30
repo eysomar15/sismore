@@ -26,7 +26,7 @@
                             </li>
                         </ul>
                     </div>
-                    <p class="font-13 text-muted m-0">{{$sistema_id}} </p>
+                    <p class="font-13 text-muted m-0"> </p>
                 </div>
             </div>
 
