@@ -1,7 +1,16 @@
-@extends('layouts.main',['titlePage'=>''])
+@extends('layouts.main',['titlePage'=>'INDICADORES'])
 
 @section('content')
     <div class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-fill bg-success">
+                    <div class="card-header bg-transparent">
+                        <h3 class="card-title text-white">{{$title}}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row" id="vistaugel">
             <div class="col-md-6">
                 <div class="card card-border">
@@ -38,35 +47,10 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-xl-6">
-                <div class="card">
-                    <div class="card-header py-3 bg-transparent">
-                        <div class="card-widgets">
-                            <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a>
-                            <a data-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false"
-                                aria-controls="cardCollpase1"><i class="mdi mdi-minus"></i></a>
-                            <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a>
-                        </div>
-                        <h5 class="card-title mb-0"> Grafica 1</h5>
-                    </div>
-                    <div id="cardCollpase1" class="collapse show">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="indicador1" style="position: relative;height: 320px"></div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- end card-->
-            </div>
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">GRAFICA 2</h3>
+                        <h3 class="card-title text-primary">GRAFICA</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="indicador2" data-type="Bar" height="300" width="800"></canvas>
@@ -84,80 +68,7 @@
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $.plot('#indicador1', [{
-                    data: {{ $minds }},
-                    label: "Resultados",
-                    color: "#317eeb"
-                },
-                /*{
-                    data: {{ $minds }},
-                    label: "Pages/Visit",
-                    color: "#1a2942"
-                }*/
-            ], {
-                series: {
-                    lines: {
-                        show: !0,
-                        fill: !0,
-                        lineWidth: 1,
-                        fillColor: {
-                            colors: [{
-                                opacity: .5
-                            }, {
-                                opacity: .5
-                            }]
-                        }
-                    },
-                    points: {
-                        show: !0
-                    },
-                    shadowSize: 0
-                },
-                legend: {
-                    position: "ne",
-                    margin: [0, -24],
-                    noColumns: 0,
-                    backgroundColor: "transparent",
-                    labelBoxBorderColor: null,
-                    labelFormatter: function(t, a) {
-                        return t + "&nbsp;&nbsp;"
-                    },
-                    width: 30,
-                    height: 2
-                },
-                grid: {
-                    hoverable: !0,
-                    clickable: !0,
-                    tickColor: "#f9f9f9",
-                    borderColor: "rgba(108, 120, 151, 0.1)",
-                    borderWidth: 1,
-                    labelMargin: 10,
-                    backgroundColor: "transparent"
-                },
-                /*yaxis: {
-                    min: 0,
-                    max: 15,
-                    tickColor: "rgba(108, 120, 151, 0.1)",
-                    font: {
-                        color: "#8a93a9"
-                    }
-                },
-                xaxis: {
-                    tickColor: "rgba(108, 120, 151, 0.1)",
-                    font: {
-                        color: "#8a93a9"
-                    }
-                },*/
-                tooltip: !0,
-                tooltipOpts: {
-                    content: "%s: Value of %x is %y",
-                    shifts: {
-                        x: -60,
-                        y: 25
-                    },
-                    defaultTheme: !1
-                }
-            }); //fin plot
+            
         });
         //var ctx = document.getElementById('indicador2').getContext('2d');
         var myChart = new Chart($('#indicador2'), {
