@@ -32,7 +32,7 @@
                                              @foreach ($inds as $item)
                                                 <tr>
                                                      <td>{{$item->titulado}}</td>
-                                                     <td>{{$item->suma}}</td>
+                                                     <td>{{round($item->suma*100/$total,2)}}</td>
                                                 </tr>
                                              @endforeach
                                         </tbody>

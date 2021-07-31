@@ -115,12 +115,14 @@ class IndicadorController extends Controller
         $nivel = 31; //31
 
         $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+        $total=0;
         foreach ($inds as $key => $value) {
+            $total+=$value->suma;
             if ($value->titulado == 0) {
                 $value->titulado = 'NO TITULADO';
             } else $value->titulado = 'TITULADO';
         }
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds'));
+        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds','total'));
     }
     public function indicadorEducacion12()
     {
@@ -128,12 +130,14 @@ class IndicadorController extends Controller
         $title = $indicadorx->nombre;
         $nivel = 37;
         $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+        $total=0;
         foreach ($inds as $key => $value) {
+            $total+=$value->suma;
             if ($value->titulado == 0) {
                 $value->titulado = 'NO TITULADO';
             } else $value->titulado = 'TITULADO';
         }
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds'));
+        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds','total'));
     }
     public function indicadorEducacion13()
     {
@@ -141,11 +145,13 @@ class IndicadorController extends Controller
         $title = $indicadorx->nombre;
         $nivel = 38;
         $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+        $total=0;
         foreach ($inds as $key => $value) {
+            $total+=$value->suma;
             if ($value->titulado == 0) {
                 $value->titulado = 'NO TITULADO';
             } else $value->titulado = 'TITULADO';
         }
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds'));
+        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds','total'));
     }
 }
