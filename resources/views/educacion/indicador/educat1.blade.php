@@ -53,7 +53,7 @@
                         <h3 class="card-title text-primary">GRAFICA</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="indicador2" data-type="Bar"></canvas>
+                        <canvas id="indicador2" data-type="Bar" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -84,11 +84,46 @@
                 }]
             },
             options: {
+                
+                responsive: true,
+                /*title: {
+                    display: false,
+                    text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
+                },*/
+                legend: {
+                    display: true,
+                    //position: 'bottom',
+                },               
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                          beginAtZero: true,
+                          min: 0,
+                          max: 100
+                        },
+                        /*scaleLabel: {
+                            display: true,
+                            labelString: 'Porcentaje'
+                        }*/
+                    }],
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                          beginAtZero: true                          
+                        },
+                        /*scaleLabel: {
+                            display: true,
+                            labelString: 'Año'
+                        }*/
+                    }]
+                },                
+                tooltips: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: true
+                    //position: 'average'
+                },
             }
         });
     </script>
