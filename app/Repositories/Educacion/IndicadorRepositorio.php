@@ -15,4 +15,17 @@ class IndicadorRepositorio
         ->where('v1.indicador_id', $id)->get();
         return $query;
     }
+
+    public static function listar_profesorestitulados($nivel)
+    {
+        $query =  DB::table('edu_plaza')
+        ->where('nivelModalidad_id', $nivel)
+        ->groupBy('esTitulado')
+        ->orderBy('esTitulado','desc')
+        ->get([
+            'esTitulado as titulado',
+            DB::raw('count(esTitulado) as suma')
+        ]);
+        return $query;
+    }
 }

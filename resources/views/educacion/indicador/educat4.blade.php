@@ -15,7 +15,7 @@
             <div class="col-md-6">
                 <div class="card card-border">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Indicador de Ucayali</h3>
+                        <h3 class="card-title">Indicador</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -24,14 +24,17 @@
                                     <table class="table mb-0">
                                         <thead>
                                             <tr>
-                                                <!--th>DEPARTAMENTO</th-->
-                                                <th>AÑO</th>
-                                                <th>RESULTADO</th>
-                                                <th>NOTA</th>
+                                                <th>PROFESORES</th>
+                                                <th>%</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                             
+                                             @foreach ($inds as $item)
+                                                <tr>
+                                                     <td>{{$item->titulado}}</td>
+                                                     <td>{{$item->suma}}</td>
+                                                </tr>
+                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
