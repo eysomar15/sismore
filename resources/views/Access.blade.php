@@ -1,51 +1,67 @@
 @extends('layouts.main_vacio')
 @section('title','SELECCIONAR SISTEMA')
+
+
 @section('content')
 
-
-<div class="" style="background:linear-gradient(60deg, #0539a8, #00030a)">
-
-    {{-- style="background-image: url('{{ asset('img/login.jpg') }}'); background-size: cover; background-position: top center;align-items: center;" --}}
-     
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6 col-xl-5">
-                
-                <div>
-                    <br><br><br><br><br><br><br><br>
-                </div>
-
-                <div class="card mt-4">
-                    
-                    <h4 class=" text-center mb-0 "  >
-                        <br>
-                        <p class="text-primary">Acceder a:</p>                        
-                    </h4>
-                    
-                    <ul>
-                        @foreach ($sistemas as $sistema)
-                          
-                                {{-- {{$escuela->nombre}} --}}
-                                <a href=" {{route('sistema_acceder',$sistema->id)}}"> {{$sistema->nombre}} <br>
-                                </a>
-                               
-                           
-                        @endforeach
-                    
-                    </ul>
-
-                </div>
-
-                <div>
-                    <br><br><br><br><br><br><br> <br><br><br><br><br> <br><br><br><br><br><br><br>
-                </div>
-                 
+    <div class="" style="background:linear-gradient(60deg,#165588, #011646)">
+        <div class="container">
+            <div>
+                <br><br><br><br><br><br><br><br>
             </div>
-            <!-- end col -->
-        </div>
-        <!-- end row -->
-    </div>
-</div>
 
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">                    
+                                 
+                    <div class="card mt-4">
+                        
+                        <h4 class=" text-center mb-0 "  >
+                            <br>
+                            <p class="font-weight-bold">ACCEDER A:</p>                        
+                        </h4>
+                      
+                        <div class="card-box">
+                            @foreach ($sistemas as $sistema)
+
+                            <a href=" {{route('sistema_acceder',$sistema->id)}}">
+
+                                <div class="media">
+                                    <div class="avatar-md bg-info rounded-circle mr-2">
+                                        <i class= "{{$sistema->icono}} avatar-title font-26 text-white"></i>
+                                    </div>
+                                    <div class="media-body align-self-center">
+                                        <div class="text-right">
+                                            <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup"> {{$sistema->nombre}} <br> </span></h4>                                    
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">                     
+                                    <div class="progress progress-sm m-0">
+                                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </a>
+                            <br>
+                            @endforeach  
+                        </div>               
+                       
+                    </div>
+
+                    <div>
+                        <br><br><br><br><br><br><br> <br><br><br><br><br> <br><br><br><br><br><br><br><br><br><br>
+                    </div>
+                    
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+    </div>
 
 @endsection
+
+
+

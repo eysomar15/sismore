@@ -19,14 +19,14 @@
                     
                     <h4 class=" text-center mb-0 "  >
                         <br>
-                        <p class="text-primary">Sistema de Monitoreo Regional</p>
+                        <p  class="font-weight-bold">Sistema de Monitoreo Regional</p>
                             
                         <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
                     </h4>
 
                     <h4 class=" text-center mb-0 "  >
                       <br>
-                      <p class="text-primary">Sesión Cerrada Correctamente</p>
+                      <p  class="font-weight-bold">Sesión Cerrada Correctamente</p>
                 
                     </h4>
 
@@ -34,7 +34,7 @@
                     <li>
                       <a href="{{route('login')}}" class="waves-effect">
                          
-                          <span> Volver a Iniciar Sesión</span>                  
+                          <span > Volver a Iniciar Sesión</span>                  
                       </a>                   
                     </li>
                     </ul>
