@@ -53,7 +53,7 @@
                         <h3 class="card-title text-primary">GRAFICA</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="indicador2" data-type="Bar" height="300" width="800"></canvas>
+                        <canvas id="indicador2" data-type="Bar" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
 @section('js')
 
     <!-- flot chart -->
-    <script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script>
+    <!--script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script-->
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -78,31 +78,52 @@
                 datasets: [{
                     label: 'RESULTADOS',
                     data: {{$info['datas']}},
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        //'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        //'rgba(255, 159, 64, 1)'
-                    ],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
+                
+                responsive: true,
+                /*title: {
+                    display: false,
+                    text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
+                },*/
+                legend: {
+                    display: true,
+                    //position: 'bottom',
+                },               
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                          beginAtZero: true,
+                          min: 0,
+                          max: 100
+                        },
+                        /*scaleLabel: {
+                            display: true,
+                            labelString: 'Porcentaje'
+                        }*/
+                    }],
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                          beginAtZero: true                          
+                        },
+                        /*scaleLabel: {
+                            display: true,
+                            labelString: 'Año'
+                        }*/
+                    }]
+                },                
+                tooltips: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: true
+                    //position: 'average'
+                },
             }
         });
     </script>

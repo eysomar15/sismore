@@ -31,14 +31,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($inds as $item)
-                                                <tr>
-                                                    <!--td>{{ $item->departamento }}</td-->
-                                                    <td>{{ $item->anio }}</td>
-                                                    <td>{{ $item->resultado }}</td>
-                                                    <td>{{ $item->nota }}</td>
-                                                </tr>
-                                            @endforeach
+                                             
                                         </tbody>
                                     </table>
                                 </div>
@@ -74,10 +67,10 @@
         var myChart = new Chart($('#indicador2'), {
             type: 'bar',
             data: {
-                labels: {{$info['labels']}},//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels:  ,//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
                     label: 'RESULTADOS',
-                    data: {{$info['datas']}},
+                    data:  ,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
