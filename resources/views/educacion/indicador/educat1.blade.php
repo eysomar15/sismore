@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'INDICADORES'])
+@extends('layouts.main',['titlePage'=>'INDICADOR'])
 
 @section('content')
     <div class="content">
@@ -100,7 +100,7 @@
                         ticks: {
                           beginAtZero: true,
                           min: 0,
-                          max: 100
+                          max: 25
                         },
                         /*scaleLabel: {
                             display: true,

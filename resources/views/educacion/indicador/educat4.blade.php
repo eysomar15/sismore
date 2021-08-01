@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'INDICADORES'])
+@extends('layouts.main',['titlePage'=>'INDICADOR'])
 
 @section('content')
     <div class="content">
