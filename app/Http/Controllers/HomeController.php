@@ -31,10 +31,17 @@ class HomeController extends Controller
 
         return view('Access',compact(('sistemas')));
     }
-
+    
     public function sistema_acceder($sistema_id)
     {      
         return view('home',compact(('sistema_id')));  
     }
+
+    public function dashboard()
+    {      
+        return view('home');  
+    }
+
+    
    
 }

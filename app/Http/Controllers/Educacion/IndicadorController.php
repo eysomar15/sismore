@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Http\Controllers\Controller;
-use App\Models\Educacion\Clasificador;
+use App\Models\Parametro\Clasificador;
 use App\Models\Educacion\Indicador;
 use App\Models\Ubigeo;
 use App\Repositories\Educacion\IndicadorRepositorio;
