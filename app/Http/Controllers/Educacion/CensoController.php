@@ -8,6 +8,8 @@ use App\Models\Educacion\Censo;
 use App\Models\Educacion\CensoResultado;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Anio;
+use App\Repositories\Educacion\CensoRepositorio;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
 
 class CensoController extends Controller
@@ -24,10 +26,7 @@ class CensoController extends Controller
         
         return view('Educacion.Censo.Importar',compact('mensaje','anios'));
     } 
-    public function guardarb(Request $request)
-    {
-      return $request['anio'];
-    }  
+    
     public function guardar(Request $request)
     {  
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
@@ -48,6 +47,7 @@ class CensoController extends Controller
                     .$row['departamento'].$row['provincia'].$row['distrito'].$row['centopoblado'].$row['direccion']
                     .$row['areageo'].$row['estadocenso'].$row['totalaulas'].$row['aulasbuenas'].$row['aulasregulares']
                     .$row['aulasmalas'].$row['nopuedeprecisarestadoaulas'].$row['ellocales'].$row['propietariolocal']
+                    .$row['cuenta_con_itse'].$row['plan_contingencia'].$row['plan_desastre'].$row['plandesastre_act']
                     .$row['compuescri_operativos'].$row['compuescri_inoperativos'].$row['compuporta_operativos']
                     .$row['compuporta_inoperativos'].$row['lapto_operativos'].$row['lapto_inoperativos'].$row['tieneinternet']
                     .$row['tipoconexion'].$row['fuenteenergiaelectrica'].$row['empresaenergiaelect'].$row['tieneenergiaelecttododia']
@@ -77,7 +77,6 @@ class CensoController extends Controller
 
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    // echo $row['cen_edu'].'<br>';
                     $CensoResultado = CensoResultado::Create([
                         'censo_id'=>$censo->id,
                         'codLocal'=>$row['codlocal'],
@@ -102,6 +101,10 @@ class CensoController extends Controller
                         'noPuedePrecisarEstadoAulas'=>$row['nopuedeprecisarestadoaulas'],
                         'elLocalEs'=>$row['ellocales'],
                         'propietarioLocal'=>$row['propietariolocal'],
+                        'cuenta_con_itse'=>$row['cuenta_con_itse'],
+                        'plan_contingencia'=>$row['plan_contingencia'],
+                        'plan_desastre'=>$row['plan_desastre'],
+                        'plandesastre_act'=>$row['plandesastre_act'],
                         'compuEscri_operativos'=>$row['compuescri_operativos'],
                         'compuEscri_inoperativos'=>$row['compuescri_inoperativos'],
                         'compuPorta_operativos'=>$row['compuporta_operativos'],
@@ -112,7 +115,7 @@ class CensoController extends Controller
                         'tipoConexion'=>$row['tipoconexion'],
                         'fuenteEnergiaElectrica'=>$row['fuenteenergiaelectrica'],
                         'empresaEnergiaElect'=>$row['empresaenergiaelect'],
-                        'tieneEnergiaElectTodoDia'=>$row['tieneenergiaelecteododia'],
+                        'tieneEnergiaElectTodoDia'=>$row['tieneenergiaelecttododia'],
                         'fuenteAgua'=>$row['fuenteagua'],
                         'empresaAgua'=>$row['empresaagua'],
                         'tieneAguaPotTodoDia'=>$row['tieneaguapottododia'],
@@ -121,39 +124,51 @@ class CensoController extends Controller
                 }
             }
         }catch (Exception $e) {
-            $importacion->delete();// elimina la importacion creada
-            $censo->delete(); 
+            $censo->delete();   
+            $importacion->delete();// elimina la importacion creada            
             $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema";           
             return view('Educacion.Censo.Importar',compact('mensaje','anios'));            
         }
-
-        return 1;
-        //return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista',$importacion->id);
+       
+        return redirect()->route('Censo.Censo_Lista',$importacion->id);
     }
 
     public function ListaImportada($importacion_id)
     {
-        return view('Educacion.CuadroAsigPersonal.ListaImportada',compact('importacion_id'));
+        return view('Educacion.Censo.ListaImportada',compact('importacion_id'));
     }
 
-    // public function ListaImportada_DataTable($importacion_id)
-    // {
-    //     $Lista = CuadroAsigPersonalRepositorio::Listar_Por_Importacion_id($importacion_id);
+    public function ListaImportada_DataTable($importacion_id)
+    {
+        $Lista = CensoRepositorio::Listar_Por_Importacion_id($importacion_id);
                 
-    //     return  datatables()->of($Lista)->toJson();;
-    // }
+        return  datatables()->of($Lista)->toJson();;
+    }
     
-    // public function aprobar($importacion_id)
-    // {
-    //     $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
+    public function aprobar($importacion_id)
+    {
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
+        $anioCenso = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first()->anio;
 
-    //     return view('educacion.CuadroAsigPersonal.Aprobar',compact('importacion_id','importacion'));
-    // } 
+        return view('educacion.Censo.Aprobar',compact('importacion_id','importacion','anioCenso'));
+    } 
 
-    // public function procesar($importacion_id)
-    // {
-    //     $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?)', [$importacion_id]);
-    //     return  $importacion_id;
-    // }
+    public function procesar($importacion_id)
+    {
+        $importacion  = Importacion::find($importacion_id);
+
+        $importacion->estado = 'PR';
+        $importacion->save();
+
+        $Censo = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first();
+        $Censo->estado = 'PR';
+        $Censo->save();
+
+        $ultimoCenso_mismoAnio = CensoRepositorio :: censo_Por_anio_estado($Censo->anio,'PR')->first();
+        $ultimoCenso_mismoAnio->estado = 'EL';
+        $ultimoCenso_mismoAnio->save();
+
+        return  $importacion;
+    }
     
 }

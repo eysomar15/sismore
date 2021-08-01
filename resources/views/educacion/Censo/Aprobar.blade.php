@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <div class="form">
                 
-                    <form action="{{route('CuadroAsigPersonal.procesar',$importacion_id)}}" method="post" enctype='multipart/form-data'
+                    <form action="{{route('Censo.procesar',$importacion_id)}}" method="post" enctype='multipart/form-data'
                         class="cmxform form-horizontal tasi-form">                            
                         @csrf
                         @if(Session::has('message'))
@@ -29,7 +29,7 @@
                         <div class="form-group row">
                             <label class="col-md-2 col-form-label">Fuente de datos</label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" readonly="readonly" value="{{$importacion->formato}} - {{$importacion->nombre}}">                                
+                                <input type="text" class="form-control" readonly="readonly" value="{{$importacion->formato}} - {{$anioCenso}}">                                
                             </div>
                         
                             <label class="col-md-2 col-form-label">Fecha Versión</label>
@@ -76,52 +76,48 @@
                         <table id="grid" class="table table-striped table-bordered" style="width:10500px">
                             <thead class="text-primary">                              
                                
-                                <th style="width:80px">region</th>
-                                <th style="width:180px">unidad_ejecutora</th>
-                                <th style="width:100px">organo_intermedio</th>
-                                <th style="width:100px">provincia</th>
-                                <th style="width:100px">distrito</th>
-                                <th style="width:200px">tipo_ie</th>
-                                <th style="width:160px">gestion</th>
-                                <th style="width:200px">zona</th>
-                                <th style="width:80px">codmod_ie</th>
-                                <th style="width:80px">codigo_local</th>
-                                <th style="width:80px">clave8</th>
-                                <th style="width:80px">nivel_educativo</th>
-                                <th style="width:200px">institucion_educativa</th>
-                                <th style="width:80px">codigo_plaza</th>
-                                <th style="width:80px">tipo_trabajador</th>
-                                <th style="width:280px">sub_tipo_trabajador</th>
-                                <th style="width:300px">cargo</th>
-                                <th style="width:80px">situacion_laboral</th>
-                                <th style="width:480px">motivo_vacante</th>
-                                <th style="width:80px">documento_identidad</th>
-                                <th style="width:80px">codigo_modular</th>
-                                <th style="width:80px">apellido_paterno</th>
-                                <th style="width:80px">apellido_materno</th>
-                                <th style="width:160px">nombres</th>
-                                <th style="width:80px">fecha_ingreso</th>
-                                <th style="width:80px">categoria_remunerativa</th>
-                                <th style="width:80px">jornada_laboral</th>
-                                <th style="width:260px">estado</th>
-                                <th style="width:80px">fecha_nacimiento</th>
-                                <th style="width:80px">fecha_inicio</th>
-                                <th style="width:80px">fecha_termino</th>
-                                <th style="width:80px">tipo_registro</th>
-                                <th style="width:80px">ley</th>
-                                <th style="width:80px">preventiva</th>
-                                <th style="width:80px">referencia_preventiva</th>
-                                <th style="width:80px">especialidad</th>
-                                <th style="width:160px">tipo_estudios</th>
-                                <th style="width:80px">estado_estudios</th>
-                                <th style="width:80px">grado</th>
-                                <th style="width:460px">mencion</th>
-                                <th style="width:300px">especialidad_profesional</th>
-                                <th style="width:80px">fecha_resolucion</th>
-                                <th style="width:80px">numero_resolucion</th>
-                                <th style="width:300px">centro_estudios</th>
-                                <th style="width:80px">celular</th>
-                                <th style="width:80px">email</th>
+                              <th style="width:80px">codLocal</th>
+                              <th style="width:100px">codigosModulares</th>
+                              <th style="width:200px">nombreInstitucion</th>
+                              <th style="width:80px">codigoGestion</th>
+                              <th style="width:250px">descripcionGestion</th>
+                              <th style="width:80px">codigoOrganoInter</th>
+                              <th style="width:280px">nombreDre_Ugel</th>
+                              <th style="width:80px">codigoUbigeo</th>
+                              <th style="width:100px">Departamento</th>
+                              <th style="width:100px">Provincia</th>
+                              <th style="width:100px">Distrito</th>
+                              <th style="width:200px">centoPoblado</th>
+                              <th style="width:400px">direccion</th>
+                              <th style="width:80px">areaGeo</th>
+                              <th style="width:200px">estadoCenso</th>
+                              <th style="width:80px">totalAulas</th>
+                              <th style="width:80px">aulasBuenas</th>
+                              <th style="width:80px">aulasRegulares</th>
+                              <th style="width:80px">aulasMalas</th>
+                              <th style="width:80px">noPuedePrecisarEstadoAulas</th>
+                              <th style="width:80px">elLocalEs</th>
+                              <th style="width:100px">propietarioLocal</th>
+                              <th style="width:80px">cuenta_con_itse</th>
+                              <th style="width:80px">plan_contingencia</th>
+                              <th style="width:80px">plan_desastre</th>
+                              <th style="width:80px">plandesastre_act</th>
+                              <th style="width:80px">compuEscri_operativos</th>
+                              <th style="width:80px">compuEscri_inoperativos</th>
+                              <th style="width:80px">compuPorta_operativos</th>
+                              <th style="width:80px">compuPorta_inoperativos</th>
+                              <th style="width:80px">lapto_operativos</th>
+                              <th style="width:80px">lapto_inoperativos</th>
+                              <th style="width:80px">tieneInternet</th>
+                              <th style="width:100px">tipoConexion</th>
+                              <th style="width:100px">fuenteEnergiaElectrica</th>
+                              <th style="width:100px">empresaEnergiaElect</th>
+                              <th style="width:100px">tieneEnergiaElectTodoDia</th>
+                              <th style="width:100px">fuenteAgua</th>
+                              <th style="width:100px">empresaAgua</th>
+                              <th style="width:100px">tieneAguaPotTodoDia</th>
+                              <th style="width:300px">desagueInfo</th>
+
                             </thead>
                          
                         </table>
@@ -147,19 +143,19 @@
 
     <script>
         $('#grid').DataTable({
-            "ajax": "{{route('CuadroAsigPersonal.ListaImportada_DataTable',$importacion_id)}}",
+             "ajax": "{{route('Censo.ListaImportada_DataTable',$importacion_id)}}",
             "columns":[             
-                {data:'region'},{data:'unidad_ejecutora'},{data:'organo_intermedio'},{data:'provincia'},
-                {data:'distrito'},{data:'tipo_ie'},{data:'gestion'},{data:'zona'},{data:'codmod_ie'},
-                {data:'codigo_local'},{data:'clave8'},{data:'nivel_educativo'},{data:'institucion_educativa'},
-                {data:'codigo_plaza'},{data:'tipo_trabajador'},{data:'sub_tipo_trabajador'},{data:'cargo'},
-                {data:'situacion_laboral'},{data:'motivo_vacante'},{data:'documento_identidad'},{data:'codigo_modular'},
-                {data:'apellido_paterno'},{data:'apellido_materno'},{data:'nombres'},{data:'fecha_ingreso'},
-                {data:'categoria_remunerativa'},{data:'jornada_laboral'},{data:'estado'},{data:'fecha_nacimiento'},
-                {data:'fecha_inicio'},{data:'fecha_termino'},{data:'tipo_registro'},{data:'ley'},{data:'preventiva'},
-                {data:'referencia_preventiva'},{data:'especialidad'},{data:'tipo_estudios'},{data:'estado_estudios'},
-                {data:'grado'},{data:'mencion'},{data:'especialidad_profesional'},{data:'fecha_resolucion'},
-                {data:'numero_resolucion'},{data:'centro_estudios'},{data:'celular'},{data:'email'},                
+              {data:'codLocal'},{data:'codigosModulares'},{data:'nombreInstitucion'},{data:'codigoGestion'},
+              {data:'descripcionGestion'},{data:'codigoOrganoInter'},{data:'nombreDre_Ugel'},{data:'codigoUbigeo'},
+              {data:'Departamento'},{data:'Provincia'},{data:'Distrito'},{data:'centoPoblado'},{data:'direccion'},
+              {data:'areaGeo'},{data:'estadoCenso'},{data:'totalAulas'},{data:'aulasBuenas'},{data:'aulasRegulares'},
+              {data:'aulasMalas'},{data:'noPuedePrecisarEstadoAulas'},{data:'elLocalEs'},{data:'propietarioLocal'},
+              {data:'cuenta_con_itse'},{data:'plan_contingencia'},{data:'plan_desastre'},{data:'plandesastre_act'},
+              {data:'compuEscri_operativos'},{data:'compuEscri_inoperativos'},{data:'compuPorta_operativos'},
+              {data:'compuPorta_inoperativos'},{data:'lapto_operativos'},{data:'lapto_inoperativos'},{data:'tieneInternet'},
+              {data:'tipoConexion'},{data:'fuenteEnergiaElectrica'},{data:'empresaEnergiaElect'},
+              {data:'tieneEnergiaElectTodoDia'},{data:'fuenteAgua'},{data:'empresaAgua'},{data:'tieneAguaPotTodoDia'},
+              {data:'desagueInfo'},               
             ],
             // responsive:true,
             autoWidth:true,
