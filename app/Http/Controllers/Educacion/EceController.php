@@ -177,6 +177,8 @@ class EceController extends Controller
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        $info1=EceRepositorio::listar_indicadoranio(date('Y'),$grado,$tipo,'1');
+        return $info1;
         return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios', 'sinaprobar'));
     }
     public function indicador6()

@@ -30,7 +30,28 @@
                 </div>
             </div>
         @endif
-
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">GRAFICA</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="indicador2" data-type="Bar" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">GRAFICA</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="indicador2" data-type="Bar" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End row -->
         <form id="form_indicadores" action="#">
             @csrf
             <input type="hidden" name="grado" value="{{ $grado }}">
@@ -67,7 +88,6 @@
         </form>
         <!-- End row -->
         <div class="row" id="vistaindcurso">
-            
         </div>
         <!-- End row -->
         <div class="row" id="vistaugel">
@@ -269,6 +289,61 @@
                 });
             }
         }
+        var myChart = new Chart($('#indicador1'), {
+            type: 'bar',
+            data: {
+                labels:  [],
+                datasets: [{
+                    label: 'RESULTADOS',
+                    data:  [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                
+                responsive: true,
+                /*title: {
+                    display: false,
+                    text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
+                },*/
+                legend: {
+                    display: true,
+                    //position: 'bottom',
+                },               
+                scales: {
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                          beginAtZero: true,
+                          min: 0,
+                          max: 100
+                        },
+                        /*scaleLabel: {
+                            display: true,
+                            labelString: 'Porcentaje'
+                        }*/
+                    }],
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                          beginAtZero: true                          
+                        },
+                        /*scaleLabel: {
+                            display: true,
+                            labelString: 'Año'
+                        }*/
+                    }]
+                },                
+                tooltips: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: true
+                    //position: 'average'
+                },
+            }
+        });
     </script>
 
 @endsection

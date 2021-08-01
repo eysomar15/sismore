@@ -177,14 +177,12 @@ class EceRepositorio
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-            //->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.anio', '<=', $anio)
             ->where('v2.tipo', $tipo)
             ->where('v1.materia_id', $materia)
             ->orderBy('v2.anio', 'desc')
             ->groupBy('v2.anio')
-            //->select('v1.*')
             ->get([
                 'v2.anio',
                 DB::raw('sum(evaluados) as evaluados'),
@@ -195,7 +193,6 @@ class EceRepositorio
             ]);
         return $query;
     }
-
     public static function listar_indicadorugel($anio, $grado, $tipo, $materia)
     {
         $query = DB::table('edu_eceresultado as v1')
@@ -344,14 +341,8 @@ class EceRepositorio
                 DB::raw('sum(proceso) as proceso'),
                 DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
-        //$provs = Ubigeo::where('dependencia', $id)->get();
-        /*foreach ($query as $key => $value) {
-            $prov=Ubigeo::find($value->id);
-            $value->provincia=$prov->nombre;
-        }*/
         return $query;
     }
-
     public static function listar_importacionsinaprobar1($grado, $tipo)
     {
         $query = DB::table('par_importacion as v1')
