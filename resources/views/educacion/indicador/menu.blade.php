@@ -16,16 +16,17 @@
                                 @php
                                     $i=1;
                                 @endphp
+
                                 @foreach ($clas as $key=> $item)
-                                <li>{{$item->nombre}}</li>
-                                @php
-                                    $inds=App\Models\Educacion\Indicador::where('clasificador_id',$item->id)->get();
-                                @endphp
-                                <ul>
-                                    @foreach ($inds as $key2=> $item2)
-                                    <li>{{$i++}}.-<a href="{{route($item2->url)}}">{{$item2->nombre}}</a></li>
-                                    @endforeach
-                                </ul>
+                                    <li>{{$item->nombre}}</li>
+                                    @php
+                                        $inds=App\Models\Educacion\Indicador::where('clasificador_id',$item->id)->get();
+                                    @endphp
+                                    <ul>
+                                        @foreach ($inds as $key2=> $item2)
+                                        <li>{{$i++}}.-<a href="{{route($item2->url)}}">{{$item2->nombre}}</a></li>
+                                        @endforeach
+                                    </ul>
                                 @endforeach
                             </ul>
                         </div>

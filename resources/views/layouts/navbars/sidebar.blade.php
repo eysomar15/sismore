@@ -26,14 +26,14 @@
                             </li>
                         </ul>
                     </div>
-                    <p class="font-13 text-muted m-0"> </p>
+                    <p class="font-13 text-muted m-0"> EDUCACION</p>
                 </div>
             </div>
 
             <ul class="metismenu" id="side-menu">
 
                 <li>
-                    <a href="{{route('home')}}" class="waves-effect">
+                    <a href="{{route('dashboard')}}" class="waves-effect">
                         <i class="mdi mdi-home"></i>
                         <span> Dashboard </span>
                     </a>
@@ -60,9 +60,30 @@
                 </li>
 
                 <li>
-                    <a href="{{route('indicador.menu','1')}}" class="waves-effect">
-                        <i class="mdi mdi-poll-box"></i>
+                    <a href="{{route('Clasificador.menu','01')}}" class="waves-effect">
+                        <i class="mdi mdi-equalizer-outline"></i>
                         <span> Indicadores </span>
+                    </a>                    
+                </li>
+
+                <li>
+                    <a href="{{route('Clasificador.menu','04')}}" class="waves-effect">
+                        <i class="mdi mdi-chart-tree"></i>
+                        <span> PDRC </span>
+                    </a>                    
+                </li>
+
+                <li>
+                    <a href="{{route('Clasificador.menu','05')}}" class="waves-effect">
+                        <i class="mdi mdi-equalizer"></i>
+                        <span> Obj. Estrat. Instit. </span>
+                    </a>                    
+                </li>
+
+                <li>
+                    <a href="{{route('Clasificador.menu','06')}}" class="waves-effect">                        
+                        <i class="mdi mdi-poll-box"></i>
+                        <span> Act. Estrat. Instit. </span>
                     </a>                    
                 </li>
 
@@ -79,23 +100,6 @@
                         <li><a href="tables-responsive.html">Responsive Table</a></li>
                     </ul>
                 </li>
-
-                <li>
-                    <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-view-list"></i>
-                        <span> Objetivos Instit. </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="tables-basic.html">Basic Tables</a></li>
-                        <li><a href="tables-datatable.html">Data Table</a></li>
-                        <li><a href="tables-editable.html">Editable Table</a></li>
-                        <li><a href="tables-responsive.html">Responsive Table</a></li>
-                    </ul>
-                </li>
-
-                
-
            
 {{-- 
 
