@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Educacion\CensoController;
 use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
@@ -44,6 +45,8 @@ Route::get('/CuadroAsigPersonal/ListaImportada_DataTable/{importacion_id}', [Cua
 Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}', [CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
 Route::post('/CuadroAsigPersonal/Aprobar/procesar/{importacion_id}', [CuadroAsigPersonalController::class, 'procesar'])->name('CuadroAsigPersonal.procesar');
 
+Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
+Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/', [ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');

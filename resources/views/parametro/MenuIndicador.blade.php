@@ -18,7 +18,7 @@
                     @foreach ($listaNivel3_deClasificador as $key => $item)
                         <br>
                         <h6>
-                            {{$nombre_niv2}} : {{$item->nombre_niv3}}
+                            {{$nombre_niv2}} : {{$item->codigoAdicional}}  {{$item->nombre_niv3}}
                         </h6>
                         <div class="progress progress-sm m-0">                
                         </div>
