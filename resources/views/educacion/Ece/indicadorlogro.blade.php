@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <div class="card card-fill bg-success">
                     <div class="card-header bg-transparent">
-                        <h3 class="card-title text-white">{{$title}}</h3>
+                        <h3 class="card-title text-white">{{ $title }}</h3>
                     </div>
                 </div>
             </div>
@@ -30,27 +30,21 @@
                 </div>
             </div>
         @endif
+                
         <div class="row">
+            @foreach ($info1 as $key => $item)
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">GRAFICA</h3>
+                        <h3 class="card-title text-primary">RESULTADO general de {{$item->descripcion}}</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="indicador2" data-type="Bar" height="200"></canvas>
+                        <canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">GRAFICA</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="indicador2" data-type="Bar" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
+            </div>    
+            @endforeach
+            
         </div><!-- End row -->
         <form id="form_indicadores" action="#">
             @csrf
@@ -77,31 +71,60 @@
                             <div class="row" id="vistaindicadores">
                             </div>
                         </div>
-                        <!-- End card-body -->
                     </div>
-                    <!-- End card -->
-
                 </div>
-                <!-- end col -->
-
             </div>
         </form>
         <!-- End row -->
-        <div class="row" id="vistaindcurso">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-border">
+                    <div class="card-header border-default bg-transparent pb-0">
+                        <h3 class="card-title">Resultados por años</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="vistaindcurso">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        
         <!-- End row -->
-        <div class="row" id="vistaugel">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-border">
+                    <div class="card-header border-default bg-transparent pb-0">
+                        <h3 class="card-title">Resultados por ugel</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="vistaugel">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        
         <!-- End row -->
-        <div class="row" id="vistaprovincia">
-             
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-border">
+                    <div class="card-header border-default bg-transparent pb-0">
+                        <h3 class="card-title">Resultados por Provincia</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="vistaprovincia">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- End row -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Resultados de los indicadores
+                    <div class="card-header border-default bg-transparent pb-0">
+                        <h3 class="card-title">Resultados
                             <div class="float-right">
                                 <select id="provincia" name="provincia" class="form-control form-control-sm"
                                     onchange="cargardistritos();vistaindicador();">
@@ -139,7 +162,7 @@
     <script src="{{ asset('/') }}assets/libs/jquery-validation/jquery.validate.min.js"></script>
     <!-- Validation init js-->
     <script src="{{ asset('/') }}assets/js/pages/form-validation.init.js"></script>
-
+    <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             satisfactorios();
@@ -289,20 +312,50 @@
                 });
             }
         }
-        var myChart = new Chart($('#indicador1'), {
+        
+        @foreach ($info1 as $pos1 => $materia)
+        var myChart = new Chart($('#indicador{{$pos1}}'), {
             type: 'bar',
             data: {
-                labels:  [],
+                labels: [
+                    @foreach ($materia->indicador as $item)
+                    {!!'"'.$item->anio.'",'!!}
+                    @endforeach
+                ],
                 datasets: [{
-                    label: 'RESULTADOS',
-                    data:  [],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    label: 'INICIO',
+                    data: [
+                        @foreach ($materia->indicador as $item)
+                        {{ round((($item->previo+$item->inicio) * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#F25656', //'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'PROCESO',
+                    data: [
+                        @foreach ($materia->indicador as $item)
+                        {{ round(($item->proceso * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#F2CA4C', //'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'SATISFACTORIO',
+                    data: [
+                        @foreach ($materia->indicador as $item)
+                        {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#22BAA0', // 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
-                
+
                 responsive: true,
                 /*title: {
                     display: false,
@@ -310,40 +363,68 @@
                 },*/
                 legend: {
                     display: true,
-                    //position: 'bottom',
-                },               
+                    position: 'bottom',
+                },
                 scales: {
                     yAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true,
-                          min: 0,
-                          max: 100
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100
                         },
-                        /*scaleLabel: {
+                        scaleLabel: {
                             display: true,
                             labelString: 'Porcentaje'
-                        }*/
+                        }
                     }],
                     xAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true                          
+                            beginAtZero: true
                         },
-                        /*scaleLabel: {
+                        scaleLabel: {
                             display: true,
                             labelString: 'Año'
-                        }*/
+                        }
                     }]
-                },                
+                },
                 tooltips: {
                     enabled: true,
                     mode: 'index',
-                    intersect: true
+                    intersect: true,
                     //position: 'average'
                 },
+                plugins: [{
+                    afterDatasetsDraw: function(chart, easing) {
+                        var ctx = chart.ctx;
+                        chart.data.datasets.forEach(function(dataset, i) {
+                            var meta = chart.getDatasetMeta(i);
+                            if (!meta.hidden) {
+                                meta.data.forEach(function(element, index) {
+                                    ctx.fillStyle = 'rgb(255, 255, 255)';
+                                    var fontSize = 11;
+                                    var fontStyle = 'normal';
+                                    var fontFamily = 'sans-serif';
+                                    ctx.font = Chart.helpers.fontString(fontSize,
+                                        fontStyle, fontFamily);
+                                    var dataString = dataset.data[index].toString() +
+                                        "%";
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'middle';
+                                    var padding = 15;
+                                    var position = element.tooltipPosition();
+                                    ctx.fillText(dataString, position.x, position.y - (
+                                        fontSize / 2) + padding);
+                                });
+                            }
+                        });
+                    }
+                }]
             }
         });
+        @endforeach
+
     </script>
 
 @endsection

@@ -25,21 +25,19 @@ class IndicadorController extends Controller
         $title = $indicadorx->nombre;
         $nivel = 37;
         $inds = IndicadorRepositorio::listar_indicador1('1');
-        $minds = '[';
-        foreach ($inds as $key => $item) {
-            $minds .= '[' . $item->anio . ',' . floatval($item->resultado) . '],';
-        }
-        $minds .= ']';
+        $limit = 100;
         $labels = '[';
         $datas = '[';
         foreach ($inds as $key => $item) {
             $labels .= $item->anio . ',';
-            $datas .= $item->resultado . ',';
+            $datas .= floatval($item->resultado) . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
         }
         $labels .= ']';
         $datas .= ']';
         $info = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'minds', 'info'));
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
     }
     public function indicadorEducacion2()
     {
@@ -47,21 +45,19 @@ class IndicadorController extends Controller
         $title = $indicadorx->nombre;
         $nivel = 38;
         $inds = IndicadorRepositorio::listar_indicador1('2');
-        $minds = '[';
-        foreach ($inds as $key => $item) {
-            $minds .= '[' . $item->anio . ',' . floatval($item->resultado) . '],';
-        }
-        $minds .= ']';
+        $limit = 100;
         $labels = '[';
         $datas = '[';
         foreach ($inds as $key => $item) {
             $labels .= $item->anio . ',';
             $datas .= $item->resultado . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
         }
         $labels .= ']';
         $datas .= ']';
         $info = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'minds', 'info'));
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',   'info', 'limit'));
     }
     public function indicadorEducacion3()
     {
@@ -69,21 +65,19 @@ class IndicadorController extends Controller
         $title = $indicadorx->nombre;
         $nivel = 0; // ES MUY VARIBLE
         $inds = IndicadorRepositorio::listar_indicador1('3');
-        $minds = '[';
-        foreach ($inds as $key => $item) {
-            $minds .= '[' . $item->anio . ',' . floatval($item->resultado) . '],';
-        }
-        $minds .= ']';
+        $limit = 100;
         $labels = '[';
         $datas = '[';
         foreach ($inds as $key => $item) {
             $labels .= $item->anio . ',';
             $datas .= $item->resultado . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
         }
         $labels .= ']';
         $datas .= ']';
         $info = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'minds', 'info'));
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'info', 'limit'));
     }
     /******* */
     public function indicadorEducacion8()

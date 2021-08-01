@@ -4,6 +4,7 @@ namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\Ece;
 use App\Models\Educacion\Grado;
+use App\Models\Educacion\Materia;
 use App\Models\Educacion\NivelModalidad;
 use App\Models\Ubigeo;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,27 @@ class EceRepositorio
             ->where('v3.grado_id', $grado)
             ->where('v3.tipo', $tipo)
             ->where('v3.anio', $anio)
+            ->orderBy('v1.id', 'asc')
+            ->distinct()->get();
+        return $query;
+    }
+
+    public static function buscar_materia2($anio, $grado, $tipo)
+    {
+        $query1 = DB::table('edu_ece as v1')
+            ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
+            ->where('v1.grado_id', $grado)
+            ->where('v1.tipo', $tipo)
+            ->where('v2.estado', 'PR')
+            ->get([DB::raw('max(v1.anio) as anio')]);
+        
+        $query = DB::table('edu_materia as v1')
+            ->select('v1.*')
+            ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
+            ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+            ->where('v3.grado_id', $grado)
+            ->where('v3.tipo', $tipo)
+            ->where('v3.anio','=', $query1[0]->anio)
             ->orderBy('v1.id', 'asc')
             ->distinct()->get();
         return $query;
@@ -122,6 +144,18 @@ class EceRepositorio
             ->distinct('v1.anio')
             ->orderBy('v1.anio', 'desc')
             ->get();
+        return $query;
+    }
+    public static function buscar_anios2($grado, $tipo)
+    {
+        $query = DB::table('edu_ece as v1')
+            ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
+            ->where('v1.grado_id', $grado)
+            ->where('v1.tipo', $tipo)
+            ->where('v2.estado', 'PR')
+            ->select('v1.anio')
+            ->orderBy('v1.anio', 'desc')
+            ->get(['max(v1.anio)']);
         return $query;
     }
     public static function listar_eceresultado1($ece)

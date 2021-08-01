@@ -11,11 +11,11 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="vistaugel">
+        <div class="row" id="">
             <div class="col-md-6">
                 <div class="card card-border">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Indicador de Ucayali</h3>
+                        <h3 class="card-title">Region de Ucayali</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -76,7 +76,7 @@
             data: {
                 labels: {{$info['labels']}},//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: 'RESULTADOS',
+                    label: 'RESULTADO',
                     data: {{$info['datas']}},
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
@@ -100,7 +100,7 @@
                         ticks: {
                           beginAtZero: true,
                           min: 0,
-                          max: 25
+                          max: {{$limit}}
                         },
                         /*scaleLabel: {
                             display: true,

@@ -15,7 +15,7 @@
             <div class="col-md-6">
                 <div class="card card-border">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Indicador</h3>
+                        <h3 class="card-title">Region de Ucayali</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -58,7 +58,7 @@
             <div class="col-md-6">
                 <div class="card card-border">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Indicador por Ugel</h3>
+                        <h3 class="card-title">Por Ugel</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
