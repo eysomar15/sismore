@@ -250,7 +250,7 @@ class PadronWebController extends Controller
     public function procesar($importacion_id)
     {
         $procesar = DB::select('call edu_pa_procesarPadronWeb(?)', [$importacion_id]);
-        return 'Procesado : ';
+        return view('correcto');
     }
 
     public function procesarb($importacion_id)
