@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Parametro\Clasificador;
 use App\Models\Educacion\Indicador;
 use App\Models\Ubigeo;
+use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\IndicadorRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -223,6 +224,119 @@ class IndicadorController extends Controller
     public function indicadorEducacion13()
     {
         $indicadorx = Indicador::find(13);
+        $title = $indicadorx->nombre;
+        $nivel = 38;
+        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+        $total = 0;
+        foreach ($inds as $key => $value) {
+            $total += $value->suma;
+            if ($value->titulado == 0) {
+                $value->titulado = 'NO TITULADO';
+            } else $value->titulado = 'TITULADO';
+        }
+        $labels = '[';
+        $datas = '[';
+        foreach ($inds as $key => $value) {
+            $labels .= '"' . $value->titulado . '",';
+            $datas .= round($value->suma * 100 / $total, 2) . ',';
+        }
+        $labels .= ']';
+        $datas .= ']';
+        $graf1 = ['labels' => $labels, 'datas' => $datas];
+
+        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
+        foreach ($indu as $key => $value) {
+            $indutt = IndicadorRepositorio::listar_profesorestituladougel($nivel);
+            $value->total = $indutt[0]->total;
+        }
+        $labels = '[';
+        $datas = '[';
+        foreach ($indu as $key => $value) {
+            $labels .= '"' . $value->nombre . '",';
+            $datas .= round($value->titulado * 100 / $total, 2) . ',';
+        }
+        $labels .= ']';
+        $datas .= ']';
+        $graf2 = ['labels' => $labels, 'datas' => $datas];
+        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
+    }
+    public function indicadorPDRC1()
+    {
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $indicadorx = Indicador::find(14);
+        $title = $indicadorx->nombre;
+        $grado = 2;
+        $tipo = 0;
+        $materia=1;
+        $ruta = 'ece.indicador.vista';
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
+        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo,$materia);
+        foreach ($info1 as $key => $value) {
+            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+        }
+        return view('educacion.indicador.pdrc1', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
+    }
+    public function indicadorPDRC2()
+    {
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $indicadorx = Indicador::find(15);
+        $title = $indicadorx->nombre;
+        $grado = 2;
+        $tipo = 0;
+        $materia=2;
+        $ruta = 'ece.indicador.vista';
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
+        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo,$materia);
+        foreach ($info1 as $key => $value) {
+            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+        }
+        //return $info1;
+        return view('educacion.indicador.pdrc1', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
+    }
+    public function indicadorPDRC3()
+    {
+        $indicadorx = Indicador::find(16);
+        $title = $indicadorx->nombre;
+        $nivel = 38;
+        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+        $total = 0;
+        foreach ($inds as $key => $value) {
+            $total += $value->suma;
+            if ($value->titulado == 0) {
+                $value->titulado = 'NO TITULADO';
+            } else $value->titulado = 'TITULADO';
+        }
+        $labels = '[';
+        $datas = '[';
+        foreach ($inds as $key => $value) {
+            $labels .= '"' . $value->titulado . '",';
+            $datas .= round($value->suma * 100 / $total, 2) . ',';
+        }
+        $labels .= ']';
+        $datas .= ']';
+        $graf1 = ['labels' => $labels, 'datas' => $datas];
+
+        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
+        foreach ($indu as $key => $value) {
+            $indutt = IndicadorRepositorio::listar_profesorestituladougel($nivel);
+            $value->total = $indutt[0]->total;
+        }
+        $labels = '[';
+        $datas = '[';
+        foreach ($indu as $key => $value) {
+            $labels .= '"' . $value->nombre . '",';
+            $datas .= round($value->titulado * 100 / $total, 2) . ',';
+        }
+        $labels .= ']';
+        $datas .= ']';
+        $graf2 = ['labels' => $labels, 'datas' => $datas];
+        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
+    }
+    public function indicadorPDRC4()
+    {
+        $indicadorx = Indicador::find(17);
         $title = $indicadorx->nombre;
         $nivel = 38;
         $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
