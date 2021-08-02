@@ -64,10 +64,6 @@ Route::get('/ECE/Importar/Aprobar/{importacion_id}', [EceController::class, 'imp
 Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}', [EceController::class, 'importarAprobarGuardar'])
     ->name('ece.importar.aprobar.guardar');
 Route::post('/ECE/ImportarGuardar', [EceController::class, 'importarGuardar'])->name('ece.importar.store');
-Route::get('/ECE/Indicador4', [EceController::class, 'indicador4'])->name('ece.indicador.4');
-Route::get('/ECE/Indicador5', [EceController::class, 'indicador5'])->name('ece.indicador.5');
-Route::get('/ECE/Indicador6', [EceController::class, 'indicador6'])->name('ece.indicador.6');
-Route::get('/ECE/Indicador7', [EceController::class, 'indicador7'])->name('ece.indicador.7');
 Route::post('/ECE/IndicadorVista', [EceController::class, 'indicadorLOGROS'])->name('ece.indicador.vista');
 Route::post('/ECE/IndicadorSatisfactorio', [EceController::class, 'indicadorSatisfactorio'])->name('ece.indicador.satisfactorio');
 Route::post('/ECE/IndicadorMateria', [EceController::class, 'indicadorMateria'])->name('ece.indicador.materia');
@@ -82,12 +78,22 @@ Route::get('/INDICADOR/Menu/{clasificador}', [IndicadorController::class, 'indic
 Route::get('/INDICADOR/Indicador1', [IndicadorController::class, 'indicadorEducacion1'])->name('indicador.1');
 Route::get('/INDICADOR/Indicador2', [IndicadorController::class, 'indicadorEducacion2'])->name('indicador.2');
 Route::get('/INDICADOR/Indicador3', [IndicadorController::class, 'indicadorEducacion3'])->name('indicador.3');
+Route::get('/ECE/Indicador4', [EceController::class, 'indicador4'])->name('ece.indicador.4');
+Route::get('/ECE/Indicador5', [EceController::class, 'indicador5'])->name('ece.indicador.5');
+Route::get('/ECE/Indicador6', [EceController::class, 'indicador6'])->name('ece.indicador.6');
+Route::get('/ECE/Indicador7', [EceController::class, 'indicador7'])->name('ece.indicador.7');
 Route::get('/INDICADOR/Indicador8', [IndicadorController::class, 'indicadorEducacion8'])->name('indicador.8');
 Route::get('/INDICADOR/Indicador9', [IndicadorController::class, 'indicadorEducacion9'])->name('indicador.9');
 Route::get('/INDICADOR/Indicador10', [IndicadorController::class, 'indicadorEducacion10'])->name('indicador.10');
 Route::get('/INDICADOR/Indicador11', [IndicadorController::class, 'indicadorEducacion11'])->name('indicador.11');
 Route::get('/INDICADOR/Indicador12', [IndicadorController::class, 'indicadorEducacion12'])->name('indicador.12');
 Route::get('/INDICADOR/Indicador13', [IndicadorController::class, 'indicadorEducacion13'])->name('indicador.13');
+Route::get('/INDICADOR/pdrc1', [IndicadorController::class, 'indicadorPDRC1'])->name('pdrc.indicador.1');
+Route::get('/INDICADOR/pdrc2', [IndicadorController::class, 'indicadorPDRC2'])->name('pdrc.indicador.2');
+Route::get('/INDICADOR/pdrc3', [IndicadorController::class, 'indicadorPDRC3'])->name('pdrc.indicador.3');
+Route::get('/INDICADOR/pdrc4', [IndicadorController::class, 'indicadorPDRC4'])->name('pdrc.indicador.4');
+Route::get('/INDICADOR/obj1', [IndicadorController::class, 'indicadorOEI1'])->name('oei.indicador.1');
+Route::get('/INDICADOR/obj2', [IndicadorController::class, 'indicadorOEI2'])->name('oei.indicador.2');
 Route::get('/INDICADOR/SINRUTA', function () {
     return 'Ruta no definida';
 })->name('indicador.sinruta');
