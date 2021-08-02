@@ -78,8 +78,8 @@
                 datasets: [{
                     label: 'AÑOS',
                     data: {{$info['datas']}},
-                    backgroundColor: '#1097EE',
-                    borderColor: '#1097EE',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',//'#1097EE',
+                    borderColor: 'rgba(54, 162, 235, 0.2)',//'#1097EE',
                     borderWidth: 1
                 }]
             },
