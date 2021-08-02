@@ -120,8 +120,8 @@
                 datasets: [{
                     label: 'PROFESORES',
                     data: {{$graf1['datas']}},
-                    backgroundColor: '#1097EE',
-                    borderColor: '#1097EE',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',//'#1097EE',
+                    borderColor:'rgba(54, 162, 235, 0.2)',// '#1097EE',
                     borderWidth: 1
                 }]
             },
@@ -174,8 +174,8 @@
                 datasets: [{
                     label: 'TITULADOS',
                     data: {{$graf2['datas']}},
-                    backgroundColor: '#1097EE',
-                    borderColor: '#1097EE',
+                    backgroundColor:'rgba(54, 162, 235, 0.2)' ,//'#1097EE',
+                    borderColor: 'rgba(54, 162, 235, 0.2)',//'#1097EE',
                     borderWidth: 1
                 }]
             },
