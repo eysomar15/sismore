@@ -76,7 +76,7 @@
             data: {
                 labels: {{$info['labels']}},//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: 'RESULTADO',
+                    label: 'AÑOS',
                     data: {{$info['datas']}},
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
@@ -92,37 +92,37 @@
                 },*/
                 legend: {
                     display: true,
-                    //position: 'bottom',
-                },               
+                    position: 'bottom',
+                },
                 scales: {
                     yAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true,
-                          min: 0,
-                          max: {{$limit}}
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100
                         },
-                        /*scaleLabel: {
+                        scaleLabel: {
                             display: true,
                             labelString: 'Porcentaje'
-                        }*/
+                        }
                     }],
                     xAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true                          
+                            beginAtZero: true
                         },
-                        /*scaleLabel: {
-                            display: true,
+                        scaleLabel: {
+                            display: false,
                             labelString: 'Año'
-                        }*/
+                        }
                     }]
-                },                
+                },  
                 tooltips: {
                     enabled: true,
                     mode: 'index',
-                    intersect: true
-                    //position: 'average'
+                    intersect: true,
+                    position: 'average'
                 },
             }
         });
