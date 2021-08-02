@@ -32,6 +32,73 @@
         @endif
                 
         <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">RESULTADO indicador</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>AÑO</th>
+                                                @foreach ($info1 as $key => $item)
+                                                <th>{{$item->descripcion}}</th>
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($info1 as $key => $materia)
+                                                @if ($key==0)
+                                                    @foreach ($materia->indicador as $key2 => $ind)
+                                                    <tr>
+                                                        @foreach ($info1 as $key3 => $materia2)
+                                                            @foreach ($materia2->indicador as $key4 => $ind2)
+                                                                @if ($key2==$key4)
+                                                                    @if ($key3==0)
+                                                                    <td>{{$ind2->anio}}</td>
+                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 1)}}%</td>
+                                                                    @else
+                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 1)}}%</td>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    </tr>
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+
+                                            {{--@foreach ($info1 as $key => $materia)
+                                            <tr>
+                                                @foreach ($materia->indicador as $key2 => $ind)
+                                                    @if ($key2==0)
+                                                    <td>{{$ind->anio}}</td>
+                                                    <td>{{ round($ind->satisfactorio * 100 / $ind->evaluados, 1)}}%</td>
+                                                    @else
+                                                    <td>{{ round($ind->satisfactorio * 100 / $ind->evaluados, 1)}}%</td>
+                                                    @endif
+                                                @endforeach
+                                            </tr>                                              
+                                            @endforeach--}}
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        @foreach ($info1 as $key => $item)
+                        @endforeach
+                    </div>
+                </div>
+            </div>    
+            
+            
+        </div><!-- End row -->
+        <div class="row">
             @foreach ($info1 as $key => $item)
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
@@ -110,7 +177,7 @@
         </div>
         
         <!-- End row -->
-        <div class="row">
+        <!--div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-default bg-transparent pb-0">
@@ -122,7 +189,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div-->
         <!-- End row -->
         <div class="row">
             <div class="col-md-12">

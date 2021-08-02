@@ -25,6 +25,7 @@
                                         <thead>
                                             <tr>
                                                 <th>PROFESORES</th>
+                                                <th>CANTIDAD</th>
                                                 <th>%</th>
                                             </tr>
                                         </thead>
@@ -32,6 +33,7 @@
                                             @foreach ($inds as $item)
                                                 <tr>
                                                     <td>{{ $item->titulado }}</td>
+                                                    <td>{{ $item->suma }}</td>
                                                     <td>{{ round(($item->suma * 100) / $total, 2) }}</td>
                                                 </tr>
                                             @endforeach
@@ -68,6 +70,7 @@
                                         <thead>
                                             <tr>
                                                 <th>UGEL</th>
+                                                <th># DE PROFESORES</th>
                                                 <th>% TITULADO</th>
                                             </tr>
                                         </thead>
@@ -75,6 +78,7 @@
                                             @foreach ($indu as $item)
                                                 <tr>
                                                     <td>{{ $item->nombre }}</td>
+                                                    <td>{{ $item->titulado }}</td>
                                                     <td>{{ round(($item->titulado * 100) / $total, 2) }}</td>
                                                 </tr>
                                             @endforeach
@@ -129,37 +133,37 @@
                 },*/
                 legend: {
                     display: true,
-                    //position: 'bottom',
-                },               
+                    position: 'bottom',
+                },
                 scales: {
                     yAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true,
-                          min: 0,
-                          max: 100
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100
                         },
-                        /*scaleLabel: {
+                        scaleLabel: {
                             display: true,
                             labelString: 'Porcentaje'
-                        }*/
+                        }
                     }],
                     xAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true                          
+                            beginAtZero: true
                         },
-                        /*scaleLabel: {
-                            display: true,
-                            labelString: 'Año'
-                        }*/
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Estado'
+                        }
                     }]
-                },                
+                },  
                 tooltips: {
                     enabled: true,
                     mode: 'index',
-                    intersect: true
-                    //position: 'average'
+                    intersect: true,
+                    position: 'average'
                 },
             }
         });
@@ -168,7 +172,7 @@
             data: {
                 labels:{!!$graf2['labels']!!},
                 datasets: [{
-                    label: 'INDICADOR',
+                    label: 'TITULADOS',
                     data: {{$graf2['datas']}},
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 0.2)',
@@ -184,37 +188,37 @@
                 },*/
                 legend: {
                     display: true,
-                    //position: 'bottom',
-                },               
+                    position: 'bottom',
+                },
                 scales: {
                     yAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true,
-                          min: 0,
-                          max: 100
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100
                         },
-                        /*scaleLabel: {
+                        scaleLabel: {
                             display: true,
                             labelString: 'Porcentaje'
-                        }*/
+                        }
                     }],
                     xAxes: [{
                         stacked: true,
                         ticks: {
-                          beginAtZero: true                          
+                            beginAtZero: true
                         },
-                        /*scaleLabel: {
-                            display: true,
-                            labelString: 'Año'
-                        }*/
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Ugel'
+                        }
                     }]
-                },                
+                },  
                 tooltips: {
                     enabled: true,
                     mode: 'index',
-                    intersect: true
-                    //position: 'average'
+                    intersect: true,
+                    position: 'average'
                 },
             }
         });

@@ -358,7 +358,7 @@ class EceController extends Controller
             foreach ($inds as $ind) {
                 $card .= '<tr>
                             <td><span class="' . ($ind->anio == $request->anio ? 'bg-info text-white' : 'text-primary') . '">' . $ind->anio . '</span></td>
-                            <td class="text-danger">' . $ind->previo  . '</td>
+                            <td class="text-danger">' . ($ind->previo + $ind->inicio)  . '</td>
                             <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-warning">' . $ind->proceso  . '</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
