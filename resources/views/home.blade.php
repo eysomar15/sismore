@@ -15,7 +15,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">2369</span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{$total_instituciones}}</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Total Instituciones</p>
                             </div>
                         </div>

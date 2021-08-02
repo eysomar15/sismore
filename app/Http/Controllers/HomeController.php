@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\Administracion\SistemaRepositorio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -33,13 +34,33 @@ class HomeController extends Controller
     }
     
     public function sistema_acceder($sistema_id)
-    {      
-        return view('home',compact(('sistema_id')));  
+    {     
+        $data = DB::select('call edu_pa_dashboard()');
+
+        $total_instituciones =0;
+
+        foreach ($data as $key => $item)
+        {
+            $total_instituciones  = $item->total_instituciones;
+        }
+         
+        return view('home',compact('sistema_id','total_instituciones'));  
     }
 
     public function dashboard()
     {      
-        return view('home');  
+        $data = DB::select('call edu_pa_dashboard()');
+
+        $total_instituciones =0;
+
+        foreach ($data as $key => $item)
+        {
+            $total_instituciones  = $item->total_instituciones;
+        }
+        
+
+
+        return view('home',compact(('total_instituciones')));  
     }
 
     
