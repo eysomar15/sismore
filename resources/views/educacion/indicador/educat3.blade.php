@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'INDICADORES'])
+@extends('layouts.main',['titlePage'=>'INDICADOR'])
 
 @section('content')
     <div class="content">
@@ -11,11 +11,11 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="vistaugel">
+        <div class="row" id="">
             <div class="col-md-6">
                 <div class="card card-border">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Indicador de Ucayali</h3>
+                        <h3 class="card-title">Region de Ucayali</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -31,7 +31,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                             
+                                            @foreach ($inds as $item)
+                                                <tr>
+                                                    <!--td>{{ $item->departamento }}</td-->
+                                                    <td>{{ $item->anio }}</td>
+                                                    <td>{{ $item->resultado }}</td>
+                                                    <td>{{ $item->nota }}</td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -46,7 +53,7 @@
                         <h3 class="card-title text-primary">GRAFICA</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="indicador2" data-type="Bar" height="300" width="800"></canvas>
+                        <canvas id="indicador2" data-type="Bar" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -57,7 +64,7 @@
 @section('js')
 
     <!-- flot chart -->
-    <script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script>
+    <!--script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script-->
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -67,35 +74,56 @@
         var myChart = new Chart($('#indicador2'), {
             type: 'bar',
             data: {
-                labels:  ,//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: {{$info['labels']}},//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
-                    label: 'RESULTADOS',
-                    data:  ,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        //'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        //'rgba(255, 159, 64, 1)'
-                    ],
+                    label: 'AÑOS',
+                    data: {{$info['datas']}},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
+                
+                responsive: true,
+                /*title: {
+                    display: false,
+                    text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
+                },*/
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                },
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Porcentaje'
+                        }
+                    }],
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Año'
+                        }
+                    }]
+                },  
+                tooltips: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: true,
+                    position: 'average'
+                },
             }
         });
     </script>
