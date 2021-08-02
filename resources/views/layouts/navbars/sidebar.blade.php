@@ -33,7 +33,7 @@
             <ul class="metismenu" id="side-menu">
 
                 <li>
-                    <a href="{{route('dashboard')}}" class="waves-effect">
+                    <a href="{{route('sistema_acceder','1')}}" class="waves-effect">
                         <i class="mdi mdi-home"></i>
                         <span> Dashboard </span>
                     </a>

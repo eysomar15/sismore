@@ -15,16 +15,16 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{$total_instituciones}}</span></h4>
-                                <p class="mb-0 mt-1 text-truncate">Total Instituciones</p>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{$instituciones_activas}}</span></h4>
+                                <p class="mb-0 mt-1 text-truncate">Total Instituciones Activas</p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="text-uppercase">Target <span class="float-right">60%</span></h6>
+                        <h6 class="text-uppercase">Representa <span class="float-right">{{$porcentajeInstituciones_activas}}%</span></h6>
                         <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                <span class="sr-only">60% Complete</span>
+                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{$porcentajeInstituciones_activas}}%">
+                                {{-- <span class="sr-only">60% Complete</span> --}}
                             </div>
                         </div>
                     </div>
@@ -40,16 +40,16 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">5056</span></h4>
-                                <p class="mb-0 mt-1 text-truncate">Profesores titulados</p>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{$titulados_sum}}</span></h4>
+                                <p class="mb-0 mt-1 text-truncate">Docentes titulados(Ini. Prim. y Secun.)</p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="text-uppercase">Target <span class="float-right">90%</span></h6>
+                        <h6 class="text-uppercase">Representa <span class="float-right">{{$porcentajeTitulados}}%</span></h6>
                         <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
-                                <span class="sr-only">90% Complete</span>
+                            <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: {{$porcentajeTitulados}}%">
+                                {{-- <span class="sr-only">90% Complete</span> --}}
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">25210</span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">0</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Alumnos Matriculados</p>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">244</span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">0</span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Instituciones Para Mantenimiento</p>
                             </div>
                         </div>
@@ -159,6 +159,7 @@
                         </div>
                         <h5 class="card-title mb-0"> Website Stats</h5>
                     </div>
+
                     <div id="cardCollpase2" class="collapse show">
                         <div class="card-body">
                             <div class="row">
@@ -182,6 +183,7 @@
 
                         </div>
                     </div>
+                    
                 </div>
                 <!-- end card-->
             </div>

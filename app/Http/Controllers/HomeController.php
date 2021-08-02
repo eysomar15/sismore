@@ -37,32 +37,34 @@ class HomeController extends Controller
     {     
         $data = DB::select('call edu_pa_dashboard()');
 
-        $total_instituciones =0;
+        $instituciones_activas =0;
+        $instituciones_inactivas =0;
+        $titulados_inicial = 0;
+        $titulados_primaria = 0;
+        $titulados_secundaria = 0;
+        $titulados_sum = 0;
+        $noTitulados = 0;
+        $porcentajeTitulados = 0;
+        $porcentajeInstituciones_activas = 0;
 
         foreach ($data as $key => $item)
         {
-            $total_instituciones  = $item->total_instituciones;
+            $instituciones_activas  = $item->instituciones_activas;
+            $instituciones_inactivas  = $item->instituciones_inactivas;
+            
+            $titulados_inicial = $item->titulados_inicial;
+            $titulados_primaria = $item->titulados_primaria;
+            $titulados_secundaria = $item->titulados_secundaria;
+            $titulados_sum = $titulados_inicial + $titulados_primaria + $titulados_secundaria;
+            $noTitulados = $item->noTitulados;
+
+            $porcentajeTitulados = round(($titulados_sum*100/($titulados_sum + $noTitulados)),2);
+
+            $porcentajeInstituciones_activas = round(($instituciones_activas*100/($instituciones_activas + $instituciones_inactivas)),2);
         }
          
-        return view('home',compact('sistema_id','total_instituciones'));  
+        return view('home',compact('sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
+        'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas'));  
     }
-
-    public function dashboard()
-    {      
-        $data = DB::select('call edu_pa_dashboard()');
-
-        $total_instituciones =0;
-
-        foreach ($data as $key => $item)
-        {
-            $total_instituciones  = $item->total_instituciones;
-        }
-        
-
-
-        return view('home',compact(('total_instituciones')));  
-    }
-
-    
    
 }
