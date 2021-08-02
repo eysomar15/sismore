@@ -85,21 +85,60 @@ class IndicadorController extends Controller
         $indicadorx = Indicador::find(8);
         $title = $indicadorx->nombre;
         $nivel = 1;
-        return view('educacion.indicador.educat3', compact('title', 'nivel'));
+        $inds = IndicadorRepositorio::listar_indicador1('8');
+        $limit = 100;
+        $labels = '[';
+        $datas = '[';
+        foreach ($inds as $key => $item) {
+            $labels .= $item->anio . ',';
+            $datas .= floatval($item->resultado) . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+        }
+        $labels .= ']';
+        $datas .= ']';
+        $info = ['labels' => $labels, 'datas' => $datas];
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
     }
     public function indicadorEducacion9()
     {
         $indicadorx = Indicador::find(9);
         $title = $indicadorx->nombre;
         $nivel = 37;
-        return view('educacion.indicador.educat3', compact('title', 'nivel'));
+        $inds = IndicadorRepositorio::listar_indicador1('9');
+        $limit = 100;
+        $labels = '[';
+        $datas = '[';
+        foreach ($inds as $key => $item) {
+            $labels .= $item->anio . ',';
+            $datas .= floatval($item->resultado) . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+        }
+        $labels .= ']';
+        $datas .= ']';
+        $info = ['labels' => $labels, 'datas' => $datas];
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
     }
     public function indicadorEducacion10()
     {
         $indicadorx = Indicador::find(10);
         $title = $indicadorx->nombre;
         $nivel = 38;
-        return view('educacion.indicador.educat3', compact('title', 'nivel'));
+        $inds = IndicadorRepositorio::listar_indicador1('10');
+        $limit = 100;
+        $labels = '[';
+        $datas = '[';
+        foreach ($inds as $key => $item) {
+            $labels .= $item->anio . ',';
+            $datas .= floatval($item->resultado) . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+        }
+        $labels .= ']';
+        $datas .= ']';
+        $info = ['labels' => $labels, 'datas' => $datas];
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
     }
     //****** */
     public function indicadorEducacion11()
