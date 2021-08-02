@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="PadronWeb" class="table table-striped table-bordered" style="width:10500px">
+                        <table id="grid" class="table table-striped table-bordered" style="width:10500px">
                             <thead class="text-primary">                              
                                
                                 <th style="width:80px">region</th>
@@ -90,7 +90,7 @@
     <script src="{{ asset('/') }}assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 
     <script>
-        $('#PadronWeb').DataTable({
+        $('#grid').DataTable({
             "ajax": "{{route('CuadroAsigPersonal.ListaImportada_DataTable',$importacion_id)}}",
             "columns":[             
                 {data:'region'},{data:'unidad_ejecutora'},{data:'organo_intermedio'},{data:'provincia'},

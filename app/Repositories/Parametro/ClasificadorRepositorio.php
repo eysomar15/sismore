@@ -27,7 +27,7 @@ class ClasificadorRepositorio
 
     public static function Listar_nivel3_porClasificador($clase_codigo,$sistema_id)
     {
-        $data = Clasificador::select('claNiv3.id as id_niv3','claNiv3.codigo','claNiv3.nombre as nombre_niv3')
+        $data = Clasificador::select('claNiv3.id as id_niv3','claNiv3.codigo','claNiv3.nombre as nombre_niv3','claNiv3.codigoAdicional')
                 ->join('par_clasificador as claNiv2', 'par_clasificador.id', '=', 'claNiv2.dependencia')
                 ->join('par_clasificador as claNiv3', 'claNiv2.id', '=', 'claNiv3.dependencia')   
                 ->join('par_indicador as ind', 'claNiv3.id', '=', 'ind.clasificador_id')           
