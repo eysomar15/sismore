@@ -46,7 +46,7 @@
                                             <tr>
                                                 <th>AÑO</th>
                                                 @foreach ($info1 as $key => $item)
-                                                <th>{{$item->descripcion}}</th>
+                                                <th>{{strtoupper($item->descripcion)}}</th>
                                                 @endforeach
                                             </tr>
                                         </thead>
@@ -60,9 +60,9 @@
                                                                 @if ($key2==$key4)
                                                                     @if ($key3==0)
                                                                     <td>{{$ind2->anio}}</td>
-                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 1)}}%</td>
+                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 2)}} %</td>
                                                                     @else
-                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 1)}}%</td>
+                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 2)}} %</td>
                                                                     @endif
                                                                 @endif
                                                             @endforeach
