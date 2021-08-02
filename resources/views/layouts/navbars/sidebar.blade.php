@@ -82,7 +82,8 @@
                 </li>
 
                 <li>
-                    <a href="{{route('Clasificador.menu','06')}}" class="waves-effect">                        
+                    {{-- <a href="{{route('Clasificador.menu','06')}}" class="waves-effect">                         --}}
+                    <a href="{{route('AEI_tempo')}}" class="waves-effect">   
                         <i class="mdi mdi-poll-box"></i>
                         <span> Act. Estrat. Instit. </span>
                     </a>                    

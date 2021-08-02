@@ -168,7 +168,7 @@ class CensoController extends Controller
         $ultimoCenso_mismoAnio->estado = 'EL';
         $ultimoCenso_mismoAnio->save();
 
-        return  $importacion;
+        return view('correcto');
     }
     
 }

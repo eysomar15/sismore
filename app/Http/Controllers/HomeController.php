@@ -39,6 +39,7 @@ class HomeController extends Controller
 
         $instituciones_activas =0;
         $instituciones_inactivas =0;
+
         $titulados_inicial = 0;
         $titulados_primaria = 0;
         $titulados_secundaria = 0;
@@ -46,6 +47,10 @@ class HomeController extends Controller
         $noTitulados = 0;
         $porcentajeTitulados = 0;
         $porcentajeInstituciones_activas = 0;
+
+        $localesEducativos = 0;
+        $locales_tieneInternet = 0;
+        $porcentajeLocales_tieneInternet = 0;
 
         foreach ($data as $key => $item)
         {
@@ -61,10 +66,41 @@ class HomeController extends Controller
             $porcentajeTitulados = round(($titulados_sum*100/($titulados_sum + $noTitulados)),2);
 
             $porcentajeInstituciones_activas = round(($instituciones_activas*100/($instituciones_activas + $instituciones_inactivas)),2);
+
+            $locales_tieneInternet = $item->locales_tieneInternet;
+            $localesEducativos = $item->locales_tieneInternet + $item->locales_no_tieneInternet;
+            $porcentajeLocales_tieneInternet = round(($locales_tieneInternet*100/$localesEducativos),2);
+           
         }
          
         return view('home',compact('sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
-        'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas'));  
+        'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas',
+        'localesEducativos','locales_tieneInternet','porcentajeLocales_tieneInternet'));  
+    }
+
+    public function AEI_tempo()
+    {     
+        $data = DB::select('call edu_pa_indicadorAEI()');
+       
+        $titulados_inicial = 0;
+        $total_inicial = 0;
+        $porcentajeTitulados_inicial = 0;
+
+        $bilingues = 0;
+
+        foreach ($data as $key => $item)
+        {
+            $titulados_inicial  = $item->titulados_inicial;
+            $total_inicial =$item->total_inicial;
+            
+             $porcentajeTitulados_inicial =  round($titulados_inicial*100/( $total_inicial),2);
+
+             $bilingues =$item->bilingues;
+   
+           
+        }
+         
+        return view('homeAEI',compact('titulados_inicial','porcentajeTitulados_inicial','bilingues'));  
     }
    
 }
