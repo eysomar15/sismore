@@ -300,77 +300,40 @@ class IndicadorController extends Controller
         $indicadorx = Indicador::find(16);
         $title = $indicadorx->nombre;
         $nivel = 38;
-        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-        $total = 0;
-        foreach ($inds as $key => $value) {
-            $total += $value->suma;
-            if ($value->titulado == 0) {
-                $value->titulado = 'NO TITULADO';
-            } else $value->titulado = 'TITULADO';
-        }
+        $inds = IndicadorRepositorio::listar_indicador1('2');
+        $limit = 100;
         $labels = '[';
         $datas = '[';
-        foreach ($inds as $key => $value) {
-            $labels .= '"' . $value->titulado . '",';
-            $datas .= round($value->suma * 100 / $total, 2) . ',';
+        foreach ($inds as $key => $item) {
+            $labels .= $item->anio . ',';
+            $datas .= floatval($item->resultado) . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
         }
         $labels .= ']';
         $datas .= ']';
-        $graf1 = ['labels' => $labels, 'datas' => $datas];
-
-        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-        foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel($nivel);
-            $value->total = $indutt[0]->total;
-        }
-        $labels = '[';
-        $datas = '[';
-        foreach ($indu as $key => $value) {
-            $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf2 = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
+        $info = ['labels' => $labels, 'datas' => $datas];
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
+        
     }
     public function indicadorPDRC4()
     {
         $indicadorx = Indicador::find(17);
         $title = $indicadorx->nombre;
-        $nivel = 38;
-        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-        $total = 0;
-        foreach ($inds as $key => $value) {
-            $total += $value->suma;
-            if ($value->titulado == 0) {
-                $value->titulado = 'NO TITULADO';
-            } else $value->titulado = 'TITULADO';
-        }
+        $nivel = 37;
+        $inds = IndicadorRepositorio::listar_indicador1('1');
+        $limit = 100;
         $labels = '[';
         $datas = '[';
-        foreach ($inds as $key => $value) {
-            $labels .= '"' . $value->titulado . '",';
-            $datas .= round($value->suma * 100 / $total, 2) . ',';
+        foreach ($inds as $key => $item) {
+            $labels .= $item->anio . ',';
+            $datas .= floatval($item->resultado) . ',';
+            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
         }
         $labels .= ']';
         $datas .= ']';
-        $graf1 = ['labels' => $labels, 'datas' => $datas];
-
-        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-        foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel($nivel);
-            $value->total = $indutt[0]->total;
-        }
-        $labels = '[';
-        $datas = '[';
-        foreach ($indu as $key => $value) {
-            $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf2 = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
+        $info = ['labels' => $labels, 'datas' => $datas];
+        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
     }
 }
