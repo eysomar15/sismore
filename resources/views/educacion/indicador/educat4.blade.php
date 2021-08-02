@@ -196,7 +196,7 @@
                         ticks: {
                             beginAtZero: true,
                             min: 0,
-                            max: 70
+                            max: 100
                         },
                         scaleLabel: {
                             display: true,

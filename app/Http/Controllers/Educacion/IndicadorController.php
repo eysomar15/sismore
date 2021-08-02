@@ -177,7 +177,7 @@ class IndicadorController extends Controller
         $datas = '[';
         foreach ($indu as $key => $value) {
             $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $total, 2) . ',';
+            $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
         }
         $labels .= ']';
         $datas .= ']';
@@ -216,7 +216,7 @@ class IndicadorController extends Controller
         $datas = '[';
         foreach ($indu as $key => $value) {
             $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $total, 2) . ',';
+            $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
         }
         $labels .= ']';
         $datas .= ']';
@@ -255,7 +255,7 @@ class IndicadorController extends Controller
         $datas = '[';
         foreach ($indu as $key => $value) {
             $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $total, 2) . ',';
+            $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
         }
         $labels .= ']';
         $datas .= ']';
