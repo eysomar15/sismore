@@ -37,9 +37,11 @@ class IndicadorRepositorio
                 ->where('v1.nivelModalidad_id', $nivel)
                 ->where('v1.esTitulado', $titulado)
                 ->groupBy('v2.nombre')
+                ->groupBy('v2.id')
                 ->get([
+                    'v2.id',
                     'v2.nombre',
-                    'v2.nombre as total',
+                    'v2.id as total',
                     DB::raw('count(esTitulado) as titulado')
                 ]);
         } else {
@@ -49,6 +51,22 @@ class IndicadorRepositorio
                 ->groupBy('v2.nombre')
                 ->get(['v2.nombre', DB::raw('count(esTitulado) as total')]);
         }
+        return $query;
+    }
+    public static function listar_profesorestituladougel2($nivel, $ugel)
+    {
+        $query = DB::table('edu_plaza as v1')
+            ->join('edu_ugel as v2', 'v2.id', '=', 'v1.ugel_id')
+            ->where('v1.nivelModalidad_id', $nivel)
+            ->where('v2.id', $ugel)
+            ->groupBy('v2.nombre')
+            ->groupBy('v2.id')
+            ->get([
+                'v2.id',
+                'v2.nombre',
+                'v2.id as total',
+                DB::raw('count(esTitulado) as total')
+            ]);
 
         return $query;
     }

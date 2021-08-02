@@ -79,7 +79,7 @@
                                                 <tr>
                                                     <td>{{ $item->nombre }}</td>
                                                     <td>{{ $item->titulado }}</td>
-                                                    <td>{{ round(($item->titulado * 100) / $total, 2) }}</td>
+                                                    <td>{{ round(($item->titulado * 100) / $item->total, 2) }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -196,7 +196,7 @@
                         ticks: {
                             beginAtZero: true,
                             min: 0,
-                            max: 100
+                            max: 70
                         },
                         scaleLabel: {
                             display: true,

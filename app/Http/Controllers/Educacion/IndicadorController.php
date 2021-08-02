@@ -19,7 +19,6 @@ class IndicadorController extends Controller
         $clas = Clasificador::where('dependencia', $clas->id)->get();
         return view('educacion.indicador.menu', compact('clas'));
     }
-
     public function indicadorEducacion1()
     {
         $indicadorx = Indicador::find(1);
@@ -167,10 +166,13 @@ class IndicadorController extends Controller
         $graf1 = ['labels' => $labels, 'datas' => $datas];
 
         $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
+        //return $indu;
         foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel($nivel);
+            $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel,$value->id);
+            //return $indutt;
             $value->total = $indutt[0]->total;
         }
+        //return $indu;
         $labels = '[';
         $datas = '[';
         foreach ($indu as $key => $value) {
@@ -207,7 +209,7 @@ class IndicadorController extends Controller
 
         $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
         foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel($nivel);
+            $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel,$value->id);
             $value->total = $indutt[0]->total;
         }
         $labels = '[';
@@ -246,7 +248,7 @@ class IndicadorController extends Controller
 
         $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
         foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel($nivel);
+            $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel,$value->id);
             $value->total = $indutt[0]->total;
         }
         $labels = '[';
