@@ -165,11 +165,11 @@ class EceController extends Controller
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1=EceRepositorio::buscar_materia2('2019',$grado,$tipo);
+        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo);
         foreach ($info1 as $key => $value) {
-            $value->indicador=EceRepositorio::listar_indicadoranio(date('Y'),$grado,$tipo,$value->id);  
+            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
         }
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar','info1'));
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
     }
     public function indicador5()
     {
@@ -180,11 +180,11 @@ class EceController extends Controller
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1=EceRepositorio::buscar_materia2('2019',$grado,$tipo);
+        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo);
         foreach ($info1 as $key => $value) {
-            $value->indicador=EceRepositorio::listar_indicadoranio(date('Y'),$grado,$tipo,$value->id);  
+            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
         }
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios', 'sinaprobar','info1'));
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado',  'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
     }
     public function indicador6()
     {
@@ -195,11 +195,11 @@ class EceController extends Controller
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1=EceRepositorio::buscar_materia2('2019',$grado,$tipo);
+        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo);
         foreach ($info1 as $key => $value) {
-            $value->indicador=EceRepositorio::listar_indicadoranio(date('Y'),$grado,$tipo,$value->id);  
+            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
         }
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar','info1'));
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
     }
     public function indicador7()
     {
@@ -210,11 +210,11 @@ class EceController extends Controller
         $ruta = 'ece.indicador.vista';
         $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1=EceRepositorio::buscar_materia2('2019',$grado,$tipo);
+        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo);
         foreach ($info1 as $key => $value) {
-            $value->indicador=EceRepositorio::listar_indicadoranio(date('Y'),$grado,$tipo,$value->id);  
+            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
         }
-        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar','info1'));
+        return view('educacion.ece.indicadorlogro', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
     }
     public function cargarprovincias()
     {
@@ -316,7 +316,7 @@ class EceController extends Controller
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '</span>%</h4>
+                                <h4 class="my-0 font-weight-bold">(Total:'.$ind->satisfactorio.') <span data-plugin="counterup">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '</span>%</h4>
                                 <p class="mb-0 mt-1 text-truncate">' . $ind->materia . '</p>
                             </div>
                         </div>
@@ -345,18 +345,24 @@ class EceController extends Controller
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th class="text-danger">TOTAL</th>
                                             <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">TOTAL</th>
                                             <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">TOTAL</th>
                                             <th class="text-success">SATISFACTORIO</th>
                                         </tr>
                                     </thead>
                                     <tbody>';
-            $inds = EceRepositorio::listar_indicadoranio($request->anio, $request->grado, $request->tipo, $materia->id);
+            $inds = EceRepositorio::listar_indicadoranio($request->anio, $request->grado, $request->tipo, $materia->id, 'desc');
             foreach ($inds as $ind) {
                 $card .= '<tr>
                             <td><span class="' . ($ind->anio == $request->anio ? 'bg-info text-white' : 'text-primary') . '">' . $ind->anio . '</span></td>
-                            <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . $ind->previo  . '</td>
+                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso  . '</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio  . '</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
             }
@@ -393,8 +399,11 @@ class EceController extends Controller
                                         <tr>
                                             <th>UGEL</th>
                                             <!--th class="text-secondary">PREVIO</th-->
+                                            <th class="text-danger">TOTAL</th>
                                             <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">TOTAL</th>
                                             <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">TOTAL</th>
                                             <th class="text-success">SATISFACTORIO</th>
                                         </tr>
                                     </thead>
@@ -404,8 +413,11 @@ class EceController extends Controller
                 $card .= '<tr>
                             <td><span>' . $ind->ugel . '</span></td>
                             <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . ($ind->previo + $ind->inicio). '</td>
+                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso  . '</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
             }
@@ -442,8 +454,11 @@ class EceController extends Controller
                                         <tr>
                                             <th>#</th>
                                             <!--th class="text-secondary">PREVIO</th-->
+                                            <th class="text-danger">TOTAL</th>
                                             <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">TOTAL</th>
                                             <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">TOTAL</th>
                                             <th class="text-success">SATISFACTORIO</th>
                                         </tr>
                                     </thead>
@@ -453,8 +468,11 @@ class EceController extends Controller
                 $card .= '<tr>
                             <td><span>' . $ind->provincia . '</span></td>
                             <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . ($ind->previo + $ind->inicio)  . '</td>
+                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso  . '</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio   . '</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
             }
@@ -503,7 +521,7 @@ class EceController extends Controller
                     $card .= '<tr>
                             <td><span>' . $ind->provincia . '</span></td>
                             <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
@@ -513,7 +531,7 @@ class EceController extends Controller
                     $card .= '<tr class="table-success">
                                 <td><span>TODOS(UCAYALI)</span></td>
                                 <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                                <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                                <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
                                 <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
                                 <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                             </tr>';
@@ -525,7 +543,7 @@ class EceController extends Controller
                         $card .= '<tr>
                             <td><span>' . $ind->distrito . '</span></td>
                             <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
@@ -535,7 +553,7 @@ class EceController extends Controller
                         $card .= '<tr class="table-success">
                             <td><span\>' . $ind->provincia . '</span></td>
                             <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
@@ -547,7 +565,7 @@ class EceController extends Controller
                         $card .= '<tr class="table-success">
                             <td><span>' . $ind->distrito . '</span></td>
                             <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo+$ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
@@ -566,6 +584,4 @@ class EceController extends Controller
 
         return $card;
     }
-
-    
 }

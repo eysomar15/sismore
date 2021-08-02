@@ -207,7 +207,7 @@ class EceRepositorio
             ]);
         return $query;
     }
-    public static function listar_indicadoranio($anio, $grado, $tipo, $materia)
+    public static function listar_indicadoranio($anio, $grado, $tipo, $materia,$order)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -215,7 +215,7 @@ class EceRepositorio
             ->where('v2.anio', '<=', $anio)
             ->where('v2.tipo', $tipo)
             ->where('v1.materia_id', $materia)
-            ->orderBy('v2.anio', 'desc')
+            ->orderBy('v2.anio', $order)
             ->groupBy('v2.anio')
             ->get([
                 'v2.anio',

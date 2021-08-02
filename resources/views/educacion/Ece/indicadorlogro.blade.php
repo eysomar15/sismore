@@ -57,12 +57,16 @@
                         <div class="card-header border-primary bg-transparent pb-0">
                             <h3 class="card-title">Resultados
                                 <div class="float-right">
-                                    <select id="anio" name="anio" class="form-control form-control-sm"
-                                        onchange="satisfactorios();indicadormaterias();">
-                                        @foreach ($anios as $item)
-                                            <option value="{{ $item->anio }}">{{ $item->anio }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="form-group row">
+                                        <label class="col-md-4 col-form-label">año</label>
+                                        <div class="col-md-8">
+                                            <select id="anio" name="anio" class="form-control" onchange="satisfactorios(); indicadormaterias(); cambiaranio();">
+                                                @foreach ($anios as $item)
+                                                    <option value="{{ $item->anio }}">{{ $item->anio }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </h3>
 
@@ -95,7 +99,7 @@
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title">Resultados por ugel</h3>
+                        <h3 class="card-title">Resultados por ugel del año <span id="valoranio1"></span></h3>
                     </div>
                     <div class="card-body">
                         <div class="row" id="vistaugel">
@@ -110,7 +114,7 @@
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title">Resultados por Provincia</h3>
+                        <h3 class="card-title">Resultados por Provincia del año <span id="valoranio2"></span></h3>
                     </div>
                     <div class="card-body">
                         <div class="row" id="vistaprovincia">
@@ -124,22 +128,25 @@
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title">Resultados
-                            <div class="float-right">
-                                <select id="provincia" name="provincia" class="form-control form-control-sm"
-                                    onchange="cargardistritos();vistaindicador();">
+                        <h3 class="card-title">Resultados Generales del año <span id="valoranio3"></span></h3>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Provincia</label>
+                            <div class="col-md-4">
+                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos();vistaindicador();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincias as $prov)
                                         <option value="{{ $prov->id }}">{!! $prov->nombre !!}</option>
                                     @endforeach
                                 </select>
-                                <select id="distrito" name="distrito" class="form-control form-control-sm"
-                                    onchange="vistaindicador();">
+                            </div>
+                        
+                            <label class="col-md-2 col-form-label">Distrito</label>
+                            <div class="col-md-4">
+                                <select id="distrito" name="distrito" class="form-control" onchange="vistaindicador();">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
-                        </h3>
-
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row" id="vistatabla">
@@ -159,9 +166,6 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('/') }}assets/libs/jquery-validation/jquery.validate.min.js"></script>
-    <!-- Validation init js-->
-    <script src="{{ asset('/') }}assets/js/pages/form-validation.init.js"></script>
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -170,7 +174,14 @@
             indicadorugel();
             indicadorprovincia();
             vistaindicador();
+            cambiaranio();
         });
+        
+        function cambiaranio(){
+            $('#valoranio1').html($('#anio').val());
+            $('#valoranio2').html($('#anio').val());
+            $('#valoranio3').html($('#anio').val());
+        }
 
         function vistaindicador() {
             datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $(
@@ -323,15 +334,25 @@
                     @endforeach
                 ],
                 datasets: [{
+                    label: 'PREVIO',
+                    data: [
+                        @foreach ($materia->indicador as $item)
+                        {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#7C7D7D', //'rgba(54, 162, 235, 0.2)',
+                    borderColor: '#7C7D7D',
+                    borderWidth: 1,
+                },{
                     label: 'INICIO',
                     data: [
                         @foreach ($materia->indicador as $item)
-                        {{ round((($item->previo+$item->inicio) * 100) / $item->evaluados, 2) . ',' }}
+                        {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
                         @endforeach
                     ],
                     backgroundColor: '#F25656', //'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
+                    borderColor: '#F25656',
+                    borderWidth: 1,
                 }, {
                     label: 'PROCESO',
                     data: [
@@ -340,7 +361,7 @@
                         @endforeach
                     ],
                     backgroundColor: '#F2CA4C', //'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: '#F2CA4C',
                     borderWidth: 1
                 }, {
                     label: 'SATISFACTORIO',
@@ -350,7 +371,7 @@
                         @endforeach
                     ],
                     backgroundColor: '#22BAA0', // 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: '#22BAA0',
                     borderWidth: 1
                 }]
             },
@@ -388,39 +409,13 @@
                             labelString: 'Año'
                         }
                     }]
-                },
+                },  
                 tooltips: {
                     enabled: true,
                     mode: 'index',
                     intersect: true,
-                    //position: 'average'
+                    position: 'average'
                 },
-                plugins: [{
-                    afterDatasetsDraw: function(chart, easing) {
-                        var ctx = chart.ctx;
-                        chart.data.datasets.forEach(function(dataset, i) {
-                            var meta = chart.getDatasetMeta(i);
-                            if (!meta.hidden) {
-                                meta.data.forEach(function(element, index) {
-                                    ctx.fillStyle = 'rgb(255, 255, 255)';
-                                    var fontSize = 11;
-                                    var fontStyle = 'normal';
-                                    var fontFamily = 'sans-serif';
-                                    ctx.font = Chart.helpers.fontString(fontSize,
-                                        fontStyle, fontFamily);
-                                    var dataString = dataset.data[index].toString() +
-                                        "%";
-                                    ctx.textAlign = 'center';
-                                    ctx.textBaseline = 'middle';
-                                    var padding = 15;
-                                    var position = element.tooltipPosition();
-                                    ctx.fillText(dataString, position.x, position.y - (
-                                        fontSize / 2) + padding);
-                                });
-                            }
-                        });
-                    }
-                }]
             }
         });
         @endforeach
