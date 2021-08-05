@@ -26,10 +26,9 @@ class HomeController extends Controller
     public function index()
     {
         $sistemas = SistemaRepositorio::Listar_porUsuario(auth()->user()->id);
-
+        session()->put(['usuario_id'=>auth()->user()->id]);
         if($sistemas->count()==1)
             return $this->sistema_acceder(1);
-
         return view('Access',compact(('sistemas')));
     }
     
@@ -72,6 +71,7 @@ class HomeController extends Controller
             $porcentajeLocales_tieneInternet = round(($locales_tieneInternet*100/$localesEducativos),2);
            
         }
+        session(['sistema_id'=>$sistema_id]);
          
         return view('home',compact('sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
         'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas',

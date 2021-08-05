@@ -148,6 +148,12 @@ class EceController extends Controller
         $importacion->save();
         return back()->with('message', 'Importacion Aprobada Correctamente');
     }
+    public function cargargrados(Request $request)
+    {
+        $grados = EceRepositorio::buscar_grados1($request->nivel);
+        return response()->json(compact('grados'));
+    }
+    /*
     public function importarMenu()
     {
         return view('educacion.menu');
@@ -227,11 +233,7 @@ class EceController extends Controller
         $distritos = EceRepositorio::buscar_distrito1($provincia);
         return response()->json(compact('distritos'));
     }
-    public function cargargrados(Request $request)
-    {
-        $grados = EceRepositorio::buscar_grados1($request->nivel);
-        return response()->json(compact('grados'));
-    }
+
     public function indicadorLOGROS(Request $request)
     {
         $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
@@ -583,5 +585,5 @@ class EceController extends Controller
         }
 
         return $card;
-    }
+    }//*/
 }

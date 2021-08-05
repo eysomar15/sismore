@@ -40,7 +40,7 @@ class EceRepositorio
         return $query;
     }
 
-    public static function buscar_materia2($anio, $grado, $tipo,$materia=null)
+    public static function buscar_materia2($grado, $tipo, $materia = null)
     {
         $query1 = DB::table('edu_ece as v1')
             ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
@@ -48,29 +48,52 @@ class EceRepositorio
             ->where('v1.tipo', $tipo)
             ->where('v2.estado', 'PR')
             ->get([DB::raw('max(v1.anio) as anio')]);
-        if($materia){
+        if ($materia) {
             $query = DB::table('edu_materia as v1')
-            ->select('v1.*')
-            ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
-            ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
-            ->where('v1.id', $materia)
-            ->where('v3.grado_id', $grado)
-            ->where('v3.tipo', $tipo)
-            ->where('v3.anio','=', $query1[0]->anio)
-            ->orderBy('v1.id', 'asc')
-            ->distinct()->get();
-        }else{
+                ->select('v1.*')
+                ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
+                ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+                ->where('v1.id', $materia)
+                ->where('v3.grado_id', $grado)
+                ->where('v3.tipo', $tipo)
+                ->where('v3.anio', '=', $query1[0]->anio)
+                ->orderBy('v1.id', 'asc')
+                ->distinct()->get();
+        } else {
             $query = DB::table('edu_materia as v1')
-            ->select('v1.*')
-            ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
-            ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
-            ->where('v3.grado_id', $grado)
-            ->where('v3.tipo', $tipo)
-            ->where('v3.anio','=', $query1[0]->anio)
-            ->orderBy('v1.id', 'asc')
-            ->distinct()->get();
+                ->select('v1.*')
+                ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
+                ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+                ->where('v3.grado_id', $grado)
+                ->where('v3.tipo', $tipo)
+                ->where('v3.anio', '=', $query1[0]->anio)
+                ->orderBy('v1.id', 'asc')
+                ->distinct()->get();
         }
-        
+        return $query;
+    }
+    public static function buscar_materia3($grado, $tipo, $materia = null)
+    {
+        if ($materia) {
+            $query = DB::table('edu_materia as v1')
+                ->select('v1.*')
+                ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
+                ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+                ->where('v1.id', $materia)
+                ->where('v3.grado_id', $grado)
+                ->where('v3.tipo', $tipo)
+                ->orderBy('v1.id', 'asc')
+                ->distinct()->get();
+        } else {
+            $query = DB::table('edu_materia as v1')
+                ->select('v1.*')
+                ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
+                ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+                ->where('v3.grado_id', $grado)
+                ->where('v3.tipo', $tipo)
+                ->orderBy('v1.id', 'asc')
+                ->distinct()->get();
+        }
         return $query;
     }
     public static function buscar_provincia1()
@@ -220,7 +243,7 @@ class EceRepositorio
             ]);
         return $query;
     }
-    public static function listar_indicadoranio($anio, $grado, $tipo, $materia,$order)
+    public static function listar_indicadoranio($anio, $grado, $tipo, $materia, $order)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')

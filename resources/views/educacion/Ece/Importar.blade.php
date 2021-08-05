@@ -145,12 +145,12 @@
         function cargargrados() {
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
-                url:"{{url('/')}}/ECE/IndicadorGrados",
+                //url:"{{url('/')}}/ECE/CargarGrados",
+                url:"{{route('ece.ajax.cargargrados')}}",
                 type: 'post',
                 dataType:'JSON',
                 data:{'nivel':$('#nivel').val()},
                 success: function(data) {
-                    console.log(data);
                     $("#grado option").remove();
                     var options = '<option value="">SELECCIONAR</option>';
                     $.each(data.grados, function(index, value) {

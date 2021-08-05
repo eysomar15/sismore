@@ -71,18 +71,34 @@
                                                     @endforeach
                                                 @endif
                                             @endforeach
+
+                                            {{--@foreach ($info1 as $key => $materia)
+                                            <tr>
+                                                @foreach ($materia->indicador as $key2 => $ind)
+                                                    @if ($key2==0)
+                                                    <td>{{$ind->anio}}</td>
+                                                    <td>{{ round($ind->satisfactorio * 100 / $ind->evaluados, 1)}}%</td>
+                                                    @else
+                                                    <td>{{ round($ind->satisfactorio * 100 / $ind->evaluados, 1)}}%</td>
+                                                    @endif
+                                                @endforeach
+                                            </tr>                                              
+                                            @endforeach--}}
+                                            
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                    
+                        @foreach ($info1 as $key => $item)
+                        @endforeach
                     </div>
                 </div>
             </div>    
             
             
-        
+        </div><!-- End row -->
+        <div class="row">
             @foreach ($info1 as $key => $item)
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
@@ -97,7 +113,7 @@
             @endforeach
             
         </div><!-- End row -->
-        <!--form id="form_indicadores" action="#">
+        <form id="form_indicadores" action="#">
             @csrf
             <input type="hidden" name="grado" value="{{ $grado }}">
             <input type="hidden" name="tipo" value="{{ $tipo }}">
@@ -129,9 +145,9 @@
                     </div>
                 </div>
             </div>
-        </form-->
+        </form>
         <!-- End row -->
-        <!--div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-default bg-transparent pb-0">
@@ -143,10 +159,10 @@
                     </div>
                 </div>
             </div>
-        </div-->
+        </div>
         
         <!-- End row -->
-        <!--div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-default bg-transparent pb-0">
@@ -158,7 +174,7 @@
                     </div>
                 </div>
             </div>
-        </div-->
+        </div>
         
         <!-- End row -->
         <!--div class="row">
@@ -175,7 +191,7 @@
             </div>
         </div-->
         <!-- End row -->
-        <!--div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-default bg-transparent pb-0">
@@ -203,9 +219,15 @@
                         <div class="row" id="vistatabla">
                         </div>
                     </div>
+                    <!-- End card-body -->
                 </div>
+                <!-- End card -->
+
             </div>
-        </div-->
+            <!-- end col -->
+
+        </div>
+
     </div>
 
 @endsection
@@ -214,12 +236,12 @@
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
-            /*satisfactorios();
+            satisfactorios();
             indicadormaterias();
             indicadorugel();
             indicadorprovincia();
             vistaindicador();
-            cambiaranio();*/
+            cambiaranio();
         });
         
         function cambiaranio(){
