@@ -1,14 +1,13 @@
 @extends('layouts.main',['titlePage'=>'Bienvenido al SISMORE - Ucayali'])
 
 @section('content')
-<<<<<<< HEAD
 <div class="content">
 
    <br><br>
     <div class="container-fluid">
      <!--Widget-4 -->
         <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-3">
+            <div class="col-md-6 col-xl-6">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-info rounded-circle mr-2">
@@ -33,7 +32,7 @@
                 <!-- end card-box-->
             </div>
 
-            <div class="col-md-6 col-lg-6 col-xl-3">
+            <div class="col-md-6 col-xl-6">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-purple rounded-circle">
@@ -59,7 +58,7 @@
             </div>
 
            
-            <div class="col-md-6 col-lg-6 col-xl-3">
+            <div class="col-md-6 col-xl-6">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-primary rounded-circle">
@@ -84,7 +83,7 @@
                 <!-- end card-box-->
             </div>
 
-            <div class="col-md-6 col-lg-6 col-xl-3">
+            <div class="col-md-6 col-xl-6">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-success rounded-circle">
@@ -197,19 +196,11 @@
       
     </div>
     
-=======
-    @if (session('sistema_id')==1)
-    @include('inicioEducacion')   
-    @else
-    <h5>No hay nada</h5>
-    @endif
-        
->>>>>>> 043e1085710e01c781939c65ed79f1ebb4e201d5
 @endsection
 
 @section('js')
  <!-- flot chart -->
-        {{--<script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.js"></script>
         <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.time.js"></script>
         <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.tooltip.min.js"></script>
         
@@ -217,11 +208,11 @@
         {{-- <script src="assets/libs/flot-charts/jquery.flot.resize.js"></script> --}}
         
         
-        {{--<script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.pie.js"></script>
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.pie.js"></script>
         <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.selection.js"></script>
         <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.stack.js"></script>
-        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.crosshair.js"></script> --}}
+        <script src="{{asset('/')}}assets/libs/flot-charts/jquery.flot.crosshair.js"></script> 
 
         <!-- Dashboard init JS -->
-        {{--<script src="{{asset('/')}}assets/js/pages/dashboard.init.js"></script> --}}
+        <script src="{{asset('/')}}assets/js/pages/dashboard.init.js"></script>
 @endsection

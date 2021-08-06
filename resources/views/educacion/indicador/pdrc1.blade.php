@@ -32,7 +32,7 @@
         @endif
                 
         <div class="row">
-            <div class="col-xl-6">
+            {{--<div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
                         <h3 class="card-title text-primary">RESULTADO indicador</h3>
@@ -79,15 +79,21 @@
                     
                     </div>
                 </div>
-            </div>    
-            
-            
+            </div> --}}   
         
             @foreach ($info1 as $key => $item)
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">RESULTADO general de {{$item->descripcion}}</h3>
+                        <h3 class="card-title text-primary">RESULTADO general de {{$item->descripcion}}
+                            <div class="float-right">
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('jajajajaja')">Ver detalle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
                     </div>
                     <div class="card-body">
                         <canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>
@@ -96,116 +102,7 @@
             </div>    
             @endforeach
             
-        </div><!-- End row -->
-        <!--form id="form_indicadores" action="#">
-            @csrf
-            <input type="hidden" name="grado" value="{{ $grado }}">
-            <input type="hidden" name="tipo" value="{{ $tipo }}">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-border">
-                        <div class="card-header border-primary bg-transparent pb-0">
-                            <h3 class="card-title">Resultados
-                                <div class="float-right">
-                                    <div class="form-group row">
-                                        <label class="col-md-4 col-form-label">año</label>
-                                        <div class="col-md-8">
-                                            <select id="anio" name="anio" class="form-control" onchange="satisfactorios(); indicadormaterias(); cambiaranio();">
-                                                @foreach ($anios as $item)
-                                                    <option value="{{ $item->anio }}">{{ $item->anio }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </h3>
-
-                        </div>
-                        <div class="card-body">
-                            <div class="row" id="vistaindicadores">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form-->
-        <!-- End row -->
-        <!--div class="row">
-            <div class="col-md-12">
-                <div class="card card-border">
-                    <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title">Resultados por años</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row" id="vistaindcurso">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div-->
-        
-        <!-- End row -->
-        <!--div class="row">
-            <div class="col-md-12">
-                <div class="card card-border">
-                    <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title">Resultados por ugel del año <span id="valoranio1"></span></h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row" id="vistaugel">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div-->
-        
-        <!-- End row -->
-        <!--div class="row">
-            <div class="col-md-12">
-                <div class="card card-border">
-                    <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title">Resultados por Provincia del año <span id="valoranio2"></span></h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row" id="vistaprovincia">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div-->
-        <!-- End row -->
-        <!--div class="row">
-            <div class="col-md-12">
-                <div class="card card-border">
-                    <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title">Resultados Generales del año <span id="valoranio3"></span></h3>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Provincia</label>
-                            <div class="col-md-4">
-                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos();vistaindicador();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($provincias as $prov)
-                                        <option value="{{ $prov->id }}">{!! $prov->nombre !!}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        
-                            <label class="col-md-2 col-form-label">Distrito</label>
-                            <div class="col-md-4">
-                                <select id="distrito" name="distrito" class="form-control" onchange="vistaindicador();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row" id="vistatabla">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div-->
+        </div><!-- End row --> 
     </div>
 
 @endsection
@@ -214,160 +111,9 @@
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
-            /*satisfactorios();
-            indicadormaterias();
-            indicadorugel();
-            indicadorprovincia();
-            vistaindicador();
-            cambiaranio();*/
+             
         });
-        
-        function cambiaranio(){
-            $('#valoranio1').html($('#anio').val());
-            $('#valoranio2').html($('#anio').val());
-            $('#valoranio3').html($('#anio').val());
-        }
-
-        function vistaindicador() {
-            datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $(
-                '#distrito').val();
-            console.log(datos);
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.derivados') }}",
-                    type: 'post',
-                    data: datos,
-                    beforeSend: function() {
-                        $("#vistatabla").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //  console.log(data);
-                        $("#vistatabla").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }
-
-        function cargardistritos() {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },
-                url: "{{ url('/') }}/ECE/IndicadorDistritos/" + $('#provincia').val(),
-                type: 'post',
-                dataType: 'JSON',
-                success: function(data) {
-                    //console.log(data);
-                    $("#distrito option").remove();
-                    var options = '<option value="">TODOS</option>';
-                    $.each(data.distritos, function(index, value) {
-                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
-                    });
-                    $("#distrito").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function satisfactorios() {
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.satisfactorio') }}",
-                    type: 'post',
-                    data: $("#form_indicadores").serialize(),
-                    beforeSend: function() {
-                        $("#vistaindicadores").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //console.log(data);
-                        $("#vistaindicadores").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }
-
-        function indicadormaterias() {
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.materia') }}",
-                    type: 'post',
-                    data: $("#form_indicadores").serialize(),
-                    beforeSend: function() {
-                        $("#vistaindcurso").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //console.log(data);
-                        $("#vistaindcurso").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }
-
-        function indicadorugel() {
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.ugel') }}",
-                    type: 'post',
-                    data: $("#form_indicadores").serialize(),
-                    beforeSend: function() {
-                        $("#vistaugel").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //console.log(data);
-                        $("#vistaugel").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }
-
-        function indicadorprovincia() {
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.provincia') }}",
-                    type: 'post',
-                    data: $("#form_indicadores").serialize(),
-                    beforeSend: function() {
-                        $("#vistaprovincia").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //console.log(data);
-                        $("#vistaprovincia").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }
+         
         
         @foreach ($info1 as $pos1 => $materia)
         var myChart = new Chart($('#indicador{{$pos1}}'), {
@@ -456,10 +202,33 @@
                     }]
                 },  
                 tooltips: {
-                    enabled: true,
+                    enabled: false,
                     mode: 'index',
                     intersect: true,
                     position: 'average'
+                },
+                maintainAspectRatio: true,
+                hover: {
+                    animationDuration: 0
+                },
+                animation: {
+                    duration: 1,
+                    onComplete: function() {
+                    let chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+                        ctx.textAlign = 'center';
+                        //ctx.textBaseline = 'bottom';
+                        this.data.datasets.forEach(function(dataset, i){
+                            let meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function(bar, index) {
+                                let data = dataset.data[index];
+                                if(data>0){
+                                    ctx.fillText(data+'%', bar._model.x ,bar._model.y+4.5+(bar._model.base-bar._model.y)/2);
+                                }
+                                
+                            });
+                        });
+                    },
                 },
             }
         });
