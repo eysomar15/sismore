@@ -46,6 +46,21 @@
             @endforeach
             
         </div><!-- End row -->
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">Leyenda</h3>
+                    </div>
+                    <div class="card-body">
+                        <span class="badge" style="background-color:#7C7D7D;">PREVIO</span>
+                        <span class="badge" style="background-color:#F25656;">INICIO</span>
+                        <span class="badge" style="background-color:#F2CA4C;">PROCESO</span>
+                        <span class="badge" style="background-color:#22BAA0;">SATISFACTORIO</span>
+                    </div>
+                </div>
+            </div>    
+        </div><!-- End row -->
         
     </div>
 
@@ -118,7 +133,7 @@
                     text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
                 },*/
                 legend: {
-                    display: true,
+                    display: false,
                     position: 'bottom',
                 },
                 scales: {
