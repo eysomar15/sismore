@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - PADRON WEB DE INSTITUCIONES EDUCATIVAS'])
+@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - CUADRO DE ASIGNACION DE PERSONAL'])
 
 @section('content')
 
@@ -15,6 +15,14 @@
         </div>           
     @endif
 
+    @if($mensaje!='')
+    <div class="alert alert-danger">
+        <ul>
+            <li>{{$mensaje}}</li>            
+        </ul>
+    </div>
+    @endif
+
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -25,14 +33,14 @@
                 <div class="card-body">
                     <div class="form">
 
-                        <form action="{{route('PadronWeb.guardar')}}" method="post" enctype='multipart/form-data'
+                        <form action="{{route('Datass.guardar')}}" method="post" enctype='multipart/form-data'
                             class="cmxform form-horizontal tasi-form"  >                            
                             @csrf
 
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Fuente de datos</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" readonly="readonly" value="ESCALE">
+                                    <input type="text" class="form-control" readonly="readonly" value="DATASS">
                                 </div>
                             </div>
 

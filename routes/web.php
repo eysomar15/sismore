@@ -8,6 +8,7 @@ use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
+use App\Http\Controllers\Vivienda\DatassController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,7 @@ Route::get('/home/{sistemas_id}', [HomeController::class, 'sistema_acceder'])->n
 
 Route::get('/AEI', [HomeController::class, 'AEI_tempo'])->name('AEI_tempo');
 
+/**************************************** EDUCACION ************************************************/
 Route::get('/PadronWeb/Importar', [PadronWebController::class, 'importar'])->name('PadronWeb.importar');
 Route::post('/PadronWeb/Importar', [PadronWebController::class, 'guardar'])->name('PadronWeb.guardar');
 Route::get('/PadronWeb/ListaImportada/{importacion_id}', [PadronWebController::class, 'ListaImportada'])->name('PadronWeb.PadronWeb_Lista');
@@ -100,3 +102,15 @@ Route::get('/INDICADOR/SINRUTA', function () {
 })->name('indicador.sinruta');
 
 Route::get('/Clasificador/{clase_codigo}', [ClasificadorController::class, 'menu_porClase'])->name('Clasificador.menu');
+
+/**************************************** FIN EDUCACION ************************************************/
+
+/**************************************** VIVIENDA ************************************************/
+Route::get('/Datass/Importar', [DatassController::class, 'importar'])->name('Datass.importar');
+Route::post('/Datass/Importar', [DatassController::class, 'guardar'])->name('Datass.guardar');
+Route::get('/Datass/ListaImportada/{importacion_id}', [DatassController::class, 'ListaImportada'])->name('Datass.Datass_Lista');
+Route::get('/Datass/ListaImportada_DataTable/{importacion_id}', [DatassController::class, 'ListaImportada_DataTable'])->name('Datass.ListaImportada_DataTable');
+Route::get('/Datass/Aprobar/{importacion_id}', [DatassController::class, 'aprobar'])->name('Datass.aprobar');
+Route::post('/Datass/Aprobar/procesar/{importacion_id}', [DatassController::class, 'procesar'])->name('Datass.procesar');
+
+/**************************************** FIN VIVIENDA ************************************************/

@@ -16,7 +16,7 @@ class CuadroAsigPersonalRepositorio
                 'tipo_registro','ley','preventiva','referencia_preventiva','especialidad','tipo_estudios','estado_estudios',
                 'grado','mencion','especialidad_profesional','fecha_resolucion',
                 'numero_resolucion','centro_estudios','celular','email',
-)
+                )
         ->where("importacion_id", "=", $importacion_id)
         ->get();
 
