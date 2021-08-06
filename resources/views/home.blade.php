@@ -7,7 +7,7 @@
     <div class="container-fluid">
      <!--Widget-4 -->
         <div class="row">
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-info rounded-circle mr-2">
@@ -32,7 +32,7 @@
                 <!-- end card-box-->
             </div>
 
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-purple rounded-circle">
@@ -58,7 +58,7 @@
             </div>
 
            
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-primary rounded-circle">
@@ -83,7 +83,7 @@
                 <!-- end card-box-->
             </div>
 
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md bg-success rounded-circle">
