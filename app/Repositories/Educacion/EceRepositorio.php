@@ -39,7 +39,6 @@ class EceRepositorio
             ->distinct()->get();
         return $query;
     }
-
     public static function buscar_materia2($grado, $tipo, $materia = null)
     {
         $query1 = DB::table('edu_ece as v1')

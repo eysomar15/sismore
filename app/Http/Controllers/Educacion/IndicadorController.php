@@ -311,38 +311,31 @@ class IndicadorController extends Controller
     }
     public function indicadorPDRC1()
     {
-        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
         $indicadorx = Indicador::find(14);
         $title = $indicadorx->nombre;
         $grado = 2;
         $tipo = 0;
         $materia = 1;
-        $ruta = 'ece.indicador.vista';
-        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo, $materia);
+        $info1 = EceRepositorio::buscar_materia3( $grado, $tipo, $materia);
         foreach ($info1 as $key => $value) {
             $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
         }
-        return view('educacion.indicador.pdrc1', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
+        return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo','sinaprobar', 'info1'));
     }
     public function indicadorPDRC2()
     {
-        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
         $indicadorx = Indicador::find(15);
         $title = $indicadorx->nombre;
         $grado = 2;
         $tipo = 0;
         $materia = 2;
-        $ruta = 'ece.indicador.vista';
-        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1 = EceRepositorio::buscar_materia2('2019', $grado, $tipo, $materia);
+        $info1 = EceRepositorio::buscar_materia3( $grado, $tipo, $materia);
         foreach ($info1 as $key => $value) {
             $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
         }
-        //return $info1;
-        return view('educacion.indicador.pdrc1', compact('provincias', 'title', 'grado', 'tipo', 'ruta', 'anios', 'sinaprobar', 'info1'));
+        return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo','sinaprobar', 'info1'));
     }
     public function indicadorPDRC3()
     {

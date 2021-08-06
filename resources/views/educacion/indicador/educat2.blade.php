@@ -36,10 +36,18 @@
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">Indicador del curso de {{$item->descripcion}}</h3>
+                        <h3 class="card-title text-primary">Indicador del curso de {{$item->descripcion}}
+                            <div class="float-right">
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('jajajajaja')">Ver detalle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="indicador{{$key}}" data-type="Bar"></canvas>
+                        <canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>
                     </div>
                 </div>
             </div>    
@@ -61,7 +69,6 @@
                 </div>
             </div>    
         </div><!-- End row -->
-        
     </div>
 
 @endsection
@@ -72,8 +79,6 @@
         $(document).ready(function() {
            
         });
-         
-
         @foreach ($materias as $pos1 => $materia)
         var myChart = new Chart($('#indicador{{$pos1}}'), {
             type: 'bar',
@@ -126,12 +131,11 @@
                 }]
             },
             options: {
-
                 responsive: true,
-                /*title: {
+                title: {
                     display: false,
                     text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
-                },*/
+                },
                 legend: {
                     display: false,
                     position: 'bottom',
@@ -161,14 +165,38 @@
                     }]
                 },  
                 tooltips: {
-                    enabled: true,
+                    enabled: false,
                     mode: 'index',
                     intersect: true,
-                    position: 'average'
+                    //position: 'average'
+                },
+                maintainAspectRatio: true,
+                hover: {
+                    animationDuration: 0
+                },
+                animation: {
+                    duration: 1,
+                    onComplete: function() {
+                    let chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+                        ctx.textAlign = 'center';
+                        //ctx.textBaseline = 'bottom';
+                        this.data.datasets.forEach(function(dataset, i){
+                            let meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function(bar, index) {
+                                let data = dataset.data[index];
+                                if(data>0){
+                                    ctx.fillText(data+'%', bar._model.x ,bar._model.y+4.5+(bar._model.base-bar._model.y)/2);
+                                }
+                                
+                            });
+                        });
+                    },
                 },
             }
         });
         @endforeach
+        
     </script>
 
 @endsection

@@ -160,10 +160,33 @@
                     }]
                 },  
                 tooltips: {
-                    enabled: true,
+                    enabled: false,
                     mode: 'index',
                     intersect: true,
                     position: 'average'
+                },
+                maintainAspectRatio: true,
+                hover: {
+                    animationDuration: 0
+                },
+                animation: {
+                    duration: 1,
+                    onComplete: function() {
+                    let chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+                        ctx.textAlign = 'center';
+                        //ctx.textBaseline = 'bottom';
+                        this.data.datasets.forEach(function(dataset, i){
+                            let meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function(bar, index) {
+                                let data = dataset.data[index];
+                                if(data>0){
+                                    ctx.fillText(data+'%', bar._model.x ,bar._model.y+4.5+(bar._model.base-bar._model.y)/2);
+                                }
+                                
+                            });
+                        });
+                    },
                 },
             }
         });
@@ -215,10 +238,33 @@
                     }]
                 },  
                 tooltips: {
-                    enabled: true,
+                    enabled: false,
                     mode: 'index',
                     intersect: true,
                     position: 'average'
+                },
+                maintainAspectRatio: true,
+                hover: {
+                    animationDuration: 0
+                },
+                animation: {
+                    duration: 1,
+                    onComplete: function() {
+                    let chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+                        ctx.textAlign = 'center';
+                        //ctx.textBaseline = 'bottom';
+                        this.data.datasets.forEach(function(dataset, i){
+                            let meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function(bar, index) {
+                                let data = dataset.data[index];
+                                if(data>0){
+                                    ctx.fillText(data+'%', bar._model.x ,bar._model.y+4.5+(bar._model.base-bar._model.y)/2);
+                                }
+                                
+                            });
+                        });
+                    },
                 },
             }
         });
