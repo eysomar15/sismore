@@ -125,16 +125,12 @@ class DatassController extends Controller
     {
         $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
 
-        //$view = View::make('Vivienda.Datass.Aprobar')->nest('content', 'ListaImportada', $importacion_id);
-
-       //$view = view('Vivienda.Datass.Aprobar')->nest('content', 'ListaImportada', $importacion_id);
-
         return  view('Vivienda.Datass.Aprobar',compact('importacion_id','importacion'));
     } 
 
     public function procesar($importacion_id)
     {
-        $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?)', [$importacion_id]);
+        $procesar = DB::select('call viv_pa_procesarDatass(?)', [$importacion_id]);
         return view('correcto');
     }
     
