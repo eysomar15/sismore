@@ -23,10 +23,10 @@
                         <div class="progress progress-sm m-0">                
                         </div>
 
-                        @foreach ($listaIndicadores as $key => $item2)
-                            @if($item->id_niv3==$item2->clasificador_id)
+                        @foreach ($listaIndicadores as $key => $indicador)
+                            @if($item->id_niv3==$indicador->clasificador_id)
                             <h6>
-                            {{$i++}}.- <a href="{{route($item2->url)}}">{{$item2->indicador}}</a>
+                            {{$i++}}.- <a href="{{route('indicador.'.$clase_codigo,$indicador->id)}}">{{$indicador->indicador}}</a>
                             </h6>
                             @endif
                         @endforeach

@@ -30,17 +30,16 @@
                 </div>
             </div>
         @endif
-                
         <div class="row">
-            @foreach ($materias as $key => $item)
+            @foreach ($materias as $key => $materia)
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">Indicador del curso de {{$item->descripcion}}
+                        <h3 class="card-title text-primary">Indicador del curso de {{$materia->descripcion}}
                             <div class="float-right">
                                 <div class="form-group row">
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('jajajajaja')">Ver detalle</button>
+                                        <a href="{{route('ind.det.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}"  class="btn btn-primary btn-xs">Ver detalle</a>
                                     </div>
                                 </div>
                             </div>

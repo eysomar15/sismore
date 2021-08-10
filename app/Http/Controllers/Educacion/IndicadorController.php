@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Educacion;
 use App\Http\Controllers\Controller;
 use App\Models\Parametro\Clasificador;
 use App\Models\Educacion\Indicador;
+use App\Models\Educacion\Materia;
 use App\Models\Ubigeo;
 use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\IndicadorRepositorio;
@@ -19,363 +20,403 @@ class IndicadorController extends Controller
         $clas = Clasificador::where('dependencia', $clas->id)->get();
         return view('educacion.indicador.menu', compact('clas'));
     }
-    public function indicadorEducacion1()
+    public function indicadorEducacion($indicador_id)
     {
-        $indicadorx = Indicador::find(1);
-        $title = $indicadorx->nombre;
-        $nivel = 37;
-        $inds = IndicadorRepositorio::listar_indicador1('1');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= floatval($item->resultado) . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+        switch ($indicador_id) {
+            case '1': //CULMINACION 
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 37;
+                $inds = IndicadorRepositorio::listar_indicador1('1');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
+
+            case '2': //CULMINACION 
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 38;
+                $inds = IndicadorRepositorio::listar_indicador1('2');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= $item->resultado . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',   'info', 'limit'));
+            case '3': //CULMINACION 
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 0; // ES MUY VARIBLE
+                $inds = IndicadorRepositorio::listar_indicador1('3');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= $item->resultado . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'info', 'limit'));
+            case '4': //LOGROS  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 2;
+                $tipo = 0;
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
+            case '5': //LOGROS 
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 8;
+                $tipo = 0;
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
+            case '6': //LOGROS 
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 4;
+                $tipo = 0;
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
+            case '7': //LOGROS 
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 4;
+                $tipo = 1; //EIB
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
+            case '8': //ACCESO  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 1;
+                $inds = IndicadorRepositorio::listar_indicador1('8');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit'));
+            case '9': //ACCESO  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 37;
+                $inds = IndicadorRepositorio::listar_indicador1('9');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit'));
+            case '10': //ACCESO  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 38;
+                $inds = IndicadorRepositorio::listar_indicador1('10');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit'));
+            case '11': //PROFESORES   
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 31; //31
+
+                $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+                $total = 0;
+                foreach ($inds as $key => $value) {
+                    $total += $value->suma;
+                    if ($value->titulado == 0) {
+                        $value->titulado = 'NO TITULADO';
+                    } else $value->titulado = 'TITULADO';
+                }
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $value) {
+                    $labels .= '"' . $value->titulado . '",';
+                    $datas .= round($value->suma * 100 / $total, 2) . ',';
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $graf1 = ['labels' => $labels, 'datas' => $datas];
+
+                $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
+                foreach ($indu as $key => $value) {
+                    $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
+                    $value->total = $indutt[0]->total;
+                }
+                $labels = '[';
+                $datas = '[';
+                foreach ($indu as $key => $value) {
+                    $labels .= '"' . $value->nombre . '",';
+                    $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $graf2 = ['labels' => $labels, 'datas' => $datas];
+                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
+            case '12': //PROFESORES  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 37;
+                $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+                $total = 0;
+                foreach ($inds as $key => $value) {
+                    $total += $value->suma;
+                    if ($value->titulado == 0) {
+                        $value->titulado = 'NO TITULADO';
+                    } else $value->titulado = 'TITULADO';
+                }
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $value) {
+                    $labels .= '"' . $value->titulado . '",';
+                    $datas .= round($value->suma * 100 / $total, 2) . ',';
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $graf1 = ['labels' => $labels, 'datas' => $datas];
+
+                $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
+                foreach ($indu as $key => $value) {
+                    $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
+                    $value->total = $indutt[0]->total;
+                }
+                $labels = '[';
+                $datas = '[';
+                foreach ($indu as $key => $value) {
+                    $labels .= '"' . $value->nombre . '",';
+                    $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $graf2 = ['labels' => $labels, 'datas' => $datas];
+                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
+            case 13: //PROFESORES  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 38;
+                $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
+                $total = 0;
+                foreach ($inds as $key => $value) {
+                    $total += $value->suma;
+                    if ($value->titulado == 0) {
+                        $value->titulado = 'NO TITULADO';
+                    } else $value->titulado = 'TITULADO';
+                }
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $value) {
+                    $labels .= '"' . $value->titulado . '",';
+                    $datas .= round($value->suma * 100 / $total, 2) . ',';
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $graf1 = ['labels' => $labels, 'datas' => $datas];
+
+                $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
+                foreach ($indu as $key => $value) {
+                    $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
+                    $value->total = $indutt[0]->total;
+                }
+                $labels = '[';
+                $datas = '[';
+                foreach ($indu as $key => $value) {
+                    $labels .= '"' . $value->nombre . '",';
+                    $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $graf2 = ['labels' => $labels, 'datas' => $datas];
+                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
+            default:
+                return 'sin datos';
+                break;
         }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
     }
-    public function indicadorEducacion2()
+    public function vistaEducacionCat1($title, $grado, $tipo, $sinaprobar)
     {
-        $indicadorx = Indicador::find(2);
-        $title = $indicadorx->nombre;
-        $nivel = 38;
-        $inds = IndicadorRepositorio::listar_indicador1('2');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= $item->resultado . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',   'info', 'limit'));
+        return 'sin informacion';
     }
-    public function indicadorEducacion3()
-    {
-        $indicadorx = Indicador::find(3);
-        $title = $indicadorx->nombre;
-        $nivel = 0; // ES MUY VARIBLE
-        $inds = IndicadorRepositorio::listar_indicador1('3');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= $item->resultado . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'info', 'limit'));
-    }
-    /******* */
-    public function indicadorEducacion4()
-    {
-        $indicadorx = Indicador::find(4);
-        $title = $indicadorx->nombre;
-        $grado = 2;
-        $tipo = 0;
-        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return $this->vistaEducacionCat2($title, $grado, $tipo, $sinaprobar);
-    }
-    public function indicadorEducacion5()
-    {
-        $indicadorx = Indicador::find(4);
-        $title = $indicadorx->nombre;
-        $grado = 8;
-        $tipo = 0;
-        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return $this->vistaEducacionCat2($title, $grado, $tipo, $sinaprobar);
-    }
-    public function indicadorEducacion6()
-    {
-        $indicadorx = Indicador::find(6);
-        $title = $indicadorx->nombre;
-        $grado = 4;
-        $tipo = 0;
-        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return $this->vistaEducacionCat2($title, $grado, $tipo, $sinaprobar);
-    }
-    public function indicadorEducacion7()
-    {
-        $indicadorx = Indicador::find(7);
-        $title = $indicadorx->nombre;
-        $grado = 4;
-        $tipo = 1; //EIB
-        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        return $this->vistaEducacionCat2($title, $grado, $tipo, $sinaprobar);
-    }
-    public function vistaEducacionCat2($title, $grado, $tipo, $sinaprobar)
+    public function vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar)
     {
         $materias = EceRepositorio::buscar_materia3($grado, $tipo);
         foreach ($materias as $key => $materia) {
             $materia->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
         }
-        //return $materias;
-        return view('educacion.indicador.educat2', compact('title', 'grado', 'tipo', 'sinaprobar', 'materias'));
+        return view('educacion.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias'));
     }
-    /******* */
-    public function indicadorEducacion8()
+    public function indDetEdu($indicador_id, $grado, $tipo, $materia)
     {
-        $indicadorx = Indicador::find(8);
-        $title = $indicadorx->nombre;
-        $nivel = 1;
-        $inds = IndicadorRepositorio::listar_indicador1('8');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= floatval($item->resultado) . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+        $indicador = Indicador::find($indicador_id);
+        $title = $indicador->nombre;
+        $anios=EceRepositorio::buscar_anios1($grado, $tipo);
+        /*$aniog=[];
+        foreach ($anios as $key => $anio) {
+            $aniog[]=['anio'=>$anio->anio,'indicador'=>EceRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia)];
+        }*/
+        foreach ($anios as $anio) {
+            $anio->indicador=EceRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
+            foreach ($anio->indicador as $indicador) {
+                $indicador->ugel=str_replace('UGEL','',$indicador->ugel);
+            }
         }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit'));
+        //return response()->json(compact('anios'));
+        return view('educacion.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia','anios'));
     }
-    public function indicadorEducacion9()
+    public function vistaEducacionCat3($title, $grado, $tipo, $sinaprobar)
     {
-        $indicadorx = Indicador::find(9);
-        $title = $indicadorx->nombre;
-        $nivel = 37;
-        $inds = IndicadorRepositorio::listar_indicador1('9');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= floatval($item->resultado) . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit'));
+        return 'sin informacion';
     }
-    public function indicadorEducacion10()
+    public function vistaEducacionCat4($title, $grado, $tipo, $sinaprobar)
     {
-        $indicadorx = Indicador::find(10);
-        $title = $indicadorx->nombre;
-        $nivel = 38;
-        $inds = IndicadorRepositorio::listar_indicador1('10');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= floatval($item->resultado) . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit'));
+        return 'sin informacion';
     }
-    //****** */
-    public function indicadorEducacion11()
+    /****** */
+    public function indicadorPDRC($indicador_id)
     {
-        $indicadorx = Indicador::find(11);
-        $title = $indicadorx->nombre;
-        $nivel = 31; //31
+        switch ($indicador_id) {
+            case 14:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 2;
+                $tipo = 0;
+                $materia = 1;
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                foreach ($info1 as $key => $value) {
+                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                }
+                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+            case 15:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 2;
+                $tipo = 0;
+                $materia = 2;
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                foreach ($info1 as $key => $value) {
+                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                }
+                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+            case 16:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 38;
+                $inds = IndicadorRepositorio::listar_indicador1('2');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
+            case 17:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 37;
+                $inds = IndicadorRepositorio::listar_indicador1('1');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
 
-        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-        $total = 0;
-        foreach ($inds as $key => $value) {
-            $total += $value->suma;
-            if ($value->titulado == 0) {
-                $value->titulado = 'NO TITULADO';
-            } else $value->titulado = 'TITULADO';
+            default:
+                return 'sin informacion';
+                break;
         }
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $value) {
-            $labels .= '"' . $value->titulado . '",';
-            $datas .= round($value->suma * 100 / $total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf1 = ['labels' => $labels, 'datas' => $datas];
-
-        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-        //return $indu;
-        foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
-            //return $indutt;
-            $value->total = $indutt[0]->total;
-        }
-        //return $indu;
-        $labels = '[';
-        $datas = '[';
-        foreach ($indu as $key => $value) {
-            $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf2 = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
     }
-    public function indicadorEducacion12()
+    /****** */
+    public function indicadorOEI($indicador_id)
     {
-        $indicadorx = Indicador::find(12);
-        $title = $indicadorx->nombre;
-        $nivel = 37;
-        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-        $total = 0;
-        foreach ($inds as $key => $value) {
-            $total += $value->suma;
-            if ($value->titulado == 0) {
-                $value->titulado = 'NO TITULADO';
-            } else $value->titulado = 'TITULADO';
+        switch ($indicador_id) {
+            case 18:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 2;
+                $tipo = 0;
+                $materia = 1;
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                foreach ($info1 as $key => $value) {
+                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                }
+                return view('educacion.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+            case 19:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 2;
+                $tipo = 0;
+                $materia = 2;
+                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                foreach ($info1 as $key => $value) {
+                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                }
+                return view('educacion.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+            default:
+                return 'sin informacion';
+                break;
         }
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $value) {
-            $labels .= '"' . $value->titulado . '",';
-            $datas .= round($value->suma * 100 / $total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf1 = ['labels' => $labels, 'datas' => $datas];
-
-        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-        foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
-            $value->total = $indutt[0]->total;
-        }
-        $labels = '[';
-        $datas = '[';
-        foreach ($indu as $key => $value) {
-            $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf2 = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
-    }
-    public function indicadorEducacion13()
-    /******* */
-    {
-        $indicadorx = Indicador::find(13);
-        $title = $indicadorx->nombre;
-        $nivel = 38;
-        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-        $total = 0;
-        foreach ($inds as $key => $value) {
-            $total += $value->suma;
-            if ($value->titulado == 0) {
-                $value->titulado = 'NO TITULADO';
-            } else $value->titulado = 'TITULADO';
-        }
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $value) {
-            $labels .= '"' . $value->titulado . '",';
-            $datas .= round($value->suma * 100 / $total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf1 = ['labels' => $labels, 'datas' => $datas];
-
-        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-        foreach ($indu as $key => $value) {
-            $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
-            $value->total = $indutt[0]->total;
-        }
-        $labels = '[';
-        $datas = '[';
-        foreach ($indu as $key => $value) {
-            $labels .= '"' . $value->nombre . '",';
-            $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $graf2 = ['labels' => $labels, 'datas' => $datas];
-        return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2'));
-    }
-    public function indicadorPDRC1()
-    {
-        $indicadorx = Indicador::find(14);
-        $title = $indicadorx->nombre;
-        $grado = 2;
-        $tipo = 0;
-        $materia = 1;
-        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1 = EceRepositorio::buscar_materia3( $grado, $tipo, $materia);
-        foreach ($info1 as $key => $value) {
-            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
-        }
-        return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo','sinaprobar', 'info1'));
-    }
-    public function indicadorPDRC2()
-    {
-        $indicadorx = Indicador::find(15);
-        $title = $indicadorx->nombre;
-        $grado = 2;
-        $tipo = 0;
-        $materia = 2;
-        $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-        $info1 = EceRepositorio::buscar_materia3( $grado, $tipo, $materia);
-        foreach ($info1 as $key => $value) {
-            $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
-        }
-        return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo','sinaprobar', 'info1'));
-    }
-    public function indicadorPDRC3()
-    {
-        $indicadorx = Indicador::find(16);
-        $title = $indicadorx->nombre;
-        $nivel = 38;
-        $inds = IndicadorRepositorio::listar_indicador1('2');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= floatval($item->resultado) . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
-    }
-    public function indicadorPDRC4()
-    {
-        $indicadorx = Indicador::find(17);
-        $title = $indicadorx->nombre;
-        $nivel = 37;
-        $inds = IndicadorRepositorio::listar_indicador1('1');
-        $limit = 100;
-        $labels = '[';
-        $datas = '[';
-        foreach ($inds as $key => $item) {
-            $labels .= $item->anio . ',';
-            $datas .= floatval($item->resultado) . ',';
-            $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-        }
-        $labels .= ']';
-        $datas .= ']';
-        $info = ['labels' => $labels, 'datas' => $datas];
-        $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-        return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
     }
     /*****OTRAS OPCIONES */
     public function cargarprovincias()
@@ -465,7 +506,7 @@ class IndicadorController extends Controller
         $tabla .= '</tbody></table>';
         return $tabla;
     }
-    public function indicadorSatisfactorio(Request $request)
+    public function indicadorSatisfactorio(Request $request)//puede eliminar
     {
         $inds = EceRepositorio::listar_indicadorsatisfactorio($request->anio, $request->grado, $request->tipo);
         $card = '';
@@ -480,6 +521,44 @@ class IndicadorController extends Controller
                             <div class="text-right">
                                 <h4 class="my-0 font-weight-bold">(Total:' . $ind->satisfactorio . ') <span data-plugin="counterup">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '</span>%</h4>
                                 <p class="mb-0 mt-1 text-truncate">' . $ind->materia . '</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   ';
+        }
+        return $card;
+    }
+    public function indicadorSatisfactorioMateria(Request $request)
+    {
+        $inds = EceRepositorio::listar_indicadorsatisfactorio1($request->anio, $request->grado, $request->tipo, $request->materia);
+        $card = '';
+        foreach ($inds as $ind) {
+            $card .= '<div class="col-md-6 col-xl-6">
+                <div class="card-box">
+                    <div class="media">
+                        <div class="avatar-md bg-success rounded-circle mr-2">
+                            <i class="ion-md-contacts avatar-title font-26 text-white"></i>
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '</span>%</h4>
+                                <p class="mb-0 mt-1 text-truncate">' . $ind->materia . ' - porcentaje</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   ';
+            $card .= '<div class="col-md-6 col-xl-6">
+                <div class="card-box">
+                    <div class="media">
+                        <div class="avatar-md bg-success rounded-circle mr-2">
+                            <i class="ion-md-contacts avatar-title font-26 text-white"></i>
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="my-0 font-weight-bold"><span data-plugin="counterup">' . $ind->satisfactorio . '</span></h4>
+                                <p class="mb-0 mt-1 text-truncate">' . $ind->materia . ' - cantidad</p>
                             </div>
                         </div>
                     </div>
@@ -541,7 +620,7 @@ class IndicadorController extends Controller
 
         return $card;
     }
-    public function indicadorUgel(Request $request)
+    public function indicadorUgel(Request $request)//observador si se usa
     {
         $card = '';
         $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
@@ -593,6 +672,66 @@ class IndicadorController extends Controller
             </div>
         </div>';
         }
+
+        return $card;
+    }
+    public function indicadorUgelMateria(Request $request)
+    {
+        $card = '';
+        $materia = Materia::find($request->materia);
+        //return response()->json(compact('materia'));
+        //$materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        //foreach ($materias as $key => $materia) {
+
+            $card .= '<div class="col-md-12">
+            <div class="card card-border">
+                <div class="card-header border-primary bg-transparent pb-0">
+                    <!--h3 class="card-title">materia ' . $materia->descripcion . '</h3-->
+                </div>
+                <div class="card-body">
+                    <div class="row" >
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-primary">UGEL</th>
+                                            <th class="text-secondary">CANTIDAD</th>
+                                            <th class="text-secondary">PREVIO</th>
+                                            <th class="text-danger">CANTIDAD</th>
+                                            <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">CANTIDAD</th>
+                                            <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">CANTIDAD</th>
+                                            <th class="text-success">SATISFACTORIO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
+            $inds = EceRepositorio::listar_indicadorugel($request->aniox, $request->grado, $request->tipo, $materia->id);
+            //return response()->json(compact('inds'));
+            foreach ($inds as $ind) {
+                $card .= '<tr>
+                            <td class="text-primary"><span>' . str_replace('UGEL',"",$ind->ugel) . '</span></td>
+                            <td class="text-secondary">' . ($ind->previo) . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-danger">' . ($ind->inicio) . '</td>
+                            <td class="text-danger">' . round( $ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-warning">' . $ind->proceso  . '</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+                        </tr>';
+            }
+
+            $card .= '              </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>';
+        //}
 
         return $card;
     }

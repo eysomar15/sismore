@@ -20,13 +20,13 @@ class ClasificadorController extends Controller
 
         $nombre_niv1 ='';
         $nombre_niv2 ='';
-        
+
         if(sizeof($listaIndicadores)>0)
         {
             $nombre_niv1 = $listaIndicadores->first()->nombre_niv1;
             $nombre_niv2 = $listaIndicadores->first()->nombre_niv2;       
-        }
+        } 
         
-        return  view('parametro.MenuIndicador',compact('nombre_niv1','nombre_niv2','listaIndicadores','listaNivel3_deClasificador'));
+        return  view('parametro.MenuIndicador',compact('nombre_niv1','nombre_niv2','listaIndicadores','listaNivel3_deClasificador','clase_codigo'));
     } 
 }

@@ -206,23 +206,26 @@ class EceRepositorio
     public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia) //no usado
     {
         $query = DB::table('edu_eceresultado as v1')
-            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->join('edu_ece as v2'      , 'v2.id', '=', 'v1.ece_id')
+            ->join('edu_materia as v3'  , 'v3.id', '=', 'v1.materia_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.anio', $anio)
             ->where('v2.tipo', $tipo)
             ->where('v1.materia_id', $materia)
             ->groupBy('v1.materia_id')
+            ->groupBy('v3.descripcion')
             ->get([
                 'v1.materia_id',
-                DB::raw('sum(evaluados)'),
-                DB::raw('sum(previo)'),
-                DB::raw('sum(inicio)'),
-                DB::raw('sum(proceso)'),
-                DB::raw('sum(satisfactorio)'),
+                'v3.descripcion as materia',    
+                DB::raw('sum(evaluados)     as evaluados'),
+                DB::raw('sum(previo)        as previo'),
+                DB::raw('sum(inicio)        as inicio'),
+                DB::raw('sum(proceso)       as proceso'),
+                DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
         return $query;
     }
-    public static function listar_indicadorsatisfactorio($anio, $grado, $tipo)
+    public static function listar_indicadorsatisfactorio($anio, $grado, $tipo)//esta por ver 
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')

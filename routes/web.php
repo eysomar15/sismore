@@ -66,32 +66,18 @@ Route::get('/ECE/Importar/Aprobar/{importacion_id}', [EceController::class, 'imp
 Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}', [EceController::class, 'importarAprobarGuardar'])->name('ece.importar.aprobar.guardar');
 Route::post('/ECE/ImportarGuardar', [EceController::class, 'importarGuardar'])->name('ece.importar.store');
 Route::post('/ECE/CargarGrados', [EceController::class, 'cargargrados'])->name('ece.ajax.cargargrados');
-
-
 Route::get('/INDICADOR/Menu/{clasificador}', [IndicadorController::class, 'indicadorEducacionMenu'])->name('indicador.menu');
-Route::get('/INDICADOR/ece1', [IndicadorController::class, 'indicadorEducacion1'])->name('indicador.1');
-Route::get('/INDICADOR/ece2', [IndicadorController::class, 'indicadorEducacion2'])->name('indicador.2');
-Route::get('/INDICADOR/ece3', [IndicadorController::class, 'indicadorEducacion3'])->name('indicador.3');
-Route::get('/INDICADOR/ece4', [IndicadorController::class, 'indicadorEducacion4'])->name('ece.indicador.4');
-Route::get('/INDICADOR/ece5', [IndicadorController::class, 'indicadorEducacion5'])->name('ece.indicador.5');
-Route::get('/INDICADOR/ece6', [IndicadorController::class, 'indicadorEducacion6'])->name('ece.indicador.6');
-Route::get('/INDICADOR/ece7', [IndicadorController::class, 'indicadorEducacion7'])->name('ece.indicador.7');
-Route::get('/INDICADOR/ece8', [IndicadorController::class, 'indicadorEducacion8'])->name('indicador.8');
-Route::get('/INDICADOR/ece9', [IndicadorController::class, 'indicadorEducacion9'])->name('indicador.9');
-Route::get('/INDICADOR/ece10', [IndicadorController::class, 'indicadorEducacion10'])->name('indicador.10');
-Route::get('/INDICADOR/ece11', [IndicadorController::class, 'indicadorEducacion11'])->name('indicador.11');
-Route::get('/INDICADOR/ece12', [IndicadorController::class, 'indicadorEducacion12'])->name('indicador.12');
-Route::get('/INDICADOR/ece13', [IndicadorController::class, 'indicadorEducacion13'])->name('indicador.13');
-Route::get('/INDICADOR/pdrc1', [IndicadorController::class, 'indicadorPDRC1'])->name('pdrc.indicador.1');
-Route::get('/INDICADOR/pdrc2', [IndicadorController::class, 'indicadorPDRC2'])->name('pdrc.indicador.2');
-Route::get('/INDICADOR/pdrc3', [IndicadorController::class, 'indicadorPDRC3'])->name('pdrc.indicador.3');
-Route::get('/INDICADOR/pdrc4', [IndicadorController::class, 'indicadorPDRC4'])->name('pdrc.indicador.4');
-Route::get('/INDICADOR/obj1', [IndicadorController::class, 'indicadorOEI1'])->name('oei.indicador.1');
-Route::get('/INDICADOR/obj2', [IndicadorController::class, 'indicadorOEI2'])->name('oei.indicador.2');
-//Route::post('/ECE/Vista', [EceController::class, 'indicadorLOGROS'])->name('ece.indicador.vista');
-Route::post('/INDICADOR/Satisfactorio', [IndicadorController::class, 'indicadorSatisfactorio'])->name('ind.ajax.satisfactorio');
+Route::get('/Clasificador/{clase_codigo}', [ClasificadorController::class, 'menu_porClase'])->name('Clasificador.menu');
+
+Route::get('/INDICADOR/ece/{indicador}', [IndicadorController::class, 'indicadorEducacion'])->name('indicador.01');
+Route::get('/INDICADOR/pdrc/{indicador}', [IndicadorController::class, 'indicadorPDRC'])->name('indicador.04');
+Route::get('/INDICADOR/obj/{indicador}', [IndicadorController::class, 'indicadorOEI'])->name('indicador.05');
+Route::get('/INDICADOR/vece/{indicador_id}/{grado}/{tipo}/{materia}', [IndicadorController::class, 'indDetEdu'])->name('ind.det.edu');
+
+Route::post('/INDICADOR/Satisfactorio', [IndicadorController::class, 'indicadorSatisfactorioMateria'])->name('ind.ajax.satisfactorio');
+Route::post('/INDICADOR/Ugel', [IndicadorController::class, 'indicadorUgelMateria'])->name('ind.ajax.ugel');
+
 Route::post('/INDICADOR/Materia', [IndicadorController::class, 'indicadorMateria'])->name('ind.ajax.materia');
-Route::post('/INDICADOR/Ugel', [IndicadorController::class, 'indicadorUgel'])->name('ind.ajax.ugel');
 Route::post('/INDICADOR/Derivados', [IndicadorController::class, 'indicadorDerivados'])->name('ind.ajax.derivados');
 Route::post('/INDICADOR/Provincia', [IndicadorController::class, 'indicadorProvincia'])->name('ind.ajax.provincia');
 Route::post('/INDICADOR/Distritos/{provincia}', [EceController::class, 'ind.ajax.cargardistritos'])
@@ -100,9 +86,6 @@ Route::post('/INDICADOR/Distritos/{provincia}', [EceController::class, 'ind.ajax
 Route::get('/INDICADOR/SINRUTA', function () {
     return 'Ruta no definida';
 })->name('indicador.sinruta');
-
-Route::get('/Clasificador/{clase_codigo}', [ClasificadorController::class, 'menu_porClase'])->name('Clasificador.menu');
-
 /**************************************** FIN EDUCACION ************************************************/
 
 /**************************************** VIVIENDA ************************************************/
