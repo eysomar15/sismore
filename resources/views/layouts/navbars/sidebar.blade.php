@@ -30,7 +30,7 @@
                 </div>
             </div>
             <!--- fin user-box -->
-            
+             
             <ul class="metismenu" id="side-menu">                  
 
                     @foreach (session('menuNivel01') as $key => $menu)  
@@ -55,9 +55,9 @@
                             </ul>
 
                             @else
-                                <a href="{{route($menu->url,session('sistema_id'))}}" class="waves-effect">
+                                <a href="{{route($menu->url,$menu->parametro)}}" class="waves-effect">
                                     <i class="{{$menu->icono}}"></i>
-                                    <span> {{$menu->nombre}} </span>
+                                    <span> {{$menu->nombre}}</span>
                                 </a>
                                 
                             @endif
@@ -66,10 +66,11 @@
                       
                     @endforeach             
 
-            </ul> 
+            </ul>  
 
             <!--- por ahora -->
-            @if (session('sistema_id')==1)
+
+            {{-- @if (session('sistema_id')==1)
                 <ul class="metismenu" id="side-menu">
 
                     <li>
@@ -123,7 +124,7 @@
                     </li>
     
                     <li>
-                        {{-- <a href="{{route('Clasificador.menu','06')}}" class="waves-effect">                         --}}
+                    
                         <a href="{{route('AEI_tempo')}}" class="waves-effect">   
                             <i class="mdi mdi-poll-box"></i>
                             <span> Act. Estrat. Instit. </span>
@@ -180,7 +181,7 @@
          
                 </ul> 
                           
-            @endif
+            @endif --}}
           
 
         </div>

@@ -8,7 +8,8 @@ class MenuRepositorio
 {
   public static function Listar_Nivel01_porUsuario_Sistema($usuario_id,$sistema_id)
   { 
-      $data = Menu::select('adm_menu.id','adm_menu.dependencia','adm_menu.nombre','adm_menu.url','adm_menu.posicion','adm_menu.icono')
+      $data = Menu::select('adm_menu.id','adm_menu.dependencia','adm_menu.nombre','adm_menu.url','adm_menu.posicion',
+              'adm_menu.icono','adm_menu.parametro')
               ->join('adm_menu_perfil as menPer', 'adm_menu.id', '=', 'menPer.menu_id')
               ->join('adm_perfil as per', 'menPer.perfil_id', '=', 'per.id')
               ->join('adm_usuario_perfil as usuPer', 'per.id', '=', 'usuPer.perfil_id')
@@ -25,7 +26,8 @@ class MenuRepositorio
 
   public static function Listar_Nivel02_porUsuario_Sistema($usuario_id,$sistema_id)
   { 
-      $data = Menu::select('adm_menu.id','adm_menu.dependencia','adm_menu.nombre','adm_menu.url','adm_menu.posicion','adm_menu.icono')
+      $data = Menu::select('adm_menu.id','adm_menu.dependencia','adm_menu.nombre','adm_menu.url','adm_menu.posicion',
+              'adm_menu.icono','adm_menu.parametro')
               ->join('adm_menu_perfil as menPer', 'adm_menu.id', '=', 'menPer.menu_id')
               ->join('adm_perfil as per', 'menPer.perfil_id', '=', 'per.id')
               ->join('adm_usuario_perfil as usuPer', 'per.id', '=', 'usuPer.perfil_id')
