@@ -30,7 +30,7 @@
                 </div>
             </div>
             <!--- fin user-box -->
-             
+              
             <ul class="metismenu" id="side-menu">                  
 
                     @foreach (session('menuNivel01') as $key => $menu)  
@@ -66,7 +66,7 @@
                       
                     @endforeach             
 
-            </ul>  
+            </ul>   
 
             <!--- por ahora -->
 
@@ -106,6 +106,14 @@
                         <a href="{{route('Clasificador.menu','01')}}" class="waves-effect">
                             <i class="mdi mdi-equalizer-outline"></i>
                             <span> Indicadores </span>
+                        </a>                    
+                    </li>
+
+                    
+                    <li>
+                        <a href="{{route('Clasificador.menu','01')}}" class="waves-effect">
+                            <i class="mdi mdi-equalizer-outline"></i>
+                            <span> Educacion ggggg </span>
                         </a>                    
                     </li>
     

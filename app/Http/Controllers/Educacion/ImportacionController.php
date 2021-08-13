@@ -24,7 +24,7 @@ class ImportacionController extends Controller
         // $padronWebLista = Importacion::select('id','comentario','fechaActualizacion','estado')
         //  ->get();
 
-        $data = ImportacionRepositorio::Listar_Importaciones();
+        $data = ImportacionRepositorio::Listar_Importaciones(session('sistema_id'));
        
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {

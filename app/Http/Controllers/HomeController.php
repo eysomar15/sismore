@@ -38,6 +38,11 @@ class HomeController extends Controller
     
     public function sistema_acceder($sistema_id)
     { 
+        // session()->forget('sistema_id');
+        // session()->forget('sistema_nombre');
+        // session()->forget('menuNivel01');
+        // session()->forget('menuNivel02');
+
         session(['sistema_id'=>$sistema_id]);
 
         $sistema = Sistema::find($sistema_id);
@@ -48,8 +53,6 @@ class HomeController extends Controller
 
         $menuNivel02 = MenuRepositorio::Listar_Nivel02_porUsuario_Sistema(auth()->user()->id,$sistema_id);
         session(['menuNivel02'=>$menuNivel02]);
-
-        //return  $menuNivel02;
 
         switch ($sistema_id ) {
             case(1): return $this->educacion($sistema_id);break;
