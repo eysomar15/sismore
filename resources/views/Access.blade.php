@@ -24,27 +24,27 @@
                         <div class="card-box">
                             @foreach ($sistemas as $sistema)
 
-                            <a href=" {{route('sistema_acceder',$sistema->id)}}">
+                                <a href=" {{route('sistema_acceder',$sistema->sistema_id)}}">
 
-                                <div class="media">
-                                    <div class="avatar-md bg-info rounded-circle mr-2">
-                                        <i class= "{{$sistema->icono}} avatar-title font-26 text-white"></i>
-                                    </div>
-                                    <div class="media-body align-self-center">
-                                        <div class="text-right">
-                                            <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup"> {{$sistema->nombre}} <br> </span></h4>                                    
+                                    <div class="media">
+                                        <div class="avatar-md bg-info rounded-circle mr-2">
+                                            <i class= "{{$sistema->icono}} avatar-title font-26 text-white"></i>
+                                        </div>
+                                        <div class="media-body align-self-center">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup"> {{$sistema->nombre}} <br> </span></h4>                                    
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mt-4">                     
-                                    <div class="progress progress-sm m-0">
-                                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <div class="mt-4">                     
+                                        <div class="progress progress-sm m-0">
+                                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </a>
-                            <br>
+                                </a>
+                                <br>
                             @endforeach  
                         </div>               
                        

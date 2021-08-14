@@ -5,7 +5,7 @@
     @if (session('sistema_id')==1)
     @include('inicioEducacion')   
     @else
-    <h5>No hay nada</h5>
+    <h5>otros sistemas</h5>
     @endif
         
 

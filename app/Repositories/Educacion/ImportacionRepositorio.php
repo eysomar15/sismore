@@ -5,7 +5,7 @@ use App\Models\Educacion\Importacion;
 
 class ImportacionRepositorio
 {
-    public static function Listar_Importaciones()
+    public static function Listar_Importaciones($sistema_id)
     { 
         $data = Importacion::select('par_importacion.id','par_importacion.comentario',
                                     'par_importacion.fechaActualizacion','par_importacion.estado',
@@ -14,6 +14,7 @@ class ImportacionRepositorio
                 ->join('adm_usuario', 'adm_usuario.id', '=', 'par_importacion.usuarioId_crea')
                 ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'par_importacion.fuenteImportacion_id')
                 ->where("par_importacion.estado", "=", "PE")
+                ->where("par_fuenteimportacion.sistema_id", "=", $sistema_id)
                 ->orderBy('par_importacion.id','desc')
                 ->get();
 
