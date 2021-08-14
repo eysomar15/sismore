@@ -79,12 +79,18 @@
             <div class="col-xl-12">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">Resumen por UGEl</h3>
+                        <h3 class="card-title text-primary">Resumen general por provincia y distrito</h3>
+                        
+                    </div>
+                    <div class="card-body">
                         <div class="form-group row">
                             <label class="col-md-2 col-form-label">Provincia</label>
                             <div class="col-md-4">
-                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos();vistaindicador();">
+                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos(); vistaindicador();">
                                     <option value="0">TODOS</option>
+                                    @foreach ($provincias as $ges)
+                                    <option value="{{$ges->id}}">{{$ges->nombre}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         
@@ -94,10 +100,48 @@
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
+                             
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="row" id="vistatabla">
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div><!-- End row -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">Resumen general por gestion y area</h3>
+                    </div> 
 
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Gestion</label>
+                            <div class="col-md-4">
+                                <select id="gestion" name="gestion" class="form-control" onchange="vistaindicador();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($gestions as $ges)
+                                    <option value="{{$ges->id}}">{{$ges->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label class="col-md-2 col-form-label">Area</label>
+                            <div class="col-md-4">
+                                <select id="area" name="area" class="form-control" onchange="vistaindicador();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($areas as $area)
+                                    <option value="{{$area->id}}">{{$area->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="vistatabla2">
+                        </div>
                     </div>
                 </div>
             </div>    
@@ -129,9 +173,79 @@
     <script>
         $(document).ready(function() {
             satisfactorios();
+            vistaindicador();
+            vistaindicador2();
             
         }); 
-        
+        function cargardistritos() {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },
+                url: "{{ url('/') }}/INDICADOR/Distritos/" + $('#provincia').val(),
+                type: 'post',
+                dataType: 'JSON',
+                success: function(data) {
+                    $("#distrito option").remove();
+                    var options = '<option value="">TODOS</option>';
+                    $.each(data.distritos, function(index, value) {
+                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
+                    });
+                    $("#distrito").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+        function vistaindicador() {
+            datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val()+ '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
+            console.log(datos);
+            if (true) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name=_token]').val()
+                    },
+                    url: "{{ route('ind.ajax.derivados') }}",
+                    type: 'post',
+                    data: datos,
+                    beforeSend: function() {
+                        $("#vistatabla").html('<br><h3>Cargando datos...</h3>');
+                    },
+                    success: function(data) {
+                        //  console.log(data);
+                        $("#vistatabla").html(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                    },
+                });
+            }
+        }
+        function vistaindicador2() {
+            datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val()+ '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
+            console.log(datos);
+            if (true) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name=_token]').val()
+                    },
+                    url: "{{ route('ind.ajax.derivados2') }}",
+                    type: 'post',
+                    data: datos,
+                    beforeSend: function() {
+                        $("#vistatabla2").html('<br><h3>Cargando datos...</h3>');
+                    },
+                    success: function(data) {
+                        //  console.log(data);
+                        $("#vistatabla2").html(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                    },
+                });
+            }
+        }
         function satisfactorios() {
             if (true) {
                 $.ajax({
@@ -145,7 +259,6 @@
                         $("#vistaindicadores").html('<br><h3>Cargando datos...</h3>');
                     },
                     success: function(data) {
-                        //console.log(data);
                         $("#vistaindicadores").html(data);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -172,7 +285,6 @@
                         $("#vistaugel").html('<br><h3>Cargando datos...</h3>');
                     },
                     success: function(data) {
-                        //console.log(data);
                         $("#vistaugel").html(data);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {

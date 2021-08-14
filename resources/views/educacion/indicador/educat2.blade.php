@@ -48,18 +48,7 @@
                     <div class="card-body">
                         <canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>
                     </div>
-                </div>
-            </div>    
-            @endforeach
-            
-        </div><!-- End row -->
-        <div class="row">
-            <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">Leyenda</h3>
-                    </div>
-                    <div class="card-body">
+                    <div  class="card-footer text-muted bg-transparent px-0 text-center">Leyenda: 
                         <span class="badge" style="background-color:#7C7D7D;">PREVIO</span>
                         <span class="badge" style="background-color:#F25656;">INICIO</span>
                         <span class="badge" style="background-color:#F2CA4C;">PROCESO</span>
@@ -67,7 +56,10 @@
                     </div>
                 </div>
             </div>    
+            @endforeach
+            
         </div><!-- End row -->
+ 
     </div>
 
 @endsection

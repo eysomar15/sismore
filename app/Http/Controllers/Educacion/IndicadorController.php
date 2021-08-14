@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Educacion\Area;
 use App\Models\Parametro\Clasificador;
 use App\Models\Educacion\Indicador;
 use App\Models\Educacion\Materia;
+use App\Models\Educacion\TipoGestion;
 use App\Models\Ubigeo;
-use App\Repositories\Educacion\EceRepositorio;
+//use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\IndicadorRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -83,28 +85,28 @@ class IndicadorController extends Controller
                 $title = $indicador->nombre;
                 $grado = 2;
                 $tipo = 0;
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '5': //LOGROS 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $grado = 8;
                 $tipo = 0;
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '6': //LOGROS 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $grado = 4;
                 $tipo = 0;
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '7': //LOGROS 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $grado = 4;
                 $tipo = 1; //EIB
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '8': //ACCESO  
                 $indicador = Indicador::find($indicador_id);
@@ -283,9 +285,9 @@ class IndicadorController extends Controller
     }
     public function vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar)
     {
-        $materias = EceRepositorio::buscar_materia3($grado, $tipo);
+        $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo);
         foreach ($materias as $key => $materia) {
-            $materia->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+            $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
         }
         return view('educacion.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias'));
     }
@@ -293,19 +295,18 @@ class IndicadorController extends Controller
     {
         $indicador = Indicador::find($indicador_id);
         $title = $indicador->nombre;
-        $anios=EceRepositorio::buscar_anios1($grado, $tipo);
-        /*$aniog=[];
-        foreach ($anios as $key => $anio) {
-            $aniog[]=['anio'=>$anio->anio,'indicador'=>EceRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia)];
-        }*/
+        //$title='Indicador N° 1: Porcentaje de estudiantes del 2° grado de educación primaria que logran el nivel SATISFACTORIO en Lectura.';
+        $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $areas = Area::all();
+        $gestions = IndicadorRepositorio::listar_gestion1($grado, $tipo);//TipoGestion::where('estado', 'AC')->get();
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
         foreach ($anios as $anio) {
-            $anio->indicador=EceRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
+            $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
             foreach ($anio->indicador as $indicador) {
-                $indicador->ugel=str_replace('UGEL','',$indicador->ugel);
+                $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
             }
         }
-        //return response()->json(compact('anios'));
-        return view('educacion.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia','anios'));
+        return view('educacion.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'areas', 'gestions', 'provincias'));
     }
     public function vistaEducacionCat3($title, $grado, $tipo, $sinaprobar)
     {
@@ -325,10 +326,10 @@ class IndicadorController extends Controller
                 $grado = 2;
                 $tipo = 0;
                 $materia = 1;
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($info1 as $key => $value) {
-                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
                 return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
             case 15:
@@ -337,10 +338,10 @@ class IndicadorController extends Controller
                 $grado = 2;
                 $tipo = 0;
                 $materia = 2;
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($info1 as $key => $value) {
-                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
                 return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
             case 16:
@@ -395,10 +396,10 @@ class IndicadorController extends Controller
                 $grado = 2;
                 $tipo = 0;
                 $materia = 1;
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($info1 as $key => $value) {
-                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
                 return view('educacion.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
             case 19:
@@ -407,10 +408,10 @@ class IndicadorController extends Controller
                 $grado = 2;
                 $tipo = 0;
                 $materia = 2;
-                $sinaprobar = EceRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = EceRepositorio::buscar_materia3($grado, $tipo, $materia);
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($info1 as $key => $value) {
-                    $value->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
                 return view('educacion.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
             default:
@@ -421,23 +422,23 @@ class IndicadorController extends Controller
     /*****OTRAS OPCIONES */
     public function cargarprovincias()
     {
-        $provincias = EceRepositorio::buscar_provincia1();
+        $provincias = IndicadorRepositorio::buscar_provincia1();
         return response()->json($provincias);
     }
     public function cargardistritos($provincia)
     {
         //$distritos = Ubigeo::where('codigo', 'like', $provincia . '%')->whereRaw('LENGTH(codigo)=6')->get();
-        $distritos = EceRepositorio::buscar_distrito1($provincia);
+        $distritos = IndicadorRepositorio::buscar_distrito1($provincia);
         return response()->json(compact('distritos'));
     }
     public function cargargrados(Request $request)
     {
-        $grados = EceRepositorio::buscar_grados1($request->nivel);
+        $grados = IndicadorRepositorio::buscar_grados1($request->nivel);
         return response()->json(compact('grados'));
     }
     public function indicadorLOGROS(Request $request)
     {
-        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        $materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
         $tabla = '<table class="table mb-0">';
         $tabla .= '<thead><tr><th></th>';
         foreach ($materias as $key => $value) {
@@ -445,11 +446,11 @@ class IndicadorController extends Controller
         }
         $tabla .= '</tr></thead><tbody>';
         if ($request->provincia == 0 && $request->distrito == 0) {
-            $provincias = EceRepositorio::buscar_provincia1();
+            $provincias = IndicadorRepositorio::buscar_provincia1();
             foreach ($provincias as $provincia) {
                 $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
                 foreach ($materias as $materia) {
-                    $resultado = EceRepositorio::buscar_resultado1($request->anio, $request->grado, $request->tipo, $materia->id, $provincia->id);
+                    $resultado = IndicadorRepositorio::buscar_resultado1($request->anio, $request->grado, $request->tipo, $materia->id, $provincia->id);
                     if ($resultado[0]->evaluados) {
                         $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                     } else $indicador = 0.0;
@@ -459,7 +460,7 @@ class IndicadorController extends Controller
             }
             $tabla .= '<tr><td>TOTAL</td>';
             foreach ($materias as $materia) {
-                $resultado = EceRepositorio::buscar_resultado2($request->anio, $request->grado, $request->tipo, $materia->id);
+                $resultado = IndicadorRepositorio::buscar_resultado2($request->anio, $request->grado, $request->tipo, $materia->id);
                 if ($resultado[0]->evaluados) {
                     $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                 } else $indicador = 0.0;
@@ -473,7 +474,7 @@ class IndicadorController extends Controller
             foreach ($distritos as  $distrito) {
                 $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
                 foreach ($materias as $materia) {
-                    $resultado = EceRepositorio::buscar_resultado3($request->anio, $request->grado, $request->tipo, $materia->id, $distrito->id);
+                    $resultado = IndicadorRepositorio::buscar_resultado3($request->anio, $request->grado, $request->tipo, $materia->id, $distrito->id);
                     if ($resultado[0]->evaluados) {
                         $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                     } else $indicador = 0.0;
@@ -483,7 +484,7 @@ class IndicadorController extends Controller
             }
             $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
             foreach ($materias as $materia) {
-                $resultado = EceRepositorio::buscar_resultado1($request->anio, $request->grado, $request->tipo, $materia->id, $provincia->id);
+                $resultado = IndicadorRepositorio::buscar_resultado1($request->anio, $request->grado, $request->tipo, $materia->id, $provincia->id);
                 if ($resultado[0]->evaluados) {
                     $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                 } else $indicador = 0.0;
@@ -494,7 +495,7 @@ class IndicadorController extends Controller
             $distrito = Ubigeo::find($request->distrito);
             $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
             foreach ($materias as $materia) {
-                $resultado = EceRepositorio::buscar_resultado3($request->anio, $request->grado, $request->tipo, $materia->id, $distrito->id);
+                $resultado = IndicadorRepositorio::buscar_resultado3($request->anio, $request->grado, $request->tipo, $materia->id, $distrito->id);
                 if ($resultado[0]->evaluados) {
                     $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
                 } else $indicador = 0.0;
@@ -506,9 +507,9 @@ class IndicadorController extends Controller
         $tabla .= '</tbody></table>';
         return $tabla;
     }
-    public function indicadorSatisfactorio(Request $request)//puede eliminar
+    public function indicadorSatisfactorio(Request $request) //puede eliminar
     {
-        $inds = EceRepositorio::listar_indicadorsatisfactorio($request->anio, $request->grado, $request->tipo);
+        $inds = IndicadorRepositorio::listar_indicadorsatisfactorio($request->anio, $request->grado, $request->tipo);
         $card = '';
         foreach ($inds as $ind) {
             $card .= '<div class="col-md-6 col-xl-' . ($inds->count() == 1 ? '12' : ($inds->count() == 2 ? '6' : ($inds->count() == 3 ? '4' : '6'))) . '">
@@ -531,7 +532,7 @@ class IndicadorController extends Controller
     }
     public function indicadorSatisfactorioMateria(Request $request)
     {
-        $inds = EceRepositorio::listar_indicadorsatisfactorio1($request->anio, $request->grado, $request->tipo, $request->materia);
+        $inds = IndicadorRepositorio::listar_indicadorsatisfactorio1($request->anio, $request->grado, $request->tipo, $request->materia);
         $card = '';
         foreach ($inds as $ind) {
             $card .= '<div class="col-md-6 col-xl-6">
@@ -570,7 +571,7 @@ class IndicadorController extends Controller
     public function indicadorMateria(Request $request)
     {
         $card = '';
-        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        $materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
         foreach ($materias as $key => $materia) {
 
             $card .= '<div class="col-md-6">
@@ -595,7 +596,7 @@ class IndicadorController extends Controller
                                         </tr>
                                     </thead>
                                     <tbody>';
-            $inds = EceRepositorio::listar_indicadoranio($request->anio, $request->grado, $request->tipo, $materia->id, 'desc');
+            $inds = IndicadorRepositorio::listar_indicadoranio($request->anio, $request->grado, $request->tipo, $materia->id, 'desc');
             foreach ($inds as $ind) {
                 $card .= '<tr>
                             <td><span class="' . ($ind->anio == $request->anio ? 'bg-info text-white' : 'text-primary') . '">' . $ind->anio . '</span></td>
@@ -620,10 +621,10 @@ class IndicadorController extends Controller
 
         return $card;
     }
-    public function indicadorUgel(Request $request)//observador si se usa
+    public function indicadorUgel(Request $request) //observador si se usa
     {
         $card = '';
-        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        $materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
         foreach ($materias as $key => $materia) {
 
             $card .= '<div class="col-md-6">
@@ -649,7 +650,7 @@ class IndicadorController extends Controller
                                         </tr>
                                     </thead>
                                     <tbody>';
-            $inds = EceRepositorio::listar_indicadorugel($request->anio, $request->grado, $request->tipo, $materia->id);
+            $inds = IndicadorRepositorio::listar_indicadorugel($request->anio, $request->grado, $request->tipo, $materia->id);
             foreach ($inds as $ind) {
                 $card .= '<tr>
                             <td><span>' . $ind->ugel . '</span></td>
@@ -679,11 +680,7 @@ class IndicadorController extends Controller
     {
         $card = '';
         $materia = Materia::find($request->materia);
-        //return response()->json(compact('materia'));
-        //$materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
-        //foreach ($materias as $key => $materia) {
-
-            $card .= '<div class="col-md-12">
+        $card .= '<div class="col-md-12">
             <div class="card card-border">
                 <div class="card-header border-primary bg-transparent pb-0">
                     <!--h3 class="card-title">materia ' . $materia->descripcion . '</h3-->
@@ -707,23 +704,22 @@ class IndicadorController extends Controller
                                         </tr>
                                     </thead>
                                     <tbody>';
-            $inds = EceRepositorio::listar_indicadorugel($request->aniox, $request->grado, $request->tipo, $materia->id);
-            //return response()->json(compact('inds'));
-            foreach ($inds as $ind) {
-                $card .= '<tr>
-                            <td class="text-primary"><span>' . str_replace('UGEL',"",$ind->ugel) . '</span></td>
+        $inds = IndicadorRepositorio::listar_indicadorugel($request->aniox, $request->grado, $request->tipo, $materia->id);
+        foreach ($inds as $ind) {
+            $card .= '<tr>
+                            <td class="text-primary"><span>' . str_replace('UGEL', "", $ind->ugel) . '</span></td>
                             <td class="text-secondary">' . ($ind->previo) . '</td>
                             <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
                             <td class="text-danger">' . ($ind->inicio) . '</td>
-                            <td class="text-danger">' . round( $ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
                             <td class="text-warning">' . $ind->proceso  . '</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
                             <td class="text-success">' . $ind->satisfactorio . '</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
                         </tr>';
-            }
+        }
 
-            $card .= '              </tbody>
+        $card .= '              </tbody>
                                 </table>
                             </div>
                         </div> 
@@ -738,7 +734,7 @@ class IndicadorController extends Controller
     public function indicadorProvincia(Request $request)
     {
         $card = '';
-        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        $materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
         foreach ($materias as $key => $materia) {
 
             $card .= '<div class="col-md-6">
@@ -764,7 +760,7 @@ class IndicadorController extends Controller
                                         </tr>
                                     </thead>
                                     <tbody>';
-            $inds = EceRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
+            $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
             foreach ($inds as $ind) {
                 $card .= '<tr>
                             <td><span>' . $ind->provincia . '</span></td>
@@ -794,12 +790,13 @@ class IndicadorController extends Controller
     {
         $card = '';
 
-        $materias = EceRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
-        foreach ($materias as $key => $materia) {
-            $card .= '<div class="col-md-6">
+        //$materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
+        //foreach ($materias as $key => $materia) {
+        $materia = Materia::find($request->materia); //IndicadorRepositorio::buscar_materia3($request->anio, $request->grado, $request->tipo, $request->materia);
+        $card .= '<div class="col-md-12">
             <div class="card card-border">
                 <div class="card-header border-primary bg-transparent pb-0">
-                    <h3 class="card-title">materia ' . $materia->descripcion . '</h3>
+                    <h3 class="card-title">Porcentaje de Estudiantes según Nivel de Logro Alcanzado  en la materia ' . $materia->descripcion . '</h3>
                 </div>
                 <div class="card-body">
                     <div class="row" >
@@ -808,72 +805,96 @@ class IndicadorController extends Controller
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <!--th class="text-secondary">PREVIO</th-->
+                                            <th class="text-primary">#</th>
+                                            <th class="text-secondary">CANTIDAD</th>
+                                            <th class="text-secondary">PREVIO</th>
+                                            <th class="text-danger">CANTIDAD</th>
                                             <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">CANTIDAD</th>
                                             <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">CANTIDAD</th>
                                             <th class="text-success">SATISFACTORIO</th>
                                         </tr>
                                     </thead>
                                     <tbody>';
-            if ($request->provincia == 0) {
-                $inds = EceRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
+        if ($request->provincia == 0) {
+            $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
+            foreach ($inds as $ind) {
+                $card .= '<tr>
+                            <td class="text-primary"><span>' . $ind->provincia . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+                        </tr>';
+            }
+            $inds = IndicadorRepositorio::listar_indicadordepartamento($request->anio, $request->grado, $request->tipo, $materia->id);
+            foreach ($inds as $ind) {
+                $card .= '<tr class="table-success">
+                                <td class="text-primary"><span>TODOS(UCAYALI)</span></td>
+                                <td class="text-secondary">' . $ind->previo . '</td>
+                                <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-danger">' . $ind->inicio . '</td>
+                                <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-warning">' . $ind->proceso . '</td>
+                                <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-success">' . $ind->satisfactorio . '</td>
+                                <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+                            </tr>';
+            }
+        } else {
+            if ($request->distrito == 0) {
+                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
                 foreach ($inds as $ind) {
                     $card .= '<tr>
-                            <td><span>' . $ind->provincia . '</span></td>
-                            <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-primary"><span>' . $ind->distrito . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
                 }
-                $inds = EceRepositorio::listar_indicadordepartamento($request->anio, $request->grado, $request->tipo, $materia->id);
+                $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
                 foreach ($inds as $ind) {
                     $card .= '<tr class="table-success">
-                                <td><span>TODOS(UCAYALI)</span></td>
-                                <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                                <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
-                                <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                                <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
-                            </tr>';
+                            <td class="text-primary"><span\>' . $ind->provincia . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                        </tr>';
                 }
             } else {
-                if ($request->distrito == 0) {
-                    $inds = EceRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
-                    foreach ($inds as $ind) {
-                        $card .= '<tr>
-                            <td><span>' . $ind->distrito . '</span></td>
-                            <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
+                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia, $request->distrito);
+                //return $inds;
+                foreach ($inds as $ind) {
+                    $card .= '<tr class="table-success">
+                            <td class="text-primary"><span>' . $ind->distrito . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
                             <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
                             <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
-                    }
-                    $inds = EceRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
-                    foreach ($inds as $ind) {
-                        $card .= '<tr class="table-success">
-                            <td><span\>' . $ind->provincia . '</span></td>
-                            <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
-                        </tr>';
-                    }
-                } else {
-                    $inds = EceRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia, $request->distrito);
-                    //return $inds;
-                    foreach ($inds as $ind) {
-                        $card .= '<tr class="table-success">
-                            <td><span>' . $ind->distrito . '</span></td>
-                            <!--td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td-->
-                            <td class="text-danger">' . round(($ind->previo + $ind->inicio) * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
-                        </tr>';
-                    }
                 }
             }
-            $card .= '              </tbody>
+        }
+        $card .= '              </tbody>
                                 </table>
                             </div>
                         </div> 
@@ -881,8 +902,125 @@ class IndicadorController extends Controller
                 </div>
             </div>
         </div>';
-        }
+        //}
 
+        return $card;
+    }    
+    public function indicadorDerivados2(Request $request)
+    {
+        $card = '';
+        $materia = Materia::find($request->materia); 
+        $inds = IndicadorRepositorio::listar_indicadorArea($request->anio, $request->grado, $request->tipo, $materia->id);
+        return response()->json(compact('inds'));
+        $card .= '<div class="col-md-12">
+            <div class="card card-border">
+                <div class="card-header border-primary bg-transparent pb-0">
+                    <h3 class="card-title">Porcentaje de Estudiantes según Nivel de Logro Alcanzado  en la materia ' . $materia->descripcion . '</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row" >
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-primary">#</th>
+                                            <th class="text-secondary">CANTIDAD</th>
+                                            <th class="text-secondary">PREVIO</th>
+                                            <th class="text-danger">CANTIDAD</th>
+                                            <th class="text-danger">INICIO</th>
+                                            <th class="text-warning">CANTIDAD</th>
+                                            <th class="text-warning">PROCESO</th>
+                                            <th class="text-success">CANTIDAD</th>
+                                            <th class="text-success">SATISFACTORIO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
+        if ($request->provincia == 0) {
+            $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
+            foreach ($inds as $ind) {
+                $card .= '<tr>
+                            <td class="text-primary"><span>' . $ind->provincia . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+                        </tr>';
+            }
+            $inds = IndicadorRepositorio::listar_indicadordepartamento($request->anio, $request->grado, $request->tipo, $materia->id);
+            foreach ($inds as $ind) {
+                $card .= '<tr class="table-success">
+                                <td class="text-primary"><span>TODOS(UCAYALI)</span></td>
+                                <td class="text-secondary">' . $ind->previo . '</td>
+                                <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-danger">' . $ind->inicio . '</td>
+                                <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-warning">' . $ind->proceso . '</td>
+                                <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-success">' . $ind->satisfactorio . '</td>
+                                <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+                            </tr>';
+            }
+        } else {
+            if ($request->distrito == 0) {
+                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
+                foreach ($inds as $ind) {
+                    $card .= '<tr>
+                            <td class="text-primary"><span>' . $ind->distrito . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                        </tr>';
+                }
+                $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
+                foreach ($inds as $ind) {
+                    $card .= '<tr class="table-success">
+                            <td class="text-primary"><span\>' . $ind->provincia . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                        </tr>';
+                }
+            } else {
+                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia, $request->distrito);
+                //return $inds;
+                foreach ($inds as $ind) {
+                    $card .= '<tr class="table-success">
+                            <td class="text-primary"><span>' . $ind->distrito . '</span></td>
+                            <td class="text-secondary">' . $ind->previo . '</td>
+                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger">' . $ind->inicio . '</td>
+                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning">' . $ind->proceso . '</td>
+                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success">' . $ind->satisfactorio . '</td>
+                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                        </tr>';
+                }
+            }
+        }
+        $card .= '              </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>';
         return $card;
     }
 }

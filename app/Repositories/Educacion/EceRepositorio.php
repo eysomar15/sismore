@@ -2,12 +2,12 @@
 
 namespace App\Repositories\Educacion;
 
-use App\Models\Educacion\Ece;
+//use App\Models\Educacion\Ece;
 use App\Models\Educacion\Grado;
-use App\Models\Educacion\Materia;
+//use App\Models\Educacion\Materia;
 use App\Models\Educacion\NivelModalidad;
-use App\Models\Ubigeo;
-use Illuminate\Support\Facades\DB;
+//use App\Models\Ubigeo;
+//use Illuminate\Support\Facades\DB;
 
 class EceRepositorio
 {
@@ -26,7 +26,7 @@ class EceRepositorio
         $query = Grado::where('nivelmodalidad_id', $nivel)->get();
         return $query;
     }
-    public static function buscar_materia1($anio, $grado, $tipo)
+    /*public static function buscar_materia1($anio, $grado, $tipo)
     {
         $query = DB::table('edu_materia as v1')
             ->select('v1.*')
@@ -206,8 +206,8 @@ class EceRepositorio
     public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia) //no usado
     {
         $query = DB::table('edu_eceresultado as v1')
-            ->join('edu_ece as v2'      , 'v2.id', '=', 'v1.ece_id')
-            ->join('edu_materia as v3'  , 'v3.id', '=', 'v1.materia_id')
+            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.anio', $anio)
             ->where('v2.tipo', $tipo)
@@ -216,7 +216,7 @@ class EceRepositorio
             ->groupBy('v3.descripcion')
             ->get([
                 'v1.materia_id',
-                'v3.descripcion as materia',    
+                'v3.descripcion as materia',
                 DB::raw('sum(evaluados)     as evaluados'),
                 DB::raw('sum(previo)        as previo'),
                 DB::raw('sum(inicio)        as inicio'),
@@ -225,7 +225,7 @@ class EceRepositorio
             ]);
         return $query;
     }
-    public static function listar_indicadorsatisfactorio($anio, $grado, $tipo)//esta por ver 
+    public static function listar_indicadorsatisfactorio($anio, $grado, $tipo) //esta por ver 
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -244,8 +244,8 @@ class EceRepositorio
                 DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
         return $query;
-    }
-    public static function listar_indicadoranio($anio, $grado, $tipo, $materia, $order)
+    }//*/
+    /*public static function listar_indicadoranio($anio, $grado, $tipo, $materia, $order)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -264,8 +264,8 @@ class EceRepositorio
                 DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
         return $query;
-    }
-    public static function listar_indicadorugel($anio, $grado, $tipo, $materia)
+    }*/
+    /*public static function listar_indicadorugel($anio, $grado, $tipo, $materia)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -288,8 +288,8 @@ class EceRepositorio
                 DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
         return $query;
-    }
-    public static function listar_indicadordistrito($anio, $grado, $tipo, $materia, $provincia, $id = null)
+    }*/
+    /*public static function listar_indicadordistrito($anio, $grado, $tipo, $materia, $provincia, $id = null)
     {
         if ($id) {
             $query = DB::table('edu_eceresultado as v1')
@@ -342,8 +342,8 @@ class EceRepositorio
             $value->distrito = $prov->nombre;
         }
         return $query;
-    }
-    public static function listar_indicadorprovincia($anio, $grado, $tipo, $materia, $dependencia = null)
+    }*/
+    /*public static function listar_indicadorprovincia($anio, $grado, $tipo, $materia, $dependencia = null)
     {
         if ($dependencia) {
             $query = DB::table('edu_eceresultado as v1')
@@ -394,8 +394,8 @@ class EceRepositorio
             $value->provincia = $prov->nombre;
         }
         return $query;
-    }
-    public static function listar_indicadordepartamento($anio, $grado, $tipo, $materia)
+    }*/
+    /*public static function listar_indicadordepartamento($anio, $grado, $tipo, $materia)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -414,8 +414,8 @@ class EceRepositorio
                 DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
         return $query;
-    }
-    public static function listar_importacionsinaprobar1($grado, $tipo)
+    }*/
+    /*public static function listar_importacionsinaprobar1($grado, $tipo)
     {
         $query = DB::table('par_importacion as v1')
             ->join('edu_ece as v2', 'v2.importacion_id', '=', 'v1.id')
@@ -426,5 +426,31 @@ class EceRepositorio
             ->select('v1.*')
             ->get();
         return $query;
-    }
+    }*/
+    /*public static function listar_indicadorGestion($anio, $grado, $tipo, $materia,$gestion=null)
+    {
+        $query = DB::table('edu_eceresultado as v1')
+            ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+            ->join('edu_tipogestion as v4', 'v4.id', '=', 'v3.TipoGestion_id')
+            //->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            //->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
+            ->where('v1.materia_id', $materia)
+            ->where('v2.grado_id', $grado)
+            ->where('v2.anio', $anio)
+            ->where('v2.tipo', $tipo)
+            //->where('v3.TipoGestion_id', $gestion)
+            ->groupBy('v4.id')
+            ->groupBy('v4.nombre')
+            ->get([
+                'v4.id',
+                'v4.nombre ',
+                DB::raw('sum(evaluados) as evaluados'),
+                DB::raw('sum(previo) as previo'),
+                DB::raw('sum(inicio) as inicio'),
+                DB::raw('sum(proceso) as proceso'),
+                DB::raw('sum(satisfactorio) as satisfactorio'),
+            ]);
+        return $query;
+    }*/
 }

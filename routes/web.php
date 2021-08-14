@@ -79,9 +79,9 @@ Route::post('/INDICADOR/Ugel', [IndicadorController::class, 'indicadorUgelMateri
 
 Route::post('/INDICADOR/Materia', [IndicadorController::class, 'indicadorMateria'])->name('ind.ajax.materia');
 Route::post('/INDICADOR/Derivados', [IndicadorController::class, 'indicadorDerivados'])->name('ind.ajax.derivados');
+Route::post('/INDICADOR/Derivados2', [IndicadorController::class, 'indicadorDerivados2'])->name('ind.ajax.derivados2');
 Route::post('/INDICADOR/Provincia', [IndicadorController::class, 'indicadorProvincia'])->name('ind.ajax.provincia');
-Route::post('/INDICADOR/Distritos/{provincia}', [EceController::class, 'ind.ajax.cargardistritos'])
-    ->name('indicador.cargardistritos');
+Route::post('/INDICADOR/Distritos/{provincia}', [IndicadorController::class, 'cargardistritos'])->name('ind.ajax.cargardistritos');
 
 Route::get('/INDICADOR/SINRUTA', function () {
     return 'Ruta no definida';
