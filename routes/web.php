@@ -5,6 +5,7 @@ use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\IndicadorController;
+use App\Http\Controllers\Educacion\MatriculaController;
 use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
@@ -56,6 +57,8 @@ Route::get('/Censo/ListaImportada_DataTable/{importacion_id}', [CensoController:
 Route::get('/Censo/Aprobar/{importacion_id}', [CensoController::class, 'aprobar'])->name('Censo.aprobar');
 Route::post('/Censo/Aprobar/procesar/{importacion_id}', [CensoController::class, 'procesar'])->name('Censo.procesar');
 
+Route::get('/Matricula/Importar', [MatriculaController::class, 'importar'])->name('Matricula.importar');
+Route::post('/Matricula/Importar', [MatriculaController::class, 'guardar'])->name('Matricula.guardar');
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/', [ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');
