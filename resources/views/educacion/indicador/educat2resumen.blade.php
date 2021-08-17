@@ -1,22 +1,13 @@
-@extends('layouts.main',['titlePage'=>'DETALLE'])
+@extends('layouts.main',['titlePage'=>'RESUMEN'])
 
 @section('content')
     <div class="content">
-        <!--div class="row">
-            <div class="col-lg-12">
-                <div class="card card-fill bg-success">
-                    <div class="card-header bg-transparent">
-                        <h3 class="card-title text-white">{{ $title }}</h3>
-                    </div>
-                </div>
-            </div>
-        </div-->
         <form id="form_indicadores" action="#">
             @csrf
             <input type="hidden" name="grado" value="{{ $grado }}">
             <input type="hidden" name="aniox" value="">
             <input type="hidden" name="tipo" value="{{ $tipo }}">
-            <input type="hidden" name="materia" value="{{ $materia }}">
+            <input type="hidden" name="materia" value="{{ $mt->id }}">
 
             <div class="row">
                 <div class="col-md-12">
@@ -27,7 +18,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-4 col-form-label">año</label>
                                         <div class="col-md-8">
-                                            <select id="anio" name="anio" class="form-control" onchange="satisfactorios();">
+                                            <select id="anio" name="anio" class="form-control" onchange="satisfactorios();vistaindicador();vistaindicador2();cambiarfechas();">
                                                 @foreach ($anios as $item)
                                                     <option value="{{ $item->anio }}">{{ $item->anio }}</option>
                                                 @endforeach
@@ -46,16 +37,16 @@
                 </div>
             </div>
         </form><!--End form-->
-        <div class="row">
+        {{--<div class="row">
             @foreach ($anios as $key => $anio)
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">Porcentaje de estudiantes por nivel de logro de aprendizaje según UGEL {{$anio->anio}}
+                        <h3 class="card-title text-primary">Indicador del curso de {{$anio->anio}}
                             <div class="float-right">
                                 <div class="form-group row">
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-info btn-xs waves-effect waves-light" onclick="abrirdetalle({{$key}},'{{$anio->anio}}')">Detalle</button>
+                                        <button type="button" class="btn btn-info btn-xs waves-effect waves-light" onclick="abrirdetalle('{{$anio->anio}}')">Detalle</button>
                                     </div>
                                 </div>
                             </div>
@@ -74,63 +65,91 @@
             </div>    
             @endforeach
             
+        </div><!-- End row -->--}}
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">Porcentaje de Estudiantes según Nivel de Logro Alcanzado a nivel regional en la Materia {{$mt->descripcion}} en el año <span id="anio1"></span>
+                        </h3>
+                        
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Provincia</label>
+                            <div class="col-md-4">
+                                <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos(); vistaindicador();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($provincias as $ges)
+                                    <option value="{{$ges->id}}">{{$ges->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label class="col-md-2 col-form-label">Distrito</label>
+                            <div class="col-md-4">
+                                <select id="distrito" name="distrito" class="form-control" onchange="vistaindicador();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" id="vistatabla">
+                        </div>
+                    </div>
+                </div>
+            </div>    
         </div><!-- End row -->
-
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">Resumen general por gestion y area en el año <span id="anio2"></span></h3>
+                    </div> 
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Gestion</label>
+                            <div class="col-md-4">
+                                <select id="gestion" name="gestion" class="form-control" onchange="vistaindicador2();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($gestions as $ges)
+                                    <option value="{{$ges->id}}">{{$ges->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <label class="col-md-2 col-form-label">Area</label>
+                            <div class="col-md-4">
+                                <select id="area" name="area" class="form-control" onchange="vistaindicador2();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($areas as $area)
+                                    <option value="{{$area->id}}">{{$area->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" id="vistatabla2">
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div><!-- End row -->
+        <div class="row">
+        </div><!-- End row -->
     </div>
 
 
-    @foreach ($anios as $key => $anio)
     <!--  Modal content for the above example -->
-    <div id="modal_detalle_{{$key}}" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div id="modal_detalle" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Porcentaje de estudiantes por nivel de logro de aprendizaje según UGEL {{$anio->anio}}</h5>
+                    <h5 class="modal-title" id="myLargeModalLabel">{{$title}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <!--div class="row" id="vistaugel"></div-->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <table class="table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-primary text-center">UGEL</th>
-                                            <th class="text-secondary text-center">CANTIDAD</th>
-                                            <th class="text-secondary text-center">PREVIO</th>
-                                            <th class="text-danger text-center">CANTIDAD</th>
-                                            <th class="text-danger text-center">INICIO</th>
-                                            <th class="text-warning text-center">CANTIDAD</th>
-                                            <th class="text-warning text-center">PROCESO</th>
-                                            <th class="text-success text-center">CANTIDAD</th>
-                                            <th class="text-success text-center">SATISFACTORIO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($anio->indicador as $ind)
-                                        <tr>
-                                            <td class="text-primary text-center">{{$ind->ugel}}</td>
-                                            <td class="text-secondary text-center">{{$ind->previo}}</td>
-                                            <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}} %</td>
-                                            <td class="text-danger text-center">{{$ind->inicio}}</td>
-                                            <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}} %</td>
-                                            <td class="text-warning text-center">{{$ind->proceso}}</td>
-                                            <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}} %</td>
-                                            <td class="text-success text-center">{{$ind->satisfactorio}}</td>
-                                            <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}} %</td>
-                                        </tr>    
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="row" id="vistaugel"></div>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->    
-    @endforeach
 
 @endsection
 
@@ -140,9 +159,13 @@
         $(document).ready(function() {
             satisfactorios();
             vistaindicador();
-            //vistaindicador2();
-            
+            vistaindicador2();
+            cambiarfechas();
         }); 
+        function cambiarfechas(){
+            $('#anio1').html($('#anio').val());
+            $('#anio2').html($('#anio').val());
+        }
         function cargardistritos() {
             $.ajax({
                 headers: {
@@ -165,7 +188,7 @@
             });
         }
         function vistaindicador() {
-            datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val()+ '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
+            datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val();
             console.log(datos);
             if (true) {
                 $.ajax({
@@ -188,8 +211,8 @@
                 });
             }
         }
-        /*function vistaindicador2() {
-            datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val()+ '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
+        function vistaindicador2() {
+            datos = $("#form_indicadores").serialize() + '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
             console.log(datos);
             if (true) {
                 $.ajax({
@@ -211,7 +234,7 @@
                     },
                 });
             }
-        }*/
+        }
         function satisfactorios() {
             if (true) {
                 $.ajax({
@@ -233,12 +256,12 @@
                 });
             }
         }
-        function abrirdetalle(pos,anio){
+        function abrirdetalle(anio){
             $('input[name=aniox]').val(anio);
-            $('#modal_detalle_'+pos).modal('show');
-            //indicadorugel();
+            $('#modal_detalle').modal('show');
+            indicadorugel();
         }
-        function indicadorugel() {
+       /* function indicadorugel() {
             if (true) {
                 $.ajax({
                     headers: {
@@ -258,8 +281,8 @@
                     },
                 });
             }
-        }
-        @foreach ($anios as $pos1 => $anio)
+        }*/
+        {{--@foreach ($anios as $pos1 => $anio)
         var myChart = new Chart($('#indicador{{$pos1}}'), {
             type: 'bar',
             data: {
@@ -375,7 +398,7 @@
                 },
             }
         });
-        @endforeach
+        @endforeach--}}
 
     </script>
 

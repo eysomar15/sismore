@@ -39,7 +39,20 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="page-title-box">
-                                        <h4 class="page-title">{{ $titlePage }}</h4>                
+                                        <h4 class="page-title">{{ $titlePage }}</h4>  
+                                        <div class="page-title-right">
+                                            <ol class="breadcrumb p-0 m-0">
+                                                @isset($breadcrumb)
+                                                    @foreach ($breadcrumb as $key => $item)
+                                                        @if ($key==count($breadcrumb)-1)
+                                                        <li class="breadcrumb-item">{{$item['titulo']}}</li>    
+                                                        @else
+                                                        <li class="breadcrumb-item"><a href="{{$item['url']}}">{{$item['titulo']}}</a></li>
+                                                        @endif
+                                                    @endforeach
+                                                @endisset
+                                            </ol>
+                                        </div>                                       
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
