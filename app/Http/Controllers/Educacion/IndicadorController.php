@@ -285,28 +285,40 @@ class IndicadorController extends Controller
     }
     public function vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar)
     {
+        $gt = IndicadorRepositorio::buscar_grado1($grado);
         $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo);
         foreach ($materias as $key => $materia) {
             $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
         }
-        return view('educacion.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias'));
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+        return view('educacion.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
     }
     public function indDetEdu($indicador_id, $grado, $tipo, $materia)
     {
-        $indicador = Indicador::find($indicador_id);
-        $title = $indicador->nombre;
-        //$title='Indicador N° 1: Porcentaje de estudiantes del 2° grado de educación primaria que logran el nivel SATISFACTORIO en Lectura.';
+        $gt = IndicadorRepositorio::buscar_grado1($grado);
+        $mt = Materia::find($materia);
+        $title = 'Estudiantes del ' . $gt[0]->grado . ' grado de ' . $gt[0]->nivel . ' que logran el nivel satisfactorio en ' . $mt->descripcion;
         $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
-        $areas = Area::all();
-        $gestions = IndicadorRepositorio::listar_gestion1($grado, $tipo);//TipoGestion::where('estado', 'AC')->get();
-        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
         foreach ($anios as $anio) {
             $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
             foreach ($anio->indicador as $indicador) {
                 $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
             }
         }
-        return view('educacion.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'areas', 'gestions', 'provincias'));
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Detalle', 'url' => '']];
+        return view('educacion.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'breadcrumb'));
+    }
+    public function indResEdu($indicador_id, $grado, $tipo, $materia)
+    {
+        $gt = IndicadorRepositorio::buscar_grado1($grado);
+        $mt = Materia::find($materia);
+        $title = 'Estudiantes del ' . $gt[0]->grado . ' grado de ' . $gt[0]->nivel . ' que logran el nivel satisfactorio en ' . $mt->descripcion;
+        $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $areas = Area::all();
+        $gestions = IndicadorRepositorio::listar_gestion1($grado, $tipo);
+        $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Resumen', 'url' => '']];
+        return view('educacion.indicador.educat2resumen', compact('title', 'grado', 'tipo', 'mt', 'anios', 'areas', 'gestions', 'provincias', 'breadcrumb'));
     }
     public function vistaEducacionCat3($title, $grado, $tipo, $sinaprobar)
     {
@@ -789,31 +801,22 @@ class IndicadorController extends Controller
     public function indicadorDerivados(Request $request)
     {
         $card = '';
-
-        //$materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
-        //foreach ($materias as $key => $materia) {
-        $materia = Materia::find($request->materia); //IndicadorRepositorio::buscar_materia3($request->anio, $request->grado, $request->tipo, $request->materia);
+        $materia = Materia::find($request->materia);
         $card .= '<div class="col-md-12">
-            <div class="card card-border">
-                <div class="card-header border-primary bg-transparent pb-0">
-                    <h3 class="card-title">Porcentaje de Estudiantes según Nivel de Logro Alcanzado  en la materia ' . $materia->descripcion . '</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row" >
-                        <div class="col-12">
+            
                             <div class="table-responsive">
-                                <table class="table mb-0">
+                                <table class="table table-bordered mb-0">
                                     <thead>
                                         <tr>
                                             <th class="text-primary">#</th>
-                                            <th class="text-secondary">CANTIDAD</th>
-                                            <th class="text-secondary">PREVIO</th>
-                                            <th class="text-danger">CANTIDAD</th>
-                                            <th class="text-danger">INICIO</th>
-                                            <th class="text-warning">CANTIDAD</th>
-                                            <th class="text-warning">PROCESO</th>
-                                            <th class="text-success">CANTIDAD</th>
-                                            <th class="text-success">SATISFACTORIO</th>
+                                            <th class="text-secondary text-center">CANTIDAD</th>
+                                            <th class="text-secondary text-center">PREVIO</th>
+                                            <th class="text-danger text-center">CANTIDAD</th>
+                                            <th class="text-danger text-center">INICIO</th>
+                                            <th class="text-warning text-center">CANTIDAD</th>
+                                            <th class="text-warning text-center">PROCESO</th>
+                                            <th class="text-success text-center">CANTIDAD</th>
+                                            <th class="text-success text-center">SATISFACTORIO</th>
                                         </tr>
                                     </thead>
                                     <tbody>';
@@ -822,28 +825,28 @@ class IndicadorController extends Controller
             foreach ($inds as $ind) {
                 $card .= '<tr>
                             <td class="text-primary"><span>' . $ind->provincia . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-secondary text-center">' . $ind->previo . '</td>
+                            <td class="text-secondary text-center">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-danger text-center">' . $ind->inicio . '</td>
+                            <td class="text-danger text-center">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-warning text-center">' . $ind->proceso . '</td>
+                            <td class="text-warning text-center">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-success text-center">' . $ind->satisfactorio . '</td>
+                            <td class="text-success text-center">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
                         </tr>';
             }
             $inds = IndicadorRepositorio::listar_indicadordepartamento($request->anio, $request->grado, $request->tipo, $materia->id);
             foreach ($inds as $ind) {
                 $card .= '<tr class="table-success">
                                 <td class="text-primary"><span>TODOS(UCAYALI)</span></td>
-                                <td class="text-secondary">' . $ind->previo . '</td>
-                                <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
-                                <td class="text-danger">' . $ind->inicio . '</td>
-                                <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
-                                <td class="text-warning">' . $ind->proceso . '</td>
-                                <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
-                                <td class="text-success">' . $ind->satisfactorio . '</td>
-                                <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-secondary text-center">' . $ind->previo . '</td>
+                                <td class="text-secondary text-center">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-danger text-center">' . $ind->inicio . '</td>
+                                <td class="text-danger text-center">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-warning text-center">' . $ind->proceso . '</td>
+                                <td class="text-warning text-center">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                                <td class="text-success text-center">' . $ind->satisfactorio . '</td>
+                                <td class="text-success text-center">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
                             </tr>';
             }
         } else {
@@ -852,28 +855,28 @@ class IndicadorController extends Controller
                 foreach ($inds as $ind) {
                     $card .= '<tr>
                             <td class="text-primary"><span>' . $ind->distrito . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-secondary text-center">' . $ind->previo . '</td>
+                            <td class="text-secondary text-center">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger text-center">' . $ind->inicio . '</td>
+                            <td class="text-danger text-center">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning text-center">' . $ind->proceso . '</td>
+                            <td class="text-warning text-center">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success text-center">' . $ind->satisfactorio . '</td>
+                            <td class="text-success text-center">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
                 }
                 $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
                 foreach ($inds as $ind) {
                     $card .= '<tr class="table-success">
                             <td class="text-primary"><span\>' . $ind->provincia . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-secondary text-center">' . $ind->previo . '</td>
+                            <td class="text-secondary text-center">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger text-center">' . $ind->inicio . '</td>
+                            <td class="text-danger text-center">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning text-center">' . $ind->proceso . '</td>
+                            <td class="text-warning text-center">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success text-center">' . $ind->satisfactorio . '</td>
+                            <td class="text-success text-center">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
                 }
             } else {
@@ -882,14 +885,14 @@ class IndicadorController extends Controller
                 foreach ($inds as $ind) {
                     $card .= '<tr class="table-success">
                             <td class="text-primary"><span>' . $ind->distrito . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-secondary text-center">' . $ind->previo . '</td>
+                            <td class="text-secondary text-center">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-danger text-center">' . $ind->inicio . '</td>
+                            <td class="text-danger text-center">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-warning text-center">' . $ind->proceso . '</td>
+                            <td class="text-warning text-center">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
+                            <td class="text-success text-center">' . $ind->satisfactorio . '</td>
+                            <td class="text-success text-center">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
                         </tr>';
                 }
             }
@@ -897,129 +900,52 @@ class IndicadorController extends Controller
         $card .= '              </tbody>
                                 </table>
                             </div>
-                        </div> 
-                    </div>
-                </div>
-            </div>
+                       
         </div>';
-        //}
-
         return $card;
-    }    
+    }
     public function indicadorDerivados2(Request $request)
     {
         $card = '';
-        $materia = Materia::find($request->materia); 
-        $inds = IndicadorRepositorio::listar_indicadorArea($request->anio, $request->grado, $request->tipo, $materia->id);
-        return response()->json(compact('inds'));
+        $materia = Materia::find($request->materia);
+        $inds = IndicadorRepositorio::listar_indicadorInstitucion($request->anio, $request->grado, $request->tipo, $materia->id, 0, 0);
+        //return response()->json(compact('inds'));
         $card .= '<div class="col-md-12">
-            <div class="card card-border">
-                <div class="card-header border-primary bg-transparent pb-0">
-                    <h3 class="card-title">Porcentaje de Estudiantes según Nivel de Logro Alcanzado  en la materia ' . $materia->descripcion . '</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row" >
-                        <div class="col-12">
+            
                             <div class="table-responsive">
-                                <table class="table mb-0">
+                                <table class="table table-bordered mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-primary">#</th>
-                                            <th class="text-secondary">CANTIDAD</th>
-                                            <th class="text-secondary">PREVIO</th>
-                                            <th class="text-danger">CANTIDAD</th>
-                                            <th class="text-danger">INICIO</th>
-                                            <th class="text-warning">CANTIDAD</th>
-                                            <th class="text-warning">PROCESO</th>
-                                            <th class="text-success">CANTIDAD</th>
-                                            <th class="text-success">SATISFACTORIO</th>
+                                            <th class="text-primary">IIEE</th>
+                                            <th class="text-secondary text-center">CANTIDAD</th>
+                                            <th class="text-secondary text-center">PREVIO</th>
+                                            <th class="text-danger text-center">CANTIDAD</th>
+                                            <th class="text-danger text-center">INICIO</th>
+                                            <th class="text-warning text-center">CANTIDAD</th>
+                                            <th class="text-warning text-center">PROCESO</th>
+                                            <th class="text-success text-center">CANTIDAD</th>
+                                            <th class="text-success text-center">SATISFACTORIO</th>
                                         </tr>
                                     </thead>
                                     <tbody>';
-        if ($request->provincia == 0) {
-            $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
-            foreach ($inds as $ind) {
-                $card .= '<tr>
-                            <td class="text-primary"><span>' . $ind->provincia . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
+        $inds = IndicadorRepositorio::listar_indicadorInstitucion($request->anio, $request->grado, $request->tipo, $materia->id, $request->gestion, $request->area);
+        foreach ($inds as $key => $ind) {
+             $card .= '<tr>
+                            <td class="text-primary"><span>' .$ind->nombre . '</span></td>
+                            <td class="text-secondary text-center">' . $ind->previo . '</td>
+                            <td class="text-secondary text-center">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-danger text-center">' . $ind->inicio . '</td>
+                            <td class="text-danger text-center">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-warning text-center">' . $ind->proceso . '</td>
+                            <td class="text-warning text-center">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
+                            <td class="text-success text-center">' . $ind->satisfactorio . '</td>
+                            <td class="text-success text-center">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
                         </tr>';
-            }
-            $inds = IndicadorRepositorio::listar_indicadordepartamento($request->anio, $request->grado, $request->tipo, $materia->id);
-            foreach ($inds as $ind) {
-                $card .= '<tr class="table-success">
-                                <td class="text-primary"><span>TODOS(UCAYALI)</span></td>
-                                <td class="text-secondary">' . $ind->previo . '</td>
-                                <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
-                                <td class="text-danger">' . $ind->inicio . '</td>
-                                <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 2) . '%</td>
-                                <td class="text-warning">' . $ind->proceso . '</td>
-                                <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 2) . '%</td>
-                                <td class="text-success">' . $ind->satisfactorio . '</td>
-                                <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
-                            </tr>';
-            }
-        } else {
-            if ($request->distrito == 0) {
-                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
-                foreach ($inds as $ind) {
-                    $card .= '<tr>
-                            <td class="text-primary"><span>' . $ind->distrito . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
-                        </tr>';
-                }
-                $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
-                foreach ($inds as $ind) {
-                    $card .= '<tr class="table-success">
-                            <td class="text-primary"><span\>' . $ind->provincia . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
-                        </tr>';
-                }
-            } else {
-                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia, $request->distrito);
-                //return $inds;
-                foreach ($inds as $ind) {
-                    $card .= '<tr class="table-success">
-                            <td class="text-primary"><span>' . $ind->distrito . '</span></td>
-                            <td class="text-secondary">' . $ind->previo . '</td>
-                            <td class="text-secondary">' . round($ind->previo * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-danger">' . $ind->inicio . '</td>
-                            <td class="text-danger">' . round($ind->inicio * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-warning">' . $ind->proceso . '</td>
-                            <td class="text-warning">' . round($ind->proceso * 100 / $ind->evaluados, 1) . '%</td>
-                            <td class="text-success">' . $ind->satisfactorio . '</td>
-                            <td class="text-success">' . round($ind->satisfactorio * 100 / $ind->evaluados, 1) . '%</td>
-                        </tr>';
-                }
-            }
-        }
+        }                                    
+        
         $card .= '              </tbody>
                                 </table>
                             </div>
-                        </div> 
-                    </div>
-                </div>
-            </div>
         </div>';
         return $card;
     }

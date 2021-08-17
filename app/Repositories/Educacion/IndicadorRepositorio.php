@@ -14,9 +14,9 @@ class IndicadorRepositorio
         $query = NivelModalidad::whereIn('id', ['37', '38'])->get();
         return $query;
     }
-    public static function buscar_grado1($grado, $nivel) //no usado todavia
+    public static function buscar_grado1($grado) //no usado todavia
     {
-        $query = Grado::where('id', $grado)->where('nivelmodalidad_id', $nivel)->first();
+        $query = DB::table('edu_grado as v1')->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')->select('v1.id', 'v1.descripcion as grado', 'v2.nombre as nivel')->where('v1.id', $grado)->get();
         return $query;
     }
     public static function buscar_grados1($nivel)
@@ -439,7 +439,7 @@ class IndicadorRepositorio
             ->get();
         return $query;
     }
-    public static function listar_indicadorGestion($anio, $grado, $tipo, $materia,$gestion=null)
+    public static function listar_indicadorGestion($anio, $grado, $tipo, $materia, $gestion = null)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -465,7 +465,7 @@ class IndicadorRepositorio
             ]);
         return $query;
     }
-    public static function listar_indicadorArea($anio, $grado, $tipo, $materia,$area=null)
+    public static function listar_indicadorArea($anio, $grado, $tipo, $materia, $area = null)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -486,6 +486,96 @@ class IndicadorRepositorio
                 DB::raw('sum(proceso) as proceso'),
                 DB::raw('sum(satisfactorio) as satisfactorio'),
             ]);
+        return $query;
+    }
+    public static function listar_indicadorInstitucion($anio, $grado, $tipo, $materia, $gestion, $area)
+    {
+        if ($gestion > 0 && $area > 0) {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->where('v1.materia_id', $materia)
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->where('v3.TipoGestion_id', $gestion)
+                ->where('v3.Area_id', $area)
+                ->orderBy('v3.nombreInstEduc')
+                ->groupBy('v3.id')
+                ->groupBy('v3.nombreInstEduc')
+                ->get([
+                    'v3.id',
+                    'v3.nombreInstEduc as nombre',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        } else if ($gestion > 0 && $area == 0) {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->where('v1.materia_id', $materia)
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->where('v3.TipoGestion_id', $gestion)
+                ->orderBy('v3.nombreInstEduc')
+                ->groupBy('v3.id')
+                ->groupBy('v3.nombreInstEduc')
+                ->get([
+                    'v3.id',
+                    'v3.nombreInstEduc as nombre',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        } else if ($gestion == 0 && $area > 0) {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->where('v1.materia_id', $materia)
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->where('v3.Area_id', $area)
+                ->orderBy('v3.nombreInstEduc')
+                ->groupBy('v3.id')
+                ->groupBy('v3.nombreInstEduc')
+                ->get([
+                    'v3.id',
+                    'v3.nombreInstEduc as nombre',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        } else {
+            $query = DB::table('edu_eceresultado as v1')
+                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->where('v1.materia_id', $materia)
+                ->where('v2.grado_id', $grado)
+                ->where('v2.anio', $anio)
+                ->where('v2.tipo', $tipo)
+                ->orderBy('v3.nombreInstEduc')
+                ->groupBy('v3.id')
+                ->groupBy('v3.nombreInstEduc')
+                ->get([
+                    'v3.id',
+                    'v3.nombreInstEduc as nombre',
+                    DB::raw('sum(evaluados) as evaluados'),
+                    DB::raw('sum(previo) as previo'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                ]);
+        }
+
         return $query;
     }
     public static function listar_indicador1($id)
