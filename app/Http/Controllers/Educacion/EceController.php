@@ -113,8 +113,8 @@ class EceController extends Controller
                             'satisfactorio' => $row['satisfactorio'],
                         ]);
                     } else {
-                        if ($row['programados'] != null)
-                            if ($row['programados'] != '') {
+                        if ($row['evaluados'] != null)
+                            if ($row['evaluados'] != '') {
                                 $eceresultado = EceResultado::Create([
                                     'ece_id' => $ece->id,
                                     'institucioneducativa_id' => $insedu->id,
@@ -122,7 +122,7 @@ class EceController extends Controller
                                     'lengua' => $row['lengua_evaluada'],
                                     'programados' => $row['programados'],
                                     'evaluados' => $row['evaluados'],
-                                    'previo' => '0',
+                                    //'previo' => '0',
                                     'inicio' => $row['inicio'],
                                     'proceso' => $row['proceso'],
                                     'mediapromedio' => $row['media_promedio'],

@@ -15,9 +15,10 @@ class ClasificadorController extends Controller
 
     public function menu_porClase($clase_codigo)
     {  
-        $listaIndicadores = ClasificadorRepositorio::Listar_menu_porClasificador($clase_codigo,1);
-        $listaNivel3_deClasificador = ClasificadorRepositorio::Listar_nivel3_porClasificador($clase_codigo,1);
+        $listaIndicadores = ClasificadorRepositorio::Listar_menu_porClasificador($clase_codigo,session('sistema_id'));
+        $listaNivel3_deClasificador = ClasificadorRepositorio::Listar_nivel3_porClasificador($clase_codigo,session('sistema_id'));
 
+        //return $listaIndicadores;
         $nombre_niv1 ='';
         $nombre_niv2 ='';
 

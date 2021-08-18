@@ -14,7 +14,7 @@ class IndicadorRepositorio
         $query = NivelModalidad::whereIn('id', ['37', '38'])->get();
         return $query;
     }
-    public static function buscar_grado1($grado) //no usado todavia
+    public static function buscar_grado1($grado)
     {
         $query = DB::table('edu_grado as v1')->join('edu_nivelmodalidad as v2', 'v2.id', '=', 'v1.nivelmodalidad_id')->select('v1.id', 'v1.descripcion as grado', 'v2.nombre as nivel')->where('v1.id', $grado)->get();
         return $query;
@@ -76,9 +76,11 @@ class IndicadorRepositorio
                 ->select('v1.*')
                 ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
                 ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+                ->join('par_importacion as v4', 'v4.id', '=', 'v3.importacion_id')
                 ->where('v1.id', $materia)
                 ->where('v3.grado_id', $grado)
                 ->where('v3.tipo', $tipo)
+                ->where('v4.estado', 'PR')
                 ->orderBy('v1.id', 'asc')
                 ->distinct()->get();
         } else {
@@ -86,8 +88,10 @@ class IndicadorRepositorio
                 ->select('v1.*')
                 ->join('edu_eceresultado as v2', 'v2.materia_id', '=', 'v1.id')
                 ->join('edu_ece as v3', 'v3.id', '=', 'v2.ece_id')
+                ->join('par_importacion as v4', 'v4.id', '=', 'v3.importacion_id')
                 ->where('v3.grado_id', $grado)
                 ->where('v3.tipo', $tipo)
+                ->where('v4.estado', 'PR')
                 ->orderBy('v1.id', 'asc')
                 ->distinct()->get();
         }
@@ -247,10 +251,12 @@ class IndicadorRepositorio
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
+            ->join('par_importacion as v3', 'v3.id', '=', 'v2.importacion_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.anio', '<=', $anio)
             ->where('v2.tipo', $tipo)
             ->where('v1.materia_id', $materia)
+            ->where('v3.estado', 'PR')
             ->orderBy('v2.anio', $order)
             ->groupBy('v2.anio')
             ->get([
@@ -269,10 +275,12 @@ class IndicadorRepositorio
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
             ->join('edu_ugel as v4', 'v4.id', '=', 'v3.Ugel_id')
+            ->join('par_importacion as v5', 'v5.id', '=', 'v2.importacion_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.anio', $anio)
             ->where('v2.tipo', $tipo)
             ->where('v1.materia_id', $materia)
+            ->where('v5.estado', 'PR')
             ->orderBy('v4.id', 'asc')
             ->groupBy('v4.nombre')
             ->groupBy('v4.id')
@@ -431,9 +439,11 @@ class IndicadorRepositorio
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
             ->join('edu_tipogestion as v4', 'v4.id', '=', 'v3.TipoGestion_id')
+            ->join('par_importacion as v5', 'v5.id', '=', 'v2.importacion_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.tipo', $tipo)
             ->where('v4.estado', 'AC')
+            ->where('v5.estado', 'PR')
             ->select('v4.*')
             ->distinct()
             ->get();

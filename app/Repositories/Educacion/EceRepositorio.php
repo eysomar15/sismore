@@ -6,6 +6,8 @@ namespace App\Repositories\Educacion;
 use App\Models\Educacion\Grado;
 //use App\Models\Educacion\Materia;
 use App\Models\Educacion\NivelModalidad;
+use Illuminate\Support\Facades\DB;
+
 //use App\Models\Ubigeo;
 //use Illuminate\Support\Facades\DB;
 
@@ -24,6 +26,26 @@ class EceRepositorio
     public static function buscar_grados1($nivel)
     {
         $query = Grado::where('nivelmodalidad_id', $nivel)->get();
+        return $query;
+    }
+    public static function buscar_ece1($importacion_id)
+    {
+        $query = DB::table('edu_ece as v1')
+            ->join('edu_grado as v2', 'v2.id', '=', 'v1.grado_id')
+            ->join('edu_nivelmodalidad as v3', 'v3.id', '=', 'v2.nivelmodalidad_id')
+            ->where('v1.importacion_id', $importacion_id)
+            ->select('v1.*', 'v2.descripcion as grado', 'v3.nombre as nivel')
+            ->first();
+        return $query;
+    }
+    public static function listar_eceresultado1($ece)
+    {
+        $query = DB::table('edu_eceresultado as v1')
+            ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'v1.institucioneducativa_id')
+            ->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
+            ->where('v1.ece_id', $ece)
+            ->select('v1.*', 'v2.codModular as codigo_modular', 'v3.descripcion as materia')
+            ->get();
         return $query;
     }
     /*public static function buscar_materia1($anio, $grado, $tipo)
@@ -158,16 +180,7 @@ class EceRepositorio
             ]);
         return $query;
     }
-    public static function buscar_ece1($importacion_id)
-    {
-        $query = DB::table('edu_ece as v1')
-            ->join('edu_grado as v2', 'v2.id', '=', 'v1.grado_id')
-            ->join('edu_nivelmodalidad as v3', 'v3.id', '=', 'v2.nivelmodalidad_id')
-            ->where('v1.importacion_id', $importacion_id)
-            ->select('v1.*', 'v2.descripcion as grado', 'v3.nombre as nivel')
-            ->first();
-        return $query;
-    }
+    
     public static function buscar_anios1($grado, $tipo)
     {
         $query = DB::table('edu_ece as v1')
@@ -193,16 +206,7 @@ class EceRepositorio
             ->get(['max(v1.anio)']);
         return $query;
     }
-    public static function listar_eceresultado1($ece)
-    {
-        $query = DB::table('edu_eceresultado as v1')
-            ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'v1.institucioneducativa_id')
-            ->join('edu_materia as v3', 'v3.id', '=', 'v1.materia_id')
-            ->where('v1.ece_id', $ece)
-            ->select('v1.*', 'v2.codModular as codigo_modular', 'v3.descripcion as materia')
-            ->get();
-        return $query;
-    }
+
     public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia) //no usado
     {
         $query = DB::table('edu_eceresultado as v1')
