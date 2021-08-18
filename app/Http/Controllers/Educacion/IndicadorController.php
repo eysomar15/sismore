@@ -43,7 +43,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit','breadcrumb'));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
 
             case '2': //CULMINACION 
                 $indicador = Indicador::find($indicador_id);
@@ -62,7 +62,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',   'info', 'limit','breadcrumb'));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',   'info', 'limit', 'breadcrumb'));
             case '3': //CULMINACION 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -80,7 +80,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'info', 'limit','breadcrumb'));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'info', 'limit', 'breadcrumb'));
             case '4': //LOGROS  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -126,7 +126,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit','breadcrumb'));
+                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
             case '9': //ACCESO  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -144,7 +144,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit','breadcrumb'));
+                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
             case '10': //ACCESO  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -162,7 +162,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit','breadcrumb'));
+                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
             case '11': //PROFESORES   
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -200,7 +200,7 @@ class IndicadorController extends Controller
                 $labels .= ']';
                 $datas .= ']';
                 $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2','breadcrumb'));
+                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
             case '12': //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -237,7 +237,7 @@ class IndicadorController extends Controller
                 $labels .= ']';
                 $datas .= ']';
                 $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2','breadcrumb'));
+                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
             case 13: //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -274,7 +274,7 @@ class IndicadorController extends Controller
                 $labels .= ']';
                 $datas .= ']';
                 $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2','breadcrumb'));
+                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
             default:
                 return 'sin datos';
                 break;
@@ -306,7 +306,7 @@ class IndicadorController extends Controller
                 $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
             }
         }
-        return response()->json(compact('anios'));
+        //return response()->json(compact('anios'));
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Detalle', 'url' => '']];
         return view('educacion.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'breadcrumb'));
     }
@@ -329,6 +329,76 @@ class IndicadorController extends Controller
     public function vistaEducacionCat4($title, $grado, $tipo, $sinaprobar)
     {
         return 'sin informacion';
+    }
+    /****** */
+    public function indicadorDRVCS($indicador_id)
+    {
+        switch ($indicador_id) {
+            case 14:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 2;
+                $tipo = 0;
+                $materia = 1;
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
+                foreach ($info1 as $key => $value) {
+                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                }
+                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+            case 15:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $grado = 2;
+                $tipo = 0;
+                $materia = 2;
+                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
+                foreach ($info1 as $key => $value) {
+                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
+                }
+                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+            case 16:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 38;
+                $inds = IndicadorRepositorio::listar_indicador1('2');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
+            case 17:
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $nivel = 37;
+                $inds = IndicadorRepositorio::listar_indicador1('1');
+                $limit = 100;
+                $labels = '[';
+                $datas = '[';
+                foreach ($inds as $key => $item) {
+                    $labels .= $item->anio . ',';
+                    $datas .= floatval($item->resultado) . ',';
+                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
+                }
+                $labels .= ']';
+                $datas .= ']';
+                $info = ['labels' => $labels, 'datas' => $datas];
+                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
+                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
+
+            default:
+                return 'sin informacion';
+                break;
+        }
     }
     /****** */
     public function indicadorPDRC($indicador_id)
@@ -932,8 +1002,8 @@ class IndicadorController extends Controller
                                     <tbody>';
         $inds = IndicadorRepositorio::listar_indicadorInstitucion($request->anio, $request->grado, $request->tipo, $materia->id, $request->gestion, $request->area);
         foreach ($inds as $key => $ind) {
-             $card .= '<tr>
-                            <td class="text-primary"><span>' .$ind->nombre . '</span></td>
+            $card .= '<tr>
+                            <td class="text-primary"><span>' . $ind->nombre . '</span></td>
                             <td class="text-secondary text-center">' . $ind->previo . '</td>
                             <td class="text-secondary text-center">' . round($ind->previo * 100 / $ind->evaluados, 2) . '%</td>
                             <td class="text-danger text-center">' . $ind->inicio . '</td>
@@ -943,8 +1013,8 @@ class IndicadorController extends Controller
                             <td class="text-success text-center">' . $ind->satisfactorio . '</td>
                             <td class="text-success text-center">' . round($ind->satisfactorio * 100 / $ind->evaluados, 2) . '%</td>
                         </tr>';
-        }                                    
-        
+        }
+
         $card .= '              </tbody>
                                 </table>
                             </div>
