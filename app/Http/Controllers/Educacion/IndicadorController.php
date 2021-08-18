@@ -20,7 +20,7 @@ class IndicadorController extends Controller
     {
         $clas = Clasificador::where('dependencia', $clasificador)->first();
         $clas = Clasificador::where('dependencia', $clas->id)->get();
-        return view('educacion.indicador.menu', compact('clas'));
+        return view('parametro.indicador.menu', compact('clas'));
     }
     public function indicadorEducacion($indicador_id)
     {
@@ -43,7 +43,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
+                return view('parametro.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
 
             case '2': //CULMINACION 
                 $indicador = Indicador::find($indicador_id);
@@ -62,7 +62,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',   'info', 'limit', 'breadcrumb'));
+                return view('parametro.indicador.educat1', compact('title', 'nivel', 'inds',   'info', 'limit', 'breadcrumb'));
             case '3': //CULMINACION 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -80,7 +80,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds', 'info', 'limit', 'breadcrumb'));
+                return view('parametro.indicador.educat1', compact('title', 'nivel', 'inds', 'info', 'limit', 'breadcrumb'));
             case '4': //LOGROS  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -126,7 +126,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
+                return view('parametro.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
             case '9': //ACCESO  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -144,7 +144,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
+                return view('parametro.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
             case '10': //ACCESO  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -162,7 +162,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
+                return view('parametro.indicador.educat3', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
             case '11': //PROFESORES   
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -200,7 +200,7 @@ class IndicadorController extends Controller
                 $labels .= ']';
                 $datas .= ']';
                 $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
+                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
             case '12': //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -237,7 +237,7 @@ class IndicadorController extends Controller
                 $labels .= ']';
                 $datas .= ']';
                 $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
+                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
             case 13: //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -274,7 +274,7 @@ class IndicadorController extends Controller
                 $labels .= ']';
                 $datas .= ']';
                 $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('educacion.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
+                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
             default:
                 return 'sin datos';
                 break;
@@ -292,7 +292,7 @@ class IndicadorController extends Controller
             $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
         }
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
-        return view('educacion.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
+        return view('parametro.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
     }
     public function indDetEdu($indicador_id, $grado, $tipo, $materia)
     {
@@ -308,7 +308,7 @@ class IndicadorController extends Controller
         }
         //return response()->json(compact('anios'));
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Detalle', 'url' => '']];
-        return view('educacion.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'breadcrumb'));
+        return view('parametro.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'breadcrumb'));
     }
     public function indResEdu($indicador_id, $grado, $tipo, $materia)
     {
@@ -320,7 +320,7 @@ class IndicadorController extends Controller
         $gestions = IndicadorRepositorio::listar_gestion1($grado, $tipo);
         $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Resumen', 'url' => '']];
-        return view('educacion.indicador.educat2resumen', compact('title', 'grado', 'tipo', 'mt', 'anios', 'areas', 'gestions', 'provincias', 'breadcrumb'));
+        return view('parametro.indicador.educat2resumen', compact('title', 'grado', 'tipo', 'mt', 'anios', 'areas', 'gestions', 'provincias', 'breadcrumb'));
     }
     public function vistaEducacionCat3($title, $grado, $tipo, $sinaprobar)
     {
@@ -334,67 +334,61 @@ class IndicadorController extends Controller
     public function indicadorDRVCS($indicador_id)
     {
         switch ($indicador_id) {
-            case 14:
+            case 20: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $grado = 2;
-                $tipo = 0;
-                $materia = 1;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
-                foreach ($info1 as $key => $value) {
-                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
-                }
-                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
-            case 15:
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 21: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $grado = 2;
-                $tipo = 0;
-                $materia = 2;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
-                foreach ($info1 as $key => $value) {
-                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
-                }
-                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
-            case 16:
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 22: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $nivel = 38;
-                $inds = IndicadorRepositorio::listar_indicador1('2');
-                $limit = 100;
-                $labels = '[';
-                $datas = '[';
-                foreach ($inds as $key => $item) {
-                    $labels .= $item->anio . ',';
-                    $datas .= floatval($item->resultado) . ',';
-                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $info = ['labels' => $labels, 'datas' => $datas];
-                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
-            case 17:
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 23: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $nivel = 37;
-                $inds = IndicadorRepositorio::listar_indicador1('1');
-                $limit = 100;
-                $labels = '[';
-                $datas = '[';
-                foreach ($inds as $key => $item) {
-                    $labels .= $item->anio . ',';
-                    $datas .= floatval($item->resultado) . ',';
-                    $limit = intval($item->resultado) < 100 ? intval($item->resultado) : $limit;
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $info = ['labels' => $labels, 'datas' => $datas];
-                $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
-
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 24: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 26: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 27: //PROGRAMAS DE VIVIENDA
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 28: //PROGRAMAS DE VIVIENDA
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 29: //PROGRAMAS DE VIVIENDA
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+            case 30: //PROGRAMAS DE VIVIENDA
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
             default:
                 return 'sin informacion';
                 break;
@@ -403,6 +397,7 @@ class IndicadorController extends Controller
     /****** */
     public function indicadorPDRC($indicador_id)
     {
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '04')], ['titulo' => 'Indicadores', 'url' => '']];
         switch ($indicador_id) {
             case 14:
                 $indicador = Indicador::find($indicador_id);
@@ -415,7 +410,7 @@ class IndicadorController extends Controller
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
             case 15:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -427,7 +422,7 @@ class IndicadorController extends Controller
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('educacion.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
             case 16:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -445,7 +440,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
+                return view('parametro.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
             case 17:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -463,7 +458,7 @@ class IndicadorController extends Controller
                 $datas .= ']';
                 $info = ['labels' => $labels, 'datas' => $datas];
                 $limit = ($limit < 25 ? 25 : ($limit < 50 ? 50 : ($limit < 75 ? 75 : 100)));
-                return view('educacion.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit'));
+                return view('parametro.indicador.educat1', compact('title', 'nivel', 'inds',  'info', 'limit', 'breadcrumb'));
 
             default:
                 return 'sin informacion';
@@ -473,6 +468,7 @@ class IndicadorController extends Controller
     /****** */
     public function indicadorOEI($indicador_id)
     {
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '05')], ['titulo' => 'Indicadores', 'url' => '']];
         switch ($indicador_id) {
             case 18:
                 $indicador = Indicador::find($indicador_id);
@@ -485,7 +481,7 @@ class IndicadorController extends Controller
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('educacion.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+                return view('parametro.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
             case 19:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -497,7 +493,7 @@ class IndicadorController extends Controller
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('educacion.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1'));
+                return view('parametro.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
             default:
                 return 'sin informacion';
                 break;
