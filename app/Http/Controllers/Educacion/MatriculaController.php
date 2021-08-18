@@ -5,7 +5,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\InstitucionEducativa;
+use App\Models\Educacion\MatriculaInicial;
 use App\Models\Parametro\Anio;
+use App\Repositories\Educacion\InstitucionEducativaRepositorio;
 use Exception;
 
 class MatriculaController extends Controller
@@ -22,13 +25,8 @@ class MatriculaController extends Controller
         
         return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
     } 
-
-    public function guardar(Request $request)
-    {
-        return 'hola gamb';
-    }
     
-    public function guardarf(Request $request)
+    public function guardar(Request $request)
     {  
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
         $archivo = $request->file('file');
@@ -37,32 +35,30 @@ class MatriculaController extends Controller
 
         $i = 0;
         $cadena ='';
+        $id = 0;
 
         try{
              foreach ($array as $key => $value) {
                  foreach ($value as $row) {
                     if(++$i > 1) break;
                     $cadena =  $cadena
-                    .$row['codlocal'].$row['codigosmodulares'].$row['nombreinstitucion'].$row['codigogestion']
-                    .$row['descripciongestion'].$row['codigoorganointer'].$row['nombredre_ugel'].$row['codigoubigeo']
-                    .$row['departamento'].$row['provincia'].$row['distrito'].$row['centopoblado'].$row['direccion']
-                    .$row['areageo'].$row['estadocenso'].$row['totalaulas'].$row['aulasbuenas'].$row['aulasregulares']
-                    .$row['aulasmalas'].$row['nopuedeprecisarestadoaulas'].$row['ellocales'].$row['propietariolocal']
-                    .$row['cuenta_con_itse'].$row['plan_contingencia'].$row['plan_desastre'].$row['plandesastre_act']
-                    .$row['compuescri_operativos'].$row['compuescri_inoperativos'].$row['compuporta_operativos']
-                    .$row['compuporta_inoperativos'].$row['lapto_operativos'].$row['lapto_inoperativos'].$row['tieneinternet']
-                    .$row['tipoconexion'].$row['fuenteenergiaelectrica'].$row['empresaenergiaelect'].$row['tieneenergiaelecttododia']
-                    .$row['fuenteagua'].$row['empresaagua'].$row['tieneaguapottododia'].$row['desagueinfo'];     
-                    }
+                    .$row['cod_mod'].$row['total_estudiantes_matriculados']                    
+                    .$row['matricula_definitiva'].$row['matricula_en_proceso'].$row['dni_validado']
+                    .$row['dni_sin_validar'].$row['registrado_sin_dni'].$row['total_grados'].$row['total_secciones']
+                    .$row['nominas_generadas'].$row['nominas_aprobadas'].$row['nominas_por_rectificar']                    
+                    .$row['cero_anios_hombre'].$row['cero_anios_mujer']
+                    .$row['uno_anios_hombre'].$row['uno_anios_mujer'].$row['dos_anios_hombre'].$row['dos_anios_mujer']
+                    .$row['tres_anios_hombre'].$row['tres_anios_mujer'].$row['cuatro_anios_hombre'].$row['cuatro_anios_mujer']
+                    .$row['cinco_anios_hombre'].$row['cinco_anios_mujer'].$row['masde_cinco_anios_hombre'].$row['masde_cinco_anios_mujer'];              }
              }
         }catch (Exception $e) {
             $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
             return view('Educacion.Censo.Importar',compact('mensaje','anios'));            
-        }
+        }       
        
         try{
             $importacion = Importacion::Create([
-                'fuenteImportacion_id'=>6, // valor predeterminado
+                'fuenteImportacion_id'=>8, // valor predeterminado
                 'usuarioId_Crea'=> auth()->user()->id,
                 'usuarioId_Aprueba'=>null,
                 'fechaActualizacion'=>$request['fechaActualizacion'],
@@ -70,68 +66,58 @@ class MatriculaController extends Controller
                 'estado'=>'PE'
               ]); 
 
-            $censo = Censo::Create([
-                'importacion_id'=>$importacion->id, // valor predeterminado
-                'anio_id'=> $request['anio'],
-                'estado'=>'PE'
-              ]); 
-
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    $CensoResultado = CensoResultado::Create([
-                        'censo_id'=>$censo->id,
-                        'codLocal'=>$row['codlocal'],
-                        'codigosModulares'=>$row['codigosmodulares'],
-                        'nombreInstitucion'=>$row['nombreinstitucion'],
-                        'codigoGestion'=>$row['codigogestion'],
-                        'descripcionGestion'=>$row['descripciongestion'],
-                        'codigoOrganoInter'=>$row['codigoorganointer'],
-                        'nombreDre_Ugel'=>$row['nombredre_ugel'],
-                        'codigoUbigeo'=>$row['codigoubigeo'],
-                        'Departamento'=>$row['departamento'],
-                        'Provincia'=>$row['provincia'],
-                        'Distrito'=>$row['distrito'],
-                        'centoPoblado'=>$row['centopoblado'],
-                        'direccion'=>$row['direccion'],
-                        'areaGeo'=>$row['areageo'],
-                        'estadoCenso'=>$row['estadocenso'],
-                        'totalAulas'=>$row['totalaulas'],
-                        'aulasBuenas'=>$row['aulasbuenas'],
-                        'aulasRegulares'=>$row['aulasregulares'],
-                        'aulasMalas'=>$row['aulasmalas'],
-                        'noPuedePrecisarEstadoAulas'=>$row['nopuedeprecisarestadoaulas'],
-                        'elLocalEs'=>$row['ellocales'],
-                        'propietarioLocal'=>$row['propietariolocal'],
-                        'cuenta_con_itse'=>$row['cuenta_con_itse'],
-                        'plan_contingencia'=>$row['plan_contingencia'],
-                        'plan_desastre'=>$row['plan_desastre'],
-                        'plandesastre_act'=>$row['plandesastre_act'],
-                        'compuEscri_operativos'=>$row['compuescri_operativos'],
-                        'compuEscri_inoperativos'=>$row['compuescri_inoperativos'],
-                        'compuPorta_operativos'=>$row['compuporta_operativos'],
-                        'compuPorta_inoperativos'=>$row['compuporta_inoperativos'],
-                        'lapto_operativos'=>$row['lapto_operativos'],
-                        'lapto_inoperativos'=>$row['lapto_inoperativos'],
-                        'tieneInternet'=>$row['tieneinternet'],
-                        'tipoConexion'=>$row['tipoconexion'],
-                        'fuenteEnergiaElectrica'=>$row['fuenteenergiaelectrica'],
-                        'empresaEnergiaElect'=>$row['empresaenergiaelect'],
-                        'tieneEnergiaElectTodoDia'=>$row['tieneenergiaelecttododia'],
-                        'fuenteAgua'=>$row['fuenteagua'],
-                        'empresaAgua'=>$row['empresaagua'],
-                        'tieneAguaPotTodoDia'=>$row['tieneaguapottododia'],
-                        'desagueInfo'=>$row['desagueinfo']             
-                    ]);
+
+                    $institucion_educativa = InstitucionEducativaRepositorio::InstitucionEducativa_porCodModular($row['cod_mod'])->first();
+
+                    if($institucion_educativa!=null)
+                    {
+                        $MatriculaInicial = MatriculaInicial::Create([
+                      
+                            'importacion_id'=>$importacion->id,
+                            'anio_id'=>$request['anio'],
+                            'institucioneducativa_id'=>$institucion_educativa->id,
+                            'total_estudiantes_matriculados'=>$row['total_estudiantes_matriculados'],
+                            'matricula_definitiva'=>$row['matricula_definitiva'],
+                            'matricula_en_proceso'=>$row['matricula_en_proceso'],
+                            'dni_validado'=>$row['dni_validado'],
+                            'dni_sin_validar'=>$row['dni_sin_validar'],
+                            'registrado_sin_dni'=>$row['registrado_sin_dni'],
+                            'total_grados'=>$row['total_grados'],
+                            'total_secciones'=>$row['total_secciones'],
+                            'nominas_generadas'=>$row['nominas_generadas'],
+                            'nominas_aprobadas'=>$row['nominas_aprobadas'],
+                            'nominas_por_rectificar'=>$row['nominas_por_rectificar'],
+                            'cero_anios_hombre'=>$row['cero_anios_hombre'],
+                            'cero_anios_mujer'=>$row['cero_anios_mujer'],
+                            'uno_anios_hombre'=>$row['uno_anios_hombre'],
+                            'uno_anios_mujer'=>$row['uno_anios_mujer'],
+                            'dos_anios_hombre'=>$row['dos_anios_hombre'],
+                            'dos_anios_mujer'=>$row['dos_anios_mujer'],
+                            'tres_anios_hombre'=>$row['tres_anios_hombre'],
+                            'tres_anios_mujer'=>$row['tres_anios_mujer'],
+                            'cuatro_anios_hombre'=>$row['cuatro_anios_hombre'],
+                            'cuatro_anios_mujer'=>$row['cuatro_anios_mujer'],
+                            'cinco_anios_hombre'=>$row['cinco_anios_hombre'],
+                            'cinco_anios_mujer'=>$row['cinco_anios_mujer'],
+                            'masde_cinco_anios_hombre'=>$row['masde_cinco_anios_hombre'],
+                            'masde_cinco_anios_mujer'=>$row['masde_cinco_anios_mujer']
+            
+                        ]);
+                    }
+                    
                 }
             }
         }catch (Exception $e) {
-            $censo->delete();   
+           
             $importacion->delete();// elimina la importacion creada            
             $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema";           
             return view('Educacion.Censo.Importar',compact('mensaje','anios'));            
         }
        
-        return redirect()->route('Censo.Censo_Lista',$importacion->id);
+        return 'ok';
+        //return redirect()->route('Censo.Censo_Lista',$importacion->id);
     }
 
     public function ListaImportada($importacion_id)
