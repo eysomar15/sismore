@@ -124,9 +124,14 @@ class CensoController extends Controller
                 }
             }
         }catch (Exception $e) {
-            $censo->delete();   
-            $importacion->delete();// elimina la importacion creada            
-            $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema";           
+
+            $censo->estado = 'EL';
+            $censo->save();
+                 
+            $importacion->estado = 'EL';
+            $importacion->save();
+            
+            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
             return view('Educacion.Censo.Importar',compact('mensaje','anios'));            
         }
        

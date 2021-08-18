@@ -120,8 +120,10 @@ class CuadroAsigPersonalController extends Controller
                 }
             }
         }catch (Exception $e) {
-            $importacion->delete(); // elimina la importacion creada
-            $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema";           
+            $importacion->estado = 'EL';
+            $importacion->save();
+            
+            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema";        
             return view('Educacion.CuadroAsigPersonal.Importar',compact('mensaje'));            
         }
 
