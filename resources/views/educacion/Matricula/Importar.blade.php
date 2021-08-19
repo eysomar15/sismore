@@ -45,6 +45,20 @@
                             </div>
 
                             <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Nivel Educativo</label>
+                                
+                                <div class="col-md-10">
+                                    <select id="nivel" name="nivel" class="form-control form-control-sm">                                       
+                                            <option value="1"> INICIAL </option>  
+                                            <option value="2"> PRIMARIA </option>  
+                                            <option value="3"> SECUNDARIA </option>                                      
+                                            <option value="4"> EBE </option>  
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Año Matricula</label>
                                 
                                 <div class="col-md-10">
