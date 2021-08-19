@@ -12,52 +12,11 @@
             </div>
         </div>
         <div class="row" id="">
-            {{--<div class="col-md-6">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Region de Ucayali</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <thead>
-                                            <tr>
-                                                <!--th>DEPARTAMENTO</th-->
-                                                <th>AÑO</th>
-                                                <th>RESULTADO</th>
-                                                <th>NOTA</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($inds as $item)
-                                                <tr>
-                                                    <!--td>{{ $item->departamento }}</td-->
-                                                    <td>{{ $item->anio }}</td>
-                                                    <td>{{ $item->resultado }}</td>
-                                                    <td>{{ $item->nota }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>--}}
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
                         <h3 class="card-title text-primary">GRAFICA
-                            <div class="float-right">
-                                <div class="form-group row">
-                                    <div class="col-md-12">
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('jajajajaja')">Ver detalle</button>
-                                    </div>
-                                </div>
-                            </div>
+                             
                         </h3>
                     </div>
                     <div class="card-body">
@@ -94,10 +53,10 @@
             options: {
                 
                 responsive: true,
-                /*title: {
+                title: {
                     display: false,
                     text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
-                },*/
+                },
                 legend: {
                     display: true,
                     position: 'bottom',

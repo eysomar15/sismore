@@ -176,35 +176,20 @@ class IndicadorController extends Controller
                         $value->titulado = 'NO TITULADO';
                     } else $value->titulado = 'TITULADO';
                 }
-                $labels = '[';
-                $datas = '[';
-                foreach ($inds as $key => $value) {
-                    $labels .= '"' . $value->titulado . '",';
-                    $datas .= round($value->suma * 100 / $total, 2) . ',';
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $graf1 = ['labels' => $labels, 'datas' => $datas];
-
+                $gra1['grf'] = $inds;
+                $gra1['tot'] = $total;
                 $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
                 foreach ($indu as $key => $value) {
                     $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
                     $value->total = $indutt[0]->total;
+                    $value->nombre = str_replace('UGEL', '', $value->nombre);
                 }
-                $labels = '[';
-                $datas = '[';
-                foreach ($indu as $key => $value) {
-                    $labels .= '"' . $value->nombre . '",';
-                    $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
+                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
             case '12': //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $nivel = 37;
+
                 $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
                 $total = 0;
                 foreach ($inds as $key => $value) {
@@ -213,31 +198,15 @@ class IndicadorController extends Controller
                         $value->titulado = 'NO TITULADO';
                     } else $value->titulado = 'TITULADO';
                 }
-                $labels = '[';
-                $datas = '[';
-                foreach ($inds as $key => $value) {
-                    $labels .= '"' . $value->titulado . '",';
-                    $datas .= round($value->suma * 100 / $total, 2) . ',';
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $graf1 = ['labels' => $labels, 'datas' => $datas];
-
+                $gra1['grf'] = $inds;
+                $gra1['tot'] = $total;
                 $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
                 foreach ($indu as $key => $value) {
                     $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
                     $value->total = $indutt[0]->total;
+                    $value->nombre = str_replace('UGEL', '', $value->nombre);
                 }
-                $labels = '[';
-                $datas = '[';
-                foreach ($indu as $key => $value) {
-                    $labels .= '"' . $value->nombre . '",';
-                    $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
+                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
             case 13: //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -250,31 +219,15 @@ class IndicadorController extends Controller
                         $value->titulado = 'NO TITULADO';
                     } else $value->titulado = 'TITULADO';
                 }
-                $labels = '[';
-                $datas = '[';
-                foreach ($inds as $key => $value) {
-                    $labels .= '"' . $value->titulado . '",';
-                    $datas .= round($value->suma * 100 / $total, 2) . ',';
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $graf1 = ['labels' => $labels, 'datas' => $datas];
-
+                $gra1['grf'] = $inds;
+                $gra1['tot'] = $total;
                 $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
                 foreach ($indu as $key => $value) {
                     $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
                     $value->total = $indutt[0]->total;
+                    $value->nombre = str_replace('UGEL', '', $value->nombre);
                 }
-                $labels = '[';
-                $datas = '[';
-                foreach ($indu as $key => $value) {
-                    $labels .= '"' . $value->nombre . '",';
-                    $datas .= round($value->titulado * 100 / $value->total, 2) . ',';
-                }
-                $labels .= ']';
-                $datas .= ']';
-                $graf2 = ['labels' => $labels, 'datas' => $datas];
-                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'total', 'graf1', 'indu', 'graf2', 'breadcrumb'));
+                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
             default:
                 return 'sin datos';
                 break;
@@ -337,6 +290,18 @@ class IndicadorController extends Controller
             case 20: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+                $cp = DB::table('viv_datass as v1')->distinct()->get()->count();
+                $cp = DB::table('viv_datass as v1')->get([DB::raw('sum(total_poblacion)'), DB::raw('sum(total_viviendas)')]);
+                $cp = DB::table('viv_datass as v1')->where('tiene_establecimiento_salud', 'SI')->get([DB::raw('count(tiene_establecimiento_salud)')]);
+                $cp = DB::table('viv_datass as v1')->where('tiene_energia_electrica', 'SI')->get([DB::raw('count(tiene_energia_electrica)')]);
+                $cp = DB::table('viv_datass as v1')->where('tiene_internet', 'SI')->get([DB::raw('count(tiene_internet)')]);
+                $cp = DB::table('viv_datass as v1')->groupBy('sistema_agua')->get([DB::raw('count(sistema_agua)')]);
+                $cp = DB::table('viv_datass as v1')->groupBy('sistema_disposicion_excretas')->get([DB::raw('count(sistema_disposicion_excretas)')]);
+                $cp = DB::table('viv_datass as v1')->groupBy('servicio_agua_continuo')->get([DB::raw('count(servicio_agua_continuo)')]);
+                $cp = DB::table('viv_datass as v1')->select('servicio_agua_continuo')->distinct()->get();
+                $cp = DB::table('viv_datass as v1')->groupBy('sistema_cloracion')->get([DB::raw('count(sistema_cloracion)')]);
+                $cp = DB::table('viv_datass as v1')->groupBy('realiza_cloracion_agua')->get([DB::raw('count(realiza_cloracion_agua)')]);
+                //return $cp;
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
             case 21: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL

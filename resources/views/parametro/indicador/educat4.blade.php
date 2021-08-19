@@ -12,92 +12,14 @@
             </div>
         </div>
         <div class="row">
-            {{--<div class="col-md-6">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Region de Ucayali</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>PROFESORES</th>
-                                                <th>CANTIDAD</th>
-                                                <th>%</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($inds as $item)
-                                                <tr>
-                                                    <td>{{ $item->titulado }}</td>
-                                                    <td>{{ $item->suma }}</td>
-                                                    <td>{{ round(($item->suma * 100) / $total, 2) }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>--}}
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">GRAFICA</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="indicador1" data-type="Bar" height="150" ></canvas>
-                    </div>
-                </div>
-            </div>
-        {{--</div><!-- End row -->
-        <div class="row">--}}
-            {{--<div class="col-md-6">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title">Por Ugel</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>UGEL</th>
-                                                <th># DE PROFESORES</th>
-                                                <th>% TITULADO</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($indu as $item)
-                                                <tr>
-                                                    <td>{{ $item->nombre }}</td>
-                                                    <td>{{ $item->titulado }}</td>
-                                                    <td>{{ round(($item->titulado * 100) / $item->total, 2) }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>--}}
-            <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">GRAFICA
+                        <h3 class="card-title text-primary">RESULTADO
                             <div class="float-right">
                                 <div class="form-group row">
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('jajajajaja')">Ver detalle</button>
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('')">Ver detalle</button>
                                     </div>
                                 </div>
                             </div>
@@ -109,6 +31,19 @@
                 </div>
             </div>
         </div><!-- End row -->
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">TOTAL</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="indicador1" data-type="Bar" height="150" ></canvas>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End row -->
+        
     </div>
 @endsection
 
@@ -122,12 +57,20 @@
 
         });
         var myChart = new Chart($('#indicador1'), {
-            type: 'bar',
+            type: 'pie',
             data: {
-                labels:{!!$graf1['labels']!!},
+                labels:[
+                    @foreach ($gra1['grf'] as $item)
+                        '{!!$item->titulado!!}',
+                    @endforeach
+                ],
                 datasets: [{
                     label: 'PROFESORES',
-                    data: {{$graf1['datas']}},
+                    data: [
+                    @foreach ($gra1['grf'] as $item)
+                        {{round($item->suma*100/$gra1['tot'],2)}},
+                    @endforeach
+                ],
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',//'#1097EE',
                     borderColor:'rgba(54, 162, 235, 0.2)',// '#1097EE',
                     borderWidth: 1
@@ -135,15 +78,15 @@
             },
             options: {
                 responsive: true,
-                /*title: {
+                title: {
                     display: false,
                     text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
-                },*/
+                },
                 legend: {
                     display: true,
                     position: 'bottom',
                 },
-                scales: {
+                /*scales: {
                     yAxes: [{
                         stacked: true,
                         ticks: {
@@ -166,9 +109,9 @@
                             labelString: 'Estado'
                         }
                     }]
-                },  
+                },  */
                 tooltips: {
-                    enabled: false,
+                    enabled: true,
                     mode: 'index',
                     intersect: true,
                     position: 'average'
@@ -201,10 +144,18 @@
         var myChart = new Chart($('#indicador2'), {
             type: 'bar',
             data: {
-                labels:{!!$graf2['labels']!!},
+                labels:[
+                    @foreach ($indu as $item)
+                        '{{$item->nombre}}',
+                    @endforeach
+                ],
                 datasets: [{
-                    label: 'TITULADOS',
-                    data: {{$graf2['datas']}},
+                    label: 'UGEL',
+                    data: [
+                        @foreach ($indu as $item)
+                        {{round($item->titulado*100/$item->total,2)}},
+                        @endforeach
+                    ],
                     backgroundColor:'rgba(54, 162, 235, 0.2)' ,//'#1097EE',
                     borderColor: 'rgba(54, 162, 235, 0.2)',//'#1097EE',
                     borderWidth: 1
@@ -213,10 +164,10 @@
             options: {
                 
                 responsive: true,
-                /*title: {
+                title: {
                     display: false,
                     text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
-                },*/
+                },
                 legend: {
                     display: true,
                     position: 'bottom',
