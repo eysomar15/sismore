@@ -153,7 +153,7 @@ class MatriculaController extends Controller
 
         try{
             $importacion = Importacion::Create([
-                'fuenteImportacion_id'=>6, // valor predeterminado
+                'fuenteImportacion_id'=>8, // valor predeterminado
                 'usuarioId_Crea'=> auth()->user()->id,
                 'usuarioId_Aprueba'=>null,
                 'fechaActualizacion'=>$request['fechaActualizacion'],
@@ -168,9 +168,7 @@ class MatriculaController extends Controller
               ]); 
            
         }catch (Exception $e) {
-            $creacionExitosa = 0;          
-
-            // 
+            $creacionExitosa = 0;
         }
         
         $mensajeNivel = "";
@@ -221,7 +219,8 @@ class MatriculaController extends Controller
             return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
         }
 
-        return $creacionExitosa;
+        $mensaje = "CREACION EXITOSA";
+        return view('Educacion.Matricula.Importar',compact('mensaje','anios'));;
     }
 
     public function guardar_inicial($array,$matricula_id)
