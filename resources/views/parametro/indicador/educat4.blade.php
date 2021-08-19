@@ -11,15 +11,27 @@
                 </div>
             </div>
         </div>
+        <!--div class="row">
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">TOTAL</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="prueba1"  height="150" ></canvas>
+                    </div>
+                </div>
+            </div>
+        </div--><!-- End row -->
         <div class="row">
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">RESULTADO
+                        <h3 class="card-title text-primary">PROFESORES TITULADOS EN {{$nivel->nombre}} por UGEL
                             <div class="float-right">
                                 <div class="form-group row">
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('')">Ver detalle</button>
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="abrirdetalle()">Ver detalle</button>
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +47,7 @@
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">TOTAL</h3>
+                        <h3 class="card-title text-primary">TOTAL de profesores en {{$nivel->nombre}} de la region</h3>
                     </div>
                     <div class="card-body">
                         <canvas id="indicador1" data-type="Bar" height="150" ></canvas>
@@ -45,15 +57,84 @@
         </div><!-- End row -->
         
     </div>
+<!--  Modal content for the above example -->
+<div id="modal_detalle" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myLargeModalLabel">PROFESORES TITULADOS EN {{$nivel->nombre}} POR UGEL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-primary ">UGEL</th>
+                                        <th class="text-primary text-center">CANTIDAD</th>
+                                        <th class="text-primary text-center">PORCENTAJE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($indu as $ind)
+                                    <tr>
+                                        <td class="text-primary">{{$ind->nombre}}</td>
+                                        <td class="text-secondary text-center">{{$ind->total}}</td>
+                                        <td class="text-success text-center">{{round($ind->titulado*100/$ind->total,2)}}</td>
+                                    </tr>    
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->        
 @endsection
 
 @section('js')
 
     <!-- flot chart -->
-    <script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script>
+    <!--script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script-->
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+
+        });
+        function abrirdetalle(){
+            $('#modal_detalle').modal('show');
+        }        
+        var myprueba1=new Chart($('#prueba1'),{
+            type:"bar",
+            data:{
+                labels:['eje 1','eje 2','eje 3','eje 4'],
+                datasets:[
+                    {
+                        //axis:'y',
+                        label:'compras',
+                        data:[10,12,15,1],
+                        backgroundColor:'red',
+                        borderColor:'red',
+                        borderWidth:1,
+                        fill:false,
+                    },
+                    /*{axis:'y',
+                        label:'ventas',
+                        data:[10,12,15,1],
+                        backgroundColor:'blue',
+                        borderColor:'blue',
+                        borderWidth:2,
+                    }*/
+                ],
+            },
+            options:{
+                indexAxis:'Y',
+            }
 
         });
         var myChart = new Chart($('#indicador1'), {

@@ -7,6 +7,7 @@ use App\Models\Educacion\Area;
 use App\Models\Parametro\Clasificador;
 use App\Models\Educacion\Indicador;
 use App\Models\Educacion\Materia;
+use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\TipoGestion;
 use App\Models\Ubigeo;
 //use App\Repositories\Educacion\EceRepositorio;
@@ -167,67 +168,17 @@ class IndicadorController extends Controller
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $nivel = 31; //31
-
-                $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-                $total = 0;
-                foreach ($inds as $key => $value) {
-                    $total += $value->suma;
-                    if ($value->titulado == 0) {
-                        $value->titulado = 'NO TITULADO';
-                    } else $value->titulado = 'TITULADO';
-                }
-                $gra1['grf'] = $inds;
-                $gra1['tot'] = $total;
-                $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-                foreach ($indu as $key => $value) {
-                    $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
-                    $value->total = $indutt[0]->total;
-                    $value->nombre = str_replace('UGEL', '', $value->nombre);
-                }
-                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
+                return $this->vistaEducacionCat4($title, $nivel);
             case '12': //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $nivel = 37;
-
-                $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-                $total = 0;
-                foreach ($inds as $key => $value) {
-                    $total += $value->suma;
-                    if ($value->titulado == 0) {
-                        $value->titulado = 'NO TITULADO';
-                    } else $value->titulado = 'TITULADO';
-                }
-                $gra1['grf'] = $inds;
-                $gra1['tot'] = $total;
-                $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-                foreach ($indu as $key => $value) {
-                    $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
-                    $value->total = $indutt[0]->total;
-                    $value->nombre = str_replace('UGEL', '', $value->nombre);
-                }
-                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
+                return $this->vistaEducacionCat4($title, $nivel);
             case 13: //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $nivel = 38;
-                $inds = IndicadorRepositorio::listar_profesorestitulados($nivel);
-                $total = 0;
-                foreach ($inds as $key => $value) {
-                    $total += $value->suma;
-                    if ($value->titulado == 0) {
-                        $value->titulado = 'NO TITULADO';
-                    } else $value->titulado = 'TITULADO';
-                }
-                $gra1['grf'] = $inds;
-                $gra1['tot'] = $total;
-                $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel, '1');
-                foreach ($indu as $key => $value) {
-                    $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
-                    $value->total = $indutt[0]->total;
-                    $value->nombre = str_replace('UGEL', '', $value->nombre);
-                }
-                return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
+                return $this->vistaEducacionCat4($title, $nivel);
             default:
                 return 'sin datos';
                 break;
@@ -279,9 +230,27 @@ class IndicadorController extends Controller
     {
         return 'sin informacion';
     }
-    public function vistaEducacionCat4($title, $grado, $tipo, $sinaprobar)
+    public function vistaEducacionCat4($title, $nivel_id)
     {
-        return 'sin informacion';
+        $nivel = NivelModalidad::find($nivel_id);
+        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel_id);
+        $total = 0;
+        foreach ($inds as $key => $value) {
+            $total += $value->suma;
+            if ($value->titulado == 0) {
+                $value->titulado = 'NO TITULADO';
+            } else $value->titulado = 'TITULADO';
+        }
+        $gra1['grf'] = $inds;
+        $gra1['tot'] = $total;
+        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel_id, '1');
+        foreach ($indu as $key => $value) {
+            $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel_id, $value->id);
+            $value->total = $indutt[0]->total;
+            $value->nombre = str_replace('UGEL', '', $value->nombre);
+        }
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+        return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
     }
     /****** */
     public function indicadorDRVCS($indicador_id)
@@ -371,11 +340,13 @@ class IndicadorController extends Controller
                 $tipo = 0;
                 $materia = 1;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+
+                $gt = IndicadorRepositorio::buscar_grado1($grado);
                 $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
+                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1','gt', 'breadcrumb'));
             case 15:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -383,11 +354,13 @@ class IndicadorController extends Controller
                 $tipo = 0;
                 $materia = 2;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+
+                $gt = IndicadorRepositorio::buscar_grado1($grado);
                 $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
+                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1','gt', 'breadcrumb'));
             case 16:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -438,31 +411,33 @@ class IndicadorController extends Controller
             case 18:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $grado = 2;
+                $grado = 8;
                 $tipo = 0;
-                $materia = 1;
+                $materia=2;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
-                foreach ($info1 as $key => $value) {
-                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
-                }
-                return view('parametro.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
+                return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar,$materia);
             case 19:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $grado = 2;
-                $tipo = 0;
-                $materia = 2;
+                $grado = 4;
+                $tipo = 1; //EIB
+                $materia=5;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                $info1 = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
-                foreach ($info1 as $key => $value) {
-                    $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
-                }
-                return view('parametro.indicador.oei1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'breadcrumb'));
+                return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar,$materia);
             default:
                 return 'sin informacion';
                 break;
         }
+    }
+    public function vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar,$materia)
+    {
+        $gt = IndicadorRepositorio::buscar_grado1($grado);
+        $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo,$materia);
+        foreach ($materias as $key => $materia) {
+            $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+        }
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+        return view('parametro.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
     }
     /*****OTRAS OPCIONES */
     public function cargarprovincias()
