@@ -259,48 +259,54 @@ class IndicadorController extends Controller
             case 20: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $cp = DB::table('viv_datass as v1')->distinct()->get()->count();
-                $cp = DB::table('viv_datass as v1')->get([DB::raw('sum(total_poblacion)'), DB::raw('sum(total_viviendas)')]);
-                $cp = DB::table('viv_datass as v1')->where('tiene_establecimiento_salud', 'SI')->get([DB::raw('count(tiene_establecimiento_salud)')]);
-                $cp = DB::table('viv_datass as v1')->where('tiene_energia_electrica', 'SI')->get([DB::raw('count(tiene_energia_electrica)')]);
-                $cp = DB::table('viv_datass as v1')->where('tiene_internet', 'SI')->get([DB::raw('count(tiene_internet)')]);
-                $cp = DB::table('viv_datass as v1')->groupBy('sistema_agua')->get([DB::raw('count(sistema_agua)')]);
-                $cp = DB::table('viv_datass as v1')->groupBy('sistema_disposicion_excretas')->get([DB::raw('count(sistema_disposicion_excretas)')]);
-                $cp = DB::table('viv_datass as v1')->groupBy('servicio_agua_continuo')->get([DB::raw('count(servicio_agua_continuo)')]);
-                $cp = DB::table('viv_datass as v1')->select('servicio_agua_continuo')->distinct()->get();
-                $cp = DB::table('viv_datass as v1')->groupBy('sistema_cloracion')->get([DB::raw('count(sistema_cloracion)')]);
-                $cp = DB::table('viv_datass as v1')->groupBy('realiza_cloracion_agua')->get([DB::raw('count(realiza_cloracion_agua)')]);
-                //return $cp;
+
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
             case 21: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
             case 22: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
             case 23: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+
+                $cp=IndicadorRepositorio::cabecera1();
+                $cp = DB::table('viv_datass as v1')->groupBy('sistema_disposicion_excretas')->get([DB::raw('count(sistema_disposicion_excretas)')]);
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
             case 24: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+
+                $cp=IndicadorRepositorio::cabecera1();
+                $cp = DB::table('viv_datass as v1')->groupBy('servicio_agua_continuo')->get([DB::raw('count(servicio_agua_continuo)')]);                
+                $cp = DB::table('viv_datass as v1')->groupBy('realiza_cloracion_agua')->get([DB::raw('count(realiza_cloracion_agua)')]);
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
             case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+
+                $cp=IndicadorRepositorio::cabecera1();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
             case 26: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+
+                $cp=IndicadorRepositorio::cabecera1();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
             case 27: //PROGRAMAS DE VIVIENDA
@@ -957,4 +963,9 @@ class IndicadorController extends Controller
         </div>';
         return $card;
     }
+    public function indicadorvivpnsrcab($provincia,$distrito,$indicador_id)
+    {
+        $cp=IndicadorRepositorio::cabecera2($provincia,$distrito,$indicador_id);
+        return response()->json($cp);
+    }    
 }
