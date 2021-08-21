@@ -44,7 +44,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Nivel Educativo</label>
                                 
                                 <div class="col-md-10">
@@ -55,7 +55,7 @@
                                             <option value="4"> EBE </option>  
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
 
                             <div class="form-group row">
@@ -85,9 +85,34 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Archivo</label>
+                                <label class="col-md-2 col-form-label">Nivel Educativo</label>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Inicial</label>
                                 <div class="col-md-10">
-                                    <input type="file" name="file" class="form-control" required > 
+                                    <input type="file" name="fileInicial" class="form-control" required > 
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Primaria</label>
+                                <div class="col-md-10">
+                                    <input type="file" name="filePrimaria" class="form-control" required > 
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Secundaria</label>
+                                <div class="col-md-10">
+                                    <input type="file" name="fileSecundaria" class="form-control" required > 
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">EBE</label>
+                                <div class="col-md-10">
+                                    <input type="file" name="fileEBE" class="form-control" required > 
                                 </div>
                             </div>
                           
