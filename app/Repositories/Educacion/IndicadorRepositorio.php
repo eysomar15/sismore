@@ -718,6 +718,14 @@ class IndicadorRepositorio
                         ]);
                     break;
                 case 22:
+                    $query['indicador'] =  DB::table('viv_datass as v1')
+                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
+                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        ->groupBy('servicio_agua_continuo')
+                        ->get([
+                            'servicio_agua_continuo as opcion',
+                            DB::raw('count(servicio_agua_continuo) as conteo')
+                        ]);
                     break;
                 case 23:
                     $query['indicador'] = DB::table('viv_datass as v1')
@@ -733,6 +741,14 @@ class IndicadorRepositorio
                 case 25:
                     break;
                 case 26:
+                    $query['indicador'] = DB::table('viv_datass as v1')
+                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
+                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        ->groupBy('realiza_cloracion_agua')
+                        ->get([
+                            'realiza_cloracion_agua as opcion',
+                            DB::raw('count(realiza_cloracion_agua) as conteo')
+                        ]);
                     break;
 
                 default:
@@ -783,6 +799,14 @@ class IndicadorRepositorio
                         ]);
                     break;
                 case 22:
+                    $query['indicador'] =  DB::table('viv_datass as v1')
+                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
+                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        ->groupBy('servicio_agua_continuo')
+                        ->get([
+                            'servicio_agua_continuo as opcion',
+                            DB::raw('count(servicio_agua_continuo) as conteo')
+                        ]);
                     break;
                 case 23:
                     $query['indicador'] = DB::table('viv_datass as v1')
@@ -798,6 +822,14 @@ class IndicadorRepositorio
                 case 25:
                     break;
                 case 26:
+                    $query['indicador'] = DB::table('viv_datass as v1')
+                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
+                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        ->groupBy('realiza_cloracion_agua')
+                        ->get([
+                            'realiza_cloracion_agua as opcion',
+                            DB::raw('count(realiza_cloracion_agua) as conteo')
+                        ]);
                     break;
 
                 default:
@@ -838,7 +870,13 @@ class IndicadorRepositorio
                         ]);
                     break;
                 case 22:
-                    $query['indicador'] = null;
+                    $query['indicador'] =  DB::table('viv_datass as v1')
+                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        ->groupBy('servicio_agua_continuo')
+                        ->get([
+                            'servicio_agua_continuo as opcion',
+                            DB::raw('count(servicio_agua_continuo) as conteo')
+                        ]);
                     break;
                 case 23:
                     $query['indicador'] = DB::table('viv_datass as v1')
@@ -855,7 +893,13 @@ class IndicadorRepositorio
                     $query['indicador'] = null;
                     break;
                 case 26:
-                    $query['indicador'] = null;
+                    $query['indicador'] = DB::table('viv_datass as v1')
+                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        ->groupBy('realiza_cloracion_agua')
+                        ->get([
+                            'realiza_cloracion_agua as opcion',
+                            DB::raw('count(realiza_cloracion_agua) as conteo')
+                        ]);
                     break;
 
                 default:

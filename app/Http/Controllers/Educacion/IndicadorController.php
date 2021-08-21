@@ -290,25 +290,26 @@ class IndicadorController extends Controller
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
 
-                $cp=IndicadorRepositorio::cabecera1();
-                $cp = DB::table('viv_datass as v1')->groupBy('servicio_agua_continuo')->get([DB::raw('count(servicio_agua_continuo)')]);                
-                $cp = DB::table('viv_datass as v1')->groupBy('realiza_cloracion_agua')->get([DB::raw('count(realiza_cloracion_agua)')]);
+                //$cp=IndicadorRepositorio::cabecera1();
+                //$cp = DB::table('viv_datass as v1')->groupBy('servicio_agua_continuo')->get([DB::raw('count(servicio_agua_continuo)')]);                
+                //$cp = DB::table('viv_datass as v1')->groupBy('realiza_cloracion_agua')->get([DB::raw('count(realiza_cloracion_agua)')]);
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
             case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
 
-                $cp=IndicadorRepositorio::cabecera1();
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
             case 26: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
 
-                $cp=IndicadorRepositorio::cabecera1();
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
             case 27: //PROGRAMAS DE VIVIENDA
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
