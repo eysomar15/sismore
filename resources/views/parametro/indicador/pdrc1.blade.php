@@ -32,64 +32,15 @@
         @endif
                 
         <div class="row">
-            {{--<div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">RESULTADO indicador</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>AÑO</th>
-                                                @foreach ($info1 as $key => $item)
-                                                <th>{{strtoupper($item->descripcion)}}</th>
-                                                @endforeach
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($info1 as $key => $materia)
-                                                @if ($key==0)
-                                                    @foreach ($materia->indicador as $key2 => $ind)
-                                                    <tr>
-                                                        @foreach ($info1 as $key3 => $materia2)
-                                                            @foreach ($materia2->indicador as $key4 => $ind2)
-                                                                @if ($key2==$key4)
-                                                                    @if ($key3==0)
-                                                                    <td>{{$ind2->anio}}</td>
-                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 2)}} %</td>
-                                                                    @else
-                                                                    <td>{{ round($ind2->satisfactorio * 100 / $ind2->evaluados, 2)}} %</td>
-                                                                    @endif
-                                                                @endif
-                                                            @endforeach
-                                                        @endforeach
-                                                    </tr>
-                                                    @endforeach
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                </div>
-            </div> --}}   
-        
-            @foreach ($info1 as $key => $item)
+            @foreach ($info1 as $key => $materia)
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">RESULTADO general de {{$item->descripcion}}
+                        <h3 class="card-title text-primary">NIÑAS(OS) del {{$gt[0]->grado}} grado de {{$gt[0]->nivel}} que logran el nivel satisfactorio en  {{$materia->descripcion}}
                             <div class="float-right">
                                 <div class="form-group row">
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="alert('jajajajaja')">Ver detalle</button>
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="abrirdetalle({{$key}})">Ver detalle</button>
                                     </div>
                                 </div>
                             </div>
@@ -104,7 +55,58 @@
             
         </div><!-- End row --> 
     </div>
-
+    @foreach ($info1 as $pos => $materia)
+    <!--  Modal content for the above example -->
+    <div id="modal_detalle_{{$pos}}" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myLargeModalLabel">NIÑAS(OS) del {{$gt[0]->grado}} grado de {{$gt[0]->nivel}} que logran el nivel satisfactorio en  {{$materia->descripcion}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-primary text-center">AÑO</th>
+                                            <th class="text-secondary text-center">CANTIDAD</th>
+                                            <th class="text-secondary text-center">PREVIO</th>
+                                            <th class="text-danger text-center">CANTIDAD</th>
+                                            <th class="text-danger text-center">INICIO</th>
+                                            <th class="text-warning text-center">CANTIDAD</th>
+                                            <th class="text-warning text-center">PROCESO</th>
+                                            <th class="text-success text-center">CANTIDAD</th>
+                                            <th class="text-success text-center">SATISFACTORIO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($materia->indicador as $ind)
+                                        <tr>
+                                            <td class="text-primary text-center">{{$ind->anio}}</td>
+                                            <td class="text-secondary text-center">{{$ind->previo}}</td>
+                                            <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}} %</td>
+                                            <td class="text-danger text-center">{{$ind->inicio}}</td>
+                                            <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}} %</td>
+                                            <td class="text-warning text-center">{{$ind->proceso}}</td>
+                                            <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}} %</td>
+                                            <td class="text-success text-center">{{$ind->satisfactorio}}</td>
+                                            <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}} %</td>
+                                        </tr>    
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->    
+    @endforeach
 @endsection
 
 @section('js')
@@ -113,7 +115,9 @@
         $(document).ready(function() {
              
         });
-         
+        function abrirdetalle(pos){
+            $('#modal_detalle_'+pos).modal('show');
+        }         
         
         @foreach ($info1 as $pos1 => $materia)
         var myChart = new Chart($('#indicador{{$pos1}}'), {
