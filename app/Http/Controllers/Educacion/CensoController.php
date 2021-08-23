@@ -163,6 +163,7 @@ class CensoController extends Controller
         $importacion  = Importacion::find($importacion_id);
 
         $importacion->estado = 'PR';
+        
         $importacion->save();
 
         $Censo = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first();

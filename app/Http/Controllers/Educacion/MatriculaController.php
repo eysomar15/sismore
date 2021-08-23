@@ -153,80 +153,80 @@ class MatriculaController extends Controller
 
         $creacionExitosa = 1;
 
-        // try{
-        //     $importacion = Importacion::Create([
-        //         'fuenteImportacion_id'=>8, // valor predeterminado
-        //         'usuarioId_Crea'=> auth()->user()->id,
-        //         'usuarioId_Aprueba'=>null,
-        //         'fechaActualizacion'=>$request['fechaActualizacion'],
-        //         'comentario'=>$request['comentario'],
-        //         'estado'=>'PE'
-        //       ]); 
+        try{
+            $importacion = Importacion::Create([
+                'fuenteImportacion_id'=>8, // valor predeterminado
+                'usuarioId_Crea'=> auth()->user()->id,
+                'usuarioId_Aprueba'=>null,
+                'fechaActualizacion'=>$request['fechaActualizacion'],
+                'comentario'=>$request['comentario'],
+                'estado'=>'PE'
+              ]); 
 
-        //     $Matricula = Matricula::Create([
-        //         'importacion_id'=>$importacion->id, // valor predeterminado
-        //         'anio_id'=> $request['anio'],
-        //         'estado'=>'PE'
-        //       ]); 
+            $Matricula = Matricula::Create([
+                'importacion_id'=>$importacion->id, // valor predeterminado
+                'anio_id'=> $request['anio'],
+                'estado'=>'PE'
+              ]); 
            
-        // }catch (Exception $e) {
-        //     $creacionExitosa = 0;
-        // }
+        }catch (Exception $e) {
+            $creacionExitosa = 0;
+        }
         
-        // $mensajeNivel = "";
+        $mensajeNivel = "";
 
-        // if($creacionExitosa==1)
-        // {
-        //     $creacionExitosa = $this->guardar_inicial($arrayInicial,$Matricula->id);
+        if($creacionExitosa==1)
+        {
+            $creacionExitosa = $this->guardar_inicial($arrayInicial,$Matricula->id);
 
-        //     if($creacionExitosa==1)
-        //     {
-        //         $creacionExitosa = $this->guardar_primaria($arrayPrimaria,$Matricula->id);
-        //         if($creacionExitosa==1)
-        //         {
-        //             $creacionExitosa = $this->guardar_secundaria($arraySecundaria,$Matricula->id);
-        //             if($creacionExitosa==1)
-        //             {
-        //                 $creacionExitosa = $this->guardar_EBE($arrayEBE,$Matricula->id);
-        //                 if($creacionExitosa==0)
-        //                 {
-        //                     $mensajeNivel = "EBE";  
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 $mensajeNivel = "Nivel SECUNDARIA";  
-        //             }
-        //         }
-        //         else
-        //         {
-        //             $mensajeNivel = "Nivel PRIMARIA";  
-        //         }
-        //     }
-        //     else
-        //     { 
-        //         $mensajeNivel ="Nivel INICIAL";
-        //     }
-        // }
+            if($creacionExitosa==1)
+            {
+                $creacionExitosa = $this->guardar_primaria($arrayPrimaria,$Matricula->id);
+                if($creacionExitosa==1)
+                {
+                    $creacionExitosa = $this->guardar_secundaria($arraySecundaria,$Matricula->id);
+                    if($creacionExitosa==1)
+                    {
+                        $creacionExitosa = $this->guardar_EBE($arrayEBE,$Matricula->id);
+                        if($creacionExitosa==0)
+                        {
+                            $mensajeNivel = "EBE";  
+                        }
+                    }
+                    else
+                    {
+                        $mensajeNivel = "Nivel SECUNDARIA";  
+                    }
+                }
+                else
+                {
+                    $mensajeNivel = "Nivel PRIMARIA";  
+                }
+            }
+            else
+            { 
+                $mensajeNivel ="Nivel INICIAL";
+            }
+        }
 
-        // if($creacionExitosa==0)
-        // {
-        //     $importacion->estado = 'EL';
-        //     $importacion->save();
+        if($creacionExitosa==0)
+        {
+            $importacion->estado = 'EL';
+            $importacion->save();
 
-        //     $Matricula->estado = 'EL';
-        //     $Matricula->save();
+            $Matricula->estado = 'EL';
+            $Matricula->save();
 
-        //     $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
-        //     return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
-        // }
+            $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
+            return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
+        }
 
         //$mensaje = "CREACION EXITOSA";
         //return view('Educacion.Matricula.Importar',compact('mensaje','anios'));;
 
         //return redirect()->route('Educacion.Matricula_Lista',$importacion->id);
 
-        return redirect()->route('Matricula.Matricula_Lista',283);
+        return redirect()->route('Matricula.Matricula_Lista',$importacion->id);
     }   
 
     public function guardar_inicial($array,$matricula_id)
@@ -472,7 +472,25 @@ class MatriculaController extends Controller
 
     public function procesar($importacion_id)
     {
+        $importacion  = Importacion::find($importacion_id);
+
+        $importacion->estado = 'PR';       
+        $importacion->save();
+
+        $matricula = MatriculaRepositorio :: matricula_porImportacion($importacion_id)->first();
+        $matricula->estado = 'PR';
+        $matricula->save();
+
         return view('correcto');
+    }
+
+    //**************************************************************************************** */
+    public function principal()
+    {
+        $dato = MatriculaRepositorio :: matricula_mas_actual();
+
+        $dd = MatriculaRepositorio::total_matricula_EBR(2);
+        return $dd;//view('correcto');
     }
     
 }
