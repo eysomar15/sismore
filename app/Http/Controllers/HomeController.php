@@ -105,8 +105,7 @@ class HomeController extends Controller
          
         return view('home',compact('sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
                     'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas',
-                    'localesEducativos','locales_tieneInternet','porcentajeLocales_tieneInternet'));  
-
+                    'localesEducativos','locales_tieneInternet','porcentajeLocales_tieneInternet'));
     }
 
     public function AEI_tempo()
@@ -132,6 +131,6 @@ class HomeController extends Controller
         }
          
         return view('homeAEI',compact('titulados_inicial','porcentajeTitulados_inicial','bilingues'));  
-    }
+    } 
    
 }

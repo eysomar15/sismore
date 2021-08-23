@@ -13,7 +13,9 @@ use App\Models\Educacion\MatriculaInicial;
 use App\Models\Educacion\MatriculaPrimaria;
 use App\Models\Educacion\MatriculaSecundaria;
 use App\Models\Parametro\Anio;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\InstitucionEducativaRepositorio;
+use App\Repositories\Educacion\MatriculaRepositorio;
 use Exception;
 
 class MatriculaController extends Controller
@@ -151,77 +153,81 @@ class MatriculaController extends Controller
 
         $creacionExitosa = 1;
 
-        try{
-            $importacion = Importacion::Create([
-                'fuenteImportacion_id'=>8, // valor predeterminado
-                'usuarioId_Crea'=> auth()->user()->id,
-                'usuarioId_Aprueba'=>null,
-                'fechaActualizacion'=>$request['fechaActualizacion'],
-                'comentario'=>$request['comentario'],
-                'estado'=>'PE'
-              ]); 
+        // try{
+        //     $importacion = Importacion::Create([
+        //         'fuenteImportacion_id'=>8, // valor predeterminado
+        //         'usuarioId_Crea'=> auth()->user()->id,
+        //         'usuarioId_Aprueba'=>null,
+        //         'fechaActualizacion'=>$request['fechaActualizacion'],
+        //         'comentario'=>$request['comentario'],
+        //         'estado'=>'PE'
+        //       ]); 
 
-            $Matricula = Matricula::Create([
-                'importacion_id'=>$importacion->id, // valor predeterminado
-                'anio_id'=> $request['anio'],
-                'estado'=>'PE'
-              ]); 
+        //     $Matricula = Matricula::Create([
+        //         'importacion_id'=>$importacion->id, // valor predeterminado
+        //         'anio_id'=> $request['anio'],
+        //         'estado'=>'PE'
+        //       ]); 
            
-        }catch (Exception $e) {
-            $creacionExitosa = 0;
-        }
+        // }catch (Exception $e) {
+        //     $creacionExitosa = 0;
+        // }
         
-        $mensajeNivel = "";
+        // $mensajeNivel = "";
 
-        if($creacionExitosa==1)
-        {
-            $creacionExitosa = $this->guardar_inicial($arrayInicial,$Matricula->id);
+        // if($creacionExitosa==1)
+        // {
+        //     $creacionExitosa = $this->guardar_inicial($arrayInicial,$Matricula->id);
 
-            if($creacionExitosa==1)
-            {
-                $creacionExitosa = $this->guardar_primaria($arrayPrimaria,$Matricula->id);
-                if($creacionExitosa==1)
-                {
-                    $creacionExitosa = $this->guardar_secundaria($arraySecundaria,$Matricula->id);
-                    if($creacionExitosa==1)
-                    {
-                        $creacionExitosa = $this->guardar_EBE($arrayEBE,$Matricula->id);
-                        if($creacionExitosa==0)
-                        {
-                            $mensajeNivel = "EBE";  
-                        }
-                    }
-                    else
-                    {
-                        $mensajeNivel = "Nivel SECUNDARIA";  
-                    }
-                }
-                else
-                {
-                    $mensajeNivel = "Nivel PRIMARIA";  
-                }
-            }
-            else
-            { 
-                $mensajeNivel ="Nivel INICIAL";
-            }
-        }
+        //     if($creacionExitosa==1)
+        //     {
+        //         $creacionExitosa = $this->guardar_primaria($arrayPrimaria,$Matricula->id);
+        //         if($creacionExitosa==1)
+        //         {
+        //             $creacionExitosa = $this->guardar_secundaria($arraySecundaria,$Matricula->id);
+        //             if($creacionExitosa==1)
+        //             {
+        //                 $creacionExitosa = $this->guardar_EBE($arrayEBE,$Matricula->id);
+        //                 if($creacionExitosa==0)
+        //                 {
+        //                     $mensajeNivel = "EBE";  
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 $mensajeNivel = "Nivel SECUNDARIA";  
+        //             }
+        //         }
+        //         else
+        //         {
+        //             $mensajeNivel = "Nivel PRIMARIA";  
+        //         }
+        //     }
+        //     else
+        //     { 
+        //         $mensajeNivel ="Nivel INICIAL";
+        //     }
+        // }
 
-        if($creacionExitosa==0)
-        {
-            $importacion->estado = 'EL';
-            $importacion->save();
+        // if($creacionExitosa==0)
+        // {
+        //     $importacion->estado = 'EL';
+        //     $importacion->save();
 
-            $Matricula->estado = 'EL';
-            $Matricula->save();
+        //     $Matricula->estado = 'EL';
+        //     $Matricula->save();
 
-            $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
-            return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
-        }
+        //     $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
+        //     return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
+        // }
 
-        $mensaje = "CREACION EXITOSA";
-        return view('Educacion.Matricula.Importar',compact('mensaje','anios'));;
-    }
+        //$mensaje = "CREACION EXITOSA";
+        //return view('Educacion.Matricula.Importar',compact('mensaje','anios'));;
+
+        //return redirect()->route('Educacion.Matricula_Lista',$importacion->id);
+
+        return redirect()->route('Matricula.Matricula_Lista',283);
+    }   
 
     public function guardar_inicial($array,$matricula_id)
     {
@@ -437,11 +443,6 @@ class MatriculaController extends Controller
         return $creacionExitosa;
     }
 
-    public function ListaImportada($importacion_id)
-    {
-        // return view('Educacion.Censo.ListaImportada',compact('importacion_id'));
-    }
-
     public function ListaImportada_DataTable($importacion_id)
     {
         // $Lista = CensoRepositorio::Listar_Por_Importacion_id($importacion_id);
@@ -449,17 +450,28 @@ class MatriculaController extends Controller
         // return  datatables()->of($Lista)->toJson();;
     }
     
+    public function ListaImportada($importacion_id)
+    {
+        $datos_matricula_importada = $this->datos_matricula_importada($importacion_id);  
+        return view('Educacion.Matricula.ListaImportada',compact('importacion_id','datos_matricula_importada'));
+    }
+
     public function aprobar($importacion_id)
     {
-        // $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
-        // $anioCenso = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first()->anio;
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);        
+        $datos_matricula_importada = $this->datos_matricula_importada($importacion_id);
 
-        return view('educacion.Censo.Aprobar',compact('importacion_id','importacion','anioCenso'));
+        return view('educacion.Matricula.Aprobar',compact('importacion_id','importacion','datos_matricula_importada'));
     } 
+
+    public function datos_matricula_importada($importacion_id)
+    {
+        $matricula = MatriculaRepositorio::matricula_porImportacion($importacion_id);        
+        return $datos_matricula_importada = MatriculaRepositorio::datos_matricula_importada($matricula->first()->id);
+    }
 
     public function procesar($importacion_id)
     {
-
         return view('correcto');
     }
     
