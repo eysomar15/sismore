@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\DB;
 
 class IndicadorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function indicadorEducacionMenu($clasificador)
     {
         $clas = Clasificador::where('dependencia', $clasificador)->first();

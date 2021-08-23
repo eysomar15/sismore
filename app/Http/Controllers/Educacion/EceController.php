@@ -21,7 +21,10 @@ use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\isNull;
 
 class EceController extends Controller
-{
+{    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function importar()
     {
         $materias = Materia::all();
