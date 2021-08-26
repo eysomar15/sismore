@@ -64,6 +64,7 @@ Route::get('/Matricula/Aprobar/{importacion_id}', [MatriculaController::class, '
 Route::post('/Matricula/Aprobar/procesar/{importacion_id}', [MatriculaController::class, 'procesar'])->name('Matricula.procesar');
 
 Route::get('/Matricula/Principal', [MatriculaController::class, 'principal'])->name('Matricula.principal');
+Route::get('/Matricula/prueba/{aniox}', [MatriculaController::class, 'prueba'])->name('Matricula.prueba');
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/', [ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');

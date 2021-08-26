@@ -42,7 +42,7 @@ class MatriculaRepositorio
                 ->where('mat.estado','=', 'PR')
                 ->orderBy('vanio.anio', 'desc')
                 ->orderBy('imp.fechaActualizacion', 'desc')
-                ->select('mat.id')
+                ->select('mat.id','imp.fechaActualizacion')
                 ->limit(1)
                 ->get();
 
@@ -57,33 +57,26 @@ class MatriculaRepositorio
                 ->join('edu_ugel as ugel', 'inst.Ugel_id', '=', 'ugel.id')         
                 ->where('mat.id','=', $matricula_id)
                 ->where('matDet.nivel','!=','E')
-                ->groupBy('ugel.nombre')
-                
+                ->groupBy('ugel.nombre')                
                 ->get([  
                     DB::raw('ugel.nombre'),                         
-                    DB::raw('sum(ifnull(segundo_nivel_hombre,0)) as hombre'),        
+                    DB::raw('sum(           
+                                ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
+                                ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
+                                ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
+                                ifnull(cinco_anios_hombre_ebe,0)
+                                ) as hombres'),  
+                    DB::raw('sum(           
+                                ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
+                                ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
+                                ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
+                                ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
+                                ) as mujeres'), 
+                    
                 ]);
 
         return $data;
 
-        /*select ugel.nombre,
-        sum(
-        ifnull(cero_nivel_hombre,'') + ifnull(primer_nivel_hombre,'') + ifnull(segundo_nivel_hombre,'') + 
-        ifnull(tercero_nivel_hombre,'') + ifnull(cuarto_nivel_hombre,'') + ifnull(quinto_nivel_hombre,'') +
-        ifnull(sexto_nivel_hombre,'') + ifnull(tres_anios_hombre_ebe,'') + ifnull(cuatro_anios_hombre_ebe,'') + ifnull(cinco_anios_hombre_ebe,'')) as hombres,
-
-        sum(
-        ifnull(cero_nivel_mujer,'') + ifnull(primer_nivel_mujer,'') + ifnull(segundo_nivel_mujer,'') + ifnull(tercero_nivel_mujer,'') + 
-        ifnull(cuarto_nivel_mujer,'') + ifnull(quinto_nivel_mujer,'') + ifnull(sexto_nivel_mujer,'') + ifnull(tres_anios_mujer_ebe,'') + 
-        ifnull(cuatro_anios_mujer_ebe,'') + ifnull(cinco_anios_mujer_ebe,'') ) as mujeres
-
-        from edu_matricula mat
-        inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
-        inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
-        inner join edu_ugel ugel on inst.Ugel_id = ugel.id
-        where mat.id = 2
-        and matDet.nivel not in ('E')
-        group by ugel.nombre;*/
     }
    
    
