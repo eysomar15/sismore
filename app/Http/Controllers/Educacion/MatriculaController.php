@@ -28,7 +28,7 @@ class MatriculaController extends Controller
     public function importar()
     {  
         $mensaje = "";
-        $anios = Anio::all();
+        $anios = Anio::orderBy('anio', 'desc')->get();
         
         return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
     } 
@@ -51,7 +51,7 @@ class MatriculaController extends Controller
         $archivoEBE = $request->file('fileEBE');
         $arrayEBE = (new tablaXImport )-> toArray($archivoEBE); 
 
-        $anios = Anio::all();
+        $anios = Anio::orderBy('anio', 'desc')->get();
 
         $i = 0;
         $cadena ='';
@@ -487,10 +487,42 @@ class MatriculaController extends Controller
     //**************************************************************************************** */
     public function principal()
     {
-        $dato = MatriculaRepositorio :: matricula_mas_actual();
+        $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
+        $anios = Anio::orderBy('anio', 'desc')->get();
 
-        $dd = MatriculaRepositorio::total_matricula_EBR(2);
-        return $dd;//view('correcto');
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
+
+
+       
+        return view('educacion.Matricula.Principal',compact('lista_total_matricula_EBR','matricula','anios'));
     }
     
+    public function prueba($aniox)
+    {
+        $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
+        $anios = Anio::orderBy('anio', 'desc')->get();
+      
+        $nombre = '';
+         if($aniox==6)
+         {
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
+            $nombre = 'gambini';
+         }            
+         else
+         {
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
+            $nombre = 'eysomar';
+         }
+            
+
+        $diaActual = \Carbon\Carbon::now();
+
+        $puntos = [];
+
+        foreach ($lista_total_matricula_EBR as $key => $lista) {
+            $puntos[] = ['name'=>$nombre, 'y'=>floatval(25)];
+        }
+
+        return view('educacion.Matricula.pruebita',["data"=> json_encode($puntos)],compact('diaActual','lista_total_matricula_EBR',));
+    }
 }
