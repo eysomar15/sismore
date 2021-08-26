@@ -72,13 +72,15 @@
                 </div>
             </div>
         </div>
+             
         {{--<div class="col-xl-6">
             <div class="card card-border card-primary">
                 <div class="card-header border-primary bg-transparent pb-0">
                     <h3 class="card-title text-primary">mi grafica xxx</h3>
                 </div>
                 <div class="card-body">
-                    <canvas id="prueba" width="400" height="400"  aria-label="Hello ARIA World" role="img"> <p>Hello Fallback World</p></canvas>
+                    <canvas id="myChart1" height="300" width="500"></canvas>
+                    <canvas id="myChart2" height="300" width="500"></canvas>
                 </div>
             </div>
         </div>--}}
@@ -174,9 +176,11 @@
                     intersect: true,
                     position: 'average'
                 },
+                
             }
         });
         } 
+        //console.log(myChart1.type);
         /*var myChart = new Chart($('#prueba'), {
         type: "bar",
         data: {
@@ -354,7 +358,6 @@
                                     }
                             }
                     });*/
-         
     </script>
 
 @endsection
