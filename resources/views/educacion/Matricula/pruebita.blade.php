@@ -62,6 +62,7 @@
             plotShadow: false,
             type: 'pie'
         },
+        credits:false,
         title: {
             text: 'TITULO DEL GRAFICO'
         },

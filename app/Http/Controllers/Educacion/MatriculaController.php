@@ -490,14 +490,42 @@ class MatriculaController extends Controller
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
         $anios = Anio::orderBy('anio', 'desc')->get();
 
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
-
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);    
 
        
         return view('educacion.Matricula.Principal',compact('lista_total_matricula_EBR','matricula','anios'));
     }
     
     public function prueba($aniox)
+    {
+        $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
+        $anios = Anio::orderBy('anio', 'desc')->get();
+      
+        $nombre = '';
+         if($aniox==6)
+         {
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
+            $nombre = 'gambini';
+         }            
+         else
+         {
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
+            $nombre = 'eysomar';
+         }
+            
+
+        $diaActual = \Carbon\Carbon::now();
+
+        $puntos = [];
+
+        foreach ($lista_total_matricula_EBR as $key => $lista) {
+            $puntos[] = ['name'=>$nombre, 'y'=>floatval(25)];
+        }
+
+        return view('educacion.Matricula.pruebita',["data"=> json_encode($puntos)],compact('diaActual','lista_total_matricula_EBR',));
+    }
+
+    public function prueba2($aniox)
     {
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
         $anios = Anio::orderBy('anio', 'desc')->get();

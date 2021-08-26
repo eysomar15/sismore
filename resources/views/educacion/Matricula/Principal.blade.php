@@ -16,7 +16,7 @@
                     <div class="form-group row">
                         <label class="col-md-1 col-form-label">Año</label>
                         <div class="col-md-2">
-                            <select id="anio" name="anio" class="form-control" onchange="cargarReporte(); ">                               
+                            <select id="anio" name="anio" class="form-control" onchange="cargarReporte();cargarReporte2(); ">                               
                                 @foreach ($anios as $item)
                                     <option value="{{ $item->id }}"> {{ $item->anio }} </option>
                                 @endforeach
@@ -33,6 +33,10 @@
                     </div>
 
                     <div class="col-lg-6" id="datos01">
+                        Cargando datos.....
+                    </div>  <!-- tabla de datos -->
+
+                    <div class="col-lg-6" id="datos02">
                         Cargando datos.....
                     </div>  <!-- tabla de datos -->
 
@@ -80,6 +84,19 @@
                 alert("Lo sentimos a ocurrido un error");
             });
         }
+
+        function cargarReporte2() {
+            
+            $.ajax({              
+                url: "{{ url('/') }}/Matricula/prueba2/" + $('#anio').val(),
+            }).done(function (data) {               
+                $('#datos02').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
+        }
+
+
 
         $(function () {
             // Obtiene mediante ajax la partial view
