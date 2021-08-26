@@ -522,7 +522,9 @@ class MatriculaController extends Controller
             $puntos[] = ['name'=>$nombre, 'y'=>floatval(25)];
         }
 
-        return view('educacion.Matricula.pruebita',["data"=> json_encode($puntos)],compact('diaActual','lista_total_matricula_EBR',));
+        $contenedor = 'container22';
+
+        return view('educacion.Matricula.pruebita',["data"=> json_encode($puntos)],compact('diaActual','lista_total_matricula_EBR','contenedor'));
     }
 
     public function prueba2($aniox)
@@ -534,12 +536,12 @@ class MatriculaController extends Controller
          if($aniox==6)
          {
             $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
-            $nombre = 'gambini';
+            $nombre = 'cuadro b';
          }            
          else
          {
             $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
-            $nombre = 'eysomar';
+            $nombre = 'cuadro a';
          }
             
 
@@ -551,6 +553,8 @@ class MatriculaController extends Controller
             $puntos[] = ['name'=>$nombre, 'y'=>floatval(25)];
         }
 
-        return view('educacion.Matricula.pruebita',["data"=> json_encode($puntos)],compact('diaActual','lista_total_matricula_EBR',));
+        $contenedor = 'container223';
+
+        return view('educacion.Matricula.pruebita',["data"=> json_encode($puntos)],compact('diaActual','lista_total_matricula_EBR','contenedor'));
     }
 }

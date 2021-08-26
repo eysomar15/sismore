@@ -37,7 +37,7 @@
                     </div>  <!-- tabla de datos -->
 
                     <div class="col-lg-6" id="datos02">
-                        Cargando datos.....
+                        Cargando datos.....2222
                     </div>  <!-- tabla de datos -->
 
                 </div>               
@@ -48,9 +48,8 @@
         </div> <!-- End col -->
     </div> <!-- End row -->
 
-        <div>
-                <div id="container"></div>
-        </div>  <!-- grafico -->
+       
+    
 
 
     {{-- <li>
@@ -71,9 +70,6 @@
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
-
-
-
 {{-- https://www.youtube.com/watch?v=HU-hffAZqYw --}}
 
     <script type="text/javascript">        
