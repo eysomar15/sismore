@@ -11,7 +11,7 @@
         },
         credits:false,
         title: {
-            text: 'TITULO DEL GRAFICO'
+            text: '{{$titulo_grafico}}'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

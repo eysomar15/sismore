@@ -1,6 +1,7 @@
-
-
 <div class="col-md-6">
+    <div>
+        <h6> TOTAL MATRICULA EBR SEGÚN UGEL AL 30 DE JULIO 2021 </h6>
+    </div>
     <div class="table-responsive">
         <table class="table table-striped mb-0">
             <thead>

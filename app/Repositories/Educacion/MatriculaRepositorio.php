@@ -49,6 +49,21 @@ class MatriculaRepositorio
         return $data;
     }
 
+    public static function fechas_matriculas_anio($anio_id)
+    { 
+        $data = DB::table('par_importacion as imp')           
+                ->join('edu_matricula as mat', 'imp.id', '=', 'mat.importacion_id')
+                ->join('par_anio as vanio', 'mat.anio_id', '=', 'vanio.id')   
+                ->where('vanio.id','=', $anio_id)      
+                ->where('imp.estado','=', 'PR')
+                ->where('mat.estado','=', 'PR')      
+                ->orderBy('imp.fechaActualizacion', 'desc')
+                ->select('mat.id as matricula_id','imp.fechaActualizacion')     
+                ->get();
+
+        return $data;
+    }
+
     public static function total_matricula_EBR($matricula_id)
     { 
         $data = DB::table('edu_matricula as mat')           

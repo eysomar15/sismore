@@ -490,19 +490,20 @@ class MatriculaController extends Controller
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
         $anios = Anio::orderBy('anio', 'desc')->get();
 
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);    
+        $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
 
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($fechas_matriculas->first()->matricula_id);    
        
-        return view('educacion.Matricula.Principal',compact('lista_total_matricula_EBR','matricula','anios'));
+        return view('educacion.Matricula.Principal',compact('lista_total_matricula_EBR','matricula','anios','fechas_matriculas'));
     }
     
-    public function prueba($anio)
+    public function reporte($anio_id)
     {
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
-        $anios = Anio::orderBy('anio', 'desc')->get();
-      
-       
-        if($anio==6)        
+          
+        
+
+        if($anio_id==6)        
             $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);                
         else        
             $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR(0);       
@@ -519,9 +520,10 @@ class MatriculaController extends Controller
             $puntos[] = ['name'=>$lista->nombre, 'y'=>floatval(($lista->hombres  + $lista->mujeres)*100/$total)];
         }
 
-        $contenedor = 'container22';
+        $contenedor = 'resumen_por_ugel';
+        $titulo_grafico = 'MATRICULAS SEGUN UGEL';
 
-        return view('educacion.Matricula.Detalles',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','contenedor'));
+        return view('educacion.Matricula.Reporte',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','contenedor','titulo_grafico'));
     }
 
     public function prueba2($anio)

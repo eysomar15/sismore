@@ -16,7 +16,7 @@
                     <div class="form-group row">
                         <label class="col-md-1 col-form-label">Año</label>
                         <div class="col-md-2">
-                            <select id="anio" name="anio" class="form-control" onchange="cargarReporte();cargarReporte2(); ">                               
+                            <select id="anio" name="anio" class="form-control" onchange="cargarResumen_Matricula();cargar_fechas(); ">                               
                                 @foreach ($anios as $item)
                                     <option value="{{ $item->id }}"> {{ $item->anio }} </option>
                                 @endforeach
@@ -25,17 +25,24 @@
                        
                         <label class="col-md-1 col-form-label">Fecha</label>
                         <div class="col-md-2">
-                            <select id="mes" name="mes." class="form-control" onchange="cargarReporte();">
-                                <option value="0">TODOS</option>
+                            <select id="mes" name="mes." class="form-control" onchange="cargarResumen_Matricula();">
+                                @foreach ($fechas_matriculas as $item)
+                                    <option value="{{ $item->matricula_id }}"> {{ $item->fechaActualizacion }} </option>
+                                @endforeach
                             </select>
                         </div>
                         
+                    </div>                  
+                           
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                         
+                        </div>
                     </div>
-
-                    <div id="datos01" class="form-group row">
-                        {{-- <div class="col-lg-12 col-md-12" id="datos01">
-                            Cargando datos.....
-                        </div>  <!-- tabla de datos --> --}}
+                
+                    <br>
+                    <div id="datos01" class="form-group row">                        
+                            Cargando datos.....                        
                     </div>
 
                     <div class="col-lg-12" id="datos02">
@@ -49,18 +56,6 @@
               
         </div> <!-- End col -->
     </div> <!-- End row -->
-
-       
-    
-
-
-    {{-- <li>
-        <a href="{{route('Matricula.prueba','04')}}" class="waves-effect">
-            <i class="mdi mdi-chart-tree"></i>
-            <span> PDRC </span>
-        </a>                    
-    </li> --}}
-
   
 </div>
 @endsection 
@@ -74,12 +69,17 @@
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
 {{-- https://www.youtube.com/watch?v=HU-hffAZqYw --}}
 
-    <script type="text/javascript">        
+    <script type="text/javascript"> 
+        
+        $(function () {
+            cargarResumen_Matricula();
+        });// ejecuta al cargar la pagina
 
-        function cargarReporte() {
+
+        function cargarResumen_Matricula() {
             
             $.ajax({              
-                url: "{{ url('/') }}/Matricula/prueba/" + $('#anio').val(),
+                url: "{{ url('/') }}/Matricula/Reporte/" + $('#anio').val(),
             }).done(function (data) {               
                 $('#datos01').html(data);
             }).fail(function () {
@@ -90,25 +90,15 @@
         function cargarReporte2() {
             
             $.ajax({              
-                url: "{{ url('/') }}/Matricula/prueba2/" + $('#anio').val(),
+                url: "{{ url('/') }}/Matricula/Reporte2/" + $('#anio').val(),
             }).done(function (data) {               
                 $('#datos02').html(data);
             }).fail(function () {
-                alert("Lo sentimos a ocurrido un error");
+                alert("Lo sentimos a ocurrido un error a2");
             });
         }
 
-        $(function () {
-            // Obtiene mediante ajax la partial view
-            $.ajax({
-                url: "{{ url('/') }}/Matricula/prueba/" + $('#anio').val(),                 
-            }).done(function (data) {                
-                $('#datos01').html(data);
-            }).fail(function () {
-                alert("Lo sentimos a ocurrido un error");
-            });
-        });
-
+       
     </script>
 
    
