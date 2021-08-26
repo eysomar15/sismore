@@ -32,9 +32,11 @@
                         
                     </div>
 
-                    <div class="col-lg-12" id="datos01">
-                        Cargando datos.....
-                    </div>  <!-- tabla de datos -->
+                    <div id="datos01" class="form-group row">
+                        {{-- <div class="col-lg-12 col-md-12" id="datos01">
+                            Cargando datos.....
+                        </div>  <!-- tabla de datos --> --}}
+                    </div>
 
                     <div class="col-lg-12" id="datos02">
                         Cargando datos.....2222
@@ -95,8 +97,6 @@
                 alert("Lo sentimos a ocurrido un error");
             });
         }
-
-
 
         $(function () {
             // Obtiene mediante ajax la partial view
