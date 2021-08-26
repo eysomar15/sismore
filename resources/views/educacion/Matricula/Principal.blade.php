@@ -32,11 +32,11 @@
                         
                     </div>
 
-                    <div class="col-lg-6" id="datos01">
+                    <div class="col-lg-12" id="datos01">
                         Cargando datos.....
                     </div>  <!-- tabla de datos -->
 
-                    <div class="col-lg-6" id="datos02">
+                    <div class="col-lg-12" id="datos02">
                         Cargando datos.....2222
                     </div>  <!-- tabla de datos -->
 

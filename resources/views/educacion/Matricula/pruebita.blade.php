@@ -4,7 +4,7 @@
    
      <div class="card-body">
          <div class="row">
-             <div class="col-12">
+             <div class="col-6">
                  <div class="table-responsive">
                      <table class="table table-striped mb-0">
                          <thead>
@@ -49,20 +49,20 @@
                  </div>
 
              </div>
+
+            <div  class="col-6">
+                <div id="{{$contenedor}}">       
+                        @include('graficos.Circular')
+                </div>
+            </div> 
+
+
          </div>
      </div>
  </div>
 
 
- <div>
-    <div id="{{$contenedor}}">
-       
-            @include('graficos.Circular')                    
-     
-    </div>
-
-    
-</div>  <!-- grafico -->
+ 
  
 
 
