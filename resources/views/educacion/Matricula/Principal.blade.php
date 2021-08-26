@@ -52,6 +52,7 @@
                 <div id="container"></div>
         </div>  <!-- grafico -->
 
+
     {{-- <li>
         <a href="{{route('Matricula.prueba','04')}}" class="waves-effect">
             <i class="mdi mdi-chart-tree"></i>
@@ -65,10 +66,13 @@
 
 @section('js')
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
+
 
 {{-- https://www.youtube.com/watch?v=HU-hffAZqYw --}}
 

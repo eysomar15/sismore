@@ -54,7 +54,8 @@
  </div>
 
  <script>
-    
+     
+
     Highcharts.chart('container', {
         chart: {
             plotBackgroundColor: null,
@@ -90,7 +91,9 @@
             data: <?=$data?>
         }]
     });
- 
+
+    
+    
 </script>
 
 
