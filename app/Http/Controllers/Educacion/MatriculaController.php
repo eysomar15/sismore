@@ -490,6 +490,11 @@ class MatriculaController extends Controller
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
        
         return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));
+
+        // $lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel_Provincia(2,'I');    
+
+        // return $lista_total_matricula_Inicial;
+     
     }
     
     public function reporteUgel($anio_id,$matricula_id)
@@ -515,7 +520,13 @@ class MatriculaController extends Controller
 
         $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico
           
-        $fecha_Matricula_texto = '';//Utilitario::fecha_formato_texto_completo($datosMatricula->first()->fechaactualizacion );     
+        $fecha_Matricula_texto = '--'; 
+        
+        if($datosMatricula->first()!=null)
+            $fecha_Matricula_texto = Utilitario::fecha_formato_texto_completo($datosMatricula->first()->fechaactualizacion );    
+        
+        
+
         $titulo_grafico =   $fecha_Matricula_texto;  
 
         return view('educacion.Matricula.ReporteUgel',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
@@ -523,8 +534,12 @@ class MatriculaController extends Controller
     }
 
     public function reporteDistrito($anio_id,$matricula_id)
-    {
-        return view('educacion.Matricula.ReporteDistrito');
+    {        
+        $lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,'I');      
+        //$lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,'I')->where('provincia', 'CORONEL PORTILLO')->all();      
+
+
+        return view('educacion.Matricula.ReporteDistrito',compact('lista_total_matricula_Inicial'));
     }
 
     public function Fechas($anio_id)
@@ -532,7 +547,4 @@ class MatriculaController extends Controller
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anio_id);      
         return response()->json(compact('fechas_matriculas'));
     }
-
-
-    
 }
