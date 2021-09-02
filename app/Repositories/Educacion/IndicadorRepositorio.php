@@ -706,15 +706,15 @@ class IndicadorRepositorio
                     $query['indicador'] = DB::table('viv_datass as v1')
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_agua')
-                        ->get(['sistema_agua', DB::raw('count(sistema_agua) as conteo')]);
+                        ->get(['sistema_agua as name', DB::raw('count(sistema_agua) as y')]);
                     break;
                 case 21:
                     $query['indicador'] = DB::table('viv_datass as v1')
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_cloracion')->get([
-                            'sistema_cloracion as opcion',
-                            DB::raw('count(sistema_cloracion) as conteo')
+                            'sistema_cloracion as name',
+                            DB::raw('count(sistema_cloracion) as y')
                         ]);
                     break;
                 case 22:
@@ -723,8 +723,8 @@ class IndicadorRepositorio
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('servicio_agua_continuo')
                         ->get([
-                            'servicio_agua_continuo as opcion',
-                            DB::raw('count(servicio_agua_continuo) as conteo')
+                            'servicio_agua_continuo as name',
+                            DB::raw('count(servicio_agua_continuo) as y')
                         ]);
                     break;
                 case 23:
@@ -732,8 +732,8 @@ class IndicadorRepositorio
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_disposicion_excretas')
                         ->get([
-                            'sistema_disposicion_excretas as opcion',
-                            DB::raw('count(sistema_disposicion_excretas) as conteo')
+                            'sistema_disposicion_excretas as name',
+                            DB::raw('count(sistema_disposicion_excretas) as y')
                         ]);
                     break;
                 case 24:
@@ -746,8 +746,8 @@ class IndicadorRepositorio
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('realiza_cloracion_agua')
                         ->get([
-                            'realiza_cloracion_agua as opcion',
-                            DB::raw('count(realiza_cloracion_agua) as conteo')
+                            'realiza_cloracion_agua as name',
+                            DB::raw('count(realiza_cloracion_agua) as y')
                         ]);
                     break;
 
@@ -787,15 +787,15 @@ class IndicadorRepositorio
                     $query['indicador'] = DB::table('viv_datass as v1')
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_agua')
-                        ->get(['sistema_agua', DB::raw('count(sistema_agua) as conteo')]);
+                        ->get(['sistema_agua as name', DB::raw('count(sistema_agua) as y')]);
                     break;
                 case 21:
                     $query['indicador'] = DB::table('viv_datass as v1')
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_cloracion')->get([
-                            'sistema_cloracion as opcion',
-                            DB::raw('count(sistema_cloracion) as conteo')
+                            'sistema_cloracion as name',
+                            DB::raw('count(sistema_cloracion) as y')
                         ]);
                     break;
                 case 22:
@@ -804,8 +804,8 @@ class IndicadorRepositorio
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('servicio_agua_continuo')
                         ->get([
-                            'servicio_agua_continuo as opcion',
-                            DB::raw('count(servicio_agua_continuo) as conteo')
+                            'servicio_agua_continuo as name',
+                            DB::raw('count(servicio_agua_continuo) as y')
                         ]);
                     break;
                 case 23:
@@ -813,8 +813,8 @@ class IndicadorRepositorio
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_disposicion_excretas')
                         ->get([
-                            'sistema_disposicion_excretas as opcion',
-                            DB::raw('count(sistema_disposicion_excretas) as conteo')
+                            'sistema_disposicion_excretas as name',
+                            DB::raw('count(sistema_disposicion_excretas) as y')
                         ]);
                     break;
                 case 24:
@@ -827,8 +827,8 @@ class IndicadorRepositorio
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('realiza_cloracion_agua')
                         ->get([
-                            'realiza_cloracion_agua as opcion',
-                            DB::raw('count(realiza_cloracion_agua) as conteo')
+                            'realiza_cloracion_agua as name',
+                            DB::raw('count(realiza_cloracion_agua) as y')
                         ]);
                     break;
 
@@ -857,16 +857,16 @@ class IndicadorRepositorio
             switch ($indicador_id) {
                 case 20:
                     $query['indicador'] = DB::table('viv_datass as v1')->groupBy('sistema_agua')->get([
-                        'sistema_agua as opcion',
-                        DB::raw('count(sistema_agua) as conteo')
+                        'sistema_agua as name',
+                        DB::raw('count(sistema_agua) as y')
                     ]);
                     break;
                 case 21:
                     $query['indicador'] = DB::table('viv_datass as v1')
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('sistema_cloracion')->get([
-                            'sistema_cloracion as opcion',
-                            DB::raw('count(sistema_cloracion) as conteo')
+                            'sistema_cloracion as name',
+                            DB::raw('count(sistema_cloracion) as y')
                         ]);
                     break;
                 case 22:
@@ -874,16 +874,16 @@ class IndicadorRepositorio
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('servicio_agua_continuo')
                         ->get([
-                            'servicio_agua_continuo as opcion',
-                            DB::raw('count(servicio_agua_continuo) as conteo')
+                            'servicio_agua_continuo as name',
+                            DB::raw('count(servicio_agua_continuo) as y')
                         ]);
                     break;
                 case 23:
                     $query['indicador'] = DB::table('viv_datass as v1')
                         ->groupBy('sistema_disposicion_excretas')
                         ->get([
-                            'sistema_disposicion_excretas as opcion',
-                            DB::raw('count(sistema_disposicion_excretas) as conteo')
+                            'sistema_disposicion_excretas as name',
+                            DB::raw('count(sistema_disposicion_excretas) as y')
                         ]);
                     break;
                 case 24:
@@ -897,8 +897,8 @@ class IndicadorRepositorio
                         ->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('realiza_cloracion_agua')
                         ->get([
-                            'realiza_cloracion_agua as opcion',
-                            DB::raw('count(realiza_cloracion_agua) as conteo')
+                            'realiza_cloracion_agua as name',
+                            DB::raw('count(realiza_cloracion_agua) as y')
                         ]);
                     break;
 
