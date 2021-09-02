@@ -94,7 +94,7 @@ var chartSpeed = Highcharts.chart('medidor1', Highcharts.merge(gaugeOptions, {
 var chartSpeed = Highcharts.chart('medidor2', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 50,
+        max: 110,
         title: {
             text: 'Speed 11111'
         }

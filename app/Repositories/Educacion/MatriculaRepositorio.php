@@ -81,7 +81,8 @@ class MatriculaRepositorio
                 ->join('edu_institucioneducativa as inst', 'matDet.institucioneducativa_id', '=', 'inst.id')  
                 ->join('edu_ugel as ugel', 'inst.Ugel_id', '=', 'ugel.id')         
                 ->where('mat.id','=', $matricula_id)
-                ->where('matDet.nivel','!=','E')                
+                ->where('matDet.nivel','!=','E')   
+                ->orderBy('ugel.codigo', 'asc')              
                 ->groupBy('ugel.nombre')
                 ->get([  
                     DB::raw('ugel.nombre'),                         
@@ -111,7 +112,8 @@ class MatriculaRepositorio
                 ->join('edu_institucioneducativa as inst', 'matDet.institucioneducativa_id', '=', 'inst.id')  
                 ->join('edu_ugel as ugel', 'inst.Ugel_id', '=', 'ugel.id')         
                 ->where('mat.id','=', $matricula_id)
-                ->where('matDet.nivel','=',$nivel)             
+                ->where('matDet.nivel','=',$nivel)  
+                ->orderBy('ugel.codigo', 'asc')           
                 ->groupBy('ugel.nombre')                
                 ->get([  
                     DB::raw('ugel.nombre'),                         
@@ -166,14 +168,15 @@ class MatriculaRepositorio
                 ->join('par_centropoblado as cenPo', 'inst.CentroPoblado_id', '=', 'cenPo.id')
                 
                 ->join('par_ubigeo as dist', 'cenPo.ubigeo_id', '=', 'dist.id')
-                ->join('par_ubigeo as prov', 'cenPo.dependencia', '=', 'prov.id')
+                ->join('par_ubigeo as prov', 'dist.dependencia', '=', 'prov.id')
 
                 ->where('mat.id','=', $matricula_id)
-                ->where('matDet.nivel','=',$nivel)             
+                ->where('matDet.nivel','=',$nivel)  
+                ->orderBy('dist.codigo', 'asc')                 
                 ->groupBy('prov.nombre')   
                 ->groupBy('dist.nombre')                
                 ->get([  
-                    DB::raw('prov.nombre as provincia'), 
+                    DB::raw('case when dist.nombre = "YURUA" then "CORONEL PORTILLO" else prov.nombre end as provincia'), 
                     DB::raw('dist.nombre as distrito'),                             
                     DB::raw('sum(           
                                 ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
@@ -213,6 +216,68 @@ class MatriculaRepositorio
                     DB::raw('sum( ifnull(cinco_anios_mujer_ebe,0) ) as cinco_anios_mujer_ebe'),
                     
                 ]);
+
+
+        return $data;
+
+    }
+
+    public static function total_matricula_por_Nivel_Provincia($matricula_id,$nivel)
+    { 
+        $data = DB::table('edu_matricula as mat')           
+                ->join('edu_matricula_detalle as matDet', 'mat.id', '=', 'matDet.matricula_id')
+                ->join('edu_institucioneducativa as inst', 'matDet.institucioneducativa_id', '=', 'inst.id')  
+                ->join('par_centropoblado as cenPo', 'inst.CentroPoblado_id', '=', 'cenPo.id')
+                
+                ->join('par_ubigeo as dist', 'cenPo.ubigeo_id', '=', 'dist.id')
+                ->join('par_ubigeo as prov', 'dist.dependencia', '=', 'prov.id')
+
+                ->where('mat.id','=', $matricula_id)
+                ->where('matDet.nivel','=',$nivel)  
+                ->orderBy('prov.codigo', 'asc')                 
+                ->groupBy('prov.nombre')  
+                 
+                ->get([  
+                    DB::raw('prov.nombre as provincia'),                                              
+                    DB::raw('sum(           
+                                ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
+                                ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
+                                ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
+                                ifnull(cinco_anios_hombre_ebe,0)
+                                ) as hombres'),  
+                    DB::raw('sum(           
+                                ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
+                                ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
+                                ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
+                                ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
+                                ) as mujeres'), 
+
+                    DB::raw('sum( ifnull(cero_nivel_hombre,0) ) as cero_nivel_hombre'),
+                    DB::raw('sum( ifnull(primer_nivel_hombre,0) ) as primer_nivel_hombre'),
+                    DB::raw('sum( ifnull(segundo_nivel_hombre,0) ) as segundo_nivel_hombre'),
+                    DB::raw('sum( ifnull(tercero_nivel_hombre,0) ) as tercero_nivel_hombre'),
+                    DB::raw('sum( ifnull(cuarto_nivel_hombre,0) ) as cuarto_nivel_hombre'),
+                    DB::raw('sum( ifnull(quinto_nivel_hombre,0) ) as quinto_nivel_hombre'),
+                    DB::raw('sum( ifnull(sexto_nivel_hombre,0) ) as sexto_nivel_hombre'),
+
+                    DB::raw('sum( ifnull(tres_anios_hombre_ebe,0) ) as tres_anios_hombre_ebe'),
+                    DB::raw('sum( ifnull(cuatro_anios_hombre_ebe,0) ) as cuatro_anios_hombre_ebe'),
+                    DB::raw('sum( ifnull(cinco_anios_hombre_ebe,0) ) as cinco_anios_hombre_ebe'),
+
+                    DB::raw('sum( ifnull(cero_nivel_mujer,0) ) as cero_nivel_mujer'),
+                    DB::raw('sum( ifnull(primer_nivel_mujer,0) ) as primer_nivel_mujer'),
+                    DB::raw('sum( ifnull(segundo_nivel_mujer,0) ) as segundo_nivel_mujer'),
+                    DB::raw('sum( ifnull(tercero_nivel_mujer,0) ) as tercero_nivel_mujer'),
+                    DB::raw('sum( ifnull(cuarto_nivel_mujer,0) ) as cuarto_nivel_mujer'),
+                    DB::raw('sum( ifnull(quinto_nivel_mujer,0) ) as quinto_nivel_mujer'),
+                    DB::raw('sum( ifnull(sexto_nivel_mujer,0) ) as sexto_nivel_mujer'),
+
+                    DB::raw('sum( ifnull(tres_anios_mujer_ebe,0) ) as tres_anios_mujer_ebe'),
+                    DB::raw('sum( ifnull(cuatro_anios_mujer_ebe,0) ) as cuatro_anios_mujer_ebe'),
+                    DB::raw('sum( ifnull(cinco_anios_mujer_ebe,0) ) as cinco_anios_mujer_ebe'),
+                    
+                ]);
+
 
         return $data;
 

@@ -6,6 +6,7 @@
 
 @section('content') 
 <div class="content">
+    <input type="hidden" id="hoja" value="1">
     
     <div class="row">
         <div class="col-md-12">           
@@ -46,7 +47,7 @@
 
                     <div class="col-md-12">                       
                         <div class="portfolioFilter">
-                            <a href="#" onClick="cargar_resumen_matricula();"  class="current waves-effect waves-light">UGELES</a>
+                            <a href="#" onClick="cargar_resumen_porUgel();"  class="current waves-effect waves-light">UGELES</a>
                             <a href="#" onClick="cargar_matricula_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>                  
                         </div>                        
                     </div>
@@ -74,13 +75,7 @@
 <script src="{{ asset('/') }}assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
 <script src="{{ asset('/') }}assets/js/pages/gallery.init.js"></script>
 
-<!-- App js -->
-{{-- <script src="{{ asset('/') }}assets/js/app.min.js"></script> --}}
-
-
-
 <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
-
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
@@ -96,13 +91,8 @@
             //cargar_resumen_matricula(); 
             // alert($('#anio').val());
             // alert($('#matricula_fechas').val());
-        }); 
+        });
 
-       
-
-        // @foreach ($fechas_matriculas as $item)
-        //     <option value="{{ $item->matricula_id }}"> {{ $item->fechaActualizacion }} </option>
-        // @endforeach
 
         function cargar_fechas_matricula() {
             //alert($('#matricula_fechas').val());
@@ -137,8 +127,20 @@
             cargar_resumen_matricula(); 
         }
 
-        function cargar_resumen_matricula() {
+        function cargar_resumen_matricula() {            
             
+            if($('#hoja').val()==1)
+            {
+                cargar_resumen_porUgel();
+            }
+            else
+            {
+                cargar_matricula_porDistrito();
+            }           
+        }
+
+        function cargar_resumen_porUgel() {            
+            $('#hoja').val(1);
             $.ajax({  
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
@@ -153,7 +155,7 @@
         }
 
         function cargar_matricula_porDistrito() {
-       
+            $('#hoja').val(2);
             $.ajax({  
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
