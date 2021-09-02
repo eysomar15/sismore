@@ -112,6 +112,7 @@
                     $('#v4').html(data.centro_salud);
                     $('#v5').html(data.energia_electrica);
                     $('#v6').html(data.internet);
+                    console.log(data);
                     grafica1(data.indicador);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -144,7 +145,7 @@
                     }
                 },
                 series:[{
-                    name:'Centro Poblados',
+                    name:'Cantidad',
                     colorByPoint:true,
                     data:datos,
                 }],
