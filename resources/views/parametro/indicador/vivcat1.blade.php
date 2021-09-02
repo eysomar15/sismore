@@ -73,26 +73,29 @@
             </div>
         </div>
              
-        {{--<div class="col-xl-6">
+        <div class="col-xl-6">
             <div class="card card-border card-primary">
-                <div class="card-header border-primary bg-transparent pb-0">
+                <!--div class="card-header border-primary bg-transparent pb-0">
                     <h3 class="card-title text-primary">mi grafica xxx</h3>
-                </div>
+                </div-->
                 <div class="card-body">
-                    <canvas id="myChart1" height="300" width="500"></canvas>
-                    <canvas id="myChart2" height="300" width="500"></canvas>
+                    <div id="con1" style="min-width:320px;height:300px;margin:0 auto;" ></div>
+                    <!--div id="con1" style="min-width:320px;height:400px;margin:0 auto;"></div-->
                 </div>
             </div>
-        </div>--}}
+        </div>
+        
     </div><!-- End row -->    
 @endsection
 
 @section('js')
 
     <!-- flot chart -->
-    <!--script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script-->
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
-    <!--script src="{{ asset('/') }}assets/chartjs/chart.js"></script-->
     <script type="text/javascript">
         $(document).ready(function() {
             cargarhistorial();
@@ -179,185 +182,26 @@
                 
             }
         });
-        } 
-        //console.log(myChart1.type);
-        /*var myChart = new Chart($('#prueba'), {
-        type: "bar",
-        data: {
-        labels: ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT"],
-        datasets: [{
-            label: "Quota Eni mensile",
-            backgroundColor: [
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)"
-            ],
-            borderColor: [
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)",
-                "rgba(255, 255, 153, 1)"
-            ],
-            borderWidth: 1,
-            data: [10, 11, 18, 10, 13, 28, 12, 16]
-        }
-        ]
-        },
-        options: {
-            legend: {
-                display: false
+        /*Highcharts.chart('con1',{
+            chart:{
+                type:'pie'
             },
-            scales: {
-                xAxes: [{
-                    ticks:{
-                        maxRotation: 90,
-                        minRotation: 90,
-                        display: "top"
-                    },          
-                }],
-                yAxes: [{
-                    display: false
+            title:{
+                text:'{{$title}}'
+            },
+            series:[{
+                name:'indicador',
+                data:[{
+                    name:labelsx[0],
+                    y:datasx[0],
+                },{
+                    name:labelsx[1],
+                    y:datasx[1],
                 }]
-            },
-            tooltips: {
-                enabled: true
-            },
-            maintainAspectRatio: true,
-            responsive: true
-        }
-        });*/
-        /*var miPrueba=new Chart($('#prueba1'),{
-            type:'doughnut',
-            data:{
-                labels:['SI','NO'],
-                datasets:[{
-                    data:[40,60],
-                    backgroundColor:['rgba(225,99,132,0.2)','rgba(54, 162, 235, 0.2)'],
-                }]
-            },
-            options:{
-                responsive:true,
-                //events:['click'],
-                tooltips:{
-                    mode:'index'
-                },
-                
-            },
-        });*/
-        /*new Chart(document.getElementById("prueba"),{
-            "type":"line",
-            "data":{
-                "labels":["January","February","March","April","May","June","July"],
-                "datasets":[{
-                    "label":"My First Dataset",
-                    "data":[65,59,80,81,56,55,40],
-                    "fill":false,
-                    "borderColor":"rgb(75, 192, 192)",
-                    "lineTension":0.1}]
-                },
-            "options":{}
-        });*/
-        /*var speedData = {
-        labels: ["0s", "10s", "20s", "30s", "40s", "50s", "60s"],
-        datasets: [{
-            label: "Car Speed",
-            data: [0, 59, 75, 20, 20, 55, 40],
-        }]
-        };
-        
-        var chartOptions = {
-            maintainAspectRatio: false,
-                    
-                    scales: {
-                        xAxes: [{                            
-                            stacked: true // this should be set to make the bars stacked
-                        }],
-                        yAxes: [{
-                            stacked: true ,// this also..
-                             ticks:{mirror:true}
-                        }]
-                    },
-                    legend: {
-                        position: 'bottom',
-                        padding: 5,
-                        labels:
-                        {
-                            pointStyle: 'circle',
-                            usePointStyle: true
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Custom Chart Title'
-                    },
+            }],
 
- 
-        };
-            var lineChart = new Chart($('#prueba'), {
-                type: 'line',
-                data: speedData,
-                options: chartOptions
-            });*/
-        /*var myChart = new Chart(document.getElementById("prueba"), {
-                        type: 'line',
-                    data: {
-                                    labels: ["January", "February", "March", "April", "May", "June"],
-                                    datasets: [{
-                                        label: "Variables - Rojo",
-                                        backgroundColor: 'red',
-                                        borderColor: 'red',
-                                     data: [65, 59, 80, 81, 56, 55],
-                                    //    data: datos,
-                                        fill: false,
-                                    }, {
-                                        label: "Fijos - Azul",
-                                        fill: false,
-                                        backgroundColor: 'blue',
-                                        borderColor: 'blue',
-                                        data: [12, 10, 4, 11, 3, 9],
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    title:{
-                                        display:true,
-                                        text:'Chart.js Line Chart'
-                                    },
-                                    tooltips: {
-                                        mode: 'index',
-                                        intersect: false,
-                                    },
-                                    hover: {
-                                        mode: 'nearest',
-                                        intersect: true
-                                    },
-                                    scales: {
-                                        xAxes: [{
-                                            display: true,
-                                            scaleLabel: {
-                                                display: true,
-                                                labelString: 'Month'
-                                            }
-                                        }],
-                                        yAxes: [{
-                                            display: true,
-                                            scaleLabel: {
-                                                display: true,
-                                                labelString: 'Value'
-                                            }
-                                        }]
-                                    }
-                            }
-                    });*/
+        });*/
+        } 
     </script>
 
 @endsection
