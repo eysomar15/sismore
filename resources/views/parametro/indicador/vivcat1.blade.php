@@ -51,36 +51,11 @@
     </div>
     <!-- end row -->
     <div class="row">
+            
         <div class="col-xl-6">
             <div class="card card-border card-primary">
-                <div class="card-header border-primary bg-transparent pb-0">
-                    <h3 class="card-title text-primary">{{$title}}
-                        <!--div class="float-right">
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <button type="button" class="btn btn-primary btn-xs" onclick=" ">Ver detalle</button>
-                                </div>
-                            </div>
-                        </div-->
-                    </h3>
-                </div>
-                <!--div class="card-body">
-                    <canvas id="indicador" data-type="Bar" height="150" ></canvas>
-                </div-->
-                <div class="card-body">
-                    <canvas id="xxx" data-type="Bar" height="150" ></canvas>
-                </div>
-            </div>
-        </div>
-             
-        <div class="col-xl-6">
-            <div class="card card-border card-primary">
-                <!--div class="card-header border-primary bg-transparent pb-0">
-                    <h3 class="card-title text-primary">mi grafica xxx</h3>
-                </div-->
                 <div class="card-body">
                     <div id="con1" style="min-width:320px;height:300px;margin:0 auto;" ></div>
-                    <!--div id="con1" style="min-width:320px;height:400px;margin:0 auto;"></div-->
                 </div>
             </div>
         </div>
@@ -137,70 +112,45 @@
                     $('#v4').html(data.centro_salud);
                     $('#v5').html(data.energia_electrica);
                     $('#v6').html(data.internet);
-                    labelx=[];
-                    datax=[];
-                    data.indicador.forEach((element,i) => {
-                        labelx[i]=element.opcion;
-                        datax[i]=element.conteo;
-                    });
-                    console.log(datax)
-                    grafica1(labelx,datax);
+                    grafica1(data.indicador);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
             });
         }        
-        function grafica1(labelsx,datasx){
-            var myChart1 = new Chart($('#xxx'), {
-            type: 'doughnut',
-            data: {
-                labels:labelsx,
-                datasets: [{
-                    data: datasx,
-                    backgroundColor:['red','blue'] ,//'rgba(54, 162, 235, 0.2)',//'#1097EE',
-                    //borderColor:'rgba(54, 162, 235, 0.2)',// '#1097EE',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                title: {
-                    display: false,
-                    text: 'Sin titulo'
+        function grafica1(datos){
+            Highcharts.chart('con1',{
+                chart:{
+                    type:'pie',
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
                 },
-                legend: {
-                    display: true,
-                    position: 'bottom',
+                title:{
+                    text:'{{$title}}'
                 },
-                tooltips: {
-                    enabled: true,
-                    mode: 'index',
-                    intersect: true,
-                    position: 'average'
+                tooltip:{
+                    pointFormat:'<b>{series.name}:</b>{point.y}',
                 },
-                
-            }
-        });
-        /*Highcharts.chart('con1',{
-            chart:{
-                type:'pie'
-            },
-            title:{
-                text:'{{$title}}'
-            },
-            series:[{
-                name:'indicador',
-                data:[{
-                    name:labelsx[0],
-                    y:datasx[0],
-                },{
-                    name:labelsx[1],
-                    y:datasx[1],
-                }]
-            }],
+                plotOptions:{
+                    pie:{
+                        allowPointSelect:true,
+                        cursor:'pointer',
+                        dataLabels:{
+                            enabled:true,
+                            format:'<b>{point.name}: {point.percentage:.2f}%</b>'
+                        },
+                    }
+                },
+                series:[{
+                    name:'Centro Poblados',
+                    colorByPoint:true,
+                    data:datos,
+                }],
+                credits:false,
 
-        });*/
+            });
         } 
     </script>
 
