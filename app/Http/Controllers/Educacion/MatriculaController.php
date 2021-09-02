@@ -5,17 +5,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Matricula;
 use App\Models\Educacion\MatriculaDetalle;
-use App\Models\Educacion\MatriculaEBE;
-use App\Models\Educacion\MatriculaInicial;
-use App\Models\Educacion\MatriculaPrimaria;
-use App\Models\Educacion\MatriculaSecundaria;
 use App\Models\Parametro\Anio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\InstitucionEducativaRepositorio;
 use App\Repositories\Educacion\MatriculaRepositorio;
+use App\Utilities\Utilitario;
+
 use Exception;
 
 class MatriculaController extends Controller
@@ -491,22 +488,17 @@ class MatriculaController extends Controller
         $anios = Anio::orderBy('anio', 'desc')->get();
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
-
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($fechas_matriculas->first()->matricula_id);    
        
-        return view('educacion.Matricula.Principal',compact('lista_total_matricula_EBR','matricula','anios','fechas_matriculas'));
+        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));
     }
     
-    public function reporte($anio_id)
+    public function reporteUgel($anio_id,$matricula_id)
     {
-        $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
-          
-        
-
-        if($anio_id==6)        
-            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);                
-        else        
-            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR(0);       
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id);
+        $lista_total_matricula_Secundaria = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id,'S');
+        $lista_total_matricula_Primaria = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id,'P');
+        $lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id,'I');
+        $datosMatricula = MatriculaRepositorio::datos_matricula($matricula_id);
        
         $puntos = [];
         
@@ -516,44 +508,31 @@ class MatriculaController extends Controller
             $total = $total  + $lista->hombres  + $lista->mujeres;
         }
 
-        foreach ($lista_total_matricula_EBR as $key => $lista) {
+        //->sortByDesc('hombres') solo para dar una variacion a los colores del grafico
+        foreach ($lista_total_matricula_EBR->sortByDesc('hombres') as $key => $lista) {
             $puntos[] = ['name'=>$lista->nombre, 'y'=>floatval(($lista->hombres  + $lista->mujeres)*100/$total)];
         }
 
-        $contenedor = 'resumen_por_ugel';
-        $titulo_grafico = 'MATRICULAS SEGUN UGEL';
+        $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico
+          
+        $fecha_Matricula_texto = '';//Utilitario::fecha_formato_texto_completo($datosMatricula->first()->fechaactualizacion );     
+        $titulo_grafico =   $fecha_Matricula_texto;  
 
-        return view('educacion.Matricula.Reporte',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','contenedor','titulo_grafico'));
+        return view('educacion.Matricula.ReporteUgel',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
+                    'lista_total_matricula_Primaria','lista_total_matricula_Inicial','contenedor','titulo_grafico','fecha_Matricula_texto'));
     }
 
-    public function prueba2($anio)
+    public function reporteDistrito($anio_id,$matricula_id)
     {
-        $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
-        $anios = Anio::orderBy('anio', 'desc')->get();
-      
-        $nombre = '';
-         if($anio==6)
-         {
-            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
-            $nombre = 'cuadro b';
-         }            
-         else
-         {
-            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula->id);
-            $nombre = 'cuadro a';
-         }
-            
-
-        $diaActual = \Carbon\Carbon::now();
-
-        $puntos = [];
-
-        foreach ($lista_total_matricula_EBR as $key => $lista) {
-            $puntos[] = ['name'=>$nombre, 'y'=>floatval(25)];
-        }
-
-        $contenedor = 'container223';
-
-        return view('educacion.Matricula.Detalles',["data"=> json_encode($puntos)],compact('diaActual','lista_total_matricula_EBR','contenedor'));
+        return view('educacion.Matricula.ReporteDistrito');
     }
+
+    public function Fechas($anio_id)
+    {
+        $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anio_id);      
+        return response()->json(compact('fechas_matriculas'));
+    }
+
+
+    
 }

@@ -69,6 +69,8 @@ class HomeController extends Controller
     { 
         $instituciones_activas =0;
         $instituciones_inactivas =0;
+        $instituciones_total =0;
+
         $titulados_inicial = 0;
         $titulados_primaria = 0;
         $titulados_secundaria = 0;
@@ -86,6 +88,8 @@ class HomeController extends Controller
         {
             $instituciones_activas  = $item->instituciones_activas;
             $instituciones_inactivas  = $item->instituciones_inactivas;
+
+            $instituciones_total = $instituciones_activas + $instituciones_inactivas;
             
             $titulados_inicial = $item->titulados_inicial;
             $titulados_primaria = $item->titulados_primaria;
@@ -101,9 +105,11 @@ class HomeController extends Controller
             $localesEducativos = $item->locales_tieneInternet + $item->locales_no_tieneInternet;
             $porcentajeLocales_tieneInternet = round(($locales_tieneInternet*100/$localesEducativos),2);
         
-        }       
+        }      
+        
+        $par_medidor1_max =  $instituciones_total;
          
-        return view('home',compact('sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
+        return view('home',compact('par_medidor1_max','sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
                     'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas',
                     'localesEducativos','locales_tieneInternet','porcentajeLocales_tieneInternet'));
     }

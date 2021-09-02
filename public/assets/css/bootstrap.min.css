@@ -101,11 +101,17 @@
   text-align: right;
  }
 
+ .columna_centro {
+  text-align: center;
+ }
+
  .columna_derecha_total {
   text-align: right;
   font-weight: bold;
   color: #4d4a4b;
  }
+
+ 
 
  p {
   margin-top: 0;

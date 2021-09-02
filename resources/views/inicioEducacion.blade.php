@@ -1,4 +1,25 @@
 
+@section('css')
+
+
+<script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
+
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
+
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script> 
+
+@endsection 
+
+<div>
+
+    <div id="container-speed" class="chart-container"></div>
+     
+</div>
+
 <div class="content">
     <div class="container-fluid">
      <!--Widget-4 -->
@@ -104,8 +125,30 @@
                 <!-- end card-box-->
             </div>
 
+            <div class="col-md-6 col-xl-6">                
+                    <div id="medidor1">       
+                        @include('graficos.Medidor')
+                    </div> 
+            </div>
+
+            <div class="col-md-6 col-xl-6">                
+                <div id="medidor2">       
+                    @include('graficos.Medidor')
+                </div> 
+        </div>
+
         </div>
         <!-- end row -->
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
     
