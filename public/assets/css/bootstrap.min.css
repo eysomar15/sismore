@@ -108,18 +108,18 @@
  .columna_derecha_total {
   text-align: right;
   font-weight: bold;
-  color: #4d4a4b;
+  color: #5c595a;
  }
 
  .titulo_tabla {
   text-align: center;
-  border: 1px solid rgb(123, 140, 236);
+  border: 1px solid rgb(214, 213, 213);
   border-collapse: collapse;
   padding: 0.2em;
 }
 
 .fila_tabla {
- border: 1px solid rgb(195, 202, 247);
+ border: 1px solid rgb(226, 224, 224);
  border-collapse: collapse;
  padding: 0.2em;
 }
