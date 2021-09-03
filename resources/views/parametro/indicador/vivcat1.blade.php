@@ -51,11 +51,36 @@
     </div>
     <!-- end row -->
     <div class="row">
-            
-        <div class="col-xl-6">
+        <div class="col-md-6">
+            <div class="card card-border">
+                <div class="card-header bg-transparent pb-0">
+                    <h3 class="card-title">{{$title}}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Cantidad</th>
+                                            <th>Porcentaje</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id='vistax1'>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
             <div class="card card-border card-primary">
                 <div class="card-body">
-                    <div id="con1" style="min-width:320px;height:300px;margin:0 auto;" ></div>
+                    <div id="con1" style="min-width:400px;height:300px;margin:0 auto;" ></div>
                 </div>
             </div>
         </div>
@@ -112,7 +137,15 @@
                     $('#v4').html(data.centro_salud);
                     $('#v5').html(data.energia_electrica);
                     $('#v6').html(data.internet);
-                    console.log(data);
+                    vista='';
+                    total=0;
+                    data.indicador.forEach(element => {total+=element.y});
+                    data.indicador.forEach(element => {
+                        por=element.y*100/total;
+                        vista+='<tr><td>'+element.name+'</td><td>'+element.y+'</td><td>'+por.toFixed(2)+'</td></tr>';
+                    });
+                    vista+='<tr><td>Total</td><td>'+total+'</td><td>100</td></tr>';
+                    $('#vistax1').html(vista);
                     grafica1(data.indicador);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -129,7 +162,7 @@
                     plotShadow: false,
                 },
                 title:{
-                    text:'{{$title}}'
+                    text:''
                 },
                 tooltip:{
                     pointFormat:'<b>{series.name}:</b>{point.y}',
