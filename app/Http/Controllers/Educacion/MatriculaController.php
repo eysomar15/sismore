@@ -485,12 +485,11 @@ class MatriculaController extends Controller
     public function principal()
     {
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
-        $anios = Anio::orderBy('anio', 'desc')->get();
+        $anios =  MatriculaRepositorio ::matriculas_anio( );
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
        
-        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));
-     
+        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));     
     }
     
     public function reporteUgel($anio_id,$matricula_id)

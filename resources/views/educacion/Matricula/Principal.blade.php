@@ -95,8 +95,7 @@
 
 
         function cargar_fechas_matricula() {
-            //alert($('#matricula_fechas').val());
-            
+           
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('input[name=_token]').val()
@@ -111,32 +110,26 @@
                     var options = null;
                     
                     $.each(data.fechas_matriculas, function(index, value) {
-                        options += "<option value='" + value.matricula_id + "'>" + value.fechaActualizacion + "</option>"
+                        options += "<option value='" + value.matricula_id + "'>" + value.fechaActualizacion + "</option>";                       
                     });
                     
-                    $("#matricula_fechas").append(options);
+                    $("#matricula_fechas").append(options);                  
+                    cargar_resumen_matricula(); 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                    
                 },
             });
-          
-           
-            //alert($('#matricula_fechas').val());
-            cargar_resumen_matricula(); 
+            
         }
 
-        function cargar_resumen_matricula() {            
-            
-            if($('#hoja').val()==1)
-            {
-                cargar_resumen_porUgel();
-            }
-            else
-            {
-                cargar_matricula_porDistrito();
-            }           
+        function cargar_resumen_matricula() {   
+
+            if($('#hoja').val()==1)       
+                cargar_resumen_porUgel();          
+            else         
+                cargar_matricula_porDistrito();                   
         }
 
         function cargar_resumen_porUgel() {            

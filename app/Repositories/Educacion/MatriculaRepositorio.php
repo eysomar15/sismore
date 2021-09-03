@@ -59,6 +59,21 @@ class MatriculaRepositorio
         return $data;
     }
 
+    public static function matriculas_anio()
+    { 
+        $data = DB::table('par_importacion as imp')           
+                ->join('edu_matricula as mat', 'imp.id', '=', 'mat.importacion_id')
+                ->join('par_anio as vanio', 'mat.anio_id', '=', 'vanio.id')        
+                ->where('imp.estado','=', 'PR')
+                ->where('mat.estado','=', 'PR')      
+                ->orderBy('vanio.anio', 'desc')
+                ->select('vanio.id','vanio.anio')   
+                ->distinct()  
+                ->get();
+
+        return $data;
+    }
+
     public static function fechas_matriculas_anio($anio_id)
     { 
         $data = DB::table('par_importacion as imp')           
@@ -68,7 +83,7 @@ class MatriculaRepositorio
                 ->where('imp.estado','=', 'PR')
                 ->where('mat.estado','=', 'PR')      
                 ->orderBy('imp.fechaActualizacion', 'desc')
-                ->select('mat.id as matricula_id','imp.fechaActualizacion')     
+                ->select('mat.id as matricula_id','imp.fechaActualizacion','vanio.id','vanio.anio')     
                 ->get();
 
         return $data;
