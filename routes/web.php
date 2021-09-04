@@ -96,7 +96,7 @@ Route::post('/INDICADOR/Derivados', [IndicadorController::class, 'indicadorDeriv
 Route::post('/INDICADOR/Derivados2', [IndicadorController::class, 'indicadorDerivados2'])->name('ind.ajax.derivados2');
 Route::post('/INDICADOR/Provincia', [IndicadorController::class, 'indicadorProvincia'])->name('ind.ajax.provincia');
 Route::post('/INDICADOR/Distritos/{provincia}', [IndicadorController::class, 'cargardistritos'])->name('ind.ajax.cargardistritos');
-Route::post('/INDICADOR/PNSR1/{provincia}/{distrito}/{indicador_id}', [IndicadorController::class, 'indicadorvivpnsrcab'])->name('ind.ajax.pnsr1');
+Route::post('/INDICADOR/PNSR1/{provincia}/{distrito}/{indicador_id}/{fecha}', [IndicadorController::class, 'indicadorvivpnsrcab'])->name('ind.ajax.pnsr1');
 
 Route::get('/INDICADOR/SINRUTA', function () {
     return 'Ruta no definida';

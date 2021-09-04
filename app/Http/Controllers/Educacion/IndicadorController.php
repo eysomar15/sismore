@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Educacion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
+use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Clasificador;
 use App\Models\Educacion\Indicador;
 use App\Models\Educacion\Materia;
 use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\TipoGestion;
 use App\Models\Ubigeo;
+use App\Repositories\Educacion\ImportacionRepositorio;
 //use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\IndicadorRepositorio;
 use Illuminate\Http\Request;
@@ -265,8 +267,14 @@ class IndicadorController extends Controller
                 $title = $indicador->nombre;
 
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $ingreso=DB::table('par_importacion as v1')           
+                                ->join('viv_datass as v2', 'v2.importacion_id', '=', 'v1.id')
+                                ->where('v1.estado','=', 'PR')
+                                ->distinct()
+                                ->select('v1.*')     
+                                ->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id','ingreso'));
             case 21: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -293,7 +301,7 @@ class IndicadorController extends Controller
             case 24: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                
+
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id'));
@@ -965,9 +973,9 @@ class IndicadorController extends Controller
         </div>';
         return $card;
     }
-    public function indicadorvivpnsrcab($provincia,$distrito,$indicador_id)
+    public function indicadorvivpnsrcab($provincia,$distrito,$indicador_id,$fecha)
     {
-        $cp=IndicadorRepositorio::cabecera2($provincia,$distrito,$indicador_id);
+        $cp=IndicadorRepositorio::cabecera2($provincia,$distrito,$indicador_id,$fecha);
         return response()->json($cp);
     }    
 }
