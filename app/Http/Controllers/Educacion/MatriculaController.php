@@ -485,61 +485,88 @@ class MatriculaController extends Controller
     public function principal()
     {
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
-        $anios = Anio::orderBy('anio', 'desc')->get();
+        $anios =  MatriculaRepositorio ::matriculas_anio( );
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
        
-        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));
-
-        // $lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel_Provincia(2,'I');    
-
-        // return $lista_total_matricula_Inicial;
-     
+        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));     
     }
     
     public function reporteUgel($anio_id,$matricula_id)
     {
         $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id);
-        $lista_total_matricula_Secundaria = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id,'S');
-        $lista_total_matricula_Primaria = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id,'P');
-        $lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id,'I');
-        $datosMatricula = MatriculaRepositorio::datos_matricula($matricula_id);
-       
-        $puntos = [];
-        
+
+        $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id);               
+        $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
+        $lista_total_matricula_Primaria = $lista_matricula->where('nivel', 'P')->all();  
+        $lista_total_matricula_Secundaria = $lista_matricula->where('nivel', 'S')->all();
+
+        $puntos = [];        
         $total = 0;
 
         foreach ($lista_total_matricula_EBR as $key => $lista) {
             $total = $total  + $lista->hombres  + $lista->mujeres;
         }
-
         //->sortByDesc('hombres') solo para dar una variacion a los colores del grafico
         foreach ($lista_total_matricula_EBR->sortByDesc('hombres') as $key => $lista) {
             $puntos[] = ['name'=>$lista->nombre, 'y'=>floatval(($lista->hombres  + $lista->mujeres)*100/$total)];
         }
 
-        $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico
-          
-        $fecha_Matricula_texto = '--'; 
-        
-        if($datosMatricula->first()!=null)
-            $fecha_Matricula_texto = Utilitario::fecha_formato_texto_completo($datosMatricula->first()->fechaactualizacion );    
-        
-        
-
-        $titulo_grafico =   $fecha_Matricula_texto;  
+        $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico          
+        $fecha_Matricula_texto = $this->fecha_texto($matricula_id);        
+        $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
 
         return view('educacion.Matricula.ReporteUgel',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
                     'lista_total_matricula_Primaria','lista_total_matricula_Inicial','contenedor','titulo_grafico','fecha_Matricula_texto'));
     }
 
     public function reporteDistrito($anio_id,$matricula_id)
-    {        
-        $lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,'I');      
-        //$lista_total_matricula_Inicial = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,'I')->where('provincia', 'CORONEL PORTILLO')->all();      
+    {     
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR_Provincia($matricula_id);
+
+        $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id);    
+        $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
+        $lista_total_matricula_Primaria = $lista_matricula->where('nivel', 'P')->all();  
+        $lista_total_matricula_Secundaria = $lista_matricula->where('nivel', 'S')->all();       
+
+        // cabeceras y/o totales en las tablas
+        $lista_total_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Provincia($matricula_id);
+        $lista_matricula_Inicial_cabecera =  $lista_total_matricula->where('nivel', 'I')->all();  
+        $lista_matricula_Primaria_cabecera =  $lista_total_matricula->where('nivel', 'P')->all();
+        $lista_matricula_Secundaria_cabecera =  $lista_total_matricula->where('nivel', 'S')->all();
 
 
-        return view('educacion.Matricula.ReporteDistrito',compact('lista_total_matricula_Inicial'));
+
+
+
+        $puntos = [];
+        $total = 0;
+        foreach ($lista_total_matricula_EBR as $key => $lista) {
+            $total = $total  + $lista->hombres  + $lista->mujeres;
+        }
+        //->sortByDesc('hombres') solo para dar una variacion a los colores del grafico
+        foreach ($lista_total_matricula_EBR->sortByDesc('hombres') as $key => $lista) {
+            $puntos[] = ['name'=>$lista->provincia, 'y'=>floatval(($lista->hombres  + $lista->mujeres)*100/$total)];
+        }
+
+        $fecha_Matricula_texto = $this->fecha_texto($matricula_id);
+        $contenedor = 'resumen_por_distrito';
+        $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
+
+        return view('educacion.Matricula.ReporteDistrito',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Inicial','lista_total_matricula_Primaria',
+        'lista_total_matricula_Secundaria','fecha_Matricula_texto','lista_matricula_Inicial_cabecera','lista_matricula_Primaria_cabecera',
+        'lista_matricula_Secundaria_cabecera','contenedor','titulo_grafico'));
+    }
+
+    public function fecha_texto($matricula_id)
+    {
+        $fecha_Matricula_texto = '--'; 
+        $datosMatricula = MatriculaRepositorio::datos_matricula($matricula_id);
+
+        if($datosMatricula->first()!=null)
+            $fecha_Matricula_texto = Utilitario::fecha_formato_texto_completo($datosMatricula->first()->fechaactualizacion ); 
+            
+        return $fecha_Matricula_texto;
     }
 
     public function Fechas($anio_id)
