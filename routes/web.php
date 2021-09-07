@@ -50,6 +50,8 @@ Route::get('/CuadroAsigPersonal/ListaImportada_DataTable/{importacion_id}', [Cua
 Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}', [CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
 Route::post('/CuadroAsigPersonal/Aprobar/procesar/{importacion_id}', [CuadroAsigPersonalController::class, 'procesar'])->name('CuadroAsigPersonal.procesar');
 
+Route::get('/CuadroAsigPersonal/Docentes', [CuadroAsigPersonalController::class, 'Docentes'])->name('Docentes.principal');
+
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');
 Route::get('/Censo/ListaImportada/{importacion_id}', [CensoController::class, 'ListaImportada'])->name('Censo.Censo_Lista');
