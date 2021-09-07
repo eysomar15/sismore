@@ -161,12 +161,11 @@ class CensoController extends Controller
     public function procesar($importacion_id)
     {
         $importacion  = Importacion::find($importacion_id);
-
-        $importacion->estado = 'PR';
-        
+        $importacion->usuarioId_Aprueba = auth()->user()->id; 
+        $importacion->estado = 'PR';        
         $importacion->save();
 
-        $Censo = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first();
+        $Censo = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first();        
         $Censo->estado = 'PR';
         $Censo->save();
 

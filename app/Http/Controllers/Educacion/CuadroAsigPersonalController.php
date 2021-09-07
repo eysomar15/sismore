@@ -151,7 +151,12 @@ class CuadroAsigPersonalController extends Controller
 
     public function procesar($importacion_id)
     {
-        $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?)', [$importacion_id]);
+        $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?,?)', [$importacion_id,auth()->user()->id]);
+        return view('correcto');
+    }
+
+    public function Docentes()
+    {
         return view('correcto');
     }
     

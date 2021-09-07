@@ -148,82 +148,90 @@ class MatriculaController extends Controller
         
          // FIN VALIDACION DE LOS FORMATOS DE LOS 04 NIVELES
 
-        $creacionExitosa = 1;
+        $existeMismaFecha = ImportacionRepositorio :: Importacion_PE($request['fechaActualizacion'],8);
 
-        try{
-            $importacion = Importacion::Create([
-                'fuenteImportacion_id'=>8, // valor predeterminado
-                'usuarioId_Crea'=> auth()->user()->id,
-                'usuarioId_Aprueba'=>null,
-                'fechaActualizacion'=>$request['fechaActualizacion'],
-                'comentario'=>$request['comentario'],
-                'estado'=>'PE'
-              ]); 
-
-            $Matricula = Matricula::Create([
-                'importacion_id'=>$importacion->id, // valor predeterminado
-                'anio_id'=> $request['anio'],
-                'estado'=>'PE'
-              ]); 
-           
-        }catch (Exception $e) {
-            $creacionExitosa = 0;
-        }
-        
-        $mensajeNivel = "";
-
-        if($creacionExitosa==1)
+        if( $existeMismaFecha != null)
         {
-            $creacionExitosa = $this->guardar_inicial($arrayInicial,$Matricula->id);
+            $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";          
+            return view('Educacion.Matricula.Importar',compact('mensaje','anios'));            
+        }
 
+        else
+        {
+            $creacionExitosa = 1;
+
+            try{
+                $importacion = Importacion::Create([
+                    'fuenteImportacion_id'=>8, // valor predeterminado
+                    'usuarioId_Crea'=> auth()->user()->id,
+                    'usuarioId_Aprueba'=>null,
+                    'fechaActualizacion'=>$request['fechaActualizacion'],
+                    'comentario'=>$request['comentario'],
+                    'estado'=>'PE'
+                  ]); 
+    
+                $Matricula = Matricula::Create([
+                    'importacion_id'=>$importacion->id, // valor predeterminado
+                    'anio_id'=> $request['anio'],
+                    'estado'=>'PE'
+                  ]); 
+               
+            }catch (Exception $e) {
+                $creacionExitosa = 0;
+            }
+            
+            $mensajeNivel = "";
+    
             if($creacionExitosa==1)
             {
-                $creacionExitosa = $this->guardar_primaria($arrayPrimaria,$Matricula->id);
+                $creacionExitosa = $this->guardar_inicial($arrayInicial,$Matricula->id);
+    
                 if($creacionExitosa==1)
                 {
-                    $creacionExitosa = $this->guardar_secundaria($arraySecundaria,$Matricula->id);
+                    $creacionExitosa = $this->guardar_primaria($arrayPrimaria,$Matricula->id);
                     if($creacionExitosa==1)
                     {
-                        $creacionExitosa = $this->guardar_EBE($arrayEBE,$Matricula->id);
-                        if($creacionExitosa==0)
+                        $creacionExitosa = $this->guardar_secundaria($arraySecundaria,$Matricula->id);
+                        if($creacionExitosa==1)
                         {
-                            $mensajeNivel = "EBE";  
+                            $creacionExitosa = $this->guardar_EBE($arrayEBE,$Matricula->id);
+                            if($creacionExitosa==0)
+                            {
+                                $mensajeNivel = "EBE";  
+                            }
+                        }
+                        else
+                        {
+                            $mensajeNivel = "Nivel SECUNDARIA";  
                         }
                     }
                     else
                     {
-                        $mensajeNivel = "Nivel SECUNDARIA";  
+                        $mensajeNivel = "Nivel PRIMARIA";  
                     }
                 }
                 else
-                {
-                    $mensajeNivel = "Nivel PRIMARIA";  
+                { 
+                    $mensajeNivel ="Nivel INICIAL";
                 }
             }
-            else
-            { 
-                $mensajeNivel ="Nivel INICIAL";
+    
+            if($creacionExitosa==0)
+            {
+                $importacion->estado = 'EL';
+                $importacion->save();
+    
+                $Matricula->estado = 'EL';
+                $Matricula->save();
+    
+                $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
+                return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
             }
+    
+            return redirect()->route('Matricula.Matricula_Lista',$importacion->id);
+
         }
 
-        if($creacionExitosa==0)
-        {
-            $importacion->estado = 'EL';
-            $importacion->save();
-
-            $Matricula->estado = 'EL';
-            $Matricula->save();
-
-            $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
-            return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
-        }
-
-        //$mensaje = "CREACION EXITOSA";
-        //return view('Educacion.Matricula.Importar',compact('mensaje','anios'));;
-
-        //return redirect()->route('Educacion.Matricula_Lista',$importacion->id);
-
-        return redirect()->route('Matricula.Matricula_Lista',$importacion->id);
     }   
 
     public function guardar_inicial($array,$matricula_id)
@@ -471,8 +479,11 @@ class MatriculaController extends Controller
     {
         $importacion  = Importacion::find($importacion_id);
 
-        $importacion->estado = 'PR';       
+        $importacion->estado = 'PR';    
+        $importacion->usuarioId_Aprueba = auth()->user()->id;    
         $importacion->save();
+
+        $this->elimina_mismaFecha($importacion->fechaActualizacion,$importacion->fuenteImportacion_id,$importacion_id);
 
         $matricula = MatriculaRepositorio :: matricula_porImportacion($importacion_id)->first();
         $matricula->estado = 'PR';
@@ -480,6 +491,19 @@ class MatriculaController extends Controller
 
         return view('correcto');
     }
+
+
+    public function elimina_mismaFecha($fechaActualizacion,$fuenteImportacion_id,$importacion_id)
+    {
+        $importacion  = ImportacionRepositorio::Importacion_mismaFecha($fechaActualizacion,$fuenteImportacion_id,$importacion_id);
+
+        if($importacion!=null)
+        {
+            $importacion->estado = 'EL';
+            $importacion->save();
+        }
+        
+    }    
 
     //**************************************************************************************** */
     public function principal()

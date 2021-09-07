@@ -33,4 +33,27 @@ class ImportacionRepositorio
 
         return $entidad;
     }
+
+    public static function Importacion_mismaFecha($fechaActualizacion,$fuenteImportacion_id,$importacion_id)
+    { 
+        $entidad = Importacion::select('par_importacion.id','par_importacion.fuenteImportacion_id','par_importacion.estado')
+                ->where("par_importacion.fechaActualizacion", "=", $fechaActualizacion)
+                ->where("par_importacion.fuenteImportacion_id", "=", $fuenteImportacion_id)
+                ->where("par_importacion.estado", "!=", 'EL')
+                ->where("par_importacion.id", "!=", $importacion_id)
+                ->first();
+
+        return $entidad;
+    }
+
+    public static function Importacion_PE($fechaActualizacion,$fuenteImportacion_id)
+    { 
+        $entidad = Importacion::select('par_importacion.id','par_importacion.fuenteImportacion_id','par_importacion.estado')
+                ->where("par_importacion.fechaActualizacion", "=", $fechaActualizacion)
+                ->where("par_importacion.fuenteImportacion_id", "=", $fuenteImportacion_id)
+                ->where("par_importacion.estado", "=", 'PE')
+                ->first();
+
+        return $entidad;
+    }
 }

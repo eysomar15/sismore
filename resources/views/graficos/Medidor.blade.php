@@ -7,7 +7,7 @@
     title: null,
 
     pane: {
-        center: ['50%', '85%'],
+        center: ['50%', '65%'],
         size: '100%',
         startAngle: -90,
         endAngle: 90,
@@ -94,7 +94,7 @@ var chartSpeed = Highcharts.chart('medidor1', Highcharts.merge(gaugeOptions, {
 var chartSpeed = Highcharts.chart('medidor2', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 110,
+        max: 90,
         title: {
             text: 'Speed 11111'
         }
