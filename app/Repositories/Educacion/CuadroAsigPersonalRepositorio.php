@@ -3,6 +3,7 @@
 namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\CuadroAsigPersonal;
+use Illuminate\Support\Facades\DB;
 
 class CuadroAsigPersonalRepositorio
 {
@@ -21,5 +22,51 @@ class CuadroAsigPersonalRepositorio
         ->get();
 
         return $Lista;
-    }   
+    } 
+    
+
+    public static function docentes_ugel()
+    {         
+        $data = DB::table("edu_plaza as pla")     
+                ->join('edu_ugel as ugel', 'pla.ugel_id', '=', 'ugel.id')
+                ->join('edu_nivelmodalidad as nivMod', 'pla.nivelModalidad_id', '=', 'nivMod.id')
+                ->join('edu_tipotrabajador as subTipTra', 'pla.tipoTrabajador_id', '=', 'subTipTra.id')
+                ->join('edu_tipotrabajador as tipTra', 'subTipTra.dependencia', '=', 'tipTra.id')
+                ->where("tipTra.id", "=", 1)//solo docentes
+                ->orderBy('ugel.codigo', 'asc')
+                ->groupBy("ugel.codigo") 
+                ->groupBy("ugel.nombre")               
+                        ->get([                       
+                            DB::raw('ugel.codigo'), 
+                            DB::raw('ugel.nombre as ugel'),              
+                            DB::raw('count(*) as cantidad')        
+                        ])
+                ;
+
+        return $data;
+    }
+
+    public static function docentes_ugel_nivel()
+    {         
+        $data = DB::table("edu_plaza as pla")     
+                ->join('edu_ugel as ugel', 'pla.ugel_id', '=', 'ugel.id')
+                ->join('edu_nivelmodalidad as nivMod', 'pla.nivelModalidad_id', '=', 'nivMod.id')
+                ->join('edu_tipotrabajador as subTipTra', 'pla.tipoTrabajador_id', '=', 'subTipTra.id')
+                ->join('edu_tipotrabajador as tipTra', 'subTipTra.dependencia', '=', 'tipTra.id')
+                ->where("tipTra.id", "=", 1)//solo docentes
+                ->orderBy('ugel.codigo', 'asc')
+                ->groupBy("ugel.codigo") 
+                ->groupBy("ugel.nombre")     
+                ->groupBy("nivMod.nombre")          
+                        ->get([                       
+                            DB::raw('ugel.codigo'), 
+                            DB::raw('ugel.nombre as ugel'), 
+                            DB::raw('nivMod.nombre as nivel'),               
+                            DB::raw('count(*) as cantidad')        
+                        ])
+                ;
+
+        return $data;
+    }
+   
 }

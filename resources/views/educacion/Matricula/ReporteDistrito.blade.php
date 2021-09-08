@@ -72,7 +72,7 @@
      <table style="width: 100%;  "  border="1px solid #000"  >
          <thead>
              <tr >
-                 <th  colspan="1" rowspan="4" class="titulo_tabla" >DISTRITO</th>
+                 <th colspan="1" rowspan="4" class="titulo_tabla" >DISTRITO</th>
                  <th colspan="3" class="titulo_tabla">TOTAL</th>
                  <th colspan="12" class="titulo_tabla">MATRICULA POR EDAD Y SEXO</th>
              </tr>

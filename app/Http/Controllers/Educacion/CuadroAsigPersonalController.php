@@ -155,9 +155,45 @@ class CuadroAsigPersonalController extends Controller
         return view('correcto');
     }
 
-    public function Docentes()
+    
+    //**************************************************************************************** */
+    public function Principal()
     {
-        return view('correcto');
+        
+        return view('educacion.CuadroAsigPersonal.Principal');
+
+    }
+
+    public function reporteUgel()
+    {
+        $lista_principal = CuadroAsigPersonalRepositorio::docentes_ugel();
+
+        $lista_ugel_nivel = CuadroAsigPersonalRepositorio::docentes_ugel_nivel();
+
+        
+        return view('educacion.CuadroAsigPersonal.ReporteUgel',compact('lista_principal','lista_ugel_nivel'));
+
+        // $puntos = [];        
+        // $total = 0;
+
+        // foreach ($lista_total_matricula_EBR as $key => $lista) {
+        //     $total = $total  + $lista->hombres  + $lista->mujeres;
+        // }
+        // //->sortByDesc('hombres') solo para dar una variacion a los colores del grafico
+        // foreach ($lista_total_matricula_EBR->sortByDesc('hombres') as $key => $lista) {
+        //     $puntos[] = ['name'=>$lista->nombre, 'y'=>floatval(($lista->hombres  + $lista->mujeres)*100/$total)];
+        // }
+
+        // $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico          
+        // $fecha_Matricula_texto = $this->fecha_texto($matricula_id);        
+        // $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
+
+        // return view('educacion.Matricula.ReporteUgel',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
+        //             'lista_total_matricula_Primaria','lista_total_matricula_Inicial','contenedor','titulo_grafico','fecha_Matricula_texto'));
+    }
+
+    public function reporteDistrito()
+    {
     }
     
 }

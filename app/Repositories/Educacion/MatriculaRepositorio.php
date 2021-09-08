@@ -366,7 +366,9 @@ class MatriculaRepositorio
         return $data;
 
     }
-   
+
+
+    
     /**pruebassssss */
     public static function total_matricula_por_Nivel_Provincia2($matricula_id)
     {
