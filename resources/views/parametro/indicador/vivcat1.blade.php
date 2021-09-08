@@ -21,8 +21,8 @@
                 </div-->
                 <div class="card-body">
                     <div class="form-group row">
-                        <label class="col-md-2 col-form-label">Provincia</label>
-                        <div class="col-md-4">
+                        <label class="col-md-1 col-form-label">Provincia</label>
+                        <div class="col-md-3">
                             <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos();cargarhistorial();">
                                 <option value="0">TODOS</option>
                                 @foreach ($provincias as $prov)
@@ -30,10 +30,18 @@
                                 @endforeach
                             </select>
                         </div>
-                        <label class="col-md-2 col-form-label">Distrito</label>
-                        <div class="col-md-4">
+                        <label class="col-md-1 col-form-label">Distrito</label>
+                        <div class="col-md-3">
                             <select id="distrito" name="distrito" class="form-control" onchange="cargarhistorial();">
                                 <option value="0">TODOS</option>
+                            </select>
+                        </div>
+                        <label class="col-md-1 col-form-label">Fecha</label>
+                        <div class="col-md-3">
+                            <select id="fecha" name="fecha" class="form-control" onchange="cargarhistorial();">
+                                @foreach ($ingresos as $item)
+                                <option value="{{$item->id}}">{{date('d-m-Y',strtotime($item->fechaActualizacion))}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -127,7 +135,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },
-                url: "{{ url('/') }}/INDICADOR/PNSR1/" + $('#provincia').val()+"/"+$('#distrito').val()+"/{{$indicador_id}}",
+                url: "{{ url('/') }}/INDICADOR/PNSR1/" + $('#provincia').val()+"/"+$('#distrito').val()+"/{{$indicador_id}}/"+$('#fecha').val(),
                 type: 'post',
                 dataType: 'JSON',
                 success: function(data) {
