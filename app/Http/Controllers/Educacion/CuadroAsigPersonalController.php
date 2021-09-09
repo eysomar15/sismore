@@ -166,12 +166,12 @@ class CuadroAsigPersonalController extends Controller
 
     public function reporteUgel()
     {
-        $lista_principal = CuadroAsigPersonalRepositorio::docentes_ugel();
-
-        $lista_ugel_nivel = CuadroAsigPersonalRepositorio::docentes_ugel_nivel();
+        $lista_principal = CuadroAsigPersonalRepositorio::cuadro_ugel();
+        $lista_ugel_nivel = CuadroAsigPersonalRepositorio::cuadro_ugel_nivel();
+        $lista_ugel_tipoTrab = CuadroAsigPersonalRepositorio::cuadro_ugel_tipoTrab();
 
         
-        return view('educacion.CuadroAsigPersonal.ReporteUgel',compact('lista_principal','lista_ugel_nivel'));
+        return view('educacion.CuadroAsigPersonal.ReporteUgel',compact('lista_principal','lista_ugel_nivel','lista_ugel_tipoTrab'));
 
         // $puntos = [];        
         // $total = 0;

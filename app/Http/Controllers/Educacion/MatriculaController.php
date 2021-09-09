@@ -559,10 +559,6 @@ class MatriculaController extends Controller
         $lista_matricula_Primaria_cabecera =  $lista_total_matricula->where('nivel', 'P')->all();
         $lista_matricula_Secundaria_cabecera =  $lista_total_matricula->where('nivel', 'S')->all();
 
-
-
-
-
         $puntos = [];
         $total = 0;
         foreach ($lista_total_matricula_EBR as $key => $lista) {

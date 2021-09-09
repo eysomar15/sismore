@@ -22,7 +22,7 @@ class CensoController extends Controller
     public function importar()
     {  
         $mensaje = "";
-        $anios = Anio::all();
+        $anios = Anio::orderBy('anio', 'desc')->get();
         
         return view('Educacion.Censo.Importar',compact('mensaje','anios'));
     } 
@@ -32,7 +32,7 @@ class CensoController extends Controller
         $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
         $archivo = $request->file('file');
         $array = (new tablaXImport )-> toArray($archivo);    
-        $anios = Anio::all();    
+        $anios = Anio::orderBy('anio', 'desc')->get();    
 
         $i = 0;
         $cadena ='';

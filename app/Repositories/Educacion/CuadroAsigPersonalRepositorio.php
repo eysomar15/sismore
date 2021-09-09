@@ -23,6 +23,62 @@ class CuadroAsigPersonalRepositorio
 
         return $Lista;
     } 
+
+    public static function cuadro_ugel()
+    {         
+        $data = DB::table("edu_plaza as pla")     
+                ->join('edu_ugel as ugel', 'pla.ugel_id', '=', 'ugel.id')                
+                ->orderBy('ugel.codigo', 'asc')         
+                ->groupBy("ugel.nombre")               
+                        ->get([ 
+                            DB::raw('ugel.nombre as ugel'),              
+                            DB::raw('count(*) as cantidad')        
+                        ])
+                ;
+
+        return $data;
+    }
+
+    public static function cuadro_ugel_nivel()
+    {         
+        $data = DB::table("edu_plaza as pla")     
+                ->join('edu_ugel as ugel', 'pla.ugel_id', '=', 'ugel.id')   
+                ->leftjoin('edu_nivelmodalidad as niv', 'pla.nivelModalidad_id', '=', 'niv.id')                
+                ->orderBy('ugel.codigo', 'asc')    
+                ->orderBy('niv.codigo', 'asc')      
+                ->groupBy("ugel.nombre")                  
+                ->groupBy("nivel_educativo_dato_adic")
+                ->groupBy("niv.codigo")               
+                        ->get([                    
+                            DB::raw('ugel.nombre as ugel'), 
+                            DB::raw('nivel_educativo_dato_adic as nivel'),
+                            // DB::raw('case when nivel_educativo_dato_adic is null then "ssss" else niv.codigo end  as nivel'),              
+                            DB::raw('count(*) as cantidad')        
+                        ])
+                ;
+
+        return $data;
+    }
+
+    public static function cuadro_ugel_tipoTrab()
+    {         
+        $data = DB::table("edu_plaza as pla")     
+                ->join('edu_ugel as ugel', 'pla.ugel_id', '=', 'ugel.id')   
+                ->join('edu_tipotrabajador as subTipTra', 'pla.tipoTrabajador_id', '=', 'subTipTra.id')
+                ->join('edu_tipotrabajador as tipTra', 'subTipTra.dependencia', '=', 'tipTra.id')            
+                ->orderBy('ugel.codigo', 'asc')
+                ->groupBy("ugel.nombre") 
+                ->groupBy("tipTra.nombre")
+                        ->get([                    
+                            DB::raw('ugel.nombre as ugel'),
+                            DB::raw('tipTra.nombre as tipoTrab'),
+                            DB::raw('count(*) as cantidad')        
+                        ])
+                ;
+
+        return $data;
+    }
+    
     
 
     public static function docentes_ugel()
