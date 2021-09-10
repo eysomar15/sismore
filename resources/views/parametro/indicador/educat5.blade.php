@@ -46,7 +46,7 @@
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
-                            <label class="col-md-1 col-form-label">Fecha</label>
+                            <label class="col-md-1 col-form-label">Año</label>
                             <div class="col-md-3">
                                 <select id="fecha" name="fecha" class="form-control" onchange="cargarhistorial();">
                                     @foreach ($fechas as $item)
