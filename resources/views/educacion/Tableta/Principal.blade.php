@@ -5,6 +5,13 @@
 @endsection  --}}
 
 @section('content') 
+
+<figure class="highcharts-figure">
+    <div id="container"></div>   
+</figure>
+
+
+
 <div class="content">
     <input type="hidden" id="hoja" value="1">
     
@@ -65,15 +72,7 @@
 
 
 
-<figure class="highcharts-figure">
-    <div id="container"></div>
-    <p class="highcharts-description">
-        A basic column chart compares rainfall values between four cities.
-        Tokyo has the overall highest amount of rainfall, followed by New York.
-        The chart is making use of the axis crosshair feature, to highlight
-        months as they are hovered over.
-    </p>
-</figure>
+
 
 @endsection 
 
@@ -164,11 +163,12 @@
             chart: {
                 type: 'column'
             },
+            credits:false,
             title: {
-                text: 'Monthly Average Rainfall'
+                text: 'Distribución de Tabletas 2021'
             },
             subtitle: {
-                text: 'Source: WorldClimate.com'
+                text: 'Fuente SIAGIE'
             },
             xAxis: {
                 categories: 
@@ -179,7 +179,7 @@
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Rainfall (mm)'
+                    text: 'Numero de tabletas'
                 }
             },
             tooltip: {
