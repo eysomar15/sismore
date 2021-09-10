@@ -7,6 +7,7 @@ use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Educacion\MatriculaController;
 use App\Http\Controllers\Educacion\PadronWebController;
+use App\Http\Controllers\Educacion\TabletaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
 use App\Http\Controllers\Vivienda\DatassController;
@@ -50,9 +51,9 @@ Route::get('/CuadroAsigPersonal/ListaImportada_DataTable/{importacion_id}', [Cua
 Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}', [CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
 Route::post('/CuadroAsigPersonal/Aprobar/procesar/{importacion_id}', [CuadroAsigPersonalController::class, 'procesar'])->name('CuadroAsigPersonal.procesar');
 
-Route::get('/CuadroAsigPersonal/Docentes', [CuadroAsigPersonalController::class, 'Principal'])->name('Docentes.principal');
-Route::post('/CuadroAsigPersonal/ReporteUgel', [CuadroAsigPersonalController::class, 'ReporteUgel'])->name('Docentes.ReporteUgel');
-Route::post('/CuadroAsigPersonal/ReporteDistrito', [CuadroAsigPersonalController::class, 'ReporteDistrito'])->name('Docentes.ReporteDistrito');
+Route::get('/CuadroAsigPersonal/Docentes', [CuadroAsigPersonalController::class, 'Principal'])->name('CuadroAsigPersonal.principal');
+Route::post('/CuadroAsigPersonal/ReporteUgel', [CuadroAsigPersonalController::class, 'ReporteUgel'])->name('CuadroAsigPersonal.ReporteUgel');
+Route::post('/CuadroAsigPersonal/ReporteDistrito', [CuadroAsigPersonalController::class, 'ReporteDistrito'])->name('CuadroAsigPersonal.ReporteDistrito');
 
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');
@@ -72,6 +73,16 @@ Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}', [MatriculaControl
 Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
 
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
+
+
+Route::get('/Tableta/Importar', [TabletaController::class, 'importar'])->name('Tableta.importar');
+Route::post('/Tableta/Importar',[TabletaController::class, 'guardar'])->name('Tableta.guardar');
+Route::get('/Tableta/Aprobar/{importacion_id}', [TabletaController::class, 'aprobar'])->name('Tableta.aprobar');
+Route::post('/Tableta/Aprobar/procesar/{importacion_id}', [TabletaController::class, 'procesar'])->name('Tableta.procesar');
+
+Route::get('/Tableta/Principal',[TabletaController::class, 'principal'])->name('Tableta.principal');
+Route::post('/Tableta/Fechas/{anio_id}', [TabletaController::class, 'Fechas'])->name('Tableta.Fechas');
+
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/', [ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');

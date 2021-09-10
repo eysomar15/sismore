@@ -36,6 +36,7 @@ class ImportacionController extends Controller
                     case('COD06'): $acciones = '<a href="Censo/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break; 
                     case('COD07'): $acciones = '<a href="Datass/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break; 
                     case('COD08'): $acciones = '<a href="Matricula/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break; 
+                    case('COD09'): $acciones = '<a href="Tableta/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
 
                     default: $acciones = '<a href="PadronWeb/AprobarNN/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
                 }                
