@@ -152,7 +152,7 @@
                         por=element.y*100/total;
                         vista+='<tr><td>'+element.name+'</td><td>'+element.y+'</td><td>'+por.toFixed(2)+'</td></tr>';
                     });
-                    vista+='<tr><td>Total</td><td>'+total+'</td><td>100</td></tr>';
+                    vista+='<tr><th>Total</th><th>'+total+'</th><th>100</th></tr>';
                     $('#vistax1').html(vista);
                     grafica1(data.indicador);
                 },
