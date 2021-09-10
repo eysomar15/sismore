@@ -62,6 +62,19 @@
     </div> <!-- End row -->
   
 </div>
+
+
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+        A basic column chart compares rainfall values between four cities.
+        Tokyo has the overall highest amount of rainfall, followed by New York.
+        The chart is making use of the axis crosshair feature, to highlight
+        months as they are hovered over.
+    </p>
+</figure>
+
 @endsection 
 
 @section('js')
@@ -106,7 +119,7 @@
                     });
                     
                     $("#fechas").append(options);                  
-                    cargar_resumen_matricula(); 
+                    cargar_resumen(); 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -124,8 +137,19 @@
                 cargar_matricula_porDistrito();                   
         }
 
-        function cargar_resumen_porUgel() {            
+        function cargar_resumen_porUgel() { 
             $('#hoja').val(1);
+            $.ajax({  
+                headers: {
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },                           
+                url: "{{ url('/') }}/Tableta/ReporteUgel/" + $('#anio').val() + "/" + $('#fechas').val(),
+                type: 'post',
+            }).done(function (data) {               
+                $('#datos01').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
            
         }
 
@@ -134,6 +158,62 @@
             
         }
   
+        
+
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Monthly Average Rainfall'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                categories: 
+                     <?=$data5?>
+                ,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y} tabletas</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                        name: 'A Distribuir',
+                        data:<?=$data?>
+
+                    }, {
+                        name: 'Despachadas',
+                        data: <?=$data2?>
+
+                    }, {
+                        name: 'Recepcionadas',
+                        data: <?=$data3?>
+
+                    }, {
+                        name: 'Asignadas',
+                        data: <?=$data4?>
+
+                    }]
+                });
        
     </script>
 

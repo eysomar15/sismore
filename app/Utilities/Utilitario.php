@@ -37,20 +37,21 @@ class Utilitario
     {         
         $nombre = '';
 
-        // if($fecha=='')
-        // {
-        //     $nombre = 'null';
-        // }
-        // else
-        // {
-        //     $nombre = 'nooo null';
-
-           
-        //}
         $fecha = Carbon::parse($fecha );
         $mes =  utilitario::nombre_mes( Carbon::parse($fecha )->format("m"));
         
         $nombre = Carbon::parse($fecha)->format("d").' de '.$mes.' del '.Carbon::parse($fecha )->format("Y");     
+        return  $nombre;       
+    } 
+
+    public static function fecha_formato_texto_diayMes($fecha)
+    {         
+        $nombre = '';
+
+        $fecha = Carbon::parse($fecha );
+        $mes =  utilitario::nombre_mes( Carbon::parse($fecha )->format("m"));
+        
+        $nombre = Carbon::parse($fecha)->format("d").' de '.$mes;     
         return  $nombre;       
     } 
 }
