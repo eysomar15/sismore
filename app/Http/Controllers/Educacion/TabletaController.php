@@ -11,6 +11,7 @@ use App\Models\Parametro\Anio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\InstitucionEducativaRepositorio;
 use App\Repositories\Educacion\TabletaRepositorio;
+use App\Utilities\Utilitario;
 use Exception;
 use PhpParser\Node\Stmt\Return_;
 
@@ -183,8 +184,50 @@ class TabletaController extends Controller
         $anios =  TabletaRepositorio ::tableta_anio( );
 
         $fechas_tabletas = TabletaRepositorio ::fechas_tabletas_anio($anios->first()->id);
+
+
+        $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio(6);
+        
+
+        foreach ($resumen_tabletas_anio as $key => $lista) {
+           
+            $puntos[] = intval( $lista->total_aDistribuir);
+            $puntos2[] = intval( $lista->total_Despachado);
+            $puntos3[] = intval( $lista->total_Recepcionadas);
+            $puntos4[] = intval( $lista->total_Asignadas);
+            $puntos5[] = Utilitario::fecha_formato_texto_diayMes($lista->fechaActualizacion);
+            
+        }
+
        
-        return view('educacion.Tableta.Principal',compact('tableta','anios','fechas_tabletas'));     
+        return view('educacion.Tableta.Principal',
+        ["data"=> json_encode($puntos),"data2"=> json_encode($puntos2),"data3"=> json_encode($puntos3),"data4"=> json_encode($puntos4),"data5"=> json_encode($puntos5)],
+        compact('tableta','anios','fechas_tabletas')); 
+        
+        // $tabletas = TabletaRepositorio ::resumen_tabletas_anio(6); 
+       // return $dato;
+       //return $resumen_tabletas_anio;
+    }
+
+    public function reporteUgel($anio_id,$tableta_id)
+    {
+        $resumen_tabletas_ugel = TabletaRepositorio ::resumen_tabletas_ugel($tableta_id); 
+        
+        $fecha_texto = $this->fecha_texto($tableta_id);  
+
+       
+        return view('educacion.Tableta.ReporteUgel',compact('resumen_tabletas_ugel','fecha_texto'));
+    }
+
+    public function fecha_texto($id)
+    {
+        $fecha_texto = '--'; 
+        $datos = TabletaRepositorio::datos_tableta($id);
+
+        if($datos->first()!=null)
+            $fecha_texto = Utilitario::fecha_formato_texto_completo($datos->first()->fechaactualizacion ); 
+            
+        return $fecha_texto;
     }
 
     public function Fechas($anio_id)

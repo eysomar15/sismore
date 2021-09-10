@@ -82,6 +82,7 @@ Route::post('/Tableta/Aprobar/procesar/{importacion_id}', [TabletaController::cl
 
 Route::get('/Tableta/Principal',[TabletaController::class, 'principal'])->name('Tableta.principal');
 Route::post('/Tableta/Fechas/{anio_id}', [TabletaController::class, 'Fechas'])->name('Tableta.Fechas');
+Route::post('/Tableta/ReporteUgel/{anio_id}/{tableta_id}', [TabletaController::class, 'ReporteUgel'])->name('Tableta.ReporteUgel');
 
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
