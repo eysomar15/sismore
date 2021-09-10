@@ -10,6 +10,7 @@ use App\Models\Educacion\Materia;
 use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\TipoGestion;
 use App\Models\Ubigeo;
+use App\Repositories\Educacion\CensoRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 //use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\IndicadorRepositorio;
@@ -184,6 +185,38 @@ class IndicadorController extends Controller
                 $title = $indicador->nombre;
                 $nivel = 38;
                 return $this->vistaEducacionCat4($title, $nivel);
+            case 31: //SERVICIOS BASICOS  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $fechas = CensoRepositorio::listar_anios();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.educat5', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
+            case 32: //SERVICIOS BASICOS  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $fechas = CensoRepositorio::listar_anios();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.educat5', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
+            case 33: //SERVICIOS BASICOS  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $fechas = CensoRepositorio::listar_anios();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.educat5', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
+            case 34: //SERVICIOS BASICOS  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $fechas = CensoRepositorio::listar_anios();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.educat5', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
             default:
                 return 'sin datos';
                 break;
@@ -257,6 +290,11 @@ class IndicadorController extends Controller
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
         return view('parametro.indicador.educat4', compact('title', 'nivel', 'inds', 'gra1', 'indu', 'breadcrumb'));
     }
+    public function vistaEducacionCat5($title, $nivel_id)
+    {
+        $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+        return view('parametro.indicador.educat5', compact('title', 'breadcrumb'));
+    }
     /****** */
     public function indicadorDRVCS($indicador_id)
     {
@@ -276,10 +314,10 @@ class IndicadorController extends Controller
                 $title = $indicador->nombre;
 
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
-                $ingresos=ImportacionRepositorio::Listar_deDatass();
+                $ingresos = ImportacionRepositorio::Listar_deDatass();
                 //return $ingreso;
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb','provincias','indicador_id','ingresos'));
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
             default:
                 return 'sin informacion';
                 break;
@@ -303,7 +341,7 @@ class IndicadorController extends Controller
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1','gt', 'breadcrumb'));
+                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'gt', 'breadcrumb'));
             case 15:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -317,7 +355,7 @@ class IndicadorController extends Controller
                 foreach ($info1 as $key => $value) {
                     $value->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $value->id, 'asc');
                 }
-                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1','gt', 'breadcrumb'));
+                return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'info1', 'gt', 'breadcrumb'));
             case 16:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
@@ -370,26 +408,26 @@ class IndicadorController extends Controller
                 $title = $indicador->nombre;
                 $grado = 8;
                 $tipo = 0;
-                $materia=2;
+                $materia = 2;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar,$materia);
+                return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia);
             case 19:
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $grado = 4;
                 $tipo = 1; //EIB
-                $materia=5;
+                $materia = 5;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar,$materia);
+                return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia);
             default:
                 return 'sin informacion';
                 break;
         }
     }
-    public function vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar,$materia)
+    public function vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia)
     {
         $gt = IndicadorRepositorio::buscar_grado1($grado);
-        $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo,$materia);
+        $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
         foreach ($materias as $key => $materia) {
             $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
         }
@@ -914,10 +952,31 @@ class IndicadorController extends Controller
         </div>';
         return $card;
     }
-    public function indicadorvivpnsrcab($provincia,$distrito,$indicador_id,$fecha)
+    public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
-        $cp=IndicadorRepositorio::cabecera2($provincia,$distrito,$indicador_id,$fecha);
+        $cp = IndicadorRepositorio::cabecera2($provincia, $distrito, $indicador_id, $fecha);
         return response()->json($cp);
-        //return response()->json([]);
-    }    
+    }
+    public function ajaxEdu5v1($provincia, $distrito, $indicador_id, $anio_id)
+    {
+        switch ($indicador_id) {
+            case 31:
+                $cp = CensoRepositorio::listar_conElectricidad($provincia, $distrito, $indicador_id, $anio_id);
+                break;
+            case 32:
+                $cp = CensoRepositorio::listar_conAguaPotable($provincia, $distrito, $indicador_id, $anio_id);
+                break;
+            case 33:
+                $cp = CensoRepositorio::listar_conDesague($provincia, $distrito, $indicador_id, $anio_id);
+                break;
+            case 34:
+                $cp = CensoRepositorio::listar_conElectricidad($provincia, $distrito, $indicador_id, $anio_id);
+                break;
+            default:
+                return [];
+                break;
+        }
+
+        return response()->json($cp);
+    }
 }
