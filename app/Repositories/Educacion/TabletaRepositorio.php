@@ -112,4 +112,27 @@ class TabletaRepositorio
 
          return $data;
     }
+
+    public static function tabletas_ultimaActualizacion()
+    { 
+              $data = DB::table('par_importacion as imp')    
+                     ->join('edu_tableta as tab', 'imp.id', '=', 'tab.importacion_id')      
+                     ->join('edu_tableta_detalle as tabDet', 'tab.id', '=', 'tabDet.tableta_id')
+                     ->join('edu_institucioneducativa as inst', 'tabDet.institucioneducativa_id', '=', 'inst.id') 
+                     ->join('edu_ugel as ugel', 'inst.Ugel_id', '=', 'ugel.id')                     
+                     ->where('imp.estado','=', 'PR')
+                     ->orderBy('fechaActualizacion', 'desc')
+                     ->groupBy('fechaActualizacion') 
+                     ->limit(1)                    
+                     ->get([  
+                             DB::raw('fechaActualizacion'),  
+                                                
+                             DB::raw('sum(ifnull(aDistribuir_estudiantes,0) + ifnull(aDistribuir_docentes,0)) as total_aDistribuir'),                            
+                             DB::raw('sum(ifnull(despachadas_estudiantes,0) + ifnull(despachadas_docentes,0)) as total_Despachado'),
+                             DB::raw('sum(ifnull(recepcionadas_estudiantes,0) + ifnull(recepcionadas_docentes,0)) as total_Recepcionadas'),
+                             DB::raw('sum(ifnull(asignadas_estudiantes,0) + ifnull(asignadas_docentes,0)) as total_Asignadas'),                              
+                  ]);
+
+         return $data;
+    }
 }

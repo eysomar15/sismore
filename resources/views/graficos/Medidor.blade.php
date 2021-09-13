@@ -64,7 +64,7 @@ var chartSpeed = Highcharts.chart('medidor1', Highcharts.merge(gaugeOptions, {
         min: 0,
         max: {{$par_medidor1_max}},
         title: {
-            text: 'Speed'
+            text: 'Recepcionadas'
         }
     },
 
@@ -73,17 +73,17 @@ var chartSpeed = Highcharts.chart('medidor1', Highcharts.merge(gaugeOptions, {
     },
 
     series: [{
-        name: 'Speed',
-        data: [{{$par_medidor1_max}}],
+        name: 'Recepcionadas',
+        data: [{{$par_medidor1_data}}],
         dataLabels: {
             format:
                 '<div style="text-align:center">' +
-                '<span style="font-size:25px">{y}</span><br/>' +
-                '<span style="font-size:12px;opacity:0.4">km/h</span>' +
+                '<span style="font-size:25px">{y} % </span><br/>' +
+                '<span style="font-size:16px;opacity:0.4"> Tablets Recepcionadas I.E</span>' +
                 '</div>'
         },
         tooltip: {
-            valueSuffix: ' km/h'
+            valueSuffix: ' %'
         }
     }]
 
@@ -91,12 +91,13 @@ var chartSpeed = Highcharts.chart('medidor1', Highcharts.merge(gaugeOptions, {
 
 
 // The speed gauge 02
+
 var chartSpeed = Highcharts.chart('medidor2', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 90,
+        max: {{$par_medidor2_max}},
         title: {
-            text: 'Speed 11111'
+            text: 'Asignadas'
         }
     },
 
@@ -105,17 +106,17 @@ var chartSpeed = Highcharts.chart('medidor2', Highcharts.merge(gaugeOptions, {
     },
 
     series: [{
-        name: 'Speed 222',
-        data: [20],
+        name: 'Asignadas',
+        data: [{{$par_medidor2_data}}],
         dataLabels: {
             format:
                 '<div style="text-align:center">' +
-                '<span style="font-size:25px">{y}</span><br/>' +
-                '<span style="font-size:12px;opacity:0.4">km/h</span>' +
+                '<span style="font-size:25px">{y} %</span><br/>' +
+                '<span style="font-size:16px;opacity:0.4">Tablets Asignadas</span>' +
                 '</div>'
         },
         tooltip: {
-            valueSuffix: ' km/h'
+            valueSuffix: ' %'
         }
     }]
 
