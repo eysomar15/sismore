@@ -1,10 +1,25 @@
 @extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
 
- {{-- @section('css')
-   
-@endsection  --}}
+@section('css')
+
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
+@endsection 
 
 @section('content') 
+
+
+<figure class="highcharts-figure">           
+    <div id="barra1">       
+        @include('graficos.Barra')
+    </div> 
+</figure>
+
+
 <div class="content">
     <input type="hidden" id="hoja" value="1">
     
@@ -64,40 +79,16 @@
 </div>
 
 
-
-<figure class="highcharts-figure">
-    <div id="container"></div>
-    <p class="highcharts-description">
-        A basic column chart compares rainfall values between four cities.
-        Tokyo has the overall highest amount of rainfall, followed by New York.
-        The chart is making use of the axis crosshair feature, to highlight
-        months as they are hovered over.
-    </p>
-</figure>
-
 @endsection 
 
 @section('js')
 
-
-<script src="{{ asset('/') }}assets/libs/isotope/isotope.pkgd.min.js"></script>
-<script src="{{ asset('/') }}assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
-<script src="{{ asset('/') }}assets/js/pages/gallery.init.js"></script>
-
-<script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
-{{-- https://www.youtube.com/watch?v=HU-hffAZqYw --}}
-
     <script type="text/javascript"> 
-        
         
         $(document).ready(function() {
             cargar_fechas();
             //cargar_resumen_matricula();
         });
-
 
         function cargar_fechas() {
            
@@ -157,66 +148,7 @@
             $('#hoja').val(2);
             
         }
-  
-        
-
-        Highcharts.chart('container', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Monthly Average Rainfall'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
-            },
-            xAxis: {
-                categories: 
-                     <?=$data5?>
-                ,
-                crosshair: true
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Rainfall (mm)'
-                }
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y} tabletas</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                        name: 'A Distribuir',
-                        data:<?=$data?>
-
-                    }, {
-                        name: 'Despachadas',
-                        data: <?=$data2?>
-
-                    }, {
-                        name: 'Recepcionadas',
-                        data: <?=$data3?>
-
-                    }, {
-                        name: 'Asignadas',
-                        data: <?=$data4?>
-
-                    }]
-                });
        
     </script>
-
-
-
+    
 @endsection

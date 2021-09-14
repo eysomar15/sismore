@@ -125,6 +125,7 @@
                 <!-- end card-box-->
             </div>
 
+            
             <div class="col-md-6 col-xl-6">                
                     <div id="medidor1">       
                         @include('graficos.Medidor')
@@ -135,7 +136,7 @@
                 <div id="medidor2">       
                     @include('graficos.Medidor')
                 </div> 
-        </div>
+            </div>
 
         </div>
         <!-- end row -->

@@ -184,29 +184,36 @@ class TabletaController extends Controller
         $anios =  TabletaRepositorio ::tableta_anio( );
 
         $fechas_tabletas = TabletaRepositorio ::fechas_tabletas_anio($anios->first()->id);
-
-
         $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio(6);
         
-
-        foreach ($resumen_tabletas_anio as $key => $lista) {
-           
-            $puntos[] = intval( $lista->total_aDistribuir);
-            $puntos2[] = intval( $lista->total_Despachado);
-            $puntos3[] = intval( $lista->total_Recepcionadas);
-            $puntos4[] = intval( $lista->total_Asignadas);
-            $puntos5[] = Utilitario::fecha_formato_texto_diayMes($lista->fechaActualizacion);
-            
-        }
-
+        $categoria1 = [];
+        $categoria2 = [];
+        $categoria3 = [];
+        $categoria4 = [];
+        $categoria_nombres=[];
        
-        return view('educacion.Tableta.Principal',
-        ["data"=> json_encode($puntos),"data2"=> json_encode($puntos2),"data3"=> json_encode($puntos3),"data4"=> json_encode($puntos4),"data5"=> json_encode($puntos5)],
-        compact('tableta','anios','fechas_tabletas')); 
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($resumen_tabletas_anio as $key => $lista) {
+            $categoria1 = array_merge($categoria1,[intval($lista->total_aDistribuir)]);
+            $categoria2 = array_merge($categoria2,[intval($lista->total_Despachado)]);
+            $categoria3 = array_merge($categoria3,[intval($lista->total_Recepcionadas)]);
+            $categoria4 = array_merge($categoria4,[intval($lista->total_Asignadas)]);
+            $categoria_nombres[] = Utilitario::fecha_formato_texto_diayMes($lista->fechaActualizacion);      
+        } 
+
+        $puntos[] = [ 'name'=>'A distribuir' ,'data'=>  $categoria1];
+        $puntos[] = [ 'name'=>'Despacahadas', 'data'=> $categoria2];
+        $puntos[] = [ 'name'=>'Recepcionadas' ,'data'=>  $categoria3];
+        $puntos[] = [ 'name'=>'Asignadas', 'data'=> $categoria4];
+
+        $titulo = 'Distribución de Tabletas 2021';
+        $subTitulo = 'Fuente SIAGIE';
+        $titulo_y = 'Numero de tabletas';
+
+        return view('educacion.Tableta.Principal', ["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+                    compact('tableta','anios','fechas_tabletas','titulo_y','titulo','subTitulo')); 
         
-        // $tabletas = TabletaRepositorio ::resumen_tabletas_anio(6); 
-       // return $dato;
-       //return $resumen_tabletas_anio;
+
     }
 
     public function reporteUgel($anio_id,$tableta_id)

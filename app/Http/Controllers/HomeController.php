@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Administracion\Sistema;
 use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
+use App\Repositories\Educacion\TabletaRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -108,8 +109,31 @@ class HomeController extends Controller
         }      
         
         $par_medidor1_max =  $instituciones_total;
+
+
+
+
+
+        $tabletas_ultimaActualizacion = TabletaRepositorio::tabletas_ultimaActualizacion()->first();
+
+        $fechaTableta = $tabletas_ultimaActualizacion->fechaActualizacion;
+
+       //{{number_format($sum_cero_nivel_hombre,0)}} 
+
+        $par_medidor1_max = 100;
+        $par_medidor1_data =  number_format(( ($tabletas_ultimaActualizacion->total_Recepcionadas * 100) / $tabletas_ultimaActualizacion->total_aDistribuir ),2);
+
+        $par_medidor2_max = 100;
+        $par_medidor2_data =  number_format(( ($tabletas_ultimaActualizacion->total_Asignadas * 100) / $tabletas_ultimaActualizacion->total_aDistribuir ),2);
+
+
+
+
+
+
          
-        return view('home',compact('par_medidor1_max','sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
+        return view('home',compact('par_medidor1_max','par_medidor1_data','par_medidor2_max','par_medidor2_data',
+                    'sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
                     'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas',
                     'localesEducativos','locales_tieneInternet','porcentajeLocales_tieneInternet'));
     }
