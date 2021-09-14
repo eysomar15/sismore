@@ -434,7 +434,7 @@ class CensoRepositorio
                 ->where('v2.fuenteEnergiaElectrica', '=', '1.Red pública')
                 ->where('v2.fuenteAgua', '=', '1.Red pública')
                 ->where('v2.desagueInfo', '=', '1.Desemboca en una red pública de desagüe')
-                ->get([DB::raw('count(v2.id) as y')]);            
+                ->get([DB::raw('count(v2.id) as y')]);
             $query2 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
                 ->where('v1.anio_id', $anio_id)
@@ -454,7 +454,7 @@ class CensoRepositorio
                 ->where('v2.fuenteEnergiaElectrica', '=', '1.Red pública')
                 ->where('v2.fuenteAgua', '=', '1.Red pública')
                 ->where('v2.desagueInfo', '=', '1.Desemboca en una red pública de desagüe')
-                ->get([DB::raw('count(v2.id) as y')]);            
+                ->get([DB::raw('count(v2.id) as y')]);
             $query2 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
                 ->where('v1.anio_id', $anio_id)
@@ -472,7 +472,7 @@ class CensoRepositorio
                 ->where('v2.fuenteEnergiaElectrica', '=', '1.Red pública')
                 ->where('v2.fuenteAgua', '=', '1.Red pública')
                 ->where('v2.desagueInfo', '=', '1.Desemboca en una red pública de desagüe')
-                ->get([DB::raw('count(v2.id) as y')]);            
+                ->get([DB::raw('count(v2.id) as y')]);
             $query2 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
                 ->where('v1.anio_id', $anio_id)
@@ -481,10 +481,22 @@ class CensoRepositorio
                 ->where('v2.fuenteAgua', '!=', 'NULL')
                 ->where('v2.desagueInfo', '!=', 'NULL')
                 ->get([DB::raw('count(v2.id) as y')]);
-
         }
-        $data['indicador'] = [['name' => '1.Tres Servicios Basicos', 'y' => $query1->first()->y], 
-        ['name' => '2.Otros', 'y' => $query2->first()->y-$query1->first()->y]];
+        $data['indicador'] = [
+            ['name' => '1.Tres Servicios Basicos', 'y' => $query1->first()->y],
+            ['name' => '2.Otros', 'y' => $query2->first()->y - $query1->first()->y]
+        ];
         return $data;
+    }
+
+    public static function Listar_IE($anio_id)
+    {
+        $query1 = DB::table('edu_censo as v1')
+            ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
+            ->join('edu_institucioneducativa as v3', 'v3.codModular', '=', 'v2.codigosModulares')
+            ->where('v1.anio_id', $anio_id)
+            ->where('v1.estado', 'PR')
+            ->get();
+        return $query1;
     }
 }
