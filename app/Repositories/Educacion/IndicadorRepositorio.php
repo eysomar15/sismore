@@ -602,6 +602,7 @@ class IndicadorRepositorio
     {
         $query =  DB::table('edu_plaza')
             ->where('nivelModalidad_id', $nivel)
+            ->where('tipoTrabajador_id', 13)
             ->groupBy('esTitulado')
             ->orderBy('esTitulado', 'desc')
             ->get([
@@ -621,6 +622,7 @@ class IndicadorRepositorio
                 ->join('edu_ugel as v2', 'v2.id', '=', 'v1.ugel_id')
                 ->where('v1.nivelModalidad_id', $nivel)
                 ->where('v1.esTitulado', $titulado)
+                ->where('v1.tipoTrabajador_id', 13)
                 ->groupBy('v2.nombre')
                 ->groupBy('v2.id')
                 ->get([
@@ -640,6 +642,7 @@ class IndicadorRepositorio
             $query = DB::table('edu_plaza as v1')
                 ->join('edu_ugel as v2', 'v2.id', '=', 'v1.ugel_id')
                 ->where('v1.nivelModalidad_id', $nivel)
+                ->where('v1.tipoTrabajador_id', 13)
                 ->groupBy('v2.nombre')
                 ->get(['v2.nombre as name', DB::raw('count(esTitulado) as y')]);
         }
