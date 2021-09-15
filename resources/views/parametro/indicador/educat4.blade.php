@@ -32,13 +32,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{$ff=0;}}
                                             @foreach ($datas['titulados'] as $item)
                                             <tr>
                                                 <td>{{$item->name}}</td>
                                                 <td>{{$item->y}}</td>
                                                 <td>{{round(100*$item->y/$item->total,2)}}</td>
+                                                {{$ff+=$item->y}}
                                             </tr>
                                             @endforeach
+                                            <tr>
+                                                <th>Total</th>
+                                                <th>{{$ff}}</th>
+                                                <th>100</th>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -76,13 +83,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{$ff=0;}}
                                             @foreach ($datas['ugel'] as $item)
                                             <tr>
                                                 <td>{{$item->name}}</td>
                                                 <td>{{$item->si}}</td>
                                                 <td>{{round($item->y,2)}}</td>
+                                                {{$ff+=$item->si}}
                                             </tr>
                                             @endforeach
+                                            <tr>
+                                                <th> Total</th>
+                                                <th>{{$ff}}</th>
+                                                <th>100</th>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
