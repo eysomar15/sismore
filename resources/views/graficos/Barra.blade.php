@@ -32,13 +32,33 @@ Highcharts.chart('barra1', {
                 shared: true,
                 useHTML: true
             },
+
             plotOptions: {
                 column: {
                     pointPadding: 0.2,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    dataLabels: {
+                                enabled: true,
+                             
+                                format: '{y}'
+                            }
+
+                    // dataLabels: {
+                    //         enabled: true,
+                    //         rotation: -90,
+                    //         color: '#FFFFFF',
+                    //         align: 'right',
+                    //         format: '{point.y}', // one decimal
+                    //         y: 10, // 10 pixels down from the top
+                    //         style: {
+                    //             fontSize: '14px',
+                    //             fontFamily: 'Verdana, sans-serif'
+                    //         }
+                    //     }
                 }
             },
             series: <?=$data?>
-            });
+        });
 
 </script>
+

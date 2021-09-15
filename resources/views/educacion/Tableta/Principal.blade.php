@@ -11,7 +11,7 @@
 @endsection 
 
 @section('content') 
-
+ 
 
 <figure class="highcharts-figure">           
     <div id="barra1">       
@@ -30,6 +30,11 @@
                 <div class="card-body">
 
                     <div class="form-group row">
+                        {{-- <div class="col-md-12" id="barra1">       
+                            @include('graficos.Barra')
+                        </div>  --}}
+
+
                         <label class="col-md-1 col-form-label">Año</label>
                         <div class="col-md-2">
                             <select id="anio" name="anio" class="form-control" onchange="cargar_fechas();">                               

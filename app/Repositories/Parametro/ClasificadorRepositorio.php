@@ -8,8 +8,8 @@ class ClasificadorRepositorio
 {
     public static function Listar_menu_porClasificador($clase_codigo,$sistema_id)
     {
-        $data = Clasificador::select('par_clasificador.nombre as nombre_niv1','claNiv2.nombre as nombre_niv2',
-        'claNiv3.id as id_niv3','claNiv3.codigo','claNiv3.nombre as nombre_niv3','ind.clasificador_id','ind.nombre as indicador', 'ind.url', 'ind.posicion','ind.id')
+        $data = Clasificador::select('par_clasificador.nombre as nombre_niv1','claNiv2.id as id_niv2','claNiv2.nombre as nombre_niv2',
+        'claNiv3.id as id_niv3','claNiv3.codigo','claNiv3.nombre as nombre_niv3','ind.clasificador_id','ind.nombre as indicador', 'ind.url', 'ind.posicion','ind.id','claNiv3.codigoAdicional')
                 ->join('par_clasificador as claNiv2', 'par_clasificador.id', '=', 'claNiv2.dependencia')
                 ->join('par_clasificador as claNiv3', 'claNiv2.id', '=', 'claNiv3.dependencia')
                 ->join('par_indicador as ind', 'claNiv3.id', '=', 'ind.clasificador_id')
