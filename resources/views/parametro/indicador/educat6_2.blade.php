@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content">
-        <!--div class="row">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card card-fill bg-success">
                     <div class="card-header bg-transparent">
@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </div>
-        </div-->
+        </div>
         <!--div class="row">
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
@@ -64,7 +64,7 @@
             <div class="col-xl-6">
                 <div class="card card-border card-default">
                     <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title text-default">{{$title}}</h3>
+                        <h3 class="card-title text-default">PORCENTAJES DE IE QUE CUENTAN CON COMPUTADOR DE ESCRITORIO EN ESTADO OPERATIVO.</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -73,7 +73,7 @@
                                     <table class="table mb-0">
                                         <thead>
                                             <tr>
-                                                <th>Tiene Internet</th>
+                                                <th>Estado Operativo</th>
                                                 <th>Cantidad</th>
                                                 <th>Porcentaje</th>
                                             </tr>
@@ -99,7 +99,85 @@
                 </div>
             </div>
         </div><!-- End row -->
+
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-border card-default">
+                    <div class="card-header border-default bg-transparent pb-0">
+                        <h3 class="card-title text-default">PORCENTAJES DE IE QUE CUENTAN CON LAPTOP  EN ESTADO OPERATIVO.</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Estado Operativo</th>
+                                                <th>Cantidad</th>
+                                                <th>Porcentaje</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id='vistax2'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
         
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <!--div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">TOTAL de profesores de la region</h3>
+                    </div-->
+                    <div class="card-body">
+                        <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End row -->
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-border card-default">
+                    <div class="card-header border-default bg-transparent pb-0">
+                        <h3 class="card-title text-default">PORCENTAJES DE IE QUE CUENTAN CON COMPUTADORA PORTATIL EN ESTADO OPERATIVO.</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Estado Operativo</th>
+                                                <th>Cantidad</th>
+                                                <th>Porcentaje</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id='vistax3'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <!--div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">TOTAL de profesores de la region</h3>
+                    </div-->
+                    <div class="card-body">
+                        <div id="con3" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End row -->
     </div>
   
 @endsection
@@ -148,14 +226,29 @@
                 dataType: 'JSON',
                 success: function(data) {          
                     vista='';
-                    total=0;
-                    data.conteo.forEach(element => {
+                    data.pc.forEach(element => {
                         por=element.y*100/data.total;
                         vista+='<tr><td>'+element.name+'</td><td>'+element.y+'</td><td>'+por.toFixed(2)+'</td></tr>';
                     });
                     vista+='<tr><th>Total</th><th>'+data.total+'</th><th>100</th></tr>';
                     $('#vistax1').html(vista);
-                    grafica1(data.conteo);
+                    grafica1('con1',data.pc);
+                    vista='';
+                    data.lc.forEach(element => {
+                        por=element.y*100/data.total;
+                        vista+='<tr><td>'+element.name+'</td><td>'+element.y+'</td><td>'+por.toFixed(2)+'</td></tr>';
+                    });
+                    vista+='<tr><th>Total</th><th>'+data.total+'</th><th>100</th></tr>';
+                    $('#vistax2').html(vista);
+                    grafica1('con2',data.lc);
+                    vista='';
+                    data.pp.forEach(element => {
+                        por=element.y*100/data.total;
+                        vista+='<tr><td>'+element.name+'</td><td>'+element.y+'</td><td>'+por.toFixed(2)+'</td></tr>';
+                    });
+                    vista+='<tr><th>Total</th><th>'+data.total+'</th><th>100</th></tr>';
+                    $('#vistax3').html(vista);
+                    grafica1('con3',data.pp);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -163,8 +256,8 @@
             });
         }         
 
-        function grafica1(datos){
-            Highcharts.chart('con1',{
+        function grafica1(contenedor,datos){
+            Highcharts.chart(contenedor,{
                 chart:{
                     type:'pie',
                     plotBackgroundColor: null,

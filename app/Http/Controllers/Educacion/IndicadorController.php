@@ -145,33 +145,28 @@ class IndicadorController extends Controller
                 $fechas = CensoRepositorio::listar_anios();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.educat5', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
-            case 35: //ACCESO A TIC
+            case 40: //ACCESO A TIC
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $inds=CensoRepositorio::Listar_IE(5);
-                return $inds;
+                $nivel_id = '37';
+                //$anio = 5;
+                //$inds = CensoRepositorio::Listar_IE($anio, $nivel_id);
+                //return $inds;
 
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $fechas = CensoRepositorio::listar_anios();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.educat6', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
-            case 36: //ACCESO A TIC
+            case 41: //ACCESO A TIC
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
+                $nivel = '38';
 
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $fechas = CensoRepositorio::listar_anios();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.educat6', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
-            case 37: //ACCESO A TIC 
-                $indicador = Indicador::find($indicador_id);
-                $title = $indicador->nombre;
-
-                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
-                $fechas = CensoRepositorio::listar_anios();
-                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.educat6', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
-            case 38: //ACCESO A TIC  
+            case 42: //ACCESO A TIC 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
 
@@ -179,6 +174,14 @@ class IndicadorController extends Controller
                 $fechas = CensoRepositorio::listar_anios();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.educat6', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
+            case 43: //ACCESO A TIC  
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $fechas = CensoRepositorio::listar_anios();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.educat6_2', compact('title', 'breadcrumb', 'provincias', 'fechas', 'indicador_id'));
             default:
                 return 'sin datos';
                 break;
@@ -235,8 +238,8 @@ class IndicadorController extends Controller
         $nivel = NivelModalidad::find($nivel_id);
         $inds = IndicadorRepositorio::listar_profesorestitulados($nivel_id);
         $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel_id, '1');
-        $datas['titulados']=$inds;
-        $datas['ugel']=$indu;
+        $datas['titulados'] = $inds;
+        $datas['ugel'] = $indu;
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
         return view('parametro.indicador.educat4', compact('title', 'nivel', 'datas', 'breadcrumb'));
     }
@@ -921,6 +924,30 @@ class IndicadorController extends Controller
                 break;
             case 34:
                 $cp = CensoRepositorio::listar_conServicioBasico($provincia, $distrito, $indicador_id, $anio_id);
+                break;
+            default:
+                return [];
+                break;
+        }
+
+        return response()->json($cp);
+    }
+    public function ajaxEdu6v1($provincia, $distrito, $indicador_id, $anio_id)
+    {
+        switch ($indicador_id) {
+            case 40:
+                $nivel = '37';
+                $cp = CensoRepositorio::Listar_IE_nivel($provincia, $distrito, $indicador_id, $anio_id, $nivel);
+                break;
+            case 41:
+                $nivel = '38';
+                $cp = CensoRepositorio::Listar_IE_nivel($provincia, $distrito, $indicador_id, $anio_id, $nivel);
+                break;
+            case 42:
+                $cp = [];//CensoRepositorio::listar_conDesague($provincia, $distrito, $indicador_id, $anio_id);
+                break;
+            case 43:
+                $cp =CensoRepositorio::Listar_IE_computo($provincia, $distrito, $indicador_id, $anio_id);
                 break;
             default:
                 return [];

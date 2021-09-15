@@ -489,14 +489,113 @@ class CensoRepositorio
         return $data;
     }
 
-    public static function Listar_IE($anio_id)
+    public static function Listar_IE_nivel($provincia, $distrito, $indicador_id, $anio_id, $nivel_id)
     {
         $query1 = DB::table('edu_censo as v1')
             ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-            ->join('edu_institucioneducativa as v3', 'v3.codModular', '=', 'v2.codigosModulares')
             ->where('v1.anio_id', $anio_id)
             ->where('v1.estado', 'PR')
+            ->select('v2.tieneInternet', 'v2.codigosmodulares as modular')
             ->get();
-        return $query1;
+        foreach ($query1 as $item) {
+            if ($item->tieneInternet != 'Si') $item->tieneInternet = 'No';
+        }
+        if ($provincia > 0 && $distrito > 0) {
+            $prov = Ubigeo::find($distrito);
+            $query = DB::table('edu_institucioneducativa as v1')
+                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
+                ->where('v1.NivelModalidad_id', $nivel_id)
+                ->where('v3.codigo', 'like', $prov->codigo . '%')
+                ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')
+                ->get();
+        } else if ($provincia > 0 && $distrito == 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = DB::table('edu_institucioneducativa as v1')
+                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
+                ->where('v1.NivelModalidad_id', $nivel_id)
+                ->where('v3.codigo', 'like', $prov->codigo . '%')
+                ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')
+                ->get();
+        } else {
+            $query = DB::table('edu_institucioneducativa as v1')
+                ->where('v1.NivelModalidad_id', $nivel_id)
+                ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')
+                ->get();
+        }
+        $conteo = [['name' => 'Si', 'y' => 0], ['name' => 'No', 'y' => 0]];
+        $xmodular = 0;
+        foreach ($query as $inst) {
+            foreach ($query1 as $censo) {
+                if (strpos($censo->modular, $inst->modular)) {
+                    if ($censo->tieneInternet == 'Si') $conteo[0]['y']++;
+                    else $conteo[1]['y']++;
+                    $xmodular++;
+                    break;
+                }
+            }
+        }
+        $data['conteo'] = $conteo;
+        $data['total'] = $xmodular;
+
+        return $data;
+    }
+    public static function Listar_IE_computo($provincia, $distrito, $indicador_id, $anio_id)
+    {
+        $query1 = DB::table('edu_censo as v1')
+            ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
+            ->where('v1.anio_id', $anio_id)
+            ->where('v1.estado', 'PR')
+            ->select('v2.compuEscri_operativos as escritorio', 'v2.compuPorta_operativos as portatil', 'v2.lapto_operativos as laptop', 'v2.codigosmodulares as modulares')
+            ->get();
+
+        if ($provincia > 0 && $distrito > 0) {
+            $prov = Ubigeo::find($distrito);
+            $query = DB::table('edu_institucioneducativa as v1')
+                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
+                ->where('v3.codigo', 'like', $prov->codigo . '%')
+                ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')
+                ->get();
+        } else if ($provincia > 0 && $distrito == 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = DB::table('edu_institucioneducativa as v1')
+                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
+                ->where('v3.codigo', 'like', $prov->codigo . '%')
+                ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')
+                ->get();
+        } else {
+            $query = DB::table('edu_institucioneducativa as v1')
+                ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')
+                ->get();
+        }
+        $pc = [['name' => 'Si', 'y' => 0], ['name' => 'No', 'y' => 0]];
+        $pp = [['name' => 'Si', 'y' => 0], ['name' => 'No', 'y' => 0]];
+        $lc = [['name' => 'Si', 'y' => 0], ['name' => 'No', 'y' => 0]];
+        $npc = 0;
+        $nlc = 0;
+        foreach ($query as $inst) {
+            foreach ($query1 as $censo) {
+                if (strpos($censo->modulares, $inst->modular)) {
+                    if ($censo->escritorio > 0) $pc[0]['y']++;
+                    else $pc[1]['y']++;
+                    if ($censo->laptop > 0) $lc[0]['y']++;
+                    else $lc[1]['y']++;
+                    if ($censo->portatil > 0) $pp[0]['y']++;
+                    else $pp[1]['y']++;
+                    $npc++;
+                    break;
+                }
+            }
+        }
+        $data['pc'] = $pc;
+        $data['total'] = $npc;
+        $data['lc'] = $lc;
+        $data['pp'] = $pp;
+        //$data['xx'] = $query;
+
+        return $data;
     }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content">
-        <div class="row">
+        <!--div class="row">
             <div class="col-lg-12">
                 <div class="card card-fill bg-success">
                     <div class="card-header bg-transparent">
@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div-->
         <div class="row" id="">
             <div class="col-xl-6">
                 <div class="card card-border card-default">
