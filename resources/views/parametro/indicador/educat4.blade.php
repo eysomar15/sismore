@@ -79,7 +79,7 @@
                                             @foreach ($datas['ugel'] as $item)
                                             <tr>
                                                 <td>{{$item->name}}</td>
-                                                <td>{{$item->total}}</td>
+                                                <td>{{$item->si}}</td>
                                                 <td>{{round($item->y,2)}}</td>
                                             </tr>
                                             @endforeach
@@ -115,7 +115,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             graficaPie({!!$datas['titulados']!!});
-            graficarBar({!!$datas['ugel']!!})
+            graficarBar({!!$datas['ugel']!!});
         });
         function abrirdetalle(){
             $('#modal_detalle').modal('show');

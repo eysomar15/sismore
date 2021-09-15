@@ -240,6 +240,7 @@ class IndicadorController extends Controller
         $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel_id, '1');
         $datas['titulados'] = $inds;
         $datas['ugel'] = $indu;
+        //return $datas;
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
         return view('parametro.indicador.educat4', compact('title', 'nivel', 'datas', 'breadcrumb'));
     }
