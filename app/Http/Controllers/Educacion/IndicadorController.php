@@ -374,6 +374,11 @@ class IndicadorController extends Controller
                 $materia = 5;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
                 return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia);
+
+            case 35:
+                return  redirect()->route('CuadroAsigPersonal.ReportePedagogico');
+            case 37:
+                return  redirect()->route('CuadroAsigPersonal.Bilingues');
             default:
                 return 'sin informacion';
                 break;

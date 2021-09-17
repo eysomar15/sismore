@@ -229,12 +229,28 @@ class CuadroAsigPersonalController extends Controller
         $indicador = Indicador::find(37);
         $title = $indicador->nombre;
 
-        $data = CuadroAsigPersonalRepositorio:: docentes_bilingues_ugel();
-        $dataCabecera = $data->unique('ugel');
+        $lista = CuadroAsigPersonalRepositorio:: docentes_bilingues_ugel();
+        //$dataCabecera = $data->unique('ugel');
 
         $dataCabecera = CuadroAsigPersonalRepositorio:: docentes_bilingues();
 
-        return  view('educacion.CuadroAsigPersonal.ReporteBilingues',compact('data','dataCabecera','title'));
+        $sumaBilingue= 0; 
+        $sumaTotal= 0;
+        $puntos = [];   
+
+        //->sortByDesc('hombres') solo para dar una variacion a los colores del grafico
+        foreach ($lista as $key => $item) {
+            $sumaBilingue+= $item->Bilingue; 
+            $sumaTotal+= $item->total;             
+        }
+
+        $puntos[] = ['name'=>'Bilingue', 'y'=>floatval($sumaBilingue*100/$sumaTotal)];
+        $puntos[] = ['name'=>'No Bilingue', 'y'=>floatval(($sumaTotal - $sumaBilingue)*100/$sumaTotal)];
+
+        $contenedor = 'resumen_bilingue';//nombre del contenedor para el grafico     
+        $titulo_grafico = 'Docentes Bilingues';  
+
+        return  view('educacion.CuadroAsigPersonal.ReporteBilingues',["data"=> json_encode($puntos)],compact('lista','dataCabecera','title','contenedor','titulo_grafico'));
     }
     
 }

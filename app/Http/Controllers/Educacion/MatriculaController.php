@@ -512,8 +512,37 @@ class MatriculaController extends Controller
         $anios =  MatriculaRepositorio ::matriculas_anio( );
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
+
+
+        $total_matricula_anual = MatriculaRepositorio:: total_matricula_anual(6);
+        
+        $categoria1 = [];
+        $categoria2 = [];
+        $categoria3 = [];
+        $categoria4 = [];
+        $categoria_nombres=[];
        
-        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));     
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($total_matricula_anual as $key => $lista) {
+            $categoria1 = array_merge($categoria1,[intval($lista->ugel10)]);
+            $categoria2 = array_merge($categoria2,[intval($lista->ugel11)]);
+            $categoria3 = array_merge($categoria3,[intval($lista->ugel12)]);
+            $categoria4 = array_merge($categoria4,[intval($lista->ugel13)]);
+            $categoria_nombres[] = Utilitario::fecha_formato_texto_diayMes($lista->fechaactualizacion);      
+        } 
+
+        $puntos[] = [ 'name'=>'Coronel Portillo' ,'data'=>  $categoria1];
+        $puntos[] = [ 'name'=>'Atalaya', 'data'=> $categoria2];
+        $puntos[] = [ 'name'=>'Padre Abad' ,'data'=>  $categoria3];
+        $puntos[] = [ 'name'=>'Purus', 'data'=> $categoria4];
+
+        $titulo = 'Matriculas EBR 2021';
+        $subTitulo = 'Fuente SIAGIE - MINEDU';
+        $titulo_y = 'Numero de matriculados';
+       
+        return view('educacion.Matricula.Principal',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)]
+        ,compact('matricula','anios','fechas_matriculas',
+        'titulo_y','titulo','subTitulo'));     
     }
     
     public function reporteUgel($anio_id,$matricula_id)

@@ -1,73 +1,97 @@
 @extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
 
 
+@section('css')
+
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
+@endsection 
+
 @section('content') 
 
-   <div class="col-md-6">
-    <div>
-        <h5  style="color: #427bf5;"> {{$title}} </h5>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-bordered mb-0">
-            <thead>
-                <tr>                                                 
-                    <th class="titulo_tabla">NIVEL EDUCATIVO</th>
-                    <th class="titulo_tabla">DOCENTES BILINGUES</th>
-                    <th class="titulo_tabla">TOTAL DOCENTES</th>
-                    <th class="titulo_tabla">PORCENTAJE</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $sumaColA=0;$sumaColB=0;
-                @endphp
-            
-                @foreach ($dataCabecera as $itemCab)
+<div class="content">
+    <div class="card">
+        <div class="card-body">
+        <div class="row">
 
-                <tr>                                            
-                            <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
-                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
-                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->total,0) }} </td>
-                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->porcentaje,2) }} </td>
-                </tr>
+            <div class="col-md-6">
+                <div>
+                    <h5  style="color: #427bf5;"> {{$title}} </h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>                                                 
+                                <th class="titulo_tabla">NIVEL EDUCATIVO</th>
+                                <th class="titulo_tabla">DOCENTES BILINGUES</th>
+                                <th class="titulo_tabla">TOTAL DOCENTES</th>
+                                <th class="titulo_tabla">PORCENTAJE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $sumaColA=0;$sumaColB=0;
+                            @endphp
+                        
+                            @foreach ($dataCabecera as $itemCab)
 
-                    @foreach ($data as $item)
+                            <tr>                                            
+                                        <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
+                                        <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
+                                        <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->total,0) }} </td>
+                                        <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->porcentaje,2) }} </td>
+                            </tr>
 
-                        @if ($itemCab->ugel==$item->ugel)
-                        @php
-                            $sumaColA+= $item->Bilingue; 
-                            $sumaColB+= $item->total; 
-                        @endphp
+                                @foreach ($lista as $item)
 
-                        <tr>                                            
-                            <td class="fila_tabla">{{$item->nivel_educativo}}</td>
-                            <td class="columna_derecha fila_tabla">{{ number_format($item->Bilingue,0) }} </td>
-                            <td class="columna_derecha fila_tabla">{{ number_format($item->total,0) }} </td>
-                            <td class="columna_derecha fila_tabla">{{ number_format($item->porcentaje,2) }} </td>
-                        </tr>
+                                    @if ($itemCab->ugel==$item->ugel)
+                                    @php
+                                        $sumaColA+= $item->Bilingue; 
+                                        $sumaColB+= $item->total; 
+                                    @endphp
 
-                        @endif
+                                    <tr>                                            
+                                        <td class="fila_tabla">{{$item->nivel_educativo}}</td>
+                                        <td class="columna_derecha fila_tabla">{{ number_format($item->Bilingue,0) }} </td>
+                                        <td class="columna_derecha fila_tabla">{{ number_format($item->total,0) }} </td>
+                                        <td class="columna_derecha fila_tabla">{{ number_format($item->porcentaje,2) }} </td>
+                                    </tr>
 
-                    @endforeach
-                @endforeach
+                                    @endif
 
-                <tr> 
-                    <td class="columna_derecha_total fila_tabla"> <b> TOTAL </b></td>
-                    <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA,0)}} </td>
-                    <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColB,0)}} </td>
-                    <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA*100/$sumaColB,2)}} </td>
-                </tr>                                              
-                
-            </tbody>
-        </table>
-    </div>
+                                @endforeach
+                            @endforeach
 
-    <div >
-        <div  class="col-md-12">
-            Fuente: Sistema de Administración y Control de Plazas – NEXUS        
+                            <tr> 
+                                <td class="columna_derecha_total fila_tabla"> <b> TOTAL </b></td>
+                                <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA,0)}} </td>
+                                <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColB,0)}} </td>
+                                <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA*100/$sumaColB,2)}} </td>
+                            </tr>                                              
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                <div >
+                    <div  class="col-md-12">
+                        Fuente: Sistema de Administración y Control de Plazas – NEXUS        
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div id="{{$contenedor}}">       
+                    @include('graficos.Circular')
+                </div>
+            </div>
         </div>
     </div>
-
-   </div>
+</div>
+</div>
 
 @endsection 
