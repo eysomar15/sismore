@@ -124,5 +124,114 @@ class CuadroAsigPersonalRepositorio
 
         return $data;
     }
+
+    public static function docentes_pedagogico($nivel_educativo)
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                    select 
+                                    row_number() OVER (partition BY ugel.nombre   ORDER BY imp.fechaActualizacion DESC) AS item, ugel.nombre as ugel, 
+                                    imp.fechaActualizacion,
+                                    sum(case when estEst.id = 2  and esTitulado = 1 then 1 else 0 end) as pedagogico, 
+                                    sum(1) as total
+                                    from edu_plaza pla
+                                    inner join edu_estadoestudio estEst on pla.estadoEstudio_id = estEst.id
+                                    inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
+                                    inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
+                                    inner join edu_ugel ugel on pla.ugel_id = ugel.id
+                                    inner join par_importacion imp on pla.importacion_id = imp.id
+                                    where  tipTra.id = 1 and nivel_educativo_dato_adic = '$nivel_educativo'
+                                    group by imp.fechaActualizacion,ugel.nombre                            
+                                ) as datos"
+                        )
+                    )
+                // ->orderBy('codigo', 'asc')                 
+                // ->groupBy('provincia')  
+                // ->groupBy('nivel')       
+                ->get([
+                    DB::raw('item'),    
+                    DB::raw('ugel'),   
+                    DB::raw('fechaActualizacion'),    
+                    DB::raw('pedagogico'),    
+                    DB::raw('total'),
+                    DB::raw('pedagogico*100/total as porcentaje'),
+                ]);
+
+        return $data;
+
+    }
+
+    public static function docentes_bilingues()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                    select 
+                                    row_number() OVER (partition BY ugel.nombre ORDER BY imp.fechaActualizacion DESC) AS item,
+                                    imp.fechaActualizacion,ugel.nombre as ugel,
+                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
+                                    sum(1) as total
+                                    from edu_institucioneducativa inst
+                                    inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
+                                    inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
+                                    inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
+                                    inner join edu_ugel ugel on pla.ugel_id = ugel.id
+                                    inner join par_importacion imp on pla.importacion_id = imp.id
+                                    where tipTra.id = 1
+                                    group by imp.fechaActualizacion,ugel.nombre
+                                    having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
+                                    order by ugel.codigo                        
+                                ) as datos"
+                        )
+                    )
+     
+                ->get([
+                    DB::raw('item'),    
+                    DB::raw('ugel'),   
+                    DB::raw('fechaActualizacion'),
+                    DB::raw('Bilingue'),
+                    DB::raw('total'),
+                    DB::raw('Bilingue*100/total as porcentaje'),
+                ]);
+
+        return $data;
+
+    }
+
+    public static function docentes_bilingues_ugel()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                    select 
+                                    row_number() OVER (partition BY ugel.nombre,nivel_educativo_dato_adic ORDER BY imp.fechaActualizacion DESC) AS item,
+                                    imp.fechaActualizacion,ugel.nombre as ugel,nivel_educativo_dato_adic as nivel_educativo,
+                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
+                                    sum(1) as total
+                                    from edu_institucioneducativa inst
+                                    inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
+                                    inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
+                                    inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
+                                    inner join edu_ugel ugel on pla.ugel_id = ugel.id
+                                    inner join par_importacion imp on pla.importacion_id = imp.id
+                                    where tipTra.id = 1
+                                    group by imp.fechaActualizacion,ugel.nombre,nivel_educativo_dato_adic
+                                    having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
+                                    order by ugel.codigo,nivel_educativo_dato_adic                        
+                                ) as datos"
+                        )
+                    )
+     
+                ->get([
+                    DB::raw('item'),    
+                    DB::raw('ugel'),   
+                    DB::raw('fechaActualizacion'),    
+                    DB::raw('nivel_educativo'),    
+                    DB::raw('Bilingue'),
+                    DB::raw('total'),
+                    DB::raw('Bilingue*100/total as porcentaje'),
+                ]);
+
+        return $data;
+
+    }
    
 }

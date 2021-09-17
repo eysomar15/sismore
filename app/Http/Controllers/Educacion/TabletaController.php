@@ -184,7 +184,7 @@ class TabletaController extends Controller
         $anios =  TabletaRepositorio ::tableta_anio( );
 
         $fechas_tabletas = TabletaRepositorio ::fechas_tabletas_anio($anios->first()->id);
-        $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio(6);
+        $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio(6); // poner la variable del año
         
         $categoria1 = [];
         $categoria2 = [];
