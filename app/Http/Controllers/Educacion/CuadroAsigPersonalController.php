@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
 use App\Models\Educacion\CuadroAsigPersonal;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\Indicador;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
@@ -194,6 +195,46 @@ class CuadroAsigPersonalController extends Controller
 
     public function reporteDistrito()
     {
+    }
+
+    public function reportePedagogico()
+    {    
+        $indicador = Indicador::find(35);
+        $title = $indicador->nombre;
+
+        $Lista = CuadroAsigPersonalRepositorio:: docentes_pedagogico('Primaria');
+
+        
+        $sumaPedagogico= 0; 
+        $sumaTotal= 0;
+        $puntos = [];   
+
+        //->sortByDesc('hombres') solo para dar una variacion a los colores del grafico
+        foreach ($Lista as $key => $item) {
+            $sumaPedagogico+= $item->pedagogico; 
+            $sumaTotal+= $item->total;             
+        }
+
+        $puntos[] = ['name'=>'Pedagógico', 'y'=>floatval($sumaPedagogico*100/$sumaTotal)];
+        $puntos[] = ['name'=>'No Pedagógico', 'y'=>floatval(($sumaTotal - $sumaPedagogico)*100/$sumaTotal)];
+
+        $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico     
+        $titulo_grafico = 'Docentes Título Pedagógico - Nivel Primaria';  
+
+        return  view('educacion.CuadroAsigPersonal.ReportePedagogico',["data"=> json_encode($puntos)],compact('Lista','title','contenedor','titulo_grafico'));
+    }
+
+    public function reporteBilingues()
+    {    
+        $indicador = Indicador::find(37);
+        $title = $indicador->nombre;
+
+        $data = CuadroAsigPersonalRepositorio:: docentes_bilingues_ugel();
+        $dataCabecera = $data->unique('ugel');
+
+        $dataCabecera = CuadroAsigPersonalRepositorio:: docentes_bilingues();
+
+        return  view('educacion.CuadroAsigPersonal.ReporteBilingues',compact('data','dataCabecera','title'));
     }
     
 }

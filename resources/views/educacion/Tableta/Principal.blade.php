@@ -30,11 +30,6 @@
                 <div class="card-body">
 
                     <div class="form-group row">
-                        {{-- <div class="col-md-12" id="barra1">       
-                            @include('graficos.Barra')
-                        </div>  --}}
-
-
                         <label class="col-md-1 col-form-label">Año</label>
                         <div class="col-md-2">
                             <select id="anio" name="anio" class="form-control" onchange="cargar_fechas();">                               
@@ -51,22 +46,13 @@
                                     <option value="{{ $item->tableta_id }}"> {{ $item->fechaActualizacion }} </option>
                                 @endforeach
                             </select>
-                        </div>
-                        
+                        </div>                        
                     </div>                    
                            
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                     <br>
-
-
-                    {{-- <div class="col-md-12">                       
-                        <div class="portfolioFilter">
-                            <a href="#" onClick="cargar_resumen_porUgel();"  class="current waves-effect waves-light">UGELES</a>
-                            <a href="#" onClick="cargar_matricula_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>                  
-                        </div>                        
-                    </div> --}}
 
                     <br>
                     <div id="datos01" class="form-group row">                        
