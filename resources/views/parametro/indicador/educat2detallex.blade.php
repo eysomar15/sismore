@@ -52,62 +52,24 @@
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
                         <h3 class="card-title text-primary">Porcentaje de estudiantes por nivel de logro de aprendizaje según UGEL {{$anio->anio}}
-                            {{--<div class="float-right">
+                            <div class="float-right">
                                 <div class="form-group row">
                                     <div class="col-md-12">
                                         <button type="button" class="btn btn-info btn-xs waves-effect waves-light" onclick="abrirdetalle({{$key}},'{{$anio->anio}}')">Detalle</button>
                                     </div>
                                 </div>
-                            </div>--}}
+                            </div>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <table class="table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-primary text-center">UGEL</th>
-                                            <th class="text-secondary text-center">CANTIDAD</th>
-                                            <th class="text-secondary text-center">PREVIO</th>
-                                            <th class="text-danger text-center">CANTIDAD</th>
-                                            <th class="text-danger text-center">INICIO</th>
-                                            <th class="text-warning text-center">CANTIDAD</th>
-                                            <th class="text-warning text-center">PROCESO</th>
-                                            <th class="text-success text-center">CANTIDAD</th>
-                                            <th class="text-success text-center">SATISFACTORIO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($anio->indicador as $ind)
-                                        <tr>
-                                            <td class="text-primary text-center">{{$ind->ugel}}</td>
-                                            <td class="text-secondary text-center">{{$ind->previo}}</td>
-                                            <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>
-                                            <td class="text-danger text-center">{{$ind->inicio}}</td>
-                                            <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>
-                                            <td class="text-warning text-center">{{$ind->proceso}}</td>
-                                            <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}}%</td>
-                                            <td class="text-success text-center">{{$ind->satisfactorio}}</td>
-                                            <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>
-                                        </tr>    
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>
                     </div>
-                    
-                </div>
-            </div>  
-            <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    
-                    <div class="card-body">
-                        {{--<canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>--}}
-                        <div id="con{{$key}}" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+                    <div  class="card-footer text-muted bg-transparent px-0 text-center">Leyenda: 
+                        <span class="badge" style="background-color:#7C7D7D;">PREVIO</span>
+                        <span class="badge" style="background-color:#F25656;">INICIO</span>
+                        <span class="badge" style="background-color:#F2CA4C;">PROCESO</span>
+                        <span class="badge" style="background-color:#22BAA0;">SATISFACTORIO</span>
                     </div>
-                    
                 </div>
             </div>    
             @endforeach
@@ -173,10 +135,6 @@
 @endsection
 
 @section('js')
-<script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
-{{--<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>--}}
     <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -302,67 +260,6 @@
             }
         }
         @foreach ($anios as $pos1 => $anio)
-            Highcharts.chart('con{{$pos1}}',{
-                chart:{
-                    type:'column',
-                },
-                title:{text:'',},
-                xAxis:{
-                    categories:[
-                        @foreach ($anio->indicador as $item)
-                        {!!'"'.$item->ugel.'",'!!}
-                        @endforeach
-                    ]
-                },
-                yAxis:{
-                    allowDecimals:false,
-                    min:0,
-                    title:{enabled:false,text:'Porcentaje',}
-                },
-                series:[{
-                    name:'Previo',
-                    data:[
-                        @foreach ($anio->indicador as $item)
-                        {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ]
-                },{
-                    name:'Inicio',
-                    data:[
-                        @foreach ($anio->indicador as $item)
-                        {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ],
-                },{
-                    name:'Proceso',
-                    data:[
-                        @foreach ($anio->indicador as $item)
-                        {{ round(($item->proceso * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ]
-                },{
-                    name:'Satisfactorio',
-                    data:[
-                        @foreach ($anio->indicador as $item)
-                        {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ]
-                }],
-                plotOptions:{
-                    columns:{stacking:'normal'},
-                    series:{
-                        borderWidth:0,
-                        dataLabels:{
-                            enabled:true,
-                            format:'{point.y:.1f}%',
-                        },
-                    }
-                },
-                credits:false,
-            });
-    @endforeach   
-    {{--   
-        @foreach ($anios as $pos1 => $anio)
         var myChart = new Chart($('#indicador{{$pos1}}'), {
             type: 'bar',
             data: {
@@ -479,7 +376,7 @@
             }
         });
         @endforeach
-        --}}     
+
     </script>
 
 @endsection

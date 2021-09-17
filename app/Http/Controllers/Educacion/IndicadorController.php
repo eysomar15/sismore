@@ -198,6 +198,7 @@ class IndicadorController extends Controller
         foreach ($materias as $key => $materia) {
             $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
         }
+        //return $materias;
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
         return view('parametro.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
     }
@@ -905,6 +906,14 @@ class IndicadorController extends Controller
                             </div>
         </div>';
         return $card;
+    }
+    public function indicadorDerivados2x(Request $request)
+    {
+        $card = '';
+        $materia = Materia::find($request->materia);
+        $inds = IndicadorRepositorio::listar_indicadorInstitucion($request->anio, $request->grado, $request->tipo, $materia->id, 0, 0);
+        return  datatables()::of($inds);
+       
     }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
