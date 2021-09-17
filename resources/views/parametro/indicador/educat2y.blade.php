@@ -37,13 +37,18 @@
                     <div class="card-header border-primary bg-transparent pb-0">
                         <h3 class="card-title text-primary">Estudiantes del {{$gt[0]->grado}} grado de {{$gt[0]->nivel}} que logran el nivel satisfactorio en  {{$materia->descripcion}}
                             <div class="float-right">
+                                <!--div class="form-group row">
+                                    <div class="col-md-12">
+                                        <a href="{{route('ind.det.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}"  class="btn btn-primary btn-xs">Ver detalle</a>
+                                    </div>
+                                </div-->
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary btn-xs waves-effect waves-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="mdi mdi-chevron-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        {{--<li><a href="#" class="dropdown-item" onclick="abrirdetalle({{$key}})">Datos del Grafico</a></li>
-                                        <li class="dropdown-divider"></li>--}}
+                                        <li><a href="#" class="dropdown-item" onclick="abrirdetalle({{$key}})">Datos del Grafico</a></li>
+                                        <li class="dropdown-divider"></li>
                                         <li><a href="{{route('ind.det.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}" class="dropdown-item">Historico</a></li>
                                         <li><a href="{{route('ind.res.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}" class="dropdown-item">Detalle</a></li>
                                     </ul>
@@ -52,49 +57,14 @@
                             
                         </h3>
                     </div>
-                    <div class="card-body "{{-- style="height:280px;" --}}>
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-primary text-center">AÑO</th>
-                                        <th class="text-secondary text-center">CANTIDAD</th>
-                                        <th class="text-secondary text-center">PREVIO</th>
-                                        <th class="text-danger text-center">CANTIDAD</th>
-                                        <th class="text-danger text-center">INICIO</th>
-                                        <th class="text-warning text-center">CANTIDAD</th>
-                                        <th class="text-warning text-center">PROCESO</th>
-                                        <th class="text-success text-center">CANTIDAD</th>
-                                        <th class="text-success text-center">SATISFACTORIO</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($materia->indicador as $ind)
-                                    <tr>
-                                        <td class="text-primary text-center">{{$ind->anio}}</td>
-                                        <td class="text-secondary text-center">{{$ind->previo}}</td>
-                                        <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>
-                                        <td class="text-danger text-center">{{$ind->inicio}}</td>
-                                        <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>
-                                        <td class="text-warning text-center">{{$ind->proceso}}</td>
-                                        <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}}%</td>
-                                        <td class="text-success text-center">{{$ind->satisfactorio}}</td>
-                                        <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>
-                                    </tr>    
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>                        
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    
                     <div class="card-body">
-                        {{--<canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>--}}
-                        <div id="con{{$key}}" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+                        <canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>
+                    </div>
+                    <div  class="card-footer text-muted bg-transparent px-0 text-center">Leyenda: 
+                        <span class="badge" style="background-color:#7C7D7D;">PREVIO</span>
+                        <span class="badge" style="background-color:#F25656;">INICIO</span>
+                        <span class="badge" style="background-color:#F2CA4C;">PROCESO</span>
+                        <span class="badge" style="background-color:#22BAA0;">SATISFACTORIO</span>
                     </div>
                 </div>
             </div>    
@@ -102,16 +72,16 @@
             
         </div><!-- End row -->
 
-        {{--<div class="row">
+        <div class="row">
         <div class="col-xl-6">
                 <div class="card card-border card-primary">
                      
                     <div class="card-body">
-                        <div id="con0" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+                        <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
                     </div>
                 </div>
             </div>
-        </div>--}}
+        </div>
  
     </div>
 
@@ -183,7 +153,7 @@
         function abrirdetalle(pos){
             $('#modal_detalle_'+pos).modal('show');
         }
-        {{--@foreach ($materias as $pos1 => $materia)
+        @foreach ($materias as $pos1 => $materia)
         var myChart = new Chart($('#indicador{{$pos1}}'), {
             type: 'bar',
             data: {
@@ -299,54 +269,28 @@
                 },
             }
         });
-        @endforeach--}}
-    
-    @foreach ($materias as $pos1 => $materia)
-            Highcharts.chart('con{{$pos1}}',{
+        @endforeach
+
+            Highcharts.chart('con2',{
                 chart:{
                     type:'column',
                 },
                 title:{text:'',},
                 xAxis:{
-                    categories:[
-                        @foreach ($materia->indicador as $item)
-                        {!!'"'.$item->anio.'",'!!}
-                        @endforeach
-                    ]
+                    categories:['2019','2020','2021']
                 },
                 yAxis:{
                     allowDecimals:false,
                     min:0,
+                    max:100,
                     title:{enabled:false,text:'Porcentaje',}
                 },
                 series:[{
-                    name:'Previo',
-                    data:[
-                        @foreach ($materia->indicador as $item)
-                        {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ]
+                    name:'ano1',
+                    data:[40,50,20],
                 },{
-                    name:'Inicio',
-                    data:[
-                        @foreach ($materia->indicador as $item)
-                        {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ],
-                },{
-                    name:'Proceso',
-                    data:[
-                        @foreach ($materia->indicador as $item)
-                        {{ round(($item->proceso * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ]
-                },{
-                    name:'Satisfactorio',
-                    data:[
-                        @foreach ($materia->indicador as $item)
-                        {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ]
+                    name:'ano2',
+                    data:[60,50,80]
                 }],
                 plotOptions:{
                     columns:{stacking:'normal'},
@@ -360,7 +304,6 @@
                 },
                 credits:false,
             });
-    @endforeach            
     </script>
 
 @endsection

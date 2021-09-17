@@ -140,7 +140,6 @@
             graficarBar({!!$datas['ugel']!!});
         });
         function abrirdetalle(){
-            $('#modal_detalle').modal('show');
         }        
         function graficarBar(datax){
             Highcharts.chart('con2',{
