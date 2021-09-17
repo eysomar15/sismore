@@ -518,9 +518,13 @@ class IndicadorRepositorio
                     'v3.nombreInstEduc as nombre',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
+                    DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                     DB::raw('sum(inicio) as inicio'),
+                    DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                     DB::raw('sum(proceso) as proceso'),
+                    DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                     DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
                 ]);
         } else if ($gestion > 0 && $area == 0) {
             $query = DB::table('edu_eceresultado as v1')
@@ -539,30 +543,13 @@ class IndicadorRepositorio
                     'v3.nombreInstEduc as nombre',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
+                    DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                     DB::raw('sum(inicio) as inicio'),
+                    DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                     DB::raw('sum(proceso) as proceso'),
+                    DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                     DB::raw('sum(satisfactorio) as satisfactorio'),
-                ]);
-        } else if ($gestion == 0 && $area > 0) {
-            $query = DB::table('edu_eceresultado as v1')
-                ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
-                ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-                ->where('v1.materia_id', $materia)
-                ->where('v2.grado_id', $grado)
-                ->where('v2.anio', $anio)
-                ->where('v2.tipo', $tipo)
-                ->where('v3.Area_id', $area)
-                ->orderBy('v3.nombreInstEduc')
-                ->groupBy('v3.id')
-                ->groupBy('v3.nombreInstEduc')
-                ->get([
-                    'v3.id',
-                    'v3.nombreInstEduc as nombre',
-                    DB::raw('sum(evaluados) as evaluados'),
-                    DB::raw('sum(previo) as previo'),
-                    DB::raw('sum(inicio) as inicio'),
-                    DB::raw('sum(proceso) as proceso'),
-                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
                 ]);
         } else {
             $query = DB::table('edu_eceresultado as v1')
@@ -580,9 +567,13 @@ class IndicadorRepositorio
                     'v3.nombreInstEduc as nombre',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
+                    DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                     DB::raw('sum(inicio) as inicio'),
+                    DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                     DB::raw('sum(proceso) as proceso'),
+                    DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                     DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
                 ]);
         }
 
@@ -607,12 +598,12 @@ class IndicadorRepositorio
             ->orderBy('esTitulado', 'desc')
             ->get([
                 'esTitulado as name',
-                DB::raw('(select count(esTitulado) from `edu_plaza` where `nivelModalidad_id` = '.$nivel.') as total'),
+                DB::raw('(select count(esTitulado) from `edu_plaza` where `nivelModalidad_id` = ' . $nivel . ') as total'),
                 DB::raw('count(esTitulado) as y')
             ]);
-            foreach ($query as $key => $item) {
-                $item->name=($item->name=='0'?'NO':'SI');
-            }
+        foreach ($query as $key => $item) {
+            $item->name = ($item->name == '0' ? 'NO' : 'SI');
+        }
         return $query;
     }
     public static function listar_profesorestituladougel($nivel, $titulado = null)
@@ -632,12 +623,12 @@ class IndicadorRepositorio
                     DB::raw('count(v1.esTitulado) as si'),
                     DB::raw('count(v1.esTitulado) as y')
                 ]);
-                foreach ($query as $value) {
-                    $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
-                    $value->total = $indutt->first()->total;
-                    $value->name = str_replace('UGEL', '', $value->name);
-                    $value->y=round(100*$value->y/$value->total,2);
-                }
+            foreach ($query as $value) {
+                $indutt = IndicadorRepositorio::listar_profesorestituladougel2($nivel, $value->id);
+                $value->total = $indutt->first()->total;
+                $value->name = str_replace('UGEL', '', $value->name);
+                $value->y = round(100 * $value->y / $value->total, 2);
+            }
         } else {
             $query = DB::table('edu_plaza as v1')
                 ->join('edu_ugel as v2', 'v2.id', '=', 'v1.ugel_id')

@@ -38,6 +38,35 @@
                 </div>
             </div>
         </form><!--End form-->
+        {{--<div class="row">
+            @foreach ($anios as $key => $anio)
+            <div class="col-xl-6">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0">
+                        <h3 class="card-title text-primary">Indicador del curso de {{$anio->anio}}
+                            <div class="float-right">
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-info btn-xs waves-effect waves-light" onclick="abrirdetalle('{{$anio->anio}}')">Detalle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>
+                    </div>
+                    <div  class="card-footer text-muted bg-transparent px-0 text-center">Leyenda: 
+                        <span class="badge" style="background-color:#7C7D7D;">PREVIO</span>
+                        <span class="badge" style="background-color:#F25656;">INICIO</span>
+                        <span class="badge" style="background-color:#F2CA4C;">PROCESO</span>
+                        <span class="badge" style="background-color:#22BAA0;">SATISFACTORIO</span>
+                    </div>
+                </div>
+            </div>    
+            @endforeach
+            
+        </div><!-- End row -->--}}
         <div class="row">
             <div class="col-xl-12">
                 <div class="card card-border card-primary">
@@ -99,25 +128,6 @@
                         </div>
                         <div class="row" id="vistatabla2">
                         </div>
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="table-responsive">
-                                    <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
-                                        <thead class="cabecera-dataTable">                                    
-                                            <th>IIEE</th>
-                                            <th>CANTIDAD</th>
-                                            <th>PREVIO</th>
-                                            <th>CANTIDAD</th>
-                                            <th>INICIO</th>
-                                            <th>CANTIDAD</th>
-                                            <th>PROCESO</th>
-                                            <th>CANTIDAD</th>
-                                            <th>SATISFACTORIO</th>
-                                        </thead>
-                                    </table>
-                                </div>   
-                            </div>                           
-                        </div>
                     </div>
                 </div>
             </div>    
@@ -145,18 +155,13 @@
 @endsection
 
 @section('js')
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             satisfactorios();
             vistaindicador();
             vistaindicador2();
             cambiarfechas();
-            cargardatatable1();
         }); 
         function cambiarfechas(){
             $('#anio1').html($('#anio').val());
@@ -257,58 +262,6 @@
             $('#modal_detalle').modal('show');
             indicadorugel();
         }
-        function cargardatatable1(){
-            datos = $("#form_indicadores").serialize() + '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
-            $('#datatable1').DataTable({
-                "ajax": "{{route('ind.ajax.derivados2x')}}",
-                "type":"post",
-                "data": datos,
-                headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                "columns":[
-                    {data:'nombre'},
-                    {data:'evaluados'},
-                    {data:'previo'},
-                    {data:'evaluados'},
-                    {data:'inicio'}, 
-                    {data:'evaluados'},
-                    {data:'proceso'},      
-                    {data:'evaluados'},           
-                    {data:'satisfactorio'},
-                ],
-                responsive:true,
-                autoWidth:false,
-                order:false,
-            "language": {
-            "lengthMenu": "Mostrar "+
-            `<select class="custom-select custom-select-sm form-control form-control-sm">
-                <option value = '10'> 10</option>
-                <option value = '25'> 25</option>
-                <option value = '50'> 50</option>
-                <option value = '100'>100</option>
-                <option value = '-1'>Todos</option>
-                </select>` + " registros por página",          
-            "info": "Mostrando la página _PAGE_ de _PAGES_" ,
-            "infoEmpty": "No records available",
-            "infoFiltered": "(Filtrado de _MAX_ registros totales)",  
-            "emptyTable":			"No hay datos disponibles en la tabla.",
-            "info":		   			"Del _START_ al _END_ de _TOTAL_ registros ",
-            "infoEmpty":			"Mostrando 0 registros de un total de 0. registros",
-            "infoFiltered":			"(filtrados de un total de _MAX_ )",
-            "infoPostFix":			"",           
-            "loadingRecords":		"Cargando...",
-            "processing":			"Procesando...",
-            "search":				"Buscar:",
-            "searchPlaceholder":	"Dato para buscar",
-            "zeroRecords":			"No se han encontrado coincidencias.",            
-            "paginate":{
-                "next":"siguiente",
-                "previous":"anterior"
-                }
-            }
-        }); 
-        }
        /* function indicadorugel() {
             if (true) {
                 $.ajax({
@@ -330,6 +283,124 @@
                 });
             }
         }*/
+        {{--@foreach ($anios as $pos1 => $anio)
+        var myChart = new Chart($('#indicador{{$pos1}}'), {
+            type: 'bar',
+            data: {
+                labels: [
+                    @foreach ($anio->indicador as $item)
+                    {!!'"'.$item->ugel.'",'!!}
+                    @endforeach
+                ],
+                datasets: [{
+                    label: 'PREVIO',
+                    data: [
+                        @foreach ($anio->indicador as $item)
+                        {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#7C7D7D', //'rgba(54, 162, 235, 0.2)',
+                    borderColor: '#7C7D7D',
+                    borderWidth: 1,
+                },{
+                    label: 'INICIO',
+                    data: [
+                        @foreach ($anio->indicador as $item)
+                        {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#F25656', //'rgba(54, 162, 235, 0.2)',
+                    borderColor: '#F25656',
+                    borderWidth: 1,
+                }, {
+                    label: 'PROCESO',
+                    data: [
+                        @foreach ($anio->indicador as $item)
+                        {{ round(($item->proceso * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#F2CA4C', //'rgba(54, 162, 235, 0.2)',
+                    borderColor: '#F2CA4C',
+                    borderWidth: 1
+                }, {
+                    label: 'SATISFACTORIO',
+                    data: [
+                        @foreach ($anio->indicador as $item)
+                        {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
+                        @endforeach
+                    ],
+                    backgroundColor: '#22BAA0', // 'rgba(54, 162, 235, 0.2)',
+                    borderColor: '#22BAA0',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: false,
+                    text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
+                },
+                legend: {
+                    display: false,
+                    position: 'bottom',
+                },
+                scales: {
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Porcentaje'
+                        }
+                    }],
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'UGEL'
+                        }
+                    }]
+                },  
+                tooltips: {
+                    enabled: false,
+                    mode: 'index',
+                    intersect: true,
+                    //position: 'average'
+                },
+                maintainAspectRatio: true,
+                hover: {
+                    animationDuration: 0
+                },
+                animation: {
+                    duration: 1,
+                    onComplete: function() {
+                    let chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+                        ctx.textAlign = 'center';
+                        //ctx.textBaseline = 'bottom';
+                        this.data.datasets.forEach(function(dataset, i){
+                            let meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function(bar, index) {
+                                let data = dataset.data[index];
+                                if(data>0){
+                                    ctx.fillText(data+'%', bar._model.x ,bar._model.y+4.5+(bar._model.base-bar._model.y)/2);
+                                }
+                                
+                            });
+                        });
+                    },
+                },
+            }
+        });
+        @endforeach--}}
+
     </script>
 
 @endsection

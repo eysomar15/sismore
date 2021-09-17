@@ -907,13 +907,22 @@ class IndicadorController extends Controller
         </div>';
         return $card;
     }
-    public function indicadorDerivados2x(Request $request)
+    public function indicadorDerivados2x($anio, $grado, $tipo, $materia, $gestion, $area)
     {
-        $card = '';
-        $materia = Materia::find($request->materia);
-        $inds = IndicadorRepositorio::listar_indicadorInstitucion($request->anio, $request->grado, $request->tipo, $materia->id, 0, 0);
-        return  datatables()::of($inds);
-       
+        $inds = IndicadorRepositorio::listar_indicadorInstitucion($anio, $grado, $tipo, $materia, $gestion, $area);
+        //return response()->json(compact('anio','grado','tipo','materia','gestion','area'));
+        return  datatables()->of($inds)
+        ->editColumn('nombre','<div class="text-primary">{{$nombre}}</div>')
+        ->editColumn('previo','<div class="text-secondary text-center">{{$previo}}</div>')
+        ->editColumn('p1','<div class="text-secondary text-center">{{$p1}}</div>')
+        ->editColumn('inicio','<div class="text-danger text-center">{{$inicio}}</div>')
+        ->editColumn('p2','<div class="text-danger text-center">{{$p2}}</div>')
+        ->editColumn('proceso','<div class="text-warning text-center">{{$proceso}}</div>')
+        ->editColumn('p3','<div class="text-warning text-center">{{$p3}}</div>')
+        ->editColumn('satisfactorio','<div class="text-success text-center">{{$satisfactorio}}</div>')
+        ->editColumn('p4','<div class="text-success text-center">{{$p4}}</div>')
+        ->rawColumns(['nombre','previo','p1','inicio','p2','proceso','p3','satisfactorio','p4',])
+        ->toJson();
     }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
@@ -954,10 +963,10 @@ class IndicadorController extends Controller
                 $cp = CensoRepositorio::Listar_IE_nivel($provincia, $distrito, $indicador_id, $anio_id, $nivel);
                 break;
             case 42:
-                $cp = [];//CensoRepositorio::listar_conDesague($provincia, $distrito, $indicador_id, $anio_id);
+                $cp = []; //CensoRepositorio::listar_conDesague($provincia, $distrito, $indicador_id, $anio_id);
                 break;
             case 43:
-                $cp =CensoRepositorio::Listar_IE_computo($provincia, $distrito, $indicador_id, $anio_id);
+                $cp = CensoRepositorio::Listar_IE_computo($provincia, $distrito, $indicador_id, $anio_id);
                 break;
             default:
                 return [];
