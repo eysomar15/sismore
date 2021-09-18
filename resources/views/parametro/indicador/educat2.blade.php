@@ -1,5 +1,4 @@
 @extends('layouts.main',['titlePage'=>'INDICADORES'])
-{{--,'breadcrumb'=>['Relacion de indicadores','Indicador']--}}
 @section('content')
     <div class="content">
         <div class="row">
@@ -24,7 +23,6 @@
                                     {{ $item->comentario }}, de la fecha {{ $item->created_at }}
                                 </div>
                             @endforeach
-
                         </div>
                     </div>
                 </div>
@@ -42,8 +40,6 @@
                                         <i class="mdi mdi-chevron-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        {{--<li><a href="#" class="dropdown-item" onclick="abrirdetalle({{$key}})">Datos del Grafico</a></li>
-                                        <li class="dropdown-divider"></li>--}}
                                         <li><a href="{{route('ind.det.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}" class="dropdown-item">Historico</a></li>
                                         <li><a href="{{route('ind.res.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}" class="dropdown-item">Detalle</a></li>
                                     </ul>
@@ -91,29 +87,15 @@
             </div>
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
-                    
                     <div class="card-body">
-                        {{--<canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>--}}
                         <div id="con{{$key}}" style="min-width:400px;height:300px;margin:0 auto;" ></div>
                     </div>
                 </div>
             </div>    
             @endforeach
-            
         </div><!-- End row -->
-
-        {{--<div class="row">
-        <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                     
-                    <div class="card-body">
-                        <div id="con0" style="min-width:400px;height:300px;margin:0 auto;" ></div>
-                    </div>
-                </div>
-            </div>
-        </div>--}}
- 
     </div>
+
 
     @foreach ($materias as $pos => $materia)
     <!--  Modal content for the above example -->
@@ -174,11 +156,9 @@
     <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
-    {{--<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>--}}
-    <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
-           
+       
         });
         function abrirdetalle(pos){
             $('#modal_detalle_'+pos).modal('show');
@@ -202,7 +182,8 @@
                     title:{enabled:false,text:'Porcentaje',}
                 },
                 series:[{
-                    name:'Previo',                    
+                    name:'Previo',     
+                    color:'#7C7D7D',
                     data:[
                         @foreach ($materia->indicador as $item)
                         {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
@@ -210,7 +191,7 @@
                     ]
                 },{
                     name:'Inicio',
-                    colors:['red','blue','red','blue',],                    
+                    color:'#F25656',
                     data:[
                         @foreach ($materia->indicador as $item)
                         {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
@@ -218,6 +199,7 @@
                     ],
                 },{
                     name:'Proceso',
+                    color:'#F2CA4C',
                     data:[
                         @foreach ($materia->indicador as $item)
                         {{ round(($item->proceso * 100) / $item->evaluados, 2) . ',' }}
@@ -225,6 +207,7 @@
                     ]
                 },{
                     name:'Satisfactorio',
+                    color:'#22BAA0',
                     data:[
                         @foreach ($materia->indicador as $item)
                         {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}

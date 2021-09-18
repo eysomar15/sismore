@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'RESUMEN'])
+@extends('layouts.main',['titlePage'=>'DETALLE'])
 
 @section('content')
     <div class="content">

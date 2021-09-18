@@ -1,16 +1,7 @@
-@extends('layouts.main',['titlePage'=>'DETALLE'])
+@extends('layouts.main',['titlePage'=>'HISTORICO'])
 
 @section('content')
     <div class="content">
-        <!--div class="row">
-            <div class="col-lg-12">
-                <div class="card card-fill bg-success">
-                    <div class="card-header bg-transparent">
-                        <h3 class="card-title text-white">{{ $title }}</h3>
-                    </div>
-                </div>
-            </div>
-        </div-->
         <form id="form_indicadores" action="#">
             @csrf
             <input type="hidden" name="grado" value="{{ $grado }}">
@@ -52,13 +43,6 @@
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
                         <h3 class="card-title text-primary">Porcentaje de estudiantes por nivel de logro de aprendizaje según UGEL {{$anio->anio}}
-                            {{--<div class="float-right">
-                                <div class="form-group row">
-                                    <div class="col-md-12">
-                                        <button type="button" class="btn btn-info btn-xs waves-effect waves-light" onclick="abrirdetalle({{$key}},'{{$anio->anio}}')">Detalle</button>
-                                    </div>
-                                </div>
-                            </div>--}}
                         </h3>
                     </div>
                     <div class="card-body">
@@ -104,7 +88,6 @@
                 <div class="card card-border card-primary">
                     
                     <div class="card-body">
-                        {{--<canvas id="indicador{{$key}}" data-type="Bar" height="200"></canvas>--}}
                         <div id="con{{$key}}" style="min-width:400px;height:300px;margin:0 auto;" ></div>
                     </div>
                     
@@ -176,14 +159,10 @@
 <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
-{{--<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>--}}
-    <script src="{{ asset('/') }}assets/libs/chart-js/Chart.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             satisfactorios();
             vistaindicador();
-            //vistaindicador2();
-            
         }); 
         function cargardistritos() {
             $.ajax({
@@ -208,7 +187,6 @@
         }
         function vistaindicador() {
             datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val()+ '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
-            console.log(datos);
             if (true) {
                 $.ajax({
                     headers: {
@@ -230,30 +208,6 @@
                 });
             }
         }
-        /*function vistaindicador2() {
-            datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val()+ '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
-            console.log(datos);
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.derivados2') }}",
-                    type: 'post',
-                    data: datos,
-                    beforeSend: function() {
-                        $("#vistatabla2").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //  console.log(data);
-                        $("#vistatabla2").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }*/
         function satisfactorios() {
             if (true) {
                 $.ajax({
@@ -278,7 +232,6 @@
         function abrirdetalle(pos,anio){
             $('input[name=aniox]').val(anio);
             $('#modal_detalle_'+pos).modal('show');
-            //indicadorugel();
         }
         function indicadorugel() {
             if (true) {
@@ -321,6 +274,7 @@
                 },
                 series:[{
                     name:'Previo',
+                    color:'#7C7D7D',
                     data:[
                         @foreach ($anio->indicador as $item)
                         {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
@@ -328,6 +282,7 @@
                     ]
                 },{
                     name:'Inicio',
+                    color:'#F25656',
                     data:[
                         @foreach ($anio->indicador as $item)
                         {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
@@ -335,6 +290,7 @@
                     ],
                 },{
                     name:'Proceso',
+                    color:'#F2CA4C',
                     data:[
                         @foreach ($anio->indicador as $item)
                         {{ round(($item->proceso * 100) / $item->evaluados, 2) . ',' }}
@@ -342,6 +298,7 @@
                     ]
                 },{
                     name:'Satisfactorio',
+                    color:'#22BAA0',
                     data:[
                         @foreach ($anio->indicador as $item)
                         {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
@@ -361,125 +318,7 @@
                 credits:false,
             });
     @endforeach   
-    {{--   
-        @foreach ($anios as $pos1 => $anio)
-        var myChart = new Chart($('#indicador{{$pos1}}'), {
-            type: 'bar',
-            data: {
-                labels: [
-                    @foreach ($anio->indicador as $item)
-                    {!!'"'.$item->ugel.'",'!!}
-                    @endforeach
-                ],
-                datasets: [{
-                    label: 'PREVIO',
-                    data: [
-                        @foreach ($anio->indicador as $item)
-                        {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ],
-                    backgroundColor: '#7C7D7D', //'rgba(54, 162, 235, 0.2)',
-                    borderColor: '#7C7D7D',
-                    borderWidth: 1,
-                },{
-                    label: 'INICIO',
-                    data: [
-                        @foreach ($anio->indicador as $item)
-                        {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ],
-                    backgroundColor: '#F25656', //'rgba(54, 162, 235, 0.2)',
-                    borderColor: '#F25656',
-                    borderWidth: 1,
-                }, {
-                    label: 'PROCESO',
-                    data: [
-                        @foreach ($anio->indicador as $item)
-                        {{ round(($item->proceso * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ],
-                    backgroundColor: '#F2CA4C', //'rgba(54, 162, 235, 0.2)',
-                    borderColor: '#F2CA4C',
-                    borderWidth: 1
-                }, {
-                    label: 'SATISFACTORIO',
-                    data: [
-                        @foreach ($anio->indicador as $item)
-                        {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
-                        @endforeach
-                    ],
-                    backgroundColor: '#22BAA0', // 'rgba(54, 162, 235, 0.2)',
-                    borderColor: '#22BAA0',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                title: {
-                    display: false,
-                    text: 'Estudiantes del 2do grado de primaria que logran el nivel satisfactorio en Lectura'
-                },
-                legend: {
-                    display: false,
-                    position: 'bottom',
-                },
-                scales: {
-                    yAxes: [{
-                        stacked: true,
-                        ticks: {
-                            beginAtZero: true,
-                            min: 0,
-                            max: 100
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Porcentaje'
-                        }
-                    }],
-                    xAxes: [{
-                        stacked: true,
-                        ticks: {
-                            beginAtZero: true
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'UGEL'
-                        }
-                    }]
-                },  
-                tooltips: {
-                    enabled: false,
-                    mode: 'index',
-                    intersect: true,
-                    //position: 'average'
-                },
-                maintainAspectRatio: true,
-                hover: {
-                    animationDuration: 0
-                },
-                animation: {
-                    duration: 1,
-                    onComplete: function() {
-                    let chartInstance = this.chart,
-                        ctx = chartInstance.ctx;
-                        ctx.textAlign = 'center';
-                        //ctx.textBaseline = 'bottom';
-                        this.data.datasets.forEach(function(dataset, i){
-                            let meta = chartInstance.controller.getDatasetMeta(i);
-                            meta.data.forEach(function(bar, index) {
-                                let data = dataset.data[index];
-                                if(data>0){
-                                    ctx.fillText(data+'%', bar._model.x ,bar._model.y+4.5+(bar._model.base-bar._model.y)/2);
-                                }
-                                
-                            });
-                        });
-                    },
-                },
-            }
-        });
-        @endforeach
-        --}}     
+   
     </script>
 
 @endsection
