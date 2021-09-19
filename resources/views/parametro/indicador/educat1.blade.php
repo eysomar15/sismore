@@ -49,10 +49,6 @@
             </div>
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
-                    <!--div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">GRAFICA
-                        </h3>
-                    </div-->
                     <div class="card-body">
                         <div id="con1" style="min-width:400px;height:300px;margin:0 auto;" ></div>
                     </div>
@@ -64,8 +60,6 @@
 
 @section('js')
 
-    <!-- flot chart -->
-    <!--script src="{{ asset('/') }}assets/libs/flot-charts/jquery.flot.js"></script-->
     <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>

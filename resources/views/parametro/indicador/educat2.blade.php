@@ -95,61 +95,6 @@
             @endforeach
         </div><!-- End row -->
     </div>
-
-
-    @foreach ($materias as $pos => $materia)
-    <!--  Modal content for the above example -->
-    <div id="modal_detalle_{{$pos}}" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Estudiantes del {{$gt[0]->grado}} grado de {{$gt[0]->nivel}} que logran el nivel satisfactorio en  {{$materia->descripcion}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <table class="table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-primary text-center">AÑO</th>
-                                            <th class="text-secondary text-center">CANTIDAD</th>
-                                            <th class="text-secondary text-center">PREVIO</th>
-                                            <th class="text-danger text-center">CANTIDAD</th>
-                                            <th class="text-danger text-center">INICIO</th>
-                                            <th class="text-warning text-center">CANTIDAD</th>
-                                            <th class="text-warning text-center">PROCESO</th>
-                                            <th class="text-success text-center">CANTIDAD</th>
-                                            <th class="text-success text-center">SATISFACTORIO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($materia->indicador as $ind)
-                                        <tr>
-                                            <td class="text-primary text-center">{{$ind->anio}}</td>
-                                            <td class="text-secondary text-center">{{$ind->previo}}</td>
-                                            <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}} %</td>
-                                            <td class="text-danger text-center">{{$ind->inicio}}</td>
-                                            <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}} %</td>
-                                            <td class="text-warning text-center">{{$ind->proceso}}</td>
-                                            <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}} %</td>
-                                            <td class="text-success text-center">{{$ind->satisfactorio}}</td>
-                                            <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}} %</td>
-                                        </tr>    
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->    
-    @endforeach
-
 @endsection
 
 @section('js')

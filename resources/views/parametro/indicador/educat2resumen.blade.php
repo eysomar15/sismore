@@ -123,23 +123,6 @@
         <div class="row">
         </div><!-- End row -->
     </div>
-
-
-    <!--  Modal content for the above example -->
-    <div id="modal_detalle" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">{{$title}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row" id="vistaugel"></div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->    
-
 @endsection
 
 @section('js')
@@ -182,81 +165,43 @@
         }
         function vistaindicador() {
             datos = $("#form_indicadores").serialize() + '&provincia=' + $('#provincia').val() + '&distrito=' + $('#distrito').val();
-            console.log(datos);
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.derivados') }}",
-                    type: 'post',
-                    data: datos,
-                    beforeSend: function() {
-                        $("#vistatabla").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //  console.log(data);
-                        $("#vistatabla").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
+            $.ajax({
+                headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
+                url: "{{ route('ind.ajax.reporteubigeo') }}",
+                type: 'post',
+                data: datos,
+                beforeSend: function() {
+                    $("#vistatabla").html('<br><h3>Cargando datos...</h3>');
+                },
+                success: function(data) {
+                    $("#vistatabla").html(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
         }
-        function vistaindicador2() {
-            datos = $("#form_indicadores").serialize() + '&gestion=' + $('#gestion').val()+ '&area=' + $('#area').val();
-            console.log(datos);
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.derivados2') }}",
-                    type: 'post',
-                    data: datos,
-                    beforeSend: function() {
-                        $("#vistatabla2").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        //  console.log(data);
-                        $("#vistatabla2").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }
+        
         function satisfactorios() {
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.satisfactorio') }}",
-                    type: 'post',
-                    data: $("#form_indicadores").serialize(),
-                    beforeSend: function() {
-                        $("#vistaindicadores").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        $("#vistaindicadores").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }
-        function abrirdetalle(anio){
-            $('input[name=aniox]').val(anio);
-            $('#modal_detalle').modal('show');
-            indicadorugel();
+            $.ajax({
+                headers: {'X-CSRF-TOKEN': $('input[name=_token]').val()},
+                url: "{{ route('ind.ajax.satisfactorio') }}",
+                type: 'post',
+                data: $("#form_indicadores").serialize(),
+                beforeSend: function() {
+                    $("#vistaindicadores").html('<br><h3>Cargando datos...</h3>');
+                },
+                success: function(data) {
+                    $("#vistaindicadores").html(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
         }
         function cargardatatable1(){
             $('#datatable1').DataTable({
-                "ajax": "{{url('/')}}/INDICADOR/Derivados2x/" + $('#anio').val()+ "/" + $('#grado').val()+"/" + 
+                "ajax": "{{url('/')}}/INDICADOR/ReporteGestionAreaDT/" + $('#anio').val()+ "/" + $('#grado').val()+"/" + 
                 $('#tipo').val()+"/" + $('#materia').val()+"/" + $('#gestion').val()+ "/" + $('#area').val(),
                 "columns":[
                     {data:'nombre'},
@@ -302,27 +247,6 @@
                     }
             }); 
         }
-       /* function indicadorugel() {
-            if (true) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                    },
-                    url: "{{ route('ind.ajax.ugel') }}",
-                    type: 'post',
-                    data: $("#form_indicadores").serialize(),
-                    beforeSend: function() {
-                        $("#vistaugel").html('<br><h3>Cargando datos...</h3>');
-                    },
-                    success: function(data) {
-                        $("#vistaugel").html(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                    },
-                });
-            }
-        }*/
     </script>
 
 @endsection

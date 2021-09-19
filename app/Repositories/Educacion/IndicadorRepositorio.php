@@ -382,7 +382,6 @@ class IndicadorRepositorio
                 ->where('v2.anio', $anio)
                 ->where('v2.tipo', $tipo)
                 ->where('v1.materia_id', $materia)
-
                 ->groupBy('v5.dependencia')
                 ->get([
                     'v5.dependencia as id',
