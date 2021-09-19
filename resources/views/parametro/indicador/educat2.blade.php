@@ -45,7 +45,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            
                         </h3>
                     </div>
                     <div class="card-body "{{-- style="height:280px;" --}}>
