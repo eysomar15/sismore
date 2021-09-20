@@ -368,6 +368,62 @@ class MatriculaRepositorio
     }
 
 
+    public static function total_matricula_anual($anio_id)
+    { 
+        //->where('matDet.nivel','!=','E') 
+
+        $data = DB::table(
+                        DB::raw("(
+                            select fechaactualizacion,sum(cantidad) as cantTotal ,
+                            sum(case when id = 10 then cantidad else 0 end ) as ugel10,
+                            sum(case when id = 11 then cantidad else 0 end ) as ugel11,
+                            sum(case when id = 12 then cantidad else 0 end ) as ugel12,
+                            sum(case when id = 13 then cantidad else 0 end ) as ugel13
+                            from (
+
+                                            select 
+                                            fechaactualizacion,
+                                            ugel.id,
+                                            sum(           
+                                                                            ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
+                                                                            ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
+                                                                            ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
+                                                                            ifnull(cinco_anios_hombre_ebe,0) + ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
+                                                                            ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
+                                                                            ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
+                                                                            ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
+                                                                            ) as cantidad
+
+                                                                            from par_importacion as imp 
+                                            inner join edu_matricula as mat on imp.id = mat.importacion_id
+                                            inner join edu_matricula_detalle as matDet on mat.id = matDet.matricula_id
+                                            inner join edu_institucioneducativa as inst on matDet.institucioneducativa_id = inst.id
+                                            inner join edu_ugel as ugel on inst.Ugel_id = ugel.id
+                                            where mat.anio_id = '$anio_id' and matDet.nivel != 'E' and imp.estado = 'PR'
+                                            group By fechaactualizacion,ugel.id 
+                                
+                            ) as dd
+                            group by fechaactualizacion
+ 
+                        ) as datos" )
+                    ) 
+                         
+                // ->orderBy('codigo', 'asc')                 
+                // ->groupBy('provincia')
+                ->get([                      
+                    DB::raw('fechaactualizacion'), 
+                    DB::raw('ugel10'),
+                    DB::raw('ugel11'),
+                    DB::raw('ugel12'),
+                    DB::raw('ugel13') 
+                  
+                ]);
+
+        return $data;
+
+    }
+
+
     
 
     

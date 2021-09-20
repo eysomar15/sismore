@@ -1,10 +1,31 @@
 @extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
 
- {{-- @section('css')
-   
-@endsection  --}}
+@section('css')
+
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
+@endsection 
 
 @section('content') 
+
+<div class="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">      
+                    <div id="barra1">       
+                        @include('graficos.Barra')
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+</div> 
+
 <div class="content">
     <input type="hidden" id="hoja" value="1">
     

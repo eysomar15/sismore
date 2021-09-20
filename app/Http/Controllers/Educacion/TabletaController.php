@@ -207,7 +207,7 @@ class TabletaController extends Controller
         $puntos[] = [ 'name'=>'Asignadas', 'data'=> $categoria4];
 
         $titulo = 'Distribución de Tabletas 2021';
-        $subTitulo = 'Fuente SIAGIE';
+        $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de tabletas';
 
         return view('educacion.Tableta.Principal', ["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],

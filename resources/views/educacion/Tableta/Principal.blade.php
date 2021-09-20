@@ -13,11 +13,19 @@
 @section('content') 
  
 
-<figure class="highcharts-figure">           
-    <div id="barra1">       
-        @include('graficos.Barra')
+<div class="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">      
+                    <div id="barra1">       
+                        @include('graficos.Barra')
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
     </div> 
-</figure>
+</div> 
 
 
 <div class="content">
