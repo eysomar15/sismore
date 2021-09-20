@@ -40,7 +40,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-primary text-center">AÑO</th>
-                                        @if ($materia->codigo!=0)
+                                        @if ($materia->previo!=0)
                                         <th class="text-secondary text-center">CANTIDAD</th>
                                         <th class="text-secondary text-center">PREVIO</th>    
                                         @endif
@@ -56,7 +56,7 @@
                                     @foreach ($materia->indicador as $ind)
                                     <tr>
                                         <td class="text-primary text-center">{{$ind->anio}}</td>
-                                        @if ($materia->codigo!=0)
+                                        @if ($materia->previo!=0)
                                         <td class="text-secondary text-center">{{$ind->previo}}</td>
                                         <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>
                                         @endif
@@ -115,7 +115,7 @@
                     min:0,
                     title:{enabled:false,text:'Porcentaje',}
                 },
-                series:[@if ($materia->codigo!=0){
+                series:[@if ($materia->previo!=0){
                     name:'Previo',     
                     color:'#7C7D7D',
                     data:[

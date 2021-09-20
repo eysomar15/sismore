@@ -197,9 +197,9 @@ class IndicadorController extends Controller
         $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo);
         foreach ($materias as $key => $materia) {
             $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
-            $materia->previo=0;
+            $materia->previo = 0;
             foreach ($materia->indicador as $item) {
-                $materia->previo+=$item->previo;
+                $materia->previo += $item->previo;
             }
         }
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
@@ -213,10 +213,10 @@ class IndicadorController extends Controller
         $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
         foreach ($anios as $anio) {
             $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
-            $anio->previo=0;
+            $anio->previo = 0;
             foreach ($anio->indicador as $indicador) {
                 $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
-                $anio->previo+=$indicador->previo;
+                $anio->previo += $indicador->previo;
             }
         }
         //return $anios;
@@ -296,11 +296,15 @@ class IndicadorController extends Controller
                 $tipo = 0;
                 $materia = 1;
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
-                
+
                 $gt = IndicadorRepositorio::buscar_grado1($grado);
-                $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo,$materia);
+                $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($materias as $key => $materia) {
+                    $materia->previo = 0;
                     $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+                    foreach ($materia->indicador as $item) {
+                        $materia->previo += $item->previo;
+                    }
                 }
                 return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
             case 15:
@@ -312,9 +316,13 @@ class IndicadorController extends Controller
                 $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
 
                 $gt = IndicadorRepositorio::buscar_grado1($grado);
-                $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo,$materia);
+                $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($materias as $key => $materia) {
+                    $materia->previo = 0;
                     $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+                    foreach ($materia->indicador as $item) {
+                        $materia->previo += $item->previo;
+                    }
                 }
                 return view('parametro.indicador.pdrc1', compact('title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
             case 16:
@@ -370,24 +378,25 @@ class IndicadorController extends Controller
         $gt = IndicadorRepositorio::buscar_grado1($grado);
         //$anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
         $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
-        foreach ($materias as $key => $materia) {
-            $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
-            $conteo=0;
-            foreach ($materia->indicador as $item) {
-                $conteo+=$item->previo;
+        foreach ($materias as $key => $materiax) {
+            $materiax->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materiax->id, 'asc');
+            $materiax->previo = 0;
+            foreach ($materiax->indicador as $item) {
+                $materiax->previo += $item->previo;
             }
-            $materia->codigo=$conteo;
         }
         $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
         foreach ($anios as $anio) {
             $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
+            $anio->previo = 0;
             foreach ($anio->indicador as $indicador) {
                 $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
+                $anio->previo += $indicador->previo;
             }
         }
-        return $anios;
+        //return $materias;
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '05')], ['titulo' => 'Indicadores', 'url' => '']];
-        return view('parametro.indicador.oei1', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'anios','breadcrumb'));
+        return view('parametro.indicador.oei1', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'anios', 'breadcrumb'));
     }
     /*****OTRAS OPCIONES */
     public function cargarprovincias()
@@ -910,17 +919,17 @@ class IndicadorController extends Controller
         $inds = IndicadorRepositorio::listar_indicadorInstitucion($anio, $grado, $tipo, $materia, $gestion, $area);
         //return response()->json(compact('anio','grado','tipo','materia','gestion','area'));
         return  datatables()->of($inds)
-        ->editColumn('nombre','<div class="text-primary">{{$nombre}}</div>')
-        ->editColumn('previo','<div class="text-secondary text-center">{{$previo}}</div>')
-        ->editColumn('p1','<div class="text-secondary text-center">{{$p1}}</div>')
-        ->editColumn('inicio','<div class="text-danger text-center">{{$inicio}}</div>')
-        ->editColumn('p2','<div class="text-danger text-center">{{$p2}}</div>')
-        ->editColumn('proceso','<div class="text-warning text-center">{{$proceso}}</div>')
-        ->editColumn('p3','<div class="text-warning text-center">{{$p3}}</div>')
-        ->editColumn('satisfactorio','<div class="text-success text-center">{{$satisfactorio}}</div>')
-        ->editColumn('p4','<div class="text-success text-center">{{$p4}}</div>')
-        ->rawColumns(['nombre','previo','p1','inicio','p2','proceso','p3','satisfactorio','p4',])
-        ->toJson();
+            ->editColumn('nombre', '<div class="text-primary">{{$nombre}}</div>')
+            ->editColumn('previo', '<div class="text-secondary text-center">{{$previo}}</div>')
+            ->editColumn('p1', '<div class="text-secondary text-center">{{$p1}}</div>')
+            ->editColumn('inicio', '<div class="text-danger text-center">{{$inicio}}</div>')
+            ->editColumn('p2', '<div class="text-danger text-center">{{$p2}}</div>')
+            ->editColumn('proceso', '<div class="text-warning text-center">{{$proceso}}</div>')
+            ->editColumn('p3', '<div class="text-warning text-center">{{$p3}}</div>')
+            ->editColumn('satisfactorio', '<div class="text-success text-center">{{$satisfactorio}}</div>')
+            ->editColumn('p4', '<div class="text-success text-center">{{$p4}}</div>')
+            ->rawColumns(['nombre', 'previo', 'p1', 'inicio', 'p2', 'proceso', 'p3', 'satisfactorio', 'p4',])
+            ->toJson();
     }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
