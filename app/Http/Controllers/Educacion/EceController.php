@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\isNull;
 
 class EceController extends Controller
-{    public function __construct()
+{
+    public function __construct()
     {
         $this->middleware('auth');
     }
@@ -29,6 +30,8 @@ class EceController extends Controller
     {
         $materias = Materia::all();
         $nivels = EceRepositorio::buscar_nivel1();
+        //$eces=EceRepositorio::listar_importaciones();
+        //return $eces;
         return view('educacion.Ece.importar', compact('nivels', 'materias'));
     }
     public function importarGuardar(Request $request)
@@ -150,6 +153,31 @@ class EceController extends Controller
         $importacion->estado = 'PR';
         $importacion->save();
         return back()->with('message', 'Importacion Aprobada Correctamente');
+    }
+    public function ListarEceImportadosDT()
+    {
+        $eces = EceRepositorio::listar_importaciones();
+        return datatables()
+            ->of($eces)
+            ->editColumn('fecha','{{date("d-m-Y",strtotime($fecha))}}')
+            ->editColumn('tipo','{{$tipo==0?"":"SI"}}')
+            //->addColumn('acciones','<button type="button" onclick="eliminarImportacion({{$importacion_id}})" class="btn btn-danger btn-xs">E</button>')
+            ->addColumn('acciones',function($obj){
+                if($obj->estado=='PR')
+                    return '<button type="button" onclick="eliminarImportacion('.$obj->importacion_id.')" class="btn btn-danger btn-xs">E</button>';
+                return '';
+            })
+            ->rawColumns(['fecha','tipo','acciones'])
+            ->toJson();
+    }
+    public function EliminarImportados($id)
+    {
+        $query = Importacion::find($id);
+        $query->estado = 'EL';
+        $query->save();
+        //$status=true;
+        //return response()->json(compact('status'));
+        return response()->json(['status'=>true]);
     }
     public function cargargrados(Request $request)
     {

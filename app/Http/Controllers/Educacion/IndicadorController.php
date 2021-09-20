@@ -357,12 +357,26 @@ class IndicadorController extends Controller
     public function vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia)
     {
         $gt = IndicadorRepositorio::buscar_grado1($grado);
+        //$anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
         $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
         foreach ($materias as $key => $materia) {
             $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+            $conteo=0;
+            foreach ($materia->indicador as $item) {
+                $conteo+=$item->previo;
+            }
+            $materia->codigo=$conteo;
         }
+        $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        foreach ($anios as $anio) {
+            $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
+            foreach ($anio->indicador as $indicador) {
+                $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
+            }
+        }
+        return $anios;
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '05')], ['titulo' => 'Indicadores', 'url' => '']];
-        return view('parametro.indicador.oei1', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
+        return view('parametro.indicador.oei1', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'anios','breadcrumb'));
     }
     /*****OTRAS OPCIONES */
     public function cargarprovincias()

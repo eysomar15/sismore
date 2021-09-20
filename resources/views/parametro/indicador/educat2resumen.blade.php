@@ -1,5 +1,8 @@
 @extends('layouts.main',['titlePage'=>'DETALLE'])
-
+@section('css')
+    <!-- Table datatable css -->
+    <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+@endsection
 @section('content')
     <div class="content">
         <form id="form_indicadores" action="#">

@@ -1,5 +1,9 @@
 @extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - EXCEL DE INDICADORES'])
-
+@section('css')
+    <!-- Table datatable css -->
+    <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+@endsection
 @section('content')
 
     <div class="content">
@@ -129,7 +133,59 @@
             <!-- col -->
         </div>
         <!-- End row -->
-        <div class="row"></div>
+        <div class="row">
+            <div class="col-md-12">           
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">LISTA DE IMPORTACION </h3>                           
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" {{--style="border-collapse: collapse; border-spacing: 0;font-size:11px; width: 100%;"--}}>
+                                        <thead class="text-primary">    
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Fecha Version</th>
+                                                <th>Año</th>
+                                                <th>Alumno EIB</th>
+                                                <th>Grado</th>
+                                                <th>Nivel</th>
+                                                <th>Estado</th>
+                                                <th>Accion</th>  
+                                            </tr>
+                                        </thead>
+                                        {{--
+                                        <tbody>
+                                            @foreach ($eces as $item)
+                                            <tr>
+                                                <td>{{$item->id}}</td>
+                                                <td>{{date('d-m-Y',strtotime($item->fecha))}}</td>
+                                                <td>{{$item->anio}}</td>
+                                                <td>{{$item->tipo==0?'':'SI'}}</td>
+                                                <td>{{$item->grado}}</td>
+                                                <td>{{$item->nivel}}</td>
+                                                <td>{{$item->estado}}</td>
+                                                <td><button type="button" onclick="" class="btn btn-primary btn-xs">Eliminar</button></td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                            --}}
+                                        
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <!-- card-body -->
+                    
+                </div>
+                  
+            </div> <!-- End col -->
+        </div> <!-- End row -->
 
     </div>
 
@@ -139,8 +195,57 @@
     <script src="{{ asset('/') }}assets/libs/jquery-validation/jquery.validate.min.js"></script>
     <!-- Validation init js-->
     <script src="{{ asset('/') }}assets/js/pages/form-validation.init.js"></script>
+
+    <script src="{{ asset('/') }}assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(document).ready(function(){
+            $('#datatable').DataTable({
+                "ajax":"{{route('ece.listar.importados')}}",
+                "columns":[
+                    {data:'id'},
+                    {data:'fecha'},
+                    {data:'anio'},
+                    {data:'tipo'},
+                    {data:'grado'},
+                    {data:'nivel'},
+                    {data:'estado'},
+                    {data:'acciones'},
+                ],
+                "responsive":true,
+                "autoWidth":false,
+                "order":false,
+                "language": {
+                    "lengthMenu": "Mostrar "+
+                    `<select class="custom-select custom-select-sm form-control form-control-sm">
+                        <option value = '10'> 10</option>
+                        <option value = '25'> 25</option>
+                        <option value = '50'> 50</option>
+                        <option value = '100'>100</option>
+                        <option value = '-1'>Todos</option>
+                        </select>` + " registros por página",          
+                    "info": "Mostrando la página _PAGE_ de _PAGES_" ,
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",  
+                    "emptyTable":			"No hay datos disponibles en la tabla.",
+                    "info":		   			"Del _START_ al _END_ de _TOTAL_ registros ",
+                    "infoEmpty":			"Mostrando 0 registros de un total de 0. registros",
+                    "infoFiltered":			"(filtrados de un total de _MAX_ )",
+                    "infoPostFix":			"",           
+                    "loadingRecords":		"Cargando...",
+                    "processing":			"Procesando...",
+                    "search":				"Buscar:",
+                    "searchPlaceholder":	"Dato para buscar",
+                    "zeroRecords":			"No se han encontrado coincidencias.",
+                    "paginate":{
+                        "next":"siguiente",
+                        "previous":"anterior"
+                        }
+                }
+            }); 
         });
         function cargargrados() {
             $.ajax({
@@ -162,6 +267,23 @@
                     console.log(jqXHR);
                 },
             });                
+        }
+        function eliminarImportacion(id){
+            if(confirm("¿Desea eliminar el registro seleccionado?")){
+                $.ajax({
+                    url:"{{url('/')}}/ECE/Eliminar/ImportarDT/"+id,
+                    success: function(data) {
+                        if(data.status){
+                            toastr.success('El registro fue elimino correctamente');                
+                            $('#datatable').DataTable().ajax.reload();       
+                        }
+                    },
+                    error:function(jqXHR,textStatus,errorThrown){
+                        console.log(jqXHR);
+                    },
+                });        
+            }
+
         }
     </script>
 @endsection
