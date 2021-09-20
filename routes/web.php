@@ -107,12 +107,11 @@ Route::get('/INDICADOR/obj/{indicador}', [IndicadorController::class, 'indicador
 Route::get('/INDICADOR/dece/{indicador_id}/{grado}/{tipo}/{materia}', [IndicadorController::class, 'indDetEdu'])->name('ind.det.edu');
 Route::get('/INDICADOR/rece/{indicador_id}/{grado}/{tipo}/{materia}', [IndicadorController::class, 'indResEdu'])->name('ind.res.edu');
 
-Route::post('/INDICADOR/Satisfactorio', [IndicadorController::class, 'indicadorSatisfactorioMateria'])->name('ind.ajax.satisfactorio');
+Route::post('/INDICADOR/Satisfactorio', [IndicadorController::class, 'reporteSatisfactorioMateria'])->name('ind.ajax.satisfactorio');
 Route::post('/INDICADOR/Ugel', [IndicadorController::class, 'indicadorUgelMateria'])->name('ind.ajax.ugel');
 Route::post('/INDICADOR/Materia', [IndicadorController::class, 'indicadorMateria'])->name('ind.ajax.materia');
-Route::post('/INDICADOR/Derivados', [IndicadorController::class, 'indicadorDerivados'])->name('ind.ajax.derivados');
-Route::post('/INDICADOR/Derivados2', [IndicadorController::class, 'indicadorDerivados2'])->name('ind.ajax.derivados2');
-Route::post('/INDICADOR/Derivados2x', [IndicadorController::class, 'indicadorDerivados2x'])->name('ind.ajax.derivados2x');
+Route::post('/INDICADOR/ReporteUbigeoAjax', [IndicadorController::class, 'reporteUbigeoAjax'])->name('ind.ajax.reporteubigeo');
+Route::get('/INDICADOR/ReporteGestionAreaDT/{anio}/{grado}/{tipo}/{materia}/{gestion}/{area}', [IndicadorController::class, 'reporteGestionAreaDT']);
 Route::post('/INDICADOR/Provincia', [IndicadorController::class, 'indicadorProvincia'])->name('ind.ajax.provincia');
 Route::post('/INDICADOR/Distritos/{provincia}', [IndicadorController::class, 'cargardistritos'])->name('ind.ajax.cargardistritos');
 Route::post('/INDICADOR/PNSR1/{provincia}/{distrito}/{indicador_id}/{fecha}', [IndicadorController::class, 'indicadorvivpnsrcab'])->name('ind.ajax.pnsr1');

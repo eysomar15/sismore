@@ -11,24 +11,9 @@
                 </div>
             </div>
         </div-->
-        <!--div class="row">
-            <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">TOTAL</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="prueba1"  height="150" ></canvas>
-                    </div>
-                </div>
-            </div>
-        </div--><!-- End row -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <!--div class="card-header">
-                        <h3 class="card-title">Default Buttons</h3>
-                    </div-->
                     <div class="card-body">
                         <div class="form-group row">
                             <label class="col-md-1 col-form-label">Provincia</label>
@@ -90,9 +75,6 @@
         
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
-                    <!--div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">TOTAL de profesores de la region</h3>
-                    </div-->
                     <div class="card-body">
                         <div id="con1" style="min-width:400px;height:300px;margin:0 auto;" ></div>
                     </div>
