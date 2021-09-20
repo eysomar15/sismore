@@ -52,8 +52,10 @@
                                     <thead>
                                         <tr>
                                             <th class="text-primary text-center">UGEL</th>
+                                            @if ($anio->previo!=0)
                                             <th class="text-secondary text-center">CANTIDAD</th>
                                             <th class="text-secondary text-center">PREVIO</th>
+                                            @endif
                                             <th class="text-danger text-center">CANTIDAD</th>
                                             <th class="text-danger text-center">INICIO</th>
                                             <th class="text-warning text-center">CANTIDAD</th>
@@ -66,8 +68,10 @@
                                         @foreach ($anio->indicador as $ind)
                                         <tr>
                                             <td class="text-primary text-center">{{$ind->ugel}}</td>
+                                            @if ($anio->previo!=0)
                                             <td class="text-secondary text-center">{{$ind->previo}}</td>
                                             <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>
+                                            @endif
                                             <td class="text-danger text-center">{{$ind->inicio}}</td>
                                             <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>
                                             <td class="text-warning text-center">{{$ind->proceso}}</td>
@@ -141,7 +145,8 @@
                 min:0,
                 title:{enabled:false,text:'Porcentaje',}
             },
-            series:[{
+            series:[
+                @if ($anio->previo!=0){
                 name:'Previo',
                 color:'#7C7D7D',
                 data:[
@@ -149,7 +154,7 @@
                 {{ round(($item->previo  * 100) / $item->evaluados, 2) . ',' }}
                 @endforeach
                 ]
-            },{
+            },@endif{
                 name:'Inicio',
                 color:'#F25656',
                 data:[

@@ -197,8 +197,11 @@ class IndicadorController extends Controller
         $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo);
         foreach ($materias as $key => $materia) {
             $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+            $materia->previo=0;
+            foreach ($materia->indicador as $item) {
+                $materia->previo+=$item->previo;
+            }
         }
-        //return $materias;
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
         return view('parametro.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
     }
@@ -210,10 +213,13 @@ class IndicadorController extends Controller
         $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
         foreach ($anios as $anio) {
             $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
+            $anio->previo=0;
             foreach ($anio->indicador as $indicador) {
                 $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
+                $anio->previo+=$indicador->previo;
             }
         }
+        //return $anios;
         //return response()->json(compact('anios'));
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Detalle', 'url' => '']];
         return view('parametro.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'breadcrumb'));
