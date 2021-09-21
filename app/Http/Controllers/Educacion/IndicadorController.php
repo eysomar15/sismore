@@ -925,13 +925,13 @@ class IndicadorController extends Controller
         return  datatables()->of($inds)
             ->editColumn('nombre', '<div class="text-primary">{{$nombre}}</div>')
             ->editColumn('previo', '<div class="text-secondary text-center">{{$previo}}</div>')
-            ->editColumn('p1', '<div class="text-secondary text-center">{{$p1}}</div>')
+            ->editColumn('p1', '<div class="text-secondary text-center">{{$p1}}%</div>')
             ->editColumn('inicio', '<div class="text-danger text-center">{{$inicio}}</div>')
-            ->editColumn('p2', '<div class="text-danger text-center">{{$p2}}</div>')
+            ->editColumn('p2', '<div class="text-danger text-center">{{$p2}}%</div>')
             ->editColumn('proceso', '<div class="text-warning text-center">{{$proceso}}</div>')
-            ->editColumn('p3', '<div class="text-warning text-center">{{$p3}}</div>')
+            ->editColumn('p3', '<div class="text-warning text-center">{{$p3}}%</div>')
             ->editColumn('satisfactorio', '<div class="text-success text-center">{{$satisfactorio}}</div>')
-            ->editColumn('p4', '<div class="text-success text-center">{{$p4}}</div>')
+            ->editColumn('p4', '<div class="text-success text-center">{{$p4}}%</div>')
             ->rawColumns(['nombre', 'previo', 'p1', 'inicio', 'p2', 'proceso', 'p3', 'satisfactorio', 'p4',])
             ->toJson();
     }

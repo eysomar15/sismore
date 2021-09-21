@@ -49,10 +49,11 @@
                                         @endif
                                         <th class="text-danger text-center">CANTIDAD</th>
                                         <th class="text-danger text-center">INICIO</th>
+                                        {{--
                                         <th class="text-warning text-center">CANTIDAD</th>
                                         <th class="text-warning text-center">PROCESO</th>
                                         <th class="text-success text-center">CANTIDAD</th>
-                                        <th class="text-success text-center">SATISFACTORIO</th>
+                                        <th class="text-success text-center">SATISFACTORIO</th>--}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,10 +66,11 @@
                                         @endif
                                         <td class="text-danger text-center">{{$ind->inicio}}</td>
                                         <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>
+                                        {{--
                                         <td class="text-warning text-center">{{$ind->proceso}}</td>
                                         <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}}%</td>
                                         <td class="text-success text-center">{{$ind->satisfactorio}}</td>
-                                        <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>
+                                        <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>--}}
                                     </tr>    
                                     @endforeach
                                 </tbody>
@@ -107,10 +109,11 @@
                                         @endif
                                         <th class="text-danger text-center">CANTIDAD</th>
                                         <th class="text-danger text-center">INICIO</th>
+                                        {{--
                                         <th class="text-warning text-center">CANTIDAD</th>
                                         <th class="text-warning text-center">PROCESO</th>
                                         <th class="text-success text-center">CANTIDAD</th>
-                                        <th class="text-success text-center">SATISFACTORIO</th>
+                                        <th class="text-success text-center">SATISFACTORIO</th>--}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -123,10 +126,11 @@
                                         @endif
                                         <td class="text-danger text-center">{{$ind->inicio}}</td>
                                         <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>
+                                        {{--
                                         <td class="text-warning text-center">{{$ind->proceso}}</td>
                                         <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}}%</td>
                                         <td class="text-success text-center">{{$ind->satisfactorio}}</td>
-                                        <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>
+                                        <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>--}}
                                     </tr>    
                                     @endforeach
                                 </tbody>
@@ -186,14 +190,17 @@
                                     <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
                                         <thead class="cabecera-dataTable">                                    
                                             <th class="text-primary">IIEE</th>
+                                            @if ($tipo!=1)
                                             <th class="text-secondary text-center">CANTIDAD</th>
-                                            <th class="text-secondary text-center">PREVIO</th>
+                                            <th class="text-secondary text-center">PREVIO</th>    
+                                            @endif
                                             <th class="text-danger text-center">CANTIDAD</th>
                                             <th class="text-danger text-center">INICIO</th>
+                                            {{--
                                             <th class="text-warning text-center">CANTIDAD</th>
                                             <th class="text-warning text-center">PROCESO</th>
                                             <th class="text-success text-center">CANTIDAD</th>
-                                            <th class="text-success text-center">SATISFACTORIO</th>
+                                            <th class="text-success text-center">SATISFACTORIO</th>--}}
                                         </thead>
                                     </table>
                                 </div>   
@@ -227,14 +234,16 @@
             "ajax": "{{url('/')}}/INDICADOR/ReporteGestionAreaDT/" + $('#anio1').val()+ "/{{$grado}}/{{$tipo}}/{{$materia}}/" + $('#gestion').val()+ "/" + $('#area').val(),
             "columns":[
                 {data:'nombre'},
+                @if ($tipo!=1)
                 {data:'previo'},
                 {data:'p1'},
+                @endif
                 {data:'inicio'}, 
                 {data:'p2'},
-                {data:'proceso'},  
+                {{--{data:'proceso'},  
                 {data:'p3'},
                 {data:'satisfactorio'},
-                {data:'p4'},    
+                {data:'p4'},  --}}  
             ],
             "responsive":false,
             "autoWidth":true,
@@ -303,7 +312,8 @@
                         {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
                         @endforeach
                     ],
-                },{
+                },
+                {{--{
                     name:'Proceso',
                     color:'#F2CA4C',
                     data:[
@@ -319,7 +329,8 @@
                         {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
                         @endforeach
                     ]
-                }],
+                }--}}
+                ],
                 plotOptions:{
                     columns:{stacking:'normal'},
                     series:{
@@ -369,7 +380,8 @@
                         {{ round(( $item->inicio * 100) / $item->evaluados, 2) . ',' }}
                         @endforeach
                     ],
-                },{
+                },
+                {{--{
                     name:'Proceso',
                     color:'#F2CA4C',
                     data:[
@@ -385,7 +397,8 @@
                         {{ round(($item->satisfactorio * 100) / $item->evaluados, 2) . ',' }}
                         @endforeach
                     ]
-                }],
+                }--}}
+                ],
                 plotOptions:{
                     columns:{stacking:'normal'},
                     series:{
