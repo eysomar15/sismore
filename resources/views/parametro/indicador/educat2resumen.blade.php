@@ -217,8 +217,8 @@
                     {data:'satisfactorio'},
                     {data:'p4'},    
                 ],
-                "responsive":true,
-                "autoWidth":false,
+                "responsive":false,
+                "autoWidth":true,
                 "order":false,
                 "destroy":true,
                 "language": {
