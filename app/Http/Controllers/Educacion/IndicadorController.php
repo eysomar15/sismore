@@ -377,6 +377,10 @@ class IndicadorController extends Controller
     {
         $gt = IndicadorRepositorio::buscar_grado1($grado);
         //$anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $aniosx = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $areas = Area::all();
+        $gestions = IndicadorRepositorio::listar_gestion1($grado, $tipo);
+
         $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
         foreach ($materias as $key => $materiax) {
             $materiax->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materiax->id, 'asc');
@@ -394,9 +398,9 @@ class IndicadorController extends Controller
                 $anio->previo += $indicador->previo;
             }
         }
-        //return $materias;
+        //return $anios;
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '05')], ['titulo' => 'Indicadores', 'url' => '']];
-        return view('parametro.indicador.oei1', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'anios', 'breadcrumb'));
+        return view('parametro.indicador.oei1', compact('indicador_id', 'title', 'grado', 'tipo', 'materia', 'sinaprobar', 'materias', 'gt', 'anios', 'aniosx', 'areas', 'gestions', 'breadcrumb'));
     }
     /*****OTRAS OPCIONES */
     public function cargarprovincias()
