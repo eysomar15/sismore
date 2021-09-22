@@ -68,7 +68,7 @@
 
                     <div class="col-md-12">                       
                         <div class="portfolioFilter">
-                            <a href="#" onClick="cargar_resumen_porUgel();"  class="current waves-effect waves-light">UGELES</a>
+                            <a href="#" onClick="cargar_resumen_porUgel();"       class="current waves-effect waves-light">UGELES</a>
                             <a href="#" onClick="cargar_matricula_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>                  
                         </div>                        
                     </div>

@@ -120,6 +120,7 @@ class MatriculaRepositorio
 
     }
 
+    
     public static function total_matricula_por_Nivel($matricula_id)
     { 
         $data = DB::table('edu_matricula as mat')           

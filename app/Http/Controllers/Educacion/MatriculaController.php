@@ -429,12 +429,12 @@ class MatriculaController extends Controller
                             'sexto_nivel_hombre'=>$row['sexto_grado_hombre'],
                             'sexto_nivel_mujer'=>$row['sexto_grado_mujer'],
                             
-                            'tres_anios_hombre_ebe'=>$row['primer_grado_hombre'],
-                            'tres_anios_mujer_ebe'=>$row['primer_grado_mujer'],
-                            'cuatro_anios_hombre_ebe'=>$row['segundo_grado_hombre'],
-                            'cuatro_anios_mujer_ebe'=>$row['segundo_grado_mujer'],
-                            'cinco_anios_hombre_ebe'=>$row['tercer_grado_hombre'],
-                            'cinco_anios_mujer_ebe'=>$row['tercer_grado_mujer'],
+                            'tres_anios_hombre_ebe'=>$row['tres_anios_hombre'],
+                            'tres_anios_mujer_ebe'=>$row['tres_anios_mujer'],
+                            'cuatro_anios_hombre_ebe'=>$row['cuatro_anios_hombre'],
+                            'cuatro_anios_mujer_ebe'=>$row['cuatro_anios_mujer'],
+                            'cinco_anios_hombre_ebe'=>$row['cinco_anios_hombre'],
+                            'cinco_anios_mujer_ebe'=>$row['cinco_anios_mujer'],
                     
                         ]);
                     }
@@ -553,6 +553,7 @@ class MatriculaController extends Controller
         $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
         $lista_total_matricula_Primaria = $lista_matricula->where('nivel', 'P')->all();  
         $lista_total_matricula_Secundaria = $lista_matricula->where('nivel', 'S')->all();
+        $lista_total_matricula_EBE = $lista_matricula->where('nivel', 'E')->all();
 
         $puntos = [];        
         $total = 0;
@@ -570,7 +571,7 @@ class MatriculaController extends Controller
         $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
 
         return view('educacion.Matricula.ReporteUgel',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
-                    'lista_total_matricula_Primaria','lista_total_matricula_Inicial','contenedor','titulo_grafico','fecha_Matricula_texto'));
+                    'lista_total_matricula_Primaria','lista_total_matricula_Inicial','lista_total_matricula_EBE','contenedor','titulo_grafico','fecha_Matricula_texto'));
     }
 
     public function reporteDistrito($anio_id,$matricula_id)
