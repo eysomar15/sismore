@@ -44,14 +44,15 @@
                                     <tr>
                                         <th class="text-primary text-center">AÑO</th>
                                         @if ($materia->previo!=0)
-                                        <th class="text-secondary text-center">CANTIDAD</th>
+                                        {{--<th class="text-secondary text-center">CANTIDAD</th>--}}
+                                        
                                         <th class="text-secondary text-center">PREVIO</th>    
                                         @endif
-                                        <th class="text-danger text-center">CANTIDAD</th>
+                                        {{--<th class="text-danger text-center">CANTIDAD</th>--}}
                                         <th class="text-danger text-center">INICIO</th>
-                                        <th class="text-warning text-center">CANTIDAD</th>
+                                        {{--<th class="text-warning text-center">CANTIDAD</th>--}}
                                         <th class="text-warning text-center">PROCESO</th>
-                                        <th class="text-success text-center">CANTIDAD</th>
+                                        {{--<th class="text-success text-center">CANTIDAD</th>--}}
                                         <th class="text-success text-center">SATISFACTORIO</th>
                                     </tr>
                                 </thead>
@@ -61,14 +62,14 @@
                                         <td class="text-primary text-center">{{$ind->anio}}</td>
                                         @if ($materia->previo!=0)
                                         <td class="text-secondary text-center">{{$ind->previo}}</td>
-                                        <td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>
+                                        {{--<td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>--}}
                                         @endif
                                         <td class="text-danger text-center">{{$ind->inicio}}</td>
-                                        <td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>
+                                        {{--<td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>--}}
                                         <td class="text-warning text-center">{{$ind->proceso}}</td>
-                                        <td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}}%</td>
+                                        {{--<td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}}%</td>--}}
                                         <td class="text-success text-center">{{$ind->satisfactorio}}</td>
-                                        <td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>
+                                        {{--<td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>--}}
                                     </tr>    
                                     @endforeach
                                 </tbody>
