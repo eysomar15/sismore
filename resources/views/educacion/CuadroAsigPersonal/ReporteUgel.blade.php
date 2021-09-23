@@ -1,14 +1,14 @@
 
     <div class="col-md-6">
-        <div>
-            <h5  style="color: #427bf5;"> Total cuadro de asignación de Personal según UGEL al FECHA </h5>
+        <div class="card-header bg-primary py-3 text-white">
+            <h5  class="card-title mb-0 text-white"> Total cuadro de asignación de Personal según UGEL al FECHA </h5>
         </div>
         <div class="table-responsive">
             <table class="table table-bordered mb-0">
                 <thead>
                     <tr>                                                 
                         <th class="titulo_tabla">UNIDAD DE GESTION EDUCATIVA LOCAL</th>
-                        <th class="titulo_tabla">TOTAL</th>
+                        <th class="titulo_tabla">TOTAL PERSONAL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,8 +55,9 @@
 
     <br><br><br>
     <div class="col-md-6">
-        <div>
-            <br><br> <h5  style="color: #427bf5;"> Total cuadro de asignación por tipo de Trabajador según UGEL al FECHA </h5>
+        <br><br>
+        <div class="card-header bg-primary py-3 text-white">
+             <h5   class="card-title mb-0 text-white"> Total cuadro de asignación de Personal por tipo de Trabajador según UGEL al FECHA </h5>
         </div>
 
         <div class="table-responsive">
@@ -64,7 +65,7 @@
                 <thead>
                     <tr>                                                 
                         <th class="titulo_tabla">UNIDAD DE GESTION EDUCATIVA LOCAL</th>
-                        <th class="titulo_tabla">TOTAL</th>
+                        <th class="titulo_tabla">TOTAL PERSONAL</th>
                
                     </tr>
                 </thead>
@@ -117,8 +118,9 @@
 
     <br><br><br>
     <div class="col-md-6">
-        <div>
-            <br><br> <h5  style="color: #427bf5;"> Total cuadro de asignación por niveles según UGEL al FECHA </h5>
+        <br><br>
+        <div class="card-header bg-primary py-3 text-white">
+             <h5  class="card-title mb-0 text-white"> Total cuadro de asignación de Personal por niveles según UGEL al FECHA </h5>
         </div>
 
         <div class="table-responsive">
@@ -126,7 +128,7 @@
                 <thead>
                     <tr>                                                 
                         <th class="titulo_tabla">UNIDAD DE GESTION EDUCATIVA LOCAL</th>
-                        <th class="titulo_tabla">TOTAL</th>
+                        <th class="titulo_tabla">TOTAL PERSONAL</th>
                
                     </tr>
                 </thead>

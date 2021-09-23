@@ -2,15 +2,14 @@
 
 @section('css')
 
-    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+    
 
 @endsection 
 
 @section('content') 
+
+<input type="hidden" id="hoja" value="1">
+
 
 <div class="content">
     <div class="card">
@@ -18,7 +17,7 @@
             <div class="row">
                 <div class="col-md-12">      
                     <div id="barra1">       
-                        @include('graficos.Barra')
+                        {{-- se carga con el scrip lineas abajo --}}
                     </div> 
                 </div> 
             </div> 
@@ -26,9 +25,7 @@
     </div> 
 </div> 
 
-<div class="content">
-    <input type="hidden" id="hoja" value="1">
-    
+<div class="content">    
     <div class="row">
         <div class="col-md-12">           
             <div class="card">
@@ -60,12 +57,6 @@
                         <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                     <br>
-
-                    {{-- <div class="col-md-12">                        
-                            <button class="btn btn-success" id="btnEliminar" type="button" onClick="cargar_resumen_matricula();">UGELES</button>
-                            <button class="btn btn-success" id="btnEliminar" type="button"  onClick="cargar_matricula_porDistrito();">DISTRITOS</button>                        
-                    </div> --}}
-
                     <div class="col-md-12">                       
                         <div class="portfolioFilter">
                             <a href="#" onClick="cargar_resumen_porUgel();"       class="current waves-effect waves-light">UGELES</a>
@@ -84,9 +75,9 @@
             </div>
               
         </div> <!-- End col -->
-    </div> <!-- End row -->
-  
+    </div> <!-- End row -->  
 </div>
+
 @endsection 
 
 @section('js')
@@ -97,9 +88,11 @@
 <script src="{{ asset('/') }}assets/js/pages/gallery.init.js"></script>
 
 <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
 {{-- https://www.youtube.com/watch?v=HU-hffAZqYw --}}
 
     <script type="text/javascript"> 
@@ -108,11 +101,27 @@
         $(document).ready(function() {
             
             //alert($('#anio').val());
+            cargar_Grafico();
             cargar_fechas_matricula();
             //cargar_resumen_matricula(); 
             // alert($('#anio').val());
             // alert($('#matricula_fechas').val());
         });
+
+        function cargar_Grafico() {
+            
+            $.ajax({  
+                headers: {
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },                           
+                url: "{{ url('/') }}/Matricula/GraficoBarrasPrincipal/"+ $('#anio').val(),
+                type: 'post',
+            }).done(function (data) {               
+                $('#barra1').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
+        }
 
 
         function cargar_fechas_matricula() {
@@ -143,6 +152,7 @@
                 },
             });
             
+            cargar_Grafico();
         }
 
         function cargar_resumen_matricula() {   
@@ -182,6 +192,8 @@
                 alert("Lo sentimos a ocurrido un error");
             });
         }
+
+        
   
        
     </script>

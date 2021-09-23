@@ -184,6 +184,12 @@ class TabletaController extends Controller
         $anios =  TabletaRepositorio ::tableta_anio( );
 
         $fechas_tabletas = TabletaRepositorio ::fechas_tabletas_anio($anios->first()->id);
+       
+        return view('educacion.Tableta.Principal', compact('tableta','anios','fechas_tabletas')); 
+    }
+
+    public function GraficoBarrasPrincipal($anio_id)
+    {     
         $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio(6); // poner la variable del año
         
         $categoria1 = [];
@@ -206,14 +212,13 @@ class TabletaController extends Controller
         $puntos[] = [ 'name'=>'Recepcionadas' ,'data'=>  $categoria3];
         $puntos[] = [ 'name'=>'Asignadas', 'data'=> $categoria4];
 
-        $titulo = 'Distribución de Tabletas 2021';
+        $nombreAnio = Anio::find($anio_id)->anio;
+
+        $titulo = 'Distribución de Tabletas '.$nombreAnio;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de tabletas';
 
-        return view('educacion.Tableta.Principal', ["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
-                    compact('tableta','anios','fechas_tabletas','titulo_y','titulo','subTitulo')); 
-        
-
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],compact( 'titulo_y','titulo','subTitulo'));
     }
 
     public function reporteUgel($anio_id,$tableta_id)

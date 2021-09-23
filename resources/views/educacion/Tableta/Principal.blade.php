@@ -2,11 +2,6 @@
 
 @section('css')
 
-    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
 
 @endsection 
 
@@ -19,7 +14,7 @@
             <div class="row">
                 <div class="col-md-12">      
                     <div id="barra1">       
-                        @include('graficos.Barra')
+                        {{-- se carga con el scrip lineas abajo --}}
                     </div> 
                 </div> 
             </div> 
@@ -82,12 +77,35 @@
 
 @section('js')
 
+
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
     <script type="text/javascript"> 
         
         $(document).ready(function() {
             cargar_fechas();
+            cargar_Grafico();
             //cargar_resumen_matricula();
         });
+
+        function cargar_Grafico() {
+            
+            $.ajax({  
+                headers: {
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },                           
+                url: "{{ url('/') }}/Tableta/GraficoBarrasPrincipal/"+ $('#anio').val(),
+                type: 'post',
+            }).done(function (data) {               
+                $('#barra1').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
+        }
 
         function cargar_fechas() {
            
@@ -116,6 +134,8 @@
                    
                 },
             });
+
+            cargar_Grafico();
             
         }
 

@@ -75,6 +75,7 @@ Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}', [MatriculaControl
 Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
 
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
+Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
 
 
 Route::get('/Tableta/Importar', [TabletaController::class, 'importar'])->name('Tableta.importar');
@@ -85,6 +86,8 @@ Route::post('/Tableta/Aprobar/procesar/{importacion_id}', [TabletaController::cl
 Route::get('/Tableta/Principal',[TabletaController::class, 'principal'])->name('Tableta.principal');
 Route::post('/Tableta/Fechas/{anio_id}', [TabletaController::class, 'Fechas'])->name('Tableta.Fechas');
 Route::post('/Tableta/ReporteUgel/{anio_id}/{tableta_id}', [TabletaController::class, 'ReporteUgel'])->name('Tableta.ReporteUgel');
+
+Route::post('/Tableta/GraficoBarrasPrincipal/{anio_id}', [TabletaController::class, 'GraficoBarrasPrincipal'])->name('Tableta.GraficoBarrasPrincipal');
 
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
