@@ -128,7 +128,7 @@
                 url: "{{ url('/') }}/INDICADOR/ece5/" + $('#provincia').val()+"/"+$('#distrito').val()+"/{{$indicador_id}}/"+$('#fecha').val(),
                 type: 'post',
                 dataType: 'JSON',
-                success: function(data) {                   
+                success: function(data) {     
                     vista='';
                     total=0;
                     data.indicador.forEach(element => {total+=element.y});
