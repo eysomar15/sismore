@@ -205,7 +205,7 @@ class IndicadorRepositorio
             ->get();
         return $query;
     }
-    public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia) //no usado
+    public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia) 
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -219,11 +219,20 @@ class IndicadorRepositorio
             ->get([
                 'v1.materia_id',
                 'v3.descripcion as materia',
-                DB::raw('sum(evaluados)     as evaluados'),
+                /*DB::raw('sum(evaluados)     as evaluados'),
                 DB::raw('sum(previo)        as previo'),
                 DB::raw('sum(inicio)        as inicio'),
                 DB::raw('sum(proceso)       as proceso'),
+                DB::raw('sum(satisfactorio) as satisfactorio'),*/
+                DB::raw('sum(evaluados) as evaluados'),
+                DB::raw('sum(previo) as previo'),
+                DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
+                DB::raw('sum(inicio) as inicio'),
+                DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
+                DB::raw('sum(proceso) as proceso'),
+                DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                 DB::raw('sum(satisfactorio) as satisfactorio'),
+                DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
             ]);
         return $query;
     }
@@ -312,12 +321,17 @@ class IndicadorRepositorio
                 ->groupBy('v5.id')
                 ->get([
                     'v5.id',
-                    'v5.id as distrito',
+                    DB::raw('(SELECT nombre FROM `par_ubigeo` WHERE id=v5.id) as ubigeo'),
+                    //'v5.id as distrito',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
+                    DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                     DB::raw('sum(inicio) as inicio'),
+                    DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                     DB::raw('sum(proceso) as proceso'),
+                    DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                     DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
                 ]);
         } else {
             $query = DB::table('edu_eceresultado as v1')
@@ -333,12 +347,17 @@ class IndicadorRepositorio
                 ->groupBy('v5.id')
                 ->get([
                     'v5.id',
-                    'v5.id as distrito',
+                    DB::raw('(SELECT nombre FROM `par_ubigeo` WHERE id=v5.id) as ubigeo'),
+                    //'v5.id as distrito',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
+                    DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                     DB::raw('sum(inicio) as inicio'),
+                    DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                     DB::raw('sum(proceso) as proceso'),
+                    DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                     DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
                 ]);
         }
 
@@ -365,12 +384,25 @@ class IndicadorRepositorio
                 ->groupBy('v5.dependencia')
                 ->get([
                     'v5.dependencia as id',
-                    'v5.dependencia as provincia',
+                    DB::raw('(SELECT nombre FROM `par_ubigeo` WHERE id=v5.dependencia) as ubigeo'),
+                    //'v5.dependencia as provincia',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
+                    DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                     DB::raw('sum(inicio) as inicio'),
+                    DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                     DB::raw('sum(proceso) as proceso'),
+                    DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                     DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
+                    /*DB::raw('sum(previo) as previo'),
+                    DB::raw('100*sum(previo)/sum(evaluados) as p1'),
+                    DB::raw('sum(inicio) as inicio'),
+                    DB::raw('100*sum(inicio)/sum(evaluados) as p2'),
+                    DB::raw('sum(proceso) as proceso'),
+                    DB::raw('100*sum(proceso)/sum(evaluados) as p3'),
+                    DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('100*sum(satisfactorio)/sum(evaluados) as p4'),*/
                 ]);
         } else {
             $query = DB::table('edu_eceresultado as v1')
@@ -385,12 +417,17 @@ class IndicadorRepositorio
                 ->groupBy('v5.dependencia')
                 ->get([
                     'v5.dependencia as id',
-                    'v5.dependencia as provincia',
+                    DB::raw('(SELECT nombre FROM `par_ubigeo` WHERE id=v5.dependencia) as ubigeo'),
+                    //'v5.dependencia as provincia',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
+                    DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                     DB::raw('sum(inicio) as inicio'),
+                    DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                     DB::raw('sum(proceso) as proceso'),
+                    DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                     DB::raw('sum(satisfactorio) as satisfactorio'),
+                    DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
                 ]);
         }
         //$provs = Ubigeo::where('dependencia', $id)->get();
@@ -412,11 +449,17 @@ class IndicadorRepositorio
             ->where('v2.tipo', $tipo)
             ->where('v1.materia_id', $materia)
             ->get([
+                DB::raw(' 34 as id'),
+                DB::raw('"TODOS(UCAYALI)" as ubigeo'),
                 DB::raw('sum(evaluados) as evaluados'),
                 DB::raw('sum(previo) as previo'),
+                DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
                 DB::raw('sum(inicio) as inicio'),
+                DB::raw('ROUND(100*sum(inicio)/sum(evaluados),2) as p2'),
                 DB::raw('sum(proceso) as proceso'),
+                DB::raw('ROUND(100*sum(proceso)/sum(evaluados),2) as p3'),
                 DB::raw('sum(satisfactorio) as satisfactorio'),
+                DB::raw('ROUND(100*sum(satisfactorio)/sum(evaluados),2) as p4'),
             ]);
         return $query;
     }

@@ -67,7 +67,30 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row" id="vistatabla">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-primary">#</th>
+                                                @if ($indicador_id==5||$indicador_id==6)
+                                                <th class="text-secondary text-center">CANTIDAD</th>
+                                                <th class="text-secondary text-center">PREVIO</th>
+                                                @endif
+                                                <th class="text-danger text-center">CANTIDAD</th>
+                                                <th class="text-danger text-center">INICIO</th>
+                                                <th class="text-warning text-center">CANTIDAD</th>
+                                                <th class="text-warning text-center">PROCESO</th>
+                                                <th class="text-success text-center">CANTIDAD</th>
+                                                <th class="text-success text-center">SATISFACTORIO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="vistatabla">
+                                        </tbody>
+                                    </table>
+                                </div>                           
+                            </div>                            
                         </div>
                     </div>
                 </div>
@@ -106,8 +129,10 @@
                                     <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
                                         <thead class="cabecera-dataTable">                                    
                                             <th class="text-primary">IIEE</th>
+                                            @if ($indicador_id==5||$indicador_id==6)
                                             <th class="text-secondary text-center">CANTIDAD</th>
-                                            <th class="text-secondary text-center">PREVIO</th>
+                                            <th class="text-secondary text-center">PREVIO</th>    
+                                            @endif
                                             <th class="text-danger text-center">CANTIDAD</th>
                                             <th class="text-danger text-center">INICIO</th>
                                             <th class="text-warning text-center">CANTIDAD</th>
@@ -177,7 +202,25 @@
                     $("#vistatabla").html('<br><h3>Cargando datos...</h3>');
                 },
                 success: function(data) {
-                    $("#vistatabla").html(data);
+                    console.log(data);
+                    vista='';
+                    max=data.length-1;
+                    $.each(data, function(index, value) {
+                        vista+='<tr class="'+(index==max?'table-success':'')+'">'+
+                        '<td class="text-primary">'+value.ubigeo+'</td>'+
+                        @if ($indicador_id==5||$indicador_id==6)
+                        '<td class="text-secondary text-center">'+value.previo+'</td>'+
+                        '<td class="text-secondary text-center">'+value.p1+'%</td>'+
+                        @endif
+                        '<td class="text-danger text-center">'+value.inicio+'</td>'+
+                        '<td class="text-danger text-center">'+value.p2+'%</td>'+
+                        '<td class="text-warning text-center">'+value.proceso+'</td>'+
+                        '<td class="text-warning text-center">'+value.p3+'%</td>'+
+                        '<td class="text-success text-center">'+value.satisfactorio+'</td>'+
+                        '<td class="text-success text-center">'+value.p4+'%</td>'+
+                        '</tr>'
+                    });
+                    $("#vistatabla").html(vista);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -208,8 +251,8 @@
                 $('#tipo').val()+"/" + $('#materia').val()+"/" + $('#gestion').val()+ "/" + $('#area').val(),
                 "columns":[
                     {data:'nombre'},
-                    {data:'previo'},
-                    {data:'p1'},
+                    @if ($indicador_id==5||$indicador_id==6){data:'previo'},
+                    {data:'p1'},@endif
                     {data:'inicio'}, 
                     {data:'p2'},
                     {data:'proceso'},  

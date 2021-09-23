@@ -113,11 +113,11 @@ Route::get('/INDICADOR/dece/{indicador_id}/{grado}/{tipo}/{materia}', [Indicador
 Route::get('/INDICADOR/rece/{indicador_id}/{grado}/{tipo}/{materia}', [IndicadorController::class, 'indResEdu'])->name('ind.res.edu');
 
 Route::post('/INDICADOR/Satisfactorio', [IndicadorController::class, 'reporteSatisfactorioMateria'])->name('ind.ajax.satisfactorio');
-Route::post('/INDICADOR/Ugel', [IndicadorController::class, 'indicadorUgelMateria'])->name('ind.ajax.ugel');
-Route::post('/INDICADOR/Materia', [IndicadorController::class, 'indicadorMateria'])->name('ind.ajax.materia');
+//Route::post('/INDICADOR/Ugel', [IndicadorController::class, 'indicadorUgelMateria'])->name('ind.ajax.ugel');
+//Route::post('/INDICADOR/Materia', [IndicadorController::class, 'indicadorMateria'])->name('ind.ajax.materia');
 Route::post('/INDICADOR/ReporteUbigeoAjax', [IndicadorController::class, 'reporteUbigeoAjax'])->name('ind.ajax.reporteubigeo');
 Route::get('/INDICADOR/ReporteGestionAreaDT/{anio}/{grado}/{tipo}/{materia}/{gestion}/{area}', [IndicadorController::class, 'reporteGestionAreaDT']);
-Route::post('/INDICADOR/Provincia', [IndicadorController::class, 'indicadorProvincia'])->name('ind.ajax.provincia');
+//Route::post('/INDICADOR/Provincia', [IndicadorController::class, 'indicadorProvincia'])->name('ind.ajax.provincia');
 Route::post('/INDICADOR/Distritos/{provincia}', [IndicadorController::class, 'cargardistritos'])->name('ind.ajax.cargardistritos');
 Route::post('/INDICADOR/PNSR1/{provincia}/{distrito}/{indicador_id}/{fecha}', [IndicadorController::class, 'indicadorvivpnsrcab'])->name('ind.ajax.pnsr1');
 Route::post('/INDICADOR/ece5/{provincia}/{distrito}/{indicador_id}/{anio_id}', [IndicadorController::class, 'ajaxEdu5v1'])->name('ind.ajax.edu5.1');
