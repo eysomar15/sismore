@@ -205,7 +205,7 @@ class IndicadorRepositorio
             ->get();
         return $query;
     }
-    public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia) 
+    public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia)
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -755,41 +755,41 @@ class IndicadorRepositorio
             $query['internet'] = $cp1[0]->internet;
             switch ($indicador_id) {
                 case 20:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_agua')
-                        ->get(['sistema_agua as name', DB::raw('count(sistema_agua) as y')]);
+                        ->get(['sistema_agua as name', DB::raw('count(id) as y')]);
                     break;
                 case 21:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_cloracion')->get([
                             'sistema_cloracion as name',
-                            DB::raw('count(sistema_cloracion) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 22:
-                    $query['indicador'] =   DB::table('viv_datass as v1')
+                    $queryx =   DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('servicio_agua_continuo')
                         ->get([
                             'servicio_agua_continuo as name',
-                            DB::raw('count(servicio_agua_continuo) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 23:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx=  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_disposicion_excretas')
                         ->get([
                             'sistema_disposicion_excretas as name',
-                            DB::raw('count(sistema_disposicion_excretas) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 24:
@@ -797,20 +797,26 @@ class IndicadorRepositorio
                 case 25:
                     break;
                 case 26:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('realiza_cloracion_agua')
                         ->get([
                             'realiza_cloracion_agua as name',
-                            DB::raw('count(realiza_cloracion_agua) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
 
                 default:
                     break;
             }
+            $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
+            foreach ($queryx as $item) {
+                if ($item->name == 'SI') $coor[0]['y'] += $item->y;
+                else $coor[1]['y'] += $item->y;
+            }
+            $query['indicador'] = $coor;
         } else if ($provincia > 0 && $distrito == 0) {
             $prov = Ubigeo::find($provincia);
             $cp1 =  DB::table('viv_datass as v1')
@@ -845,41 +851,41 @@ class IndicadorRepositorio
 
             switch ($indicador_id) {
                 case 20:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_agua')
-                        ->get(['sistema_agua as name', DB::raw('count(sistema_agua) as y')]);
+                        ->get(['sistema_agua as name', DB::raw('count(id) as y')]);
                     break;
                 case 21:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_cloracion')->get([
                             'sistema_cloracion as name',
-                            DB::raw('count(sistema_cloracion) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 22:
-                    $query['indicador'] =   DB::table('viv_datass as v1')
+                    $queryx =   DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('servicio_agua_continuo')
                         ->get([
                             'servicio_agua_continuo as name',
-                            DB::raw('count(servicio_agua_continuo) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 23:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
                         ->groupBy('sistema_disposicion_excretas')
                         ->get([
                             'sistema_disposicion_excretas as name',
-                            DB::raw('count(sistema_disposicion_excretas) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 24:
@@ -887,20 +893,26 @@ class IndicadorRepositorio
                 case 25:
                     break;
                 case 26:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('realiza_cloracion_agua')
                         ->get([
                             'realiza_cloracion_agua as name',
-                            DB::raw('count(realiza_cloracion_agua) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
 
                 default:
                     break;
             }
+            $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
+            foreach ($queryx as $item) {
+                if ($item->name == 'SI') $coor[0]['y'] += $item->y;
+                else $coor[1]['y'] += $item->y;
+            }
+            $query['indicador'] = $coor;
         } else {
             $cp1 =  DB::table('viv_datass as v1')
                 ->where('importacion_id', $importacion_id)
@@ -930,61 +942,67 @@ class IndicadorRepositorio
             switch ($indicador_id) {
                 case 20:
                     //$cp = DB::table('viv_datass as v1')->where('importacion_id', $importacion_id);
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->groupBy('sistema_agua')->get([
                             'sistema_agua as name',
-                            DB::raw('count(sistema_agua) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 21:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('sistema_cloracion')->get([
                             'sistema_cloracion as name',
-                            DB::raw('count(sistema_cloracion) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 22:
-                    $query['indicador'] =   DB::table('viv_datass as v1')
+                    $queryx =   DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('servicio_agua_continuo')
                         ->get([
                             'servicio_agua_continuo as name',
-                            DB::raw('count(servicio_agua_continuo) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 23:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
                         ->groupBy('sistema_disposicion_excretas')
                         ->get([
                             'sistema_disposicion_excretas as name',
-                            DB::raw('count(sistema_disposicion_excretas) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
                 case 24:
-                    $query['indicador'] = null;
+                    $queryx = null;
                     break;
                 case 25:
-                    $query['indicador'] = null;
+                    $queryx = null;
                     break;
                 case 26:
-                    $query['indicador'] =  DB::table('viv_datass as v1')
+                    $queryx =  DB::table('viv_datass as v1')
                         ->where('importacion_id', $importacion_id)
-                        ->whereIn('sistema_cloracion', ['SI', 'NO'])
+                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
                         ->groupBy('realiza_cloracion_agua')
                         ->get([
                             'realiza_cloracion_agua as name',
-                            DB::raw('count(realiza_cloracion_agua) as y')
+                            DB::raw('count(id) as y')
                         ]);
                     break;
 
                 default:
                     break;
             }
+            $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
+            foreach ($queryx as $item) {
+                if ($item->name == 'SI') $coor[0]['y'] += $item->y;
+                else $coor[1]['y'] += $item->y;
+            }
+            $query['indicador'] = $coor;
         }
 
         return $query;

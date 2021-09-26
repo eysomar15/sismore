@@ -40,7 +40,7 @@
                                         <i class="mdi mdi-chevron-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{route('ind.det.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}" class="dropdown-item">Historico</a></li>
+                                        <li><a href="{{route('ind.det.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}" class="dropdown-item">Ugel</a></li>
                                         <li><a href="{{route('ind.res.edu',['indicador_id'=>$indicador_id,'grado'=>$grado,'tipo'=>$tipo,'materia'=>$materia->id])}}" class="dropdown-item">Detalle</a></li>
                                     </ul>
                                 </div>

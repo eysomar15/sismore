@@ -437,7 +437,7 @@ class IndicadorController extends Controller
         $grados = IndicadorRepositorio::buscar_grados1($request->nivel);
         return response()->json(compact('grados'));
     }
-    public function indicadorLOGROS(Request $request)
+    /*public function indicadorLOGROS(Request $request)
     {
         $materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
         $tabla = '<table class="table mb-0">';
@@ -507,7 +507,7 @@ class IndicadorController extends Controller
         }
         $tabla .= '</tbody></table>';
         return $tabla;
-    }
+    }*/
 
     public function reporteSatisfactorioMateria(Request $request)
     {
