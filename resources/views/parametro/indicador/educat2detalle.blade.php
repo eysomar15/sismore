@@ -42,7 +42,7 @@
             <div class="col-xl-6">
                 <div class="card card-border card-primary">
                     <div class="card-header border-primary bg-transparent pb-0">
-                        <h3 class="card-title text-primary">Porcentaje de estudiantes por nivel de logro de aprendizaje según UGEL {{$anio->anio}}
+                        <h3 class="card-title text-primary">Estudiantes por nivel de logro de aprendizaje según UGEL {{$anio->anio}}
                         </h3>
                     </div>
                     <div class="card-body">
@@ -51,36 +51,51 @@
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-primary text-center">UGEL</th>
+                                            <th>UGEL</th>
                                             @if ($anio->previo!=0)
                                             {{--<th class="text-secondary text-center">CANTIDAD</th>--}}
                                             
-                                            <th class="text-secondary text-center">PREVIO</th>
+                                            <th class="text-center">PREVIO</th>
                                             @endif
                                             {{--<th class="text-danger text-center">CANTIDAD</th>--}}
-                                            <th class="text-danger text-center">INICIO</th>
+                                            <th class="text-center">INICIO</th>
                                             {{--<th class="text-warning text-center">CANTIDAD</th>--}}
-                                            <th class="text-warning text-center">PROCESO</th>
+                                            <th class="text-center">PROCESO</th>
                                             {{--<th class="text-success text-center">CANTIDAD</th>--}}
                                             <th class="text-success text-center">SATISFACTORIO</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $v1=0;$v2=0;$v3=0;$v4=0;
+                                        @endphp
                                         @foreach ($anio->indicador as $ind)
                                         <tr>
-                                            <td class="text-primary text-center">{{$ind->ugel}}</td>
+                                            <td>{{$ind->ugel}}</td>
                                             @if ($anio->previo!=0)
-                                            <td class="text-secondary text-center">{{$ind->previo}}</td>
+                                            <td class="text-center">{{$ind->previo}}</td>
                                             {{--<td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>--}}
                                             @endif
-                                            <td class="text-danger text-center">{{$ind->inicio}}</td>
+                                            <td class="text-center">{{$ind->inicio}}</td>
                                             {{--<td class="text-danger text-center">{{round($ind->inicio * 100 / $ind->evaluados, 2)}}%</td>--}}
-                                            <td class="text-warning text-center">{{$ind->proceso}}</td>
+                                            <td class=" text-center">{{$ind->proceso}}</td>
                                             {{--<td class="text-warning text-center">{{round($ind->proceso * 100 / $ind->evaluados, 2)}}%</td>--}}
                                             <td class="text-success text-center">{{$ind->satisfactorio}}</td>
                                             {{--<td class="text-success text-center">{{round($ind->satisfactorio * 100 / $ind->evaluados, 2)}}%</td>--}}
-                                        </tr>    
+                                        </tr> 
+                                        @php
+                                            $v1+=$ind->previo;$v2+=$ind->inicio;$v3+=$ind->proceso;$v4+=$ind->satisfactorio;
+                                        @endphp   
                                         @endforeach
+                                        <tr class="table-success">
+                                            <td>Total</td>
+                                            @if ($anio->previo!=0)
+                                            <td class="text-center">{{$v1}}</td>
+                                            @endif
+                                            <td class="text-center">{{$v2}}</td>
+                                            <td class=" text-center">{{$v3}}</td>
+                                            <td class="text-success text-center">{{$v4}}</td>
+                                        </tr>    
                                     </tbody>
                                 </table>
                             </div>

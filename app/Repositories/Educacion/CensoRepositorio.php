@@ -96,7 +96,7 @@ class CensoRepositorio
 
     public static function listar_conElectricidad($provincia, $distrito, $indicador_id, $anio_id)
     {
-        if ($provincia > 0 && $distrito > 0) {
+        if ($distrito > 0) {
             $prov = Ubigeo::find($distrito);
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -104,7 +104,7 @@ class CensoRepositorio
                 ->where('v1.estado', 'PR')
                 ->where('v2.codigoUbigeo', 'like', $prov->codigo . '%')
                 ->where('v2.fuenteEnergiaElectrica', '!=', '1.Red pública')
-                ->get([DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -114,8 +114,8 @@ class CensoRepositorio
                 ->whereIn('v2.fuenteEnergiaElectrica', ['1.Red pública', '2.Generador o motor del Municipio'])
                 ->groupBy('v2.fuenteEnergiaElectrica')
                 ->orderBy('v2.fuenteEnergiaElectrica', 'asc')
-                ->get(['v2.fuenteEnergiaElectrica as name', DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
-        } else if ($provincia > 0 && $distrito == 0) {
+                ->get(['v2.fuenteEnergiaElectrica as name', DB::raw('count(v2.id) as y')]);
+        } else if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -123,7 +123,7 @@ class CensoRepositorio
                 ->where('v1.estado', 'PR')
                 ->where('v2.codigoUbigeo', 'like', $prov->codigo . '%')
                 ->where('v2.fuenteEnergiaElectrica', '!=', '1.Red pública')
-                ->get([DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -133,14 +133,14 @@ class CensoRepositorio
                 ->whereIn('v2.fuenteEnergiaElectrica', ['1.Red pública', '2.Generador o motor del Municipio'])
                 ->groupBy('v2.fuenteEnergiaElectrica')
                 ->orderBy('v2.fuenteEnergiaElectrica', 'asc')
-                ->get(['v2.fuenteEnergiaElectrica as name', DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
+                ->get(['v2.fuenteEnergiaElectrica as name', DB::raw('count(v2.id) as y')]);
         } else {
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
                 ->where('v1.anio_id', $anio_id)
                 ->where('v1.estado', 'PR')
                 ->where('v2.fuenteEnergiaElectrica', '!=', '1.Red pública')
-                ->get([DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -149,73 +149,7 @@ class CensoRepositorio
                 ->whereIn('v2.fuenteEnergiaElectrica', ['1.Red pública', '2.Generador o motor del Municipio'])
                 ->groupBy('v2.fuenteEnergiaElectrica')
                 ->orderBy('v2.fuenteEnergiaElectrica', 'asc')
-                ->get(['v2.fuenteEnergiaElectrica as name', DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
-        }
-        foreach ($query1 as $item) {
-            if ($item->name == '2.Generador o motor del Municipio') {
-                $item->y = $query->first()->y;
-                $item->name = '2.Otros';
-            }
-        }
-        $data['indicador'] = $query1;
-        return $data;
-    }
-    public static function listar_conElectricidadAux($provincia, $distrito, $indicador_id, $anio_id)
-    {
-        if ($provincia > 0 && $distrito > 0) {
-            $prov = Ubigeo::find($distrito);
-            $query = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneEnergiaElectTodoDia', ['Si', 'No sabe o no puede precisar', '-----'])
-                ->get([DB::raw('count(v2.tieneEnergiaElectTodoDia) as y')]);
-
-            $query1 = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneEnergiaElectTodoDia', ['Si', 'No'])
-                ->groupBy('v2.tieneEnergiaElectTodoDia')
-                ->orderBy('v2.tieneEnergiaElectTodoDia', 'desc')
-                ->get(['v2.tieneEnergiaElectTodoDia as name', DB::raw('count(v2.tieneEnergiaElectTodoDia) as y')]);
-        } else if ($provincia > 0 && $distrito == 0) {
-            $prov = Ubigeo::find($provincia);
-            $query = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneEnergiaElectTodoDia', ['Si', 'No sabe o no puede precisar', '-----'])
-                ->get([DB::raw('count(v2.tieneEnergiaElectTodoDia) as y')]);
-
-            $query1 = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneEnergiaElectTodoDia', ['Si', 'No'])
-                ->groupBy('v2.tieneEnergiaElectTodoDia')
-                ->orderBy('v2.tieneEnergiaElectTodoDia', 'desc')
-                ->get(['v2.tieneEnergiaElectTodoDia as name', DB::raw('count(v2.tieneEnergiaElectTodoDia) as y')]);
-        } else {
-            $query = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('v2.fuenteEnergiaElectrica', '!=', '1.Red pública')
-                ->get([DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
-
-            $query1 = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->whereIn('v2.fuenteEnergiaElectrica', ['1.Red pública', '2.Generador o motor del Municipio'])
-                ->groupBy('v2.fuenteEnergiaElectrica')
-                ->orderBy('v2.fuenteEnergiaElectrica', 'asc')
-                ->get(['v2.fuenteEnergiaElectrica as name', DB::raw('count(v2.fuenteEnergiaElectrica) as y')]);
+                ->get(['v2.fuenteEnergiaElectrica as name', DB::raw('count(v2.id) as y')]);
         }
         foreach ($query1 as $item) {
             if ($item->name == '2.Generador o motor del Municipio') {
@@ -228,7 +162,7 @@ class CensoRepositorio
     }
     public static function listar_conAguaPotable($provincia, $distrito, $indicador_id, $anio_id)
     {
-        if ($provincia > 0 && $distrito > 0) {
+        if ($distrito > 0) {
             $prov = Ubigeo::find($distrito);
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -236,7 +170,7 @@ class CensoRepositorio
                 ->where('v1.estado', 'PR')
                 ->where('v2.codigoUbigeo', 'like', $prov->codigo . '%')
                 ->where('v2.fuenteAgua', '!=', '1.Red pública')
-                ->get([DB::raw('count(v2.fuenteAgua) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -246,8 +180,8 @@ class CensoRepositorio
                 ->whereIn('v2.fuenteAgua', ['1.Red pública', '2.Pilón de uso público'])
                 ->groupBy('v2.fuenteAgua')
                 ->orderBy('v2.fuenteAgua', 'asc')
-                ->get(['v2.fuenteAgua as name', DB::raw('count(v2.fuenteAgua) as y')]);
-        } else if ($provincia > 0 && $distrito == 0) {
+                ->get(['v2.fuenteAgua as name', DB::raw('count(v2.id) as y')]);
+        } else if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -255,7 +189,7 @@ class CensoRepositorio
                 ->where('v1.estado', 'PR')
                 ->where('v2.codigoUbigeo', 'like', $prov->codigo . '%')
                 ->where('v2.fuenteAgua', '!=', '1.Red pública')
-                ->get([DB::raw('count(v2.fuenteAgua) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
                 ->where('v1.anio_id', $anio_id)
@@ -264,14 +198,14 @@ class CensoRepositorio
                 ->whereIn('v2.fuenteAgua', ['1.Red pública', '2.Pilón de uso público'])
                 ->groupBy('v2.fuenteAgua')
                 ->orderBy('v2.fuenteAgua', 'asc')
-                ->get(['v2.fuenteAgua as name', DB::raw('count(v2.fuenteAgua) as y')]);
+                ->get(['v2.fuenteAgua as name', DB::raw('count(v2.id) as y')]);
         } else {
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
                 ->where('v1.anio_id', $anio_id)
                 ->where('v1.estado', 'PR')
                 ->where('v2.fuenteAgua', '!=', '1.Red pública')
-                ->get([DB::raw('count(v2.fuenteAgua) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -280,7 +214,7 @@ class CensoRepositorio
                 ->whereIn('v2.fuenteAgua', ['1.Red pública', '2.Pilón de uso público'])
                 ->groupBy('v2.fuenteAgua')
                 ->orderBy('v2.fuenteAgua', 'asc')
-                ->get(['v2.fuenteAgua as name', DB::raw('count(v2.fuenteAgua) as y')]);
+                ->get(['v2.fuenteAgua as name', DB::raw('count(v2.id) as y')]);
         }
         foreach ($query1 as $item) {
             if ($item->name == '2.Pilón de uso público') {
@@ -291,73 +225,9 @@ class CensoRepositorio
         $data['indicador'] = $query1;
         return $data;
     }
-    public static function listar_conAguaPotableAux($provincia, $distrito, $indicador_id, $anio_id)
-    {
-        if ($provincia > 0 && $distrito > 0) {
-            $prov = Ubigeo::find($distrito);
-            $query = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneAguaPotTodoDia', ['Si', 'No sabe o no puede precisar', '-----'])
-                ->get([DB::raw('count(v2.tieneAguaPotTodoDia) as y')]);
-
-            $query1 = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneAguaPotTodoDia', ['Si', 'No'])
-                ->groupBy('v2.tieneAguaPotTodoDia')
-                ->orderBy('v2.tieneAguaPotTodoDia', 'desc')
-                ->get(['v2.tieneAguaPotTodoDia as name', DB::raw('count(v2.tieneAguaPotTodoDia) as y')]);
-        } else if ($provincia > 0 && $distrito == 0) {
-            $prov = Ubigeo::find($provincia);
-            $query = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneAguaPotTodoDia', ['Si', 'No sabe o no puede precisar', '-----'])
-                ->get([DB::raw('count(v2.tieneAguaPotTodoDia) as y')]);
-
-            $query1 = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->where('codigoUbigeo', 'like', $prov->codigo . '%')
-                ->whereIn('v2.tieneAguaPotTodoDia', ['Si', 'No'])
-                ->groupBy('v2.tieneAguaPotTodoDia')
-                ->orderBy('v2.tieneAguaPotTodoDia', 'desc')
-                ->get(['v2.tieneAguaPotTodoDia as name', DB::raw('count(v2.tieneAguaPotTodoDia) as y')]);
-        } else {
-            $query = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->whereIn('v2.tieneAguaPotTodoDia', ['Si', 'No sabe o no puede precisar', '-----'])
-                ->get([DB::raw('count(v2.tieneAguaPotTodoDia) as y')]);
-
-            $query1 = DB::table('edu_censo as v1')
-                ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
-                ->where('v1.anio_id', $anio_id)
-                ->where('v1.estado', 'PR')
-                ->whereIn('v2.tieneAguaPotTodoDia', ['Si', 'No'])
-                ->groupBy('v2.tieneAguaPotTodoDia')
-                ->orderBy('v2.tieneAguaPotTodoDia', 'desc')
-                ->get(['v2.tieneAguaPotTodoDia as name', DB::raw('count(v2.tieneAguaPotTodoDia) as y')]);
-        }
-        foreach ($query1 as $item) {
-            if ($item->name == 'Si')
-                $item->y = $query->first()->y;
-        }
-        $data['indicador'] = $query1;
-        return $data;
-    }
     public static function listar_conDesague($provincia, $distrito, $indicador_id, $anio_id)
     {
-        if ($provincia > 0 && $distrito > 0) {
+        if ($distrito > 0) {
             $prov = Ubigeo::find($distrito);
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -365,7 +235,7 @@ class CensoRepositorio
                 ->where('v1.estado', 'PR')
                 ->where('v2.codigoUbigeo', 'like', $prov->codigo . '%')
                 ->where('v2.desagueInfo', '!=', '1.Desemboca en una red pública de desagüe')
-                ->get([DB::raw('count(v2.desagueInfo) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -375,8 +245,8 @@ class CensoRepositorio
                 ->whereIn('v2.desagueInfo', ['1.Desemboca en una red pública de desagüe', '2. Utiliza pozo séptico/tanque séptico'])
                 ->groupBy('v2.desagueInfo')
                 ->orderBy('v2.desagueInfo', 'asc')
-                ->get(['v2.desagueInfo as name', DB::raw('count(v2.desagueInfo) as y')]);
-        } else if ($provincia > 0 && $distrito == 0) {
+                ->get(['v2.desagueInfo as name', DB::raw('count(v2.id) as y')]);
+        } else if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -384,7 +254,7 @@ class CensoRepositorio
                 ->where('v1.estado', 'PR')
                 ->where('v2.codigoUbigeo', 'like', $prov->codigo . '%')
                 ->where('v2.desagueInfo', '!=', '1.Desemboca en una red pública de desagüe')
-                ->get([DB::raw('count(v2.desagueInfo) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -394,14 +264,14 @@ class CensoRepositorio
                 ->whereIn('v2.desagueInfo', ['1.Desemboca en una red pública de desagüe', '2. Utiliza pozo séptico/tanque séptico'])
                 ->groupBy('v2.desagueInfo')
                 ->orderBy('v2.desagueInfo', 'asc')
-                ->get(['v2.desagueInfo as name', DB::raw('count(v2.desagueInfo) as y')]);
+                ->get(['v2.desagueInfo as name', DB::raw('count(v2.id) as y')]);
         } else {
             $query = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
                 ->where('v1.anio_id', $anio_id)
                 ->where('v1.estado', 'PR')
                 ->where('v2.desagueInfo', '!=', '1.Desemboca en una red pública de desagüe')
-                ->get([DB::raw('count(v2.desagueInfo) as y')]);
+                ->get([DB::raw('count(v2.id) as y')]);
 
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -410,7 +280,7 @@ class CensoRepositorio
                 ->whereIn('v2.desagueInfo', ['1.Desemboca en una red pública de desagüe', '2. Utiliza pozo séptico/tanque séptico'])
                 ->groupBy('v2.desagueInfo')
                 ->orderBy('v2.desagueInfo', 'asc')
-                ->get(['v2.desagueInfo as name', DB::raw('count(v2.desagueInfo) as y')]);
+                ->get(['v2.desagueInfo as name', DB::raw('count(v2.id) as y')]);
         }
         foreach ($query1 as $item) {
             if ($item->name == '2. Utiliza pozo séptico/tanque séptico') {
@@ -421,10 +291,9 @@ class CensoRepositorio
         $data['indicador'] = $query1;
         return $data;
     }
-
     public static function listar_conServicioBasico($provincia, $distrito, $indicador_id, $anio_id)
     {
-        if ($provincia > 0 && $distrito > 0) {
+        if ($distrito > 0) {
             $prov = Ubigeo::find($distrito);
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
@@ -444,7 +313,7 @@ class CensoRepositorio
                 ->where('v2.fuenteAgua', '!=', 'NULL')
                 ->where('v2.desagueInfo', '!=', 'NULL')
                 ->get([DB::raw('count(v2.id) as y')]);
-        } else if ($provincia > 0 && $distrito == 0) {
+        } else if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query1 = DB::table('edu_censo as v1')
                 ->join('edu_censoresultado as v2', 'v2.censo_id', '=', 'v1.id')
