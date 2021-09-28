@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'DETALLE'])
+@extends('layouts.main',['titlePage'=>'INSTITUCIONES'])
 @section('css')
     <!-- Table datatable css -->
     <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -41,6 +41,7 @@
                 </div>
             </div>
         </form><!--End form-->
+        {{--
         <div class="row">
             <div class="col-xl-12">
                 <div class="card card-border card-primary">
@@ -95,7 +96,7 @@
                     </div>
                 </div>
             </div>    
-        </div><!-- End row -->
+        </div><!-- End row -->--}}
         <div class="row">
             <div class="col-xl-12">
                 <div class="card card-border card-primary">

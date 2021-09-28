@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'HISTORICO'])
+@extends('layouts.main',['titlePage'=>'UGEL'])
 
 @section('content')
     <div class="content">
