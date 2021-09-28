@@ -513,10 +513,8 @@ class MatriculaController extends Controller
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
 
-        // $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion(2);
-        // return $lista_total_matricula_EBR ;
+        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));  
 
-        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));     
     }
     
     public function reporteUgel($anio_id,$matricula_id)
@@ -593,10 +591,25 @@ class MatriculaController extends Controller
 
     public function Institucion_DataTable($matricula_id)
     {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion(2);
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,'I');
 
         return  datatables()->of($lista_total_matricula_EBR)->toJson();
     }
+
+    public function Institucion_DataTable2($matricula_id)
+    {     
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,'P');
+
+        return  datatables()->of($lista_total_matricula_EBR)->toJson();
+    }
+    
+    public function Institucion_DataTable3($matricula_id)
+    {     
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,'S');
+
+        return  datatables()->of($lista_total_matricula_EBR)->toJson();
+    }
+
 
     public function GraficoBarrasPrincipal($anio_id)
     {     

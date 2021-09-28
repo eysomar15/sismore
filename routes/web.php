@@ -77,6 +77,8 @@ Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}', [MatriculaCon
 Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');
 
 Route::get('/Matricula/Institucion_DataTable/{matricula_id}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
+Route::get('/Matricula/Institucion_DataTable2/{matricula_id}', [MatriculaController::class, 'Institucion_DataTable2'])->name('Matricula.Institucion_DataTable2');
+Route::get('/Matricula/Institucion_DataTable3/{matricula_id}', [MatriculaController::class, 'Institucion_DataTable3'])->name('Matricula.Institucion_DataTable3');
 
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
 Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');

@@ -1,7 +1,7 @@
 
     <div class="col-md-6">
         <div class="card-header bg-primary py-3 text-white">
-            <h5  class="card-title mb-0 text-white"> Total cuadro de asignación de Personal según UGEL al FECHA </h5>
+            <h5  class="card-title mb-0 text-white"> Total cuadro de asignación de Personal según UGEL </h5>
         </div>
         <div class="table-responsive">
             <table class="table table-bordered mb-0">
@@ -57,7 +57,7 @@
     <div class="col-md-6">
         <br><br>
         <div class="card-header bg-primary py-3 text-white">
-             <h5   class="card-title mb-0 text-white"> Total cuadro de asignación de Personal por tipo de Trabajador según UGEL al FECHA </h5>
+             <h5   class="card-title mb-0 text-white"> Total cuadro de asignación de Personal por tipo de Trabajador según UGEL</h5>
         </div>
 
         <div class="table-responsive">
@@ -120,7 +120,7 @@
     <div class="col-md-6">
         <br><br>
         <div class="card-header bg-primary py-3 text-white">
-             <h5  class="card-title mb-0 text-white"> Total cuadro de asignación de Personal por niveles según UGEL al FECHA </h5>
+             <h5  class="card-title mb-0 text-white"> Total cuadro de asignación de Personal por niveles según UGEL </h5>
         </div>
 
         <div class="table-responsive">

@@ -242,14 +242,14 @@ class MatriculaRepositorio
 
     }
 
-    public static function total_matricula_por_Nivel_Institucion($matricula_id)
+    public static function total_matricula_por_Nivel_Institucion($matricula_id,$nivel)
     { 
         $data = DB::table(
                         DB::raw("(
                                 select ugel.nombre as ugel,case when dist.nombre = 'yurua' then 'CORONEL PORTILLO' else prov.nombre end as provincia , 
                                 dist.nombre as distrito,cenPo.nombre as cenPo,inst.codModular,inst.anexo,inst.nombreInstEduc,tipoGestion.nombre as tipoGestion,
                                 tipoGestionCab.nombre as tipoGestionCab,forma.nombre as forma,caracteristica.nombre as caracteristica, areas.nombre as areas,
-                                prov.codigo,nivel,
+                                prov.codigo,nivel,total_estudiantes_matriculados,
                                 cero_nivel_hombre , primer_nivel_hombre ,segundo_nivel_hombre ,
                                 tercero_nivel_hombre , cuarto_nivel_hombre , quinto_nivel_hombre ,
                                 sexto_nivel_hombre , tres_anios_hombre_ebe,cuatro_anios_hombre_ebe, cinco_anios_hombre_ebe,
@@ -268,7 +268,8 @@ class MatriculaRepositorio
                                 inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                                 inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                                 inner join par_ubigeo prov on dist.dependencia = prov.id
-                                where mat.id = '$matricula_id'
+                                where mat.id = '$matricula_id' and nivel = '$nivel'
+                                order by ugel.codigo     
                             ) as datos"
                         )
                     )           
