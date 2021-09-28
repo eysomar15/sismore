@@ -512,9 +512,6 @@ class MatriculaController extends Controller
         $anios =  MatriculaRepositorio ::matriculas_anio( );
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
-
-        
-
        
         return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));     
     }
@@ -611,8 +608,6 @@ class MatriculaController extends Controller
         $titulo = 'Matriculas EBR '.$nombreAnio;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de matriculados';
-
-        
 
         return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],compact( 'titulo_y','titulo','subTitulo'));
     }

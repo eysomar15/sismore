@@ -5,6 +5,7 @@ use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\IndicadorController;
+use App\Http\Controllers\Educacion\InstEducativaController;
 use App\Http\Controllers\Educacion\MatriculaController;
 use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\Educacion\TabletaController;
@@ -77,6 +78,8 @@ Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}', [MatriculaCon
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
 Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
 
+Route::get('/InstEducativa/Principal', [InstEducativaController::class, 'principal'])->name('InstEducativa.principal');
+Route::post('/InstEducativa/ReporteDistrito', [InstEducativaController::class, 'ReporteDistrito'])->name('InstEducativa.ReporteDistrito');
 
 Route::get('/Tableta/Importar', [TabletaController::class, 'importar'])->name('Tableta.importar');
 Route::post('/Tableta/Importar',[TabletaController::class, 'guardar'])->name('Tableta.guardar');
