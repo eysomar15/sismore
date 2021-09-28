@@ -3,7 +3,7 @@
     <div class="content">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-fill bg-success">
+                <div class="card card-fill bg-primary">
                     <div class="card-header bg-transparent">
                         <h3 class="card-title text-white">{{ $title }}</h3>
                     </div>
@@ -53,6 +53,7 @@
                                 <thead>
                                     <tr>
                                         <th class=" text-center">AÑO</th>
+                                        <th class=" text-center">EVALUADOS</th>
                                         @if ($materia->previo!=0)
                                         {{--<th class="text-secondary text-center">CANTIDAD</th>--}}
                                         <th class="text-center">PREVIO</th>
@@ -70,6 +71,7 @@
                                     @foreach ($materia->indicador as $ind)
                                     <tr>
                                         <td class="text-center">{{$ind->anio}}</td>
+                                        <td class="text-center">{{$ind->evaluados}}</td>
                                         @if ($materia->previo!=0)
                                         <td class="text-center">{{$ind->previo}}</td>
                                         {{--<td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>--}}

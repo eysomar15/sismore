@@ -52,6 +52,7 @@
                                     <thead>
                                         <tr>
                                             <th>UGEL</th>
+                                            <th class="text-center">EVALUADOS</th>
                                             @if ($anio->previo!=0)
                                             {{--<th class="text-secondary text-center">CANTIDAD</th>--}}
                                             
@@ -72,6 +73,7 @@
                                         @foreach ($anio->indicador as $ind)
                                         <tr>
                                             <td>{{$ind->ugel}}</td>
+                                            <td class="text-center">{{$ind->evaluados}}</td>
                                             @if ($anio->previo!=0)
                                             <td class="text-center">{{$ind->previo}}</td>
                                             {{--<td class="text-secondary text-center">{{round($ind->previo * 100 / $ind->evaluados, 2)}}%</td>--}}
@@ -89,6 +91,7 @@
                                         @endforeach
                                         <tr class="table-success">
                                             <td>Total</td>
+                                            <td class="text-center">{{$v1+$v2+$v3+$v4}}</td>
                                             @if ($anio->previo!=0)
                                             <td class="text-center">{{$v1}}</td>
                                             @endif
