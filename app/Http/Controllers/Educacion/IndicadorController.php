@@ -582,7 +582,8 @@ class IndicadorController extends Controller
             ->editColumn('p3', '<div class="text-center">{{$p3}}%</div>')
             ->editColumn('satisfactorio', '<div class="text-success text-center">{{$satisfactorio}}</div>')
             ->editColumn('p4', '<div class="text-success text-center">{{$p4}}%</div>')
-            ->rawColumns(['nombre', 'previo', 'p1', 'inicio', 'p2', 'proceso', 'p3', 'satisfactorio', 'p4',])
+            ->editColumn('evaluados', '<div class="text-center">{{$evaluados}}</div>')
+            ->rawColumns(['nombre', 'previo', 'p1', 'inicio', 'p2', 'proceso', 'p3', 'satisfactorio', 'p4','evaluados',])
             ->toJson();
     }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)

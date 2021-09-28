@@ -132,6 +132,7 @@
                                             <th class="">IIEE</th>
                                             <th class="text-center">PROVINCIA</th>
                                             <th class="text-center">DISTRITO</th>
+                                            <th class="text-center">EVALUADOS</th>
                                             @if ($indicador_id==5||$indicador_id==6)
                                             <th class="text-center">CANTIDAD</th>
                                             <th class="text-center">PREVIO</th>    
@@ -256,6 +257,7 @@
                     {data:'nombre'},
                     {data:'provincia'},
                     {data:'distrito'},
+                    {data:'evaluados'},
                     @if ($indicador_id==5||$indicador_id==6){data:'previo'},
                     {data:'p1'},@endif
                     {data:'inicio'}, 
