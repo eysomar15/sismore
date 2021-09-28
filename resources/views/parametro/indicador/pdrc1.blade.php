@@ -4,7 +4,7 @@
     <div class="content">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-fill bg-success">
+                <div class="card card-fill bg-primary">
                     <div class="card-header bg-transparent">
                         <h3 class="card-title text-white">{{ $title }}</h3>
                     </div>

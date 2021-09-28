@@ -216,7 +216,7 @@ class IndicadorController extends Controller
                 $anio->previo += $indicador->previo;
             }
         }
-        //return $anios;
+        return $anios;
         //return response()->json(compact('anios'));
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Detalle', 'url' => '']];
         return view('parametro.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'breadcrumb'));
