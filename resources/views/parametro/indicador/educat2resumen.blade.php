@@ -129,15 +129,17 @@
                                 <div class="table-responsive">
                                     <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
                                         <thead class="cabecera-dataTable">                                    
-                                            <th class="text-primary">IIEE</th>
+                                            <th class="">IIEE</th>
+                                            <th class="text-center">PROVINCIA</th>
+                                            <th class="text-center">DISTRITO</th>
                                             @if ($indicador_id==5||$indicador_id==6)
-                                            <th class="text-secondary text-center">CANTIDAD</th>
-                                            <th class="text-secondary text-center">PREVIO</th>    
+                                            <th class="text-center">CANTIDAD</th>
+                                            <th class="text-center">PREVIO</th>    
                                             @endif
-                                            <th class="text-danger text-center">CANTIDAD</th>
-                                            <th class="text-danger text-center">INICIO</th>
-                                            <th class="text-warning text-center">CANTIDAD</th>
-                                            <th class="text-warning text-center">PROCESO</th>
+                                            <th class="text-center">CANTIDAD</th>
+                                            <th class="text-center">INICIO</th>
+                                            <th class="text-center">CANTIDAD</th>
+                                            <th class="text-center">PROCESO</th>
                                             <th class="text-success text-center">CANTIDAD</th>
                                             <th class="text-success text-center">SATISFACTORIO</th>
                                         </thead>
@@ -252,6 +254,8 @@
                 $('#tipo').val()+"/" + $('#materia').val()+"/" + $('#gestion').val()+ "/" + $('#area').val(),
                 "columns":[
                     {data:'nombre'},
+                    {data:'provincia'},
+                    {data:'distrito'},
                     @if ($indicador_id==5||$indicador_id==6){data:'previo'},
                     {data:'p1'},@endif
                     {data:'inicio'}, 

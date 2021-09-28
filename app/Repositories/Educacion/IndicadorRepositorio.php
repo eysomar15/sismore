@@ -546,18 +546,26 @@ class IndicadorRepositorio
             $query = DB::table('edu_eceresultado as v1')
                 ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
                 ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
                 ->where('v1.materia_id', $materia)
                 ->where('v2.grado_id', $grado)
                 ->where('v2.anio', $anio)
                 ->where('v2.tipo', $tipo)
                 ->where('v3.TipoGestion_id', $gestion)
                 ->where('v3.Area_id', $area)
+                ->orderBy('provincia')
+                ->orderBy('distrito')
                 ->orderBy('v3.nombreInstEduc')
                 ->groupBy('v3.id')
                 ->groupBy('v3.nombreInstEduc')
+                ->groupBy('v5.nombre')
+                ->groupBy('v5.dependencia')
                 ->get([
                     'v3.id',
                     'v3.nombreInstEduc as nombre',
+                    DB::raw('(SELECT nombre FROM par_ubigeo WHERE id=v5.dependencia) as provincia'),
+                    'v5.nombre as distrito',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
                     DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
@@ -572,17 +580,25 @@ class IndicadorRepositorio
             $query = DB::table('edu_eceresultado as v1')
                 ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
                 ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
                 ->where('v1.materia_id', $materia)
                 ->where('v2.grado_id', $grado)
                 ->where('v2.anio', $anio)
                 ->where('v2.tipo', $tipo)
                 ->where('v3.TipoGestion_id', $gestion)
+                ->orderBy('provincia')
+                ->orderBy('distrito')
                 ->orderBy('v3.nombreInstEduc')
                 ->groupBy('v3.id')
                 ->groupBy('v3.nombreInstEduc')
+                ->groupBy('v5.nombre')
+                ->groupBy('v5.dependencia')
                 ->get([
                     'v3.id',
                     'v3.nombreInstEduc as nombre',
+                    DB::raw('(SELECT nombre FROM par_ubigeo WHERE id=v5.dependencia) as provincia'),
+                    'v5.nombre as distrito',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
                     DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
@@ -597,16 +613,24 @@ class IndicadorRepositorio
             $query = DB::table('edu_eceresultado as v1')
                 ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
                 ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
+                ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+                ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
                 ->where('v1.materia_id', $materia)
                 ->where('v2.grado_id', $grado)
                 ->where('v2.anio', $anio)
                 ->where('v2.tipo', $tipo)
+                ->orderBy('provincia')
+                ->orderBy('distrito')
                 ->orderBy('v3.nombreInstEduc')
                 ->groupBy('v3.id')
                 ->groupBy('v3.nombreInstEduc')
+                ->groupBy('v5.nombre')
+                ->groupBy('v5.dependencia')
                 ->get([
                     'v3.id',
                     'v3.nombreInstEduc as nombre',
+                    DB::raw('(SELECT nombre FROM par_ubigeo WHERE id=v5.dependencia) as provincia'),
+                    'v5.nombre as distrito',
                     DB::raw('sum(evaluados) as evaluados'),
                     DB::raw('sum(previo) as previo'),
                     DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
