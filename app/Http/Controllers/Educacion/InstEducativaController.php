@@ -13,26 +13,21 @@ class InstEducativaController extends Controller
     }
 
     public function principal()
-    {     
-        $lista_resumen_porDistrito = InstEducativaRepositorio::resumen_porDistrito();
-        $sumatoria_Provincia  = $this->sumatoria_Provincia($lista_resumen_porDistrito);
-
-        
-        //return $sumatoria_Provincia;
-        
-        return view('educacion.InstEducativa.ReporteDistrito',compact('lista_resumen_porDistrito','sumatoria_Provincia'));  
-            
-        //return view('educacion.InstEducativa.Principal');     
+    {        
+        return view('educacion.InstEducativa.Principal');     
     }
 
-    // public function reporteDistrito()
-    // {
-    //     $lista_resumen_porDistrito = InstEducativaRepositorio::resumen_porDistrito();
-    //     $sumatoria_Provincia = $this->sumatoria_Provincia($lista_resumen_porDistrito);
+    public function reporteDistrito()
+    {
+        $lista_resumen_porDistrito = InstEducativaRepositorio::resumen_porDistrito();
+        $lista_resumen_porProvincia = InstEducativaRepositorio::resumen_porProvincia();
+        // $sumatoria_Provincia = $this->sumatoria_Provincia($lista_resumen_porDistrito);
+        $lista_resumen_porRegion = InstEducativaRepositorio::resumen_porRegion();
 
+  
         
-    //     return view('educacion.InstEducativa.ReporteDistrito',compact('lista_resumen_porDistrito','sumatoria_Provincia'));   
-    // }
+        return view('educacion.InstEducativa.ReporteDistrito',compact('lista_resumen_porDistrito','lista_resumen_porRegion','lista_resumen_porProvincia'));   
+    }
 
     public function sumatoria_Provincia($lista_resumen_porDistrito)
     {  

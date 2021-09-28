@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'InstEducativa','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
+@extends('layouts.main',['activePage'=>'InstEducativa','titlePage'=>'INSTITUCIONES EDUCATIVAS - UCAYALI'])
 
 @section('css')
 

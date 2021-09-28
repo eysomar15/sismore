@@ -242,6 +242,48 @@ class MatriculaRepositorio
 
     }
 
+    public static function total_matricula_por_Nivel_Institucion($matricula_id)
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                select ugel.nombre as ugel,case when dist.nombre = 'yurua' then 'CORONEL PORTILLO' else prov.nombre end as provincia , 
+                                dist.nombre as distrito,cenPo.nombre as cenPo,inst.codModular,inst.anexo,inst.nombreInstEduc,tipoGestion.nombre as tipoGestion,
+                                tipoGestionCab.nombre as tipoGestionCab,forma.nombre as forma,caracteristica.nombre as caracteristica, areas.nombre as areas,
+                                prov.codigo,nivel,
+                                cero_nivel_hombre , primer_nivel_hombre ,segundo_nivel_hombre ,
+                                tercero_nivel_hombre , cuarto_nivel_hombre , quinto_nivel_hombre ,
+                                sexto_nivel_hombre , tres_anios_hombre_ebe,cuatro_anios_hombre_ebe, cinco_anios_hombre_ebe,
+                                cero_nivel_mujer , primer_nivel_mujer , segundo_nivel_mujer , tercero_nivel_mujer ,
+                                cuarto_nivel_mujer , quinto_nivel_mujer , sexto_nivel_mujer , tres_anios_mujer_ebe , 
+                                cuatro_anios_mujer_ebe , cinco_anios_mujer_ebe
+                                from edu_matricula mat
+                                inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
+                                inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
+                                inner join edu_ugel ugel on inst.Ugel_id = ugel.id
+                                inner join edu_tipogestion tipoGestion on inst.TipoGestion_id = tipoGestion.id
+                                inner join edu_tipogestion tipoGestionCab on tipoGestion.dependencia = tipoGestionCab.id
+                                inner join edu_forma forma on inst.Forma_id = forma.id
+                                inner join edu_caracteristica caracteristica on inst.Caracteristica_id = caracteristica .id
+                                inner join edu_area areas on inst.Area_id = areas.id
+                                inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                                inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
+                                inner join par_ubigeo prov on dist.dependencia = prov.id
+                                where mat.id = '$matricula_id'
+                            ) as datos"
+                        )
+                    )           
+            
+                ->orderBy('nombreInstEduc', 'asc')
+                ->get(
+                    //[                      
+                    // DB::raw('ugel'), 
+                    // ]
+                );
+
+
+        return $data;
+
+    }
 
 
     public static function total_matricula_por_Nivel_Provincia($matricula_id)
