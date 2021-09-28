@@ -60,7 +60,8 @@
                     <div class="col-md-12">                       
                         <div class="portfolioFilter">
                             <a href="#" onClick="cargar_resumen_porUgel();"       class="current waves-effect waves-light">UGELES</a>
-                            <a href="#" onClick="cargar_matricula_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>                  
+                            <a href="#" onClick="cargar_matricula_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>    
+                            <a href="#" onClick="cargar_matricula_porInstitucion();" class="waves-effect waves-light" > INSTITUCIONES </a>                  
                         </div>                        
                     </div>
 
@@ -159,8 +160,14 @@
 
             if($('#hoja').val()==1)       
                 cargar_resumen_porUgel();          
-            else         
-                cargar_matricula_porDistrito();                   
+            else  
+            {
+                if($('#hoja').val()==2)
+                    cargar_matricula_porDistrito();  
+                else
+                    cargar_matricula_porInstitucion(); 
+            }       
+                               
         }
 
         function cargar_resumen_porUgel() {            
@@ -192,6 +199,22 @@
                 alert("Lo sentimos a ocurrido un error");
             });
         }
+
+        function cargar_matricula_porInstitucion() {
+            $('#hoja').val(3);
+            $.ajax({  
+                headers: {
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },                           
+                url: "{{ url('/') }}/Matricula/ReporteInstitucion/" + $('#anio').val() + "/" + $('#matricula_fechas').val(),
+                type: 'post',
+            }).done(function (data) {               
+                $('#datos01').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
+        }
+
 
         
   

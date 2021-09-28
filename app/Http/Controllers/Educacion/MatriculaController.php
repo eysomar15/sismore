@@ -512,7 +512,10 @@ class MatriculaController extends Controller
         $anios =  MatriculaRepositorio ::matriculas_anio( );
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
-       
+
+        // $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion(2);
+        // return $lista_total_matricula_EBR ;
+
         return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));     
     }
     
@@ -577,6 +580,22 @@ class MatriculaController extends Controller
         return view('educacion.Matricula.ReporteDistrito',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Inicial','lista_total_matricula_Primaria',
         'lista_total_matricula_Secundaria','fecha_Matricula_texto','lista_matricula_Inicial_cabecera','lista_matricula_Primaria_cabecera',
         'lista_matricula_Secundaria_cabecera','contenedor','titulo_grafico'));
+    }
+
+    public function reporteInstitucion($anio_id,$matricula_id)
+    {     
+        //$lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id);
+
+
+        $fecha_Matricula_texto = $this->fecha_texto($matricula_id);
+        return view('educacion.Matricula.ReporteInstitucion',compact('fecha_Matricula_texto','matricula_id'));
+    }
+
+    public function Institucion_DataTable($matricula_id)
+    {     
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion(2);
+
+        return  datatables()->of($lista_total_matricula_EBR)->toJson();
     }
 
     public function GraficoBarrasPrincipal($anio_id)
