@@ -86,7 +86,6 @@
     </div>
 </div>
 
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -255,8 +254,6 @@
         </div>
     </div>
 </div> 
-
-
         
 
 {{-- *********************************** SCRIPTs ************************ --}}
@@ -270,7 +267,7 @@
 
 <script>
     $('#grid').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable',$matricula_id)}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'I'))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},
@@ -318,7 +315,7 @@
 
 
     $('#grid2').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable2',$matricula_id)}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'P'))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},          
@@ -364,7 +361,7 @@
     );
 
     $('#grid3').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable3',$matricula_id)}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'S'))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},          

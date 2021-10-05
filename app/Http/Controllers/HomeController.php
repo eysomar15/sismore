@@ -58,8 +58,14 @@ class HomeController extends Controller
         switch ($sistema_id ) {
             case(1): return $this->educacion($sistema_id);break;
             case(2): return $this->vivienda($sistema_id);break;
+            case(4): return $this->administracion($sistema_id);break;
             default: return 'Ruta de sistema no establecida';break;
         }  
+    }
+
+    public function administracion($sistema_id)
+    {   
+        return view('home',compact('sistema_id'));
     }
 
     public function vivienda($sistema_id)

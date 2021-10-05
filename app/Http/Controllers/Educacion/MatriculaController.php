@@ -589,27 +589,12 @@ class MatriculaController extends Controller
         return view('educacion.Matricula.ReporteInstitucion',compact('fecha_Matricula_texto','matricula_id'));
     }
 
-    public function Institucion_DataTable($matricula_id)
+    public function Institucion_DataTable($matricula_id,$nivel)
     {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,'I');
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,$nivel);
 
         return  datatables()->of($lista_total_matricula_EBR)->toJson();
     }
-
-    public function Institucion_DataTable2($matricula_id)
-    {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,'P');
-
-        return  datatables()->of($lista_total_matricula_EBR)->toJson();
-    }
-    
-    public function Institucion_DataTable3($matricula_id)
-    {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,'S');
-
-        return  datatables()->of($lista_total_matricula_EBR)->toJson();
-    }
-
 
     public function GraficoBarrasPrincipal($anio_id)
     {     

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Administracion\UsuarioController;
 use App\Http\Controllers\Educacion\CensoController;
 use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\Educacion\TabletaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
+use App\Http\Controllers\Vivienda\CentroPobladoController;
 use App\Http\Controllers\Vivienda\DatassController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -76,9 +78,7 @@ Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}', [MatriculaControl
 Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
 Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');
 
-Route::get('/Matricula/Institucion_DataTable/{matricula_id}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
-Route::get('/Matricula/Institucion_DataTable2/{matricula_id}', [MatriculaController::class, 'Institucion_DataTable2'])->name('Matricula.Institucion_DataTable2');
-Route::get('/Matricula/Institucion_DataTable3/{matricula_id}', [MatriculaController::class, 'Institucion_DataTable3'])->name('Matricula.Institucion_DataTable3');
+Route::get('/Matricula/Institucion_DataTable/{matricula_id}/{nivel}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
 
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
 Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
@@ -142,4 +142,10 @@ Route::get('/Datass/ListaImportada_DataTable/{importacion_id}', [DatassControlle
 Route::get('/Datass/Aprobar/{importacion_id}', [DatassController::class, 'aprobar'])->name('Datass.aprobar');
 Route::post('/Datass/Aprobar/procesar/{importacion_id}', [DatassController::class, 'procesar'])->name('Datass.procesar');
 
+Route::get('/CentroPoblado/Principal', [CentroPobladoController::class, 'principal'])->name('CentroPoblado.principal');
 /**************************************** FIN VIVIENDA ************************************************/
+
+/**************************************** ADMINISTRADOR ************************************************/
+Route::get('/Usuario/Principal', [UsuarioController::class, 'principal'])->name('Usuario.principal');
+Route::get('/Usuario/Usuario_DataTable/', [UsuarioController::class, 'Lista_DataTable'])->name('Usuario.Lista_DataTable');
+/**************************************** FIN ADMINISTRADOR ************************************************/
