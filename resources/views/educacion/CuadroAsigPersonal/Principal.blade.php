@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
+@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'ASIGNACION DE PRESONAL'])
 
 
 @section('content') 
@@ -12,12 +12,12 @@
                 <div class="card-body">
                            
                     
-                    <div class="col-md-12">                       
+                    {{-- <div class="col-md-12">                       
                         <div class="portfolioFilter">
                             <a href="#" onClick="cargar_resumen_porUgel();"  class="current waves-effect waves-light">UGELES</a>
                             <a href="#" onClick="cargar_resumen_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>                  
                         </div>                        
-                    </div>
+                    </div> --}}
 
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>

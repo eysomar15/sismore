@@ -1,8 +1,8 @@
 @extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
 
 @section('css')
-
     
+    <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
 @endsection 
 
@@ -93,6 +93,7 @@
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
 <script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
 
 {{-- https://www.youtube.com/watch?v=HU-hffAZqYw --}}
 
