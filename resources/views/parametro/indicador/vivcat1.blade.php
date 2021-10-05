@@ -45,14 +45,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="button-list text-center">
+                    <!--div class="button-list text-center">
                         <button type="button" class="btn btn-primary">Centros Poblados<br><span id="v1"></span></button>
                         <button type="button" class="btn btn-primary">Poblacion Total<br><span id="v2"></span></button>
                         <button type="button" class="btn btn-primary">Total Viviendas<br><span id="v3"></span></button>
                         <button type="button" class="btn btn-primary">centro Salud<br><span id="v4"></span></button>
                         <button type="button" class="btn btn-primary">Energia Electrica<br><span id="v5"></span></button>
                         <button type="button" class="btn btn-primary">Internet<br><span id="v6"></span></button>
-                    </div>
+                    </div-->
                 </div>
             </div>
         </div>
