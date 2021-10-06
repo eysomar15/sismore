@@ -830,6 +830,7 @@ class IndicadorRepositorio
         } else if ($provincia > 0 && $distrito == 0) {
             $query = $query->where('v3.id', $provincia);
         } else {
+            
         }
         $query = $query->orderBy('v3.nombre')->orderBy('v2.nombre')->orderBy('v1.nombre');
         $query = $query->get();
