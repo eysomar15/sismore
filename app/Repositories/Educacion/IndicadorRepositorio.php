@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class IndicadorRepositorio
 {
+    public static $tipos = [
+        20 => 'sistema_agua',
+        21 => 'sistema_cloracion',
+        22 => 'servicio_agua_continuo',
+        23 => 'sistema_disposicion_excretas',
+        26 => 'realiza_cloracion_agua'
+    ];
+
     public static function buscar_nivel1()
     {
         $query = NivelModalidad::whereIn('id', ['37', '38'])->get();
@@ -722,313 +730,109 @@ class IndicadorRepositorio
 
         return $query;
     }
-    public static function cabecera1()
+
+    public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
     {
-        $cp = DB::table('viv_datass as v1')
-            ->get([
-                DB::raw('count(id) as centros_poblados'),
-                DB::raw('sum(total_poblacion) as poblacion_total'),
-                DB::raw('sum(total_viviendas) as total_viviendas'),
-            ]);
-        $query['centros_poblados'] = $cp[0]->centros_poblados;
-        $query['poblacion_total'] = $cp[0]->poblacion_total;
-        $query['total_viviendas'] = $cp[0]->total_viviendas;
-        $cp = DB::table('viv_datass as v1')->where('tiene_establecimiento_salud', 'SI')
-            ->get([DB::raw('count(tiene_establecimiento_salud) as centro_salud')]);
-        $query['centro_salud'] = $cp[0]->centro_salud;
-        $cp = DB::table('viv_datass as v1')->where('tiene_energia_electrica', 'SI')
-            ->get([DB::raw('count(tiene_energia_electrica) as energia_electrica')]);
-        $query['energia_electrica'] = $cp[0]->energia_electrica;
-        $cp = DB::table('viv_datass as v1')->where('tiene_internet', 'SI')
-            ->get([DB::raw('count(tiene_internet) as internet')]);
-        $query['internet'] = $cp[0]->internet;
+        switch ($indicador_id) {
+            case 20:
+                $queryx =  DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.sistema_agua');
+                if ($provincia > 0 && $distrito > 0) {
+                    $queryx = $queryx->where('v2.id', $distrito);
+                } else if ($provincia > 0 && $distrito == 0) {
+                    $queryx = $queryx->where('v2.dependencia', $provincia);
+                } else {
+                }
+                $queryx = $queryx->get(['v1.sistema_agua as name', DB::raw('count(v1.id) as y')]);
+                break;
+            case 21:
+                $queryx =  DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.sistema_cloracion');
+                if ($provincia > 0 && $distrito > 0) {
+                    $queryx = $queryx->where('v2.id', $distrito);
+                } else if ($provincia > 0 && $distrito == 0) {
+                    $queryx = $queryx->where('v2.dependencia', $provincia);
+                } else {
+                }
+                $queryx = $queryx->get(['v1.sistema_cloracion as name', DB::raw('count(v1.id) as y')]);
+                break;
+            case 22:
+                $queryx =   DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.servicio_agua_continuo');
+                if ($provincia > 0 && $distrito > 0) {
+                    $queryx = $queryx->where('v2.id', $distrito);
+                } else if ($provincia > 0 && $distrito == 0) {
+                    $queryx = $queryx->where('v2.dependencia', $provincia);
+                } else {
+                }
+                $queryx = $queryx->get(['v1.servicio_agua_continuo as name', DB::raw('count(v1.id) as y')]);
+                break;
+            case 23:
+                $queryx =  DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.sistema_disposicion_excretas');
+                if ($provincia > 0 && $distrito > 0) {
+                    $queryx = $queryx->where('v2.id', $distrito);
+                } else if ($provincia > 0 && $distrito == 0) {
+                    $queryx = $queryx->where('v2.dependencia', $provincia);
+                } else {
+                }
+                $queryx = $queryx->get(['v1.sistema_disposicion_excretas as name', DB::raw('count(v1.id) as y')]);
+                break;
+            case 24:
+                break;
+            case 25:
+                break;
+            case 26:
+                $queryx =  DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.realiza_cloracion_agua');
+                if ($provincia > 0 && $distrito > 0) {
+                    $queryx = $queryx->where('v2.id', $distrito);
+                } else if ($provincia > 0 && $distrito == 0) {
+                    $queryx = $queryx->where('v2.dependencia', $provincia);
+                } else {
+                }
+                $queryx = $queryx->get(['v1.realiza_cloracion_agua as name', DB::raw('count(v1.id) as y')]);
+                break;
+
+            default:
+                break;
+        }
+        $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
+        foreach ($queryx as $item) {
+            if ($item->name == 'SI') $coor[0]['y'] += $item->y;
+            else $coor[1]['y'] += $item->y;
+        }
+        $query['indicador'] = $coor;
+
         return $query;
     }
-    public static function cabecera2($provincia, $distrito, $indicador_id, $importacion_id)
+
+    public static function listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id)
     {
+        $buscar = IndicadorRepositorio::$tipos[$indicador_id];
+        $query = DB::table('viv_centropoblado_datass as v1')
+            ->select('v1.id', 'v1.nombre as cp', 'v1.total_poblacion', 'v3.nombre as provincia', 'v2.nombre as distrito', DB::raw('if(sistema_agua="SI",sistema_agua,"NO") as servicio'))
+            ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+            ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.dependencia')
+            ->where('v1.importacion_id', $importacion_id);
         if ($provincia > 0 && $distrito > 0) {
-            $prov = Ubigeo::find($distrito);
-            $cp1 = DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([
-                    DB::raw('count(id) as centros_poblados'),
-                    DB::raw('sum(total_poblacion) as poblacion_total'),
-                    DB::raw('sum(total_viviendas) as total_viviendas'),
-                ]);
-            $query['centros_poblados'] = $cp1[0]->centros_poblados;
-            $query['poblacion_total'] = $cp1[0]->poblacion_total;
-            $query['total_viviendas'] = $cp1[0]->total_viviendas;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_establecimiento_salud', 'SI')
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([DB::raw('count(tiene_establecimiento_salud) as centro_salud')]);
-            $query['centro_salud'] = $cp1[0]->centro_salud;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_energia_electrica', 'SI')
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([DB::raw('count(tiene_energia_electrica) as energia_electrica')]);
-            $query['energia_electrica'] = $cp1[0]->energia_electrica;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_internet', 'SI')
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([DB::raw('count(tiene_internet) as internet')]);
-            $query['internet'] = $cp1[0]->internet;
-            switch ($indicador_id) {
-                case 20:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->groupBy('sistema_agua')
-                        ->get(['sistema_agua as name', DB::raw('count(id) as y')]);
-                    break;
-                case 21:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->groupBy('sistema_cloracion')->get([
-                            'sistema_cloracion as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 22:
-                    $queryx =   DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->groupBy('servicio_agua_continuo')
-                        ->get([
-                            'servicio_agua_continuo as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 23:
-                    $queryx=  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->groupBy('sistema_disposicion_excretas')
-                        ->get([
-                            'sistema_disposicion_excretas as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 24:
-                    break;
-                case 25:
-                    break;
-                case 26:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->groupBy('realiza_cloracion_agua')
-                        ->get([
-                            'realiza_cloracion_agua as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-
-                default:
-                    break;
-            }
-            $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
-            foreach ($queryx as $item) {
-                if ($item->name == 'SI') $coor[0]['y'] += $item->y;
-                else $coor[1]['y'] += $item->y;
-            }
-            $query['indicador'] = $coor;
+            $query = $query->where('v2.id', $distrito);
         } else if ($provincia > 0 && $distrito == 0) {
-            $prov = Ubigeo::find($provincia);
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([
-                    DB::raw('count(id) as centros_poblados'),
-                    DB::raw('sum(total_poblacion) as poblacion_total'),
-                    DB::raw('sum(total_viviendas) as total_viviendas'),
-                ]);
-            $query['centros_poblados'] = $cp1[0]->centros_poblados;
-            $query['poblacion_total'] = $cp1[0]->poblacion_total;
-            $query['total_viviendas'] = $cp1[0]->total_viviendas;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_establecimiento_salud', 'SI')
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([DB::raw('count(tiene_establecimiento_salud) as centro_salud')]);
-            $query['centro_salud'] = $cp1[0]->centro_salud;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_energia_electrica', 'SI')
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([DB::raw('count(tiene_energia_electrica) as energia_electrica')]);
-            $query['energia_electrica'] = $cp1[0]->energia_electrica;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_internet', 'SI')
-                ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                ->get([DB::raw('count(tiene_internet) as internet')]);
-            $query['internet'] = $cp1[0]->internet;
-
-            switch ($indicador_id) {
-                case 20:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->groupBy('sistema_agua')
-                        ->get(['sistema_agua as name', DB::raw('count(id) as y')]);
-                    break;
-                case 21:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->groupBy('sistema_cloracion')->get([
-                            'sistema_cloracion as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 22:
-                    $queryx =   DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->groupBy('servicio_agua_continuo')
-                        ->get([
-                            'servicio_agua_continuo as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 23:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        ->groupBy('sistema_disposicion_excretas')
-                        ->get([
-                            'sistema_disposicion_excretas as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 24:
-                    break;
-                case 25:
-                    break;
-                case 26:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->where('Ubigeo_CP', 'like', $prov->codigo . '%')
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->groupBy('realiza_cloracion_agua')
-                        ->get([
-                            'realiza_cloracion_agua as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-
-                default:
-                    break;
-            }
-            $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
-            foreach ($queryx as $item) {
-                if ($item->name == 'SI') $coor[0]['y'] += $item->y;
-                else $coor[1]['y'] += $item->y;
-            }
-            $query['indicador'] = $coor;
+            $query = $query->where('v3.id', $provincia);
         } else {
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->get([
-                    DB::raw('count(id) as centros_poblados'),
-                    DB::raw('sum(total_poblacion) as poblacion_total'),
-                    DB::raw('sum(total_viviendas) as total_viviendas'),
-                ]);
-            $query['centros_poblados'] = $cp1[0]->centros_poblados;
-            $query['poblacion_total'] = $cp1[0]->poblacion_total;
-            $query['total_viviendas'] = $cp1[0]->total_viviendas;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_establecimiento_salud', 'SI')
-                ->get([DB::raw('count(tiene_establecimiento_salud) as centro_salud')]);
-            $query['centro_salud'] = $cp1[0]->centro_salud;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_energia_electrica', 'SI')
-                ->get([DB::raw('count(tiene_energia_electrica) as energia_electrica')]);
-            $query['energia_electrica'] = $cp1[0]->energia_electrica;
-            $cp1 =  DB::table('viv_datass as v1')
-                ->where('importacion_id', $importacion_id)
-                ->where('tiene_internet', 'SI')
-                ->get([DB::raw('count(tiene_internet) as internet')]);
-            $query['internet'] = $cp1[0]->internet;
-            switch ($indicador_id) {
-                case 20:
-                    //$cp = DB::table('viv_datass as v1')->where('importacion_id', $importacion_id);
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->groupBy('sistema_agua')->get([
-                            'sistema_agua as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 21:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->groupBy('sistema_cloracion')->get([
-                            'sistema_cloracion as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 22:
-                    $queryx =   DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->groupBy('servicio_agua_continuo')
-                        ->get([
-                            'servicio_agua_continuo as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 23:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        ->groupBy('sistema_disposicion_excretas')
-                        ->get([
-                            'sistema_disposicion_excretas as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-                case 24:
-                    $queryx = null;
-                    break;
-                case 25:
-                    $queryx = null;
-                    break;
-                case 26:
-                    $queryx =  DB::table('viv_datass as v1')
-                        ->where('importacion_id', $importacion_id)
-                        //->whereIn('sistema_cloracion', ['SI', 'NO'])
-                        ->groupBy('realiza_cloracion_agua')
-                        ->get([
-                            'realiza_cloracion_agua as name',
-                            DB::raw('count(id) as y')
-                        ]);
-                    break;
-
-                default:
-                    break;
-            }
-            $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
-            foreach ($queryx as $item) {
-                if ($item->name == 'SI') $coor[0]['y'] += $item->y;
-                else $coor[1]['y'] += $item->y;
-            }
-            $query['indicador'] = $coor;
         }
-
+        $query = $query->orderBy('v1.nombre');
+        $query = $query->get();
         return $query;
     }
 }

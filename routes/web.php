@@ -87,11 +87,11 @@ Route::get('/InstEducativa/Principal', [InstEducativaController::class, 'princip
 Route::post('/InstEducativa/ReporteDistrito', [InstEducativaController::class, 'ReporteDistrito'])->name('InstEducativa.ReporteDistrito');
 
 Route::get('/Tableta/Importar', [TabletaController::class, 'importar'])->name('Tableta.importar');
-Route::post('/Tableta/Importar',[TabletaController::class, 'guardar'])->name('Tableta.guardar');
+Route::post('/Tableta/Importar', [TabletaController::class, 'guardar'])->name('Tableta.guardar');
 Route::get('/Tableta/Aprobar/{importacion_id}', [TabletaController::class, 'aprobar'])->name('Tableta.aprobar');
 Route::post('/Tableta/Aprobar/procesar/{importacion_id}', [TabletaController::class, 'procesar'])->name('Tableta.procesar');
 
-Route::get('/Tableta/Principal',[TabletaController::class, 'principal'])->name('Tableta.principal');
+Route::get('/Tableta/Principal', [TabletaController::class, 'principal'])->name('Tableta.principal');
 Route::post('/Tableta/Fechas/{anio_id}', [TabletaController::class, 'Fechas'])->name('Tableta.Fechas');
 Route::post('/Tableta/ReporteUgel/{anio_id}/{tableta_id}', [TabletaController::class, 'ReporteUgel'])->name('Tableta.ReporteUgel');
 
@@ -123,6 +123,7 @@ Route::get('/INDICADOR/rece/{indicador_id}/{grado}/{tipo}/{materia}', [Indicador
 Route::post('/INDICADOR/Satisfactorio', [IndicadorController::class, 'reporteSatisfactorioMateria'])->name('ind.ajax.satisfactorio');
 Route::post('/INDICADOR/ReporteUbigeoAjax', [IndicadorController::class, 'reporteUbigeoAjax'])->name('ind.ajax.reporteubigeo');
 Route::get('/INDICADOR/ReporteGestionAreaDT/{anio}/{grado}/{tipo}/{materia}/{gestion}/{area}', [IndicadorController::class, 'reporteGestionAreaDT']);
+Route::get('/INDICADOR/ReporteCPVivDT/{provincia}/{distrito}/{importacion_id}/{indicador_id}', [IndicadorController::class, 'ReporteCPVivDT']);
 Route::post('/INDICADOR/Distritos/{provincia}', [IndicadorController::class, 'cargardistritos'])->name('ind.ajax.cargardistritos');
 Route::post('/INDICADOR/PNSR1/{provincia}/{distrito}/{indicador_id}/{fecha}', [IndicadorController::class, 'indicadorvivpnsrcab'])->name('ind.ajax.pnsr1');
 Route::post('/INDICADOR/ece5/{provincia}/{distrito}/{indicador_id}/{anio_id}', [IndicadorController::class, 'ajaxEdu5v1'])->name('ind.ajax.edu5.1');

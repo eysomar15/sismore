@@ -15,6 +15,7 @@ use App\Repositories\Educacion\CensoRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 //use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\IndicadorRepositorio;
+use App\Repositories\Vivienda\CentroPobladoRepositotio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,9 +27,9 @@ class IndicadorController extends Controller
     }
     public function indicadorEducacionMenu($clasificador)
     {
-        $clas = Clasificador::where('dependencia', $clasificador)->first();
+        /* $clas = Clasificador::where('dependencia', $clasificador)->first();
         $clas = Clasificador::where('dependencia', $clas->id)->get();
-        return view('parametro.indicador.menu', compact('clas'));
+        return view('parametro.indicador.menu', compact('clas'));*/
     }
     public function indicadorEducacion($indicador_id)
     {
@@ -270,12 +271,16 @@ class IndicadorController extends Controller
             case 30: //PROGRAMAS DE VIVIENDA
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-
+                /*$tcdt1 = str_replace('_', ' ', isset(IndicadorRepositorio::$tipos[$indicador_id])?IndicadorRepositorio::$tipos[$indicador_id]:'');
+                $tcdt1=strtoupper($tcdt1);*/
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $ingresos = ImportacionRepositorio::Listar_deDatass();
                 //return $ingreso;
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
+                return view(
+                    'parametro.indicador.vivcat1',
+                    compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos')
+                );
             default:
                 return 'sin informacion';
                 break;
@@ -437,78 +442,6 @@ class IndicadorController extends Controller
         $grados = IndicadorRepositorio::buscar_grados1($request->nivel);
         return response()->json(compact('grados'));
     }
-    /*public function indicadorLOGROS(Request $request)
-    {
-        $materias = IndicadorRepositorio::buscar_materia1($request->anio, $request->grado, $request->tipo);
-        $tabla = '<table class="table mb-0">';
-        $tabla .= '<thead><tr><th></th>';
-        foreach ($materias as $key => $value) {
-            $tabla .= '<th>' . $value->descripcion . '</th>';
-        }
-        $tabla .= '</tr></thead><tbody>';
-        if ($request->provincia == 0 && $request->distrito == 0) {
-            $provincias = IndicadorRepositorio::buscar_provincia1();
-            foreach ($provincias as $provincia) {
-                $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
-                foreach ($materias as $materia) {
-                    $resultado = IndicadorRepositorio::buscar_resultado1($request->anio, $request->grado, $request->tipo, $materia->id, $provincia->id);
-                    if ($resultado[0]->evaluados) {
-                        $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
-                    } else $indicador = 0.0;
-                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
-                }
-                $tabla .= '</tr>';
-            }
-            $tabla .= '<tr><td>TOTAL</td>';
-            foreach ($materias as $materia) {
-                $resultado = IndicadorRepositorio::buscar_resultado2($request->anio, $request->grado, $request->tipo, $materia->id);
-                if ($resultado[0]->evaluados) {
-                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
-                } else $indicador = 0.0;
-                $tabla .= '<td>' . round($indicador, 2) . '</td>';
-            }
-            $tabla .= '</tr>';
-        } else if ($request->provincia > 0 && $request->distrito == 0) {
-            $provincia = Ubigeo::find($request->provincia);
-
-            $distritos = Ubigeo::where('dependencia', $provincia->id)->get();
-            foreach ($distritos as  $distrito) {
-                $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
-                foreach ($materias as $materia) {
-                    $resultado = IndicadorRepositorio::buscar_resultado3($request->anio, $request->grado, $request->tipo, $materia->id, $distrito->id);
-                    if ($resultado[0]->evaluados) {
-                        $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
-                    } else $indicador = 0.0;
-                    $tabla .= '<td>' . round($indicador, 2) . '</td>';
-                }
-                $tabla .= '</tr>';
-            }
-            $tabla .= '<tr><td>' . $provincia->nombre . '</td>';
-            foreach ($materias as $materia) {
-                $resultado = IndicadorRepositorio::buscar_resultado1($request->anio, $request->grado, $request->tipo, $materia->id, $provincia->id);
-                if ($resultado[0]->evaluados) {
-                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
-                } else $indicador = 0.0;
-                $tabla .= '<td>' . round($indicador, 2) . '</td>';
-            }
-            $tabla .= '</tr>';
-        } else if ($request->provincia > 0 && $request->distrito > 0) {
-            $distrito = Ubigeo::find($request->distrito);
-            $tabla .= '<tr><td>' . $distrito->nombre . '</td>';
-            foreach ($materias as $materia) {
-                $resultado = IndicadorRepositorio::buscar_resultado3($request->anio, $request->grado, $request->tipo, $materia->id, $distrito->id);
-                if ($resultado[0]->evaluados) {
-                    $indicador = $resultado[0]->satisfactorio * 100 / $resultado[0]->evaluados;
-                } else $indicador = 0.0;
-                $tabla .= '<td>' . round($indicador, 2) . '</td>';
-            }
-            $tabla .= '</tr>';
-        } else {
-        }
-        $tabla .= '</tbody></table>';
-        return $tabla;
-    }*/
-
     public function reporteSatisfactorioMateria(Request $request)
     {
         $inds = IndicadorRepositorio::listar_indicadorsatisfactorio1($request->anio, $request->grado, $request->tipo, $request->materia);
@@ -583,12 +516,19 @@ class IndicadorController extends Controller
             ->editColumn('satisfactorio', '<div class="text-success text-center">{{$satisfactorio}}</div>')
             ->editColumn('p4', '<div class="text-success text-center">{{$p4}}%</div>')
             ->editColumn('evaluados', '<div class="text-center">{{$evaluados}}</div>')
-            ->rawColumns(['nombre', 'previo', 'p1', 'inicio', 'p2', 'proceso', 'p3', 'satisfactorio', 'p4','evaluados',])
+            ->rawColumns(['nombre', 'previo', 'p1', 'inicio', 'p2', 'proceso', 'p3', 'satisfactorio', 'p4', 'evaluados',])
             ->toJson();
+    }
+    public function ReporteCPVivDT($provincia, $distrito, $importacion_id, $indicador_id)
+    {
+        $inds = IndicadorRepositorio::listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id);
+        //return response()->json(compact('provincia', 'distrito', 'indicador_id', 'importacion_id'));
+        //return $inds;
+        return  datatables()->of($inds)->toJson(); //*/
     }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
-        $cp = IndicadorRepositorio::cabecera2($provincia, $distrito, $indicador_id, $fecha);
+        $cp = IndicadorRepositorio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $fecha);
         return response()->json($cp);
     }
     public function ajaxEdu5v1($provincia, $distrito, $indicador_id, $anio_id)

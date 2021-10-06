@@ -175,6 +175,7 @@
             $('#anio2').html($('#anio').val());
         }
         function cargardistritos() {
+            $('#distrito').val('0');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('input[name=_token]').val()
