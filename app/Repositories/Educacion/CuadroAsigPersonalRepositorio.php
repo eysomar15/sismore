@@ -217,18 +217,18 @@ class CuadroAsigPersonalRepositorio
                                     having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
                                     order by ugel.codigo,nivel_educativo_dato_adic                        
                                 ) as datos"
+                            )
                         )
-                    )
-     
-                ->get([
-                    DB::raw('item'),    
-                    DB::raw('ugel'),   
-                    DB::raw('fechaActualizacion'),    
-                    DB::raw('nivel_educativo'),    
-                    DB::raw('Bilingue'),
-                    DB::raw('total'),
-                    DB::raw('Bilingue*100/total as porcentaje'),
-                ]);
+        
+                    ->get([
+                        DB::raw('item'),    
+                        DB::raw('ugel'),   
+                        DB::raw('fechaActualizacion'),    
+                        DB::raw('nivel_educativo'),    
+                        DB::raw('Bilingue'),
+                        DB::raw('total'),
+                        DB::raw('Bilingue*100/total as porcentaje'),
+                    ]);
 
         return $data;
 

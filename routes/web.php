@@ -39,6 +39,9 @@ Route::get('/home/{sistemas_id}', [HomeController::class, 'sistema_acceder'])->n
 
 Route::get('/AEI', [HomeController::class, 'AEI_tempo'])->name('AEI_tempo');
 
+
+
+
 /**************************************** EDUCACION ************************************************/
 Route::get('/PadronWeb/Importar', [PadronWebController::class, 'importar'])->name('PadronWeb.importar');
 Route::post('/PadronWeb/Importar', [PadronWebController::class, 'guardar'])->name('PadronWeb.guardar');

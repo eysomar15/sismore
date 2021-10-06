@@ -7,27 +7,51 @@ use Illuminate\Support\Facades\DB;
 
 class ImportacionRepositorio
 {
-    public static function Listar_Importaciones($sistema_id)
-    {
-        $data = Importacion::select(
-            'par_importacion.id',
-            'par_importacion.comentario',
-            'par_importacion.fechaActualizacion',
-            'par_importacion.estado',
-            // 'case when Importacion.estado = '.'PE'.'then'.'pendiente'.'else Importacion.estado end as estado', 
-            'adm_usuario.usuario',
-            'par_fuenteimportacion.nombre',
-            'par_fuenteimportacion.codigo',
-            'par_fuenteimportacion.formato'
-        )
-            ->join('adm_usuario', 'adm_usuario.id', '=', 'par_importacion.usuarioId_crea')
-            ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'par_importacion.fuenteImportacion_id')
-            ->where("par_importacion.estado", "=", "PE")
-            ->where("par_fuenteimportacion.sistema_id", "=", $sistema_id)
-            ->orderBy('par_importacion.id', 'desc')
-            ->get();
+    // public static function Listar_Importaciones($sistema_id)
+    // {
+    //     $data = Importacion::select(
+    //             'par_importacion.id','par_importacion.comentario','par_importacion.fechaActualizacion',
+    //             'par_importacion.estado',
+    //             // 'case when Importacion.estado = '.'PE'.'then'.'pendiente'.'else Importacion.estado end as estado', 
+    //             'adm_usuario.usuario',
+    //             'par_fuenteimportacion.nombre',
+    //             'par_fuenteimportacion.codigo',
+    //             'par_fuenteimportacion.formato'
+    //         )
+    //         ->join('adm_usuario', 'adm_usuario.id', '=', 'par_importacion.usuarioId_crea')
+    //         ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'par_importacion.fuenteImportacion_id')
+    //         ->where("par_importacion.estado", "=", "PE")
+    //         ->where("par_fuenteimportacion.sistema_id", "=", $sistema_id)
+    //         ->orderBy('par_importacion.id', 'desc')
+    //         ->get();
 
-        return $data;
+    //     return $data;
+    // }
+
+    public static function Listar_Importaciones($sistema_id)
+    { 
+              $data = DB::table('par_importacion as imp')           
+                        ->join('adm_usuario', 'adm_usuario.id', '=', 'imp.usuarioId_crea')
+                        ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'imp.fuenteImportacion_id')
+                        ->leftJoin('adm_usuario as aprueba', 'aprueba.id', '=', 'imp.usuarioId_Aprueba')
+                        ->where("imp.estado", "!=", "EL")
+                        ->where("par_fuenteimportacion.sistema_id", "=", $sistema_id)
+                        ->orderBy('imp.estado', 'asc')
+                        ->orderBy('imp.id', 'desc')
+                    ->get([  
+                             DB::raw('imp.id'),                            
+                             DB::raw('imp.comentario'), 
+                             DB::raw('imp.fechaActualizacion'), 
+                             DB::raw('case when imp.estado = "PE" then "PENDIENTE" else "APROBADO" end as estado'), 
+                             DB::raw('adm_usuario.usuario'), 
+                             DB::raw('aprueba.usuario as aprueba'),
+                             DB::raw('par_fuenteimportacion.nombre'), 
+                             DB::raw('par_fuenteimportacion.codigo'), 
+                             DB::raw('par_fuenteimportacion.formato'), 
+
+                            ]);
+
+         return $data;
     }
 
     public static function ImportacionPor_Id($id)
