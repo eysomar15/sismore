@@ -4,10 +4,10 @@
     <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
-    <!--div class="content">
+    <div class="content">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-fill bg-success">
+                <div class="card card-fill bg-primary">
                     <div class="card-header bg-transparent">
                         <h3 class="card-title text-white">{{$title}}</h3>
                     </div>
@@ -15,7 +15,7 @@
             </div>
         </div>
        
-    </div-->
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -48,14 +48,6 @@
                             </select>
                         </div>
                     </div>
-                    <!--div class="button-list text-center">
-                        <button type="button" class="btn btn-primary">Centros Poblados<br><span id="v1"></span></button>
-                        <button type="button" class="btn btn-primary">Poblacion Total<br><span id="v2"></span></button>
-                        <button type="button" class="btn btn-primary">Total Viviendas<br><span id="v3"></span></button>
-                        <button type="button" class="btn btn-primary">centro Salud<br><span id="v4"></span></button>
-                        <button type="button" class="btn btn-primary">Energia Electrica<br><span id="v5"></span></button>
-                        <button type="button" class="btn btn-primary">Internet<br><span id="v6"></span></button>
-                    </div-->
                 </div>
             </div>
         </div>
@@ -63,7 +55,7 @@
     <!-- end row -->
     <div class="row">
         <div class="col-md-6">
-            <div class="card card-border">
+            <div class="card card-border card-primary">
                 <div class="card-header bg-transparent pb-0">
                     <h3 class="card-title">{{$title}}</h3>
                 </div>
@@ -74,7 +66,7 @@
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th>Tiene Servicio</th>
                                             <th>Cantidad</th>
                                             <th>Porcentaje</th>
                                         </tr>
