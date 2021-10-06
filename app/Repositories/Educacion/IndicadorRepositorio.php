@@ -821,7 +821,7 @@ class IndicadorRepositorio
     {
         $buscar = IndicadorRepositorio::$tipos[$indicador_id];
         $query = DB::table('viv_centropoblado_datass as v1')
-            ->select('v1.id', 'v1.nombre as cp', 'v1.total_poblacion', 'v3.nombre as provincia', 'v2.nombre as distrito', DB::raw('if(sistema_agua="SI",sistema_agua,"NO") as servicio'))
+            ->select('v1.id', 'v1.nombre as cp', 'v1.total_poblacion', 'v3.nombre as provincia', 'v2.nombre as distrito', DB::raw('if(' . $buscar . '="SI",' . $buscar . ',"NO") as servicio'))
             ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
             ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.dependencia')
             ->where('v1.importacion_id', $importacion_id);
@@ -831,7 +831,7 @@ class IndicadorRepositorio
             $query = $query->where('v3.id', $provincia);
         } else {
         }
-        $query = $query->orderBy('v1.nombre');
+        $query = $query->orderBy('v3.nombre')->orderBy('v2.nombre')->orderBy('v1.nombre');
         $query = $query->get();
         return $query;
     }
