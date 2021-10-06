@@ -26,6 +26,7 @@
                                         <th>Fuente</th>
                                         <th>Formato</th>
                                         <th>Usuario crea</th>
+                                        <th>Usuario aprueba</th>
                                         <th>Fecha version</th>
                                         <th>Estado</th> 
                                         <th>Aciones</th>
@@ -84,7 +85,8 @@
                 {data:'id'},
                 {data:'nombre'},
                 {data:'formato'}, 
-                {data:'usuario'},                 
+                {data:'usuario'},    
+                {data:'aprueba'},                 
                 {data:'fechaActualizacion'},
                 {data:'estado'}, 
                 // {data:'comentario'},
