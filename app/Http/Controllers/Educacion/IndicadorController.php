@@ -521,14 +521,14 @@ class IndicadorController extends Controller
     }
     public function ReporteCPVivDT($provincia, $distrito, $importacion_id, $indicador_id)
     {
-        $inds = IndicadorRepositorio::listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id);
+        $inds = CentroPobladoRepositotio::listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id);
         //return response()->json(compact('provincia', 'distrito', 'indicador_id', 'importacion_id'));
         //return $inds;
         return  datatables()->of($inds)->toJson(); //*/
     }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
-        $cp = IndicadorRepositorio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $fecha);
+        $cp = CentroPobladoRepositotio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $fecha);
         return response()->json($cp);
     }
     public function ajaxEdu5v1($provincia, $distrito, $indicador_id, $anio_id)

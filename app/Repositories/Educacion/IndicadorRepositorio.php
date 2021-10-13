@@ -9,14 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class IndicadorRepositorio
 {
-    public static $tipos = [
-        20 => 'sistema_agua',
-        21 => 'sistema_cloracion',
-        22 => 'servicio_agua_continuo',
-        23 => 'sistema_disposicion_excretas',
-        26 => 'realiza_cloracion_agua'
-    ];
-
     public static function buscar_nivel1()
     {
         $query = NivelModalidad::whereIn('id', ['37', '38'])->get();
@@ -227,11 +219,6 @@ class IndicadorRepositorio
             ->get([
                 'v1.materia_id',
                 'v3.descripcion as materia',
-                /*DB::raw('sum(evaluados)     as evaluados'),
-                DB::raw('sum(previo)        as previo'),
-                DB::raw('sum(inicio)        as inicio'),
-                DB::raw('sum(proceso)       as proceso'),
-                DB::raw('sum(satisfactorio) as satisfactorio'),*/
                 DB::raw('sum(evaluados) as evaluados'),
                 DB::raw('sum(previo) as previo'),
                 DB::raw('ROUND(100*sum(previo)/sum(evaluados),2) as p1'),
@@ -731,7 +718,7 @@ class IndicadorRepositorio
         return $query;
     }
 
-    public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
+    /*public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
     {
         switch ($indicador_id) {
             case 20:
@@ -815,25 +802,5 @@ class IndicadorRepositorio
         $query['indicador'] = $coor;
 
         return $query;
-    }
-
-    public static function listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id)
-    {
-        $buscar = IndicadorRepositorio::$tipos[$indicador_id];
-        $query = DB::table('viv_centropoblado_datass as v1')
-            ->select('v1.id', 'v1.nombre as cp', 'v1.total_poblacion', 'v3.nombre as provincia', 'v2.nombre as distrito', DB::raw('if(' . $buscar . '="SI",' . $buscar . ',"NO") as servicio'))
-            ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-            ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.dependencia')
-            ->where('v1.importacion_id', $importacion_id);
-        if ($provincia > 0 && $distrito > 0) {
-            $query = $query->where('v2.id', $distrito);
-        } else if ($provincia > 0 && $distrito == 0) {
-            $query = $query->where('v3.id', $provincia);
-        } else {
-            
-        }
-        $query = $query->orderBy('v3.nombre')->orderBy('v2.nombre')->orderBy('v1.nombre');
-        $query = $query->get();
-        return $query;
-    }
+    }//*/
 }
