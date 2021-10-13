@@ -107,4 +107,17 @@ class ImportacionRepositorio
             ->get();
         return $query;
     }
+
+    public static function listar_ImportacionSinAprobarEce($grado, $tipo)
+    {
+        $query = DB::table('par_importacion as v1')
+            ->join('edu_ece as v2', 'v2.importacion_id', '=', 'v1.id')
+            ->where('v2.grado_id', $grado)
+            ->where('v2.tipo', $tipo)
+            ->where('v1.estado', 'PE')
+            ->orderBy('v1.id', 'desc')
+            ->select('v1.*')
+            ->get();
+        return $query;
+    }
 }

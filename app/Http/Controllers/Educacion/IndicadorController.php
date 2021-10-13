@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Educacion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
-use App\Models\Educacion\CensoResultado;
-use App\Models\Parametro\Clasificador;
 use App\Models\Educacion\Indicador;
 use App\Models\Educacion\Materia;
 use App\Models\Educacion\NivelModalidad;
-use App\Models\Educacion\TipoGestion;
 use App\Models\Ubigeo;
 use App\Repositories\Educacion\CensoRepositorio;
+use App\Repositories\Educacion\EceRepositorio;
+use App\Repositories\Educacion\GradoRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-//use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\IndicadorRepositorio;
+use App\Repositories\Educacion\MateriaRepositorio;
+use App\Repositories\Educacion\PlazaRepositorio;
+use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,12 +26,12 @@ class IndicadorController extends Controller
     {
         $this->middleware('auth');
     }
-    public function indicadorEducacionMenu($clasificador)
+    /*public function indicadorEducacionMenu($clasificador)
     {
-        /* $clas = Clasificador::where('dependencia', $clasificador)->first();
+         $clas = Clasificador::where('dependencia', $clasificador)->first();
         $clas = Clasificador::where('dependencia', $clas->id)->get();
-        return view('parametro.indicador.menu', compact('clas'));*/
-    }
+        return view('parametro.indicador.menu', compact('clas'));
+    }*/
     public function indicadorEducacion($indicador_id)
     {
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
@@ -58,28 +59,28 @@ class IndicadorController extends Controller
                 $title = $indicador->nombre;
                 $grado = 2;
                 $tipo = 0;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '5': //LOGROS 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $grado = 8;
                 $tipo = 0;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '6': //LOGROS 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $grado = 4;
                 $tipo = 0;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '7': //LOGROS 
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $grado = 4;
                 $tipo = 1; //EIB
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
                 return $this->vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar);
             case '8': //ACCESO  
                 $indicador = Indicador::find($indicador_id);
@@ -191,10 +192,10 @@ class IndicadorController extends Controller
     }
     public function vistaEducacionCat2($indicador_id, $title, $grado, $tipo, $sinaprobar)
     {
-        $gt = IndicadorRepositorio::buscar_grado1($grado);
-        $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo);
+        $gt = GradoRepositorio::buscar_grado1($grado);
+        $materias = MateriaRepositorio::buscar_materia3($grado, $tipo);
         foreach ($materias as $key => $materia) {
-            $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+            $materia->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
             $materia->previo = 0;
             foreach ($materia->indicador as $item) {
                 $materia->previo += $item->previo;
@@ -205,12 +206,12 @@ class IndicadorController extends Controller
     }
     public function indDetEdu($indicador_id, $grado, $tipo, $materia)
     {
-        $gt = IndicadorRepositorio::buscar_grado1($grado);
+        $gt = GradoRepositorio::buscar_grado1($grado);
         $mt = Materia::find($materia);
         $title = 'Estudiantes del ' . $gt[0]->grado . ' grado de ' . $gt[0]->nivel . ' que logran el nivel satisfactorio en ' . $mt->descripcion;
-        $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         foreach ($anios as $anio) {
-            $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
+            $anio->indicador = EceRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
             $anio->previo = 0;
             foreach ($anio->indicador as $indicador) {
                 $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
@@ -224,12 +225,12 @@ class IndicadorController extends Controller
     }
     public function indResEdu($indicador_id, $grado, $tipo, $materia)
     {
-        $gt = IndicadorRepositorio::buscar_grado1($grado);
+        $gt = GradoRepositorio::buscar_grado1($grado);
         $mt = Materia::find($materia);
         $title = 'Estudiantes del ' . $gt[0]->grado . ' grado de ' . $gt[0]->nivel . ' que logran el nivel satisfactorio en ' . $mt->descripcion;
-        $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         $areas = Area::all();
-        $gestions = IndicadorRepositorio::listar_gestion1($grado, $tipo);
+        $gestions = EceRepositorio::listar_gestion1($grado, $tipo);
         $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => url()->previous()], ['titulo' => 'Resumen', 'url' => '']];
         return view('parametro.indicador.educat2resumen', compact('title', 'grado', 'tipo', 'indicador_id', 'mt', 'anios', 'areas', 'gestions', 'provincias', 'breadcrumb'));
@@ -241,8 +242,8 @@ class IndicadorController extends Controller
     public function vistaEducacionCat4($title, $nivel_id)
     {
         $nivel = NivelModalidad::find($nivel_id);
-        $inds = IndicadorRepositorio::listar_profesorestitulados($nivel_id);
-        $indu = IndicadorRepositorio::listar_profesorestituladougel($nivel_id, '1');
+        $inds = PlazaRepositorio::listar_profesorestitulados($nivel_id);
+        $indu = PlazaRepositorio::listar_profesorestituladougel($nivel_id, '1');
         $datas['titulados'] = $inds;
         $datas['ugel'] = $indu;
         //return $datas;
@@ -297,13 +298,13 @@ class IndicadorController extends Controller
                 $grado = 2;
                 $tipo = 0;
                 $materia = 1;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
 
-                $gt = IndicadorRepositorio::buscar_grado1($grado);
-                $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
+                $gt = GradoRepositorio::buscar_grado1($grado);
+                $materias = MateriaRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($materias as $key => $materia) {
                     $materia->previo = 0;
-                    $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+                    $materia->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
                     foreach ($materia->indicador as $item) {
                         $materia->previo += $item->previo;
                     }
@@ -315,13 +316,13 @@ class IndicadorController extends Controller
                 $grado = 2;
                 $tipo = 0;
                 $materia = 2;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
 
-                $gt = IndicadorRepositorio::buscar_grado1($grado);
-                $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
+                $gt = GradoRepositorio::buscar_grado1($grado);
+                $materias = MateriaRepositorio::buscar_materia3($grado, $tipo, $materia);
                 foreach ($materias as $key => $materia) {
                     $materia->previo = 0;
-                    $materia->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
+                    $materia->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
                     foreach ($materia->indicador as $item) {
                         $materia->previo += $item->previo;
                     }
@@ -355,7 +356,7 @@ class IndicadorController extends Controller
                 $grado = 8;
                 $tipo = 0;
                 $materia = 2;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
                 return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia);
             case 19:
                 $indicador = Indicador::find($indicador_id);
@@ -363,7 +364,7 @@ class IndicadorController extends Controller
                 $grado = 4;
                 $tipo = 1; //EIB
                 $materia = 5;
-                $sinaprobar = IndicadorRepositorio::listar_importacionsinaprobar1($grado, $tipo);
+                $sinaprobar = ImportacionRepositorio::listar_ImportacionSinAprobarEce($grado, $tipo);
                 return $this->vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia);
 
             case 35:
@@ -398,23 +399,23 @@ class IndicadorController extends Controller
     }
     public function vistaOEI($indicador_id, $title, $grado, $tipo, $sinaprobar, $materia)
     {
-        $gt = IndicadorRepositorio::buscar_grado1($grado);
+        $gt = GradoRepositorio::buscar_grado1($grado);
         //$anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
-        $aniosx = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $aniosx = EceRepositorio::buscar_anios1($grado, $tipo);
         $areas = Area::all();
-        $gestions = IndicadorRepositorio::listar_gestion1($grado, $tipo);
+        $gestions = EceRepositorio::listar_gestion1($grado, $tipo);
 
-        $materias = IndicadorRepositorio::buscar_materia3($grado, $tipo, $materia);
+        $materias = MateriaRepositorio::buscar_materia3($grado, $tipo, $materia);
         foreach ($materias as $key => $materiax) {
-            $materiax->indicador = IndicadorRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materiax->id, 'asc');
+            $materiax->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materiax->id, 'asc');
             $materiax->previo = 0;
             foreach ($materiax->indicador as $item) {
                 $materiax->previo += $item->previo;
             }
         }
-        $anios = IndicadorRepositorio::buscar_anios1($grado, $tipo);
+        $anios = EceRepositorio::buscar_anios1($grado, $tipo);
         foreach ($anios as $anio) {
-            $anio->indicador = IndicadorRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
+            $anio->indicador = EceRepositorio::listar_indicadorugel($anio->anio, $grado, $tipo, $materia);
             $anio->previo = 0;
             foreach ($anio->indicador as $indicador) {
                 $indicador->ugel = str_replace('UGEL', '', $indicador->ugel);
@@ -428,23 +429,22 @@ class IndicadorController extends Controller
     /*****OTRAS OPCIONES */
     public function cargarprovincias()
     {
-        $provincias = IndicadorRepositorio::buscar_provincia1();
+        $provincias = UbigeoRepositorio::buscar_provincia1();
         return response()->json($provincias);
     }
     public function cargardistritos($provincia)
     {
-        //$distritos = Ubigeo::where('codigo', 'like', $provincia . '%')->whereRaw('LENGTH(codigo)=6')->get();
-        $distritos = IndicadorRepositorio::buscar_distrito1($provincia);
+        $distritos = UbigeoRepositorio::buscar_distrito1($provincia);
         return response()->json(compact('distritos'));
     }
     public function cargargrados(Request $request)
     {
-        $grados = IndicadorRepositorio::buscar_grados1($request->nivel);
+        $grados = GradoRepositorio::buscar_grados1($request->nivel);
         return response()->json(compact('grados'));
     }
     public function reporteSatisfactorioMateria(Request $request)
     {
-        $inds = IndicadorRepositorio::listar_indicadorsatisfactorio1($request->anio, $request->grado, $request->tipo, $request->materia);
+        $inds = EceRepositorio::listar_indicadorsatisfactorio1($request->anio, $request->grado, $request->tipo, $request->materia);
         //return $inds;
         $card = '';
         foreach ($inds as $ind) {
@@ -486,16 +486,16 @@ class IndicadorController extends Controller
     {
         $materia = Materia::find($request->materia);
         if ($request->provincia == 0) {
-            $inds = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
-            $inds2 = IndicadorRepositorio::listar_indicadordepartamento($request->anio, $request->grado, $request->tipo, $materia->id);
+            $inds = EceRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id);
+            $inds2 = EceRepositorio::listar_indicadordepartamento($request->anio, $request->grado, $request->tipo, $materia->id);
             $inds[$inds->count()] = $inds2[0];
         } else {
             if ($request->distrito == 0) {
-                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
-                $inds2 = IndicadorRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
+                $inds = EceRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
+                $inds2 = EceRepositorio::listar_indicadorprovincia($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia);
                 $inds[$inds->count()] = $inds2[0];
             } else {
-                $inds = IndicadorRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia, $request->distrito);
+                $inds = EceRepositorio::listar_indicadordistrito($request->anio, $request->grado, $request->tipo, $materia->id, $request->provincia, $request->distrito);
             }
         }
         return $inds;
@@ -503,7 +503,7 @@ class IndicadorController extends Controller
 
     public function reporteGestionAreaDT($anio, $grado, $tipo, $materia, $gestion, $area)
     {
-        $inds = IndicadorRepositorio::listar_indicadorInstitucion($anio, $grado, $tipo, $materia, $gestion, $area);
+        $inds = EceRepositorio::listar_indicadorInstitucion($anio, $grado, $tipo, $materia, $gestion, $area);
         //return response()->json(compact('anio','grado','tipo','materia','gestion','area'));
         return  datatables()->of($inds)
             ->editColumn('nombre', '<div class="">{{$nombre}}</div>')
