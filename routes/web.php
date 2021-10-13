@@ -77,6 +77,8 @@ Route::get('/Matricula/Aprobar/{importacion_id}', [MatriculaController::class, '
 Route::post('/Matricula/Aprobar/procesar/{importacion_id}', [MatriculaController::class, 'procesar'])->name('Matricula.procesar');
 
 Route::get('/Matricula/Principal', [MatriculaController::class, 'principal'])->name('Matricula.principal');
+Route::post('/Matricula/inicio', [MatriculaController::class, 'inicio'])->name('Matricula.inicio');
+Route::post('/Matricula/Detalle', [MatriculaController::class, 'Detalle'])->name('Matricula.Detalle');
 Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}', [MatriculaController::class, 'ReporteUgel'])->name('Matricula.ReporteUgel');
 Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
 Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');

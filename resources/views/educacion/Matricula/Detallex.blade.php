@@ -1,15 +1,39 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
-
+{{-- @extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI']) --}}
+{{-- 
 @section('css')
     
     <link href="{{ asset('/') }}assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
-@endsection 
+@endsection  --}}
 
-@section('content') 
+{{-- @section('content')  --}}
 
-<input type="hidden" id="hoja" value="0">
+<script src="{{ asset('/') }}assets/libs/isotope/isotope.pkgd.min.js"></script>
+<script src="{{ asset('/') }}assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
+<script src="{{ asset('/') }}assets/js/pages/gallery.init.js"></script>
 
+<script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
+<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+
+<input type="hidden" id="hoja" value="1">
+
+
+<div class="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">      
+                    <div id="barra1">       
+                        {{-- se carga con el scrip lineas abajo --}}
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+</div> 
 
 <div class="content">    
     <div class="row">
@@ -30,7 +54,7 @@
                        
                         <label class="col-md-1 col-form-label">Fecha</label>
                         <div class="col-md-2">
-                            <select id="matricula_fechas" name="matricula_fechas" class="form-control"  onchange="cambia_fecha();">
+                            <select id="matricula_fechas" name="matricula_fechas" class="form-control"  onchange="cargar_resumen_matricula();">
                                 @foreach ($fechas_matriculas as $item)
                                     <option value="{{ $item->matricula_id }}"> {{ $item->fechaActualizacion }} </option>
                                 @endforeach
@@ -45,34 +69,16 @@
                     <br>
                     <div class="col-md-12">                       
                         <div class="portfolioFilter">
-                            <a href="#" onClick="cargar_inicio();" class="current waves-effect waves-light">INICIO</a>
-                            <a href="#" onClick="cargar_resumen_porUgel();"       class="waves-effect waves-light">UGELES</a>
+                            <a href="#" onClick="cargar_resumen_porUgel();"       class="current waves-effect waves-light">UGELES</a>
                             <a href="#" onClick="cargar_matricula_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>    
-                            <a href="#" onClick="cargar_matricula_porInstitucion();" class="waves-effect waves-light" > INSTITUCIONES </a>  
-                            <a href="#" onClick="cargar_Grafico();" class="waves-effect waves-light" > GRAFICA </a>                  
+                            <a href="#" onClick="cargar_matricula_porInstitucion();" class="waves-effect waves-light" > INSTITUCIONES </a>                  
                         </div>                        
                     </div>
 
-                    {{-- <br>
+                    <br>
                     <div id="datos01" class="form-group row">                        
                             Cargando datos.....                        
                     </div>
-                    --}}
-
-                    
-                    <div class="content" >
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-12">      
-                                        <div id="barra1" class="form-group row">       
-                                           
-                                        </div> 
-                                    </div> 
-                                </div> 
-                            </div> 
-                        </div> 
-                    </div> 
 
                 </div>               
                 <!-- card-body -->
@@ -83,20 +89,9 @@
     </div> <!-- End row -->  
 </div>
 
-@endsection 
+{{-- @endsection  --}}
 
-@section('js')
-
-
-<script src="{{ asset('/') }}assets/libs/isotope/isotope.pkgd.min.js"></script>
-<script src="{{ asset('/') }}assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
-<script src="{{ asset('/') }}assets/js/pages/gallery.init.js"></script>
-
-<script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts/highcharts-more.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/export-data.js"></script>
-<script src="{{ asset('/') }}assets/libs/highcharts-modules/accessibility.js"></script>
+{{-- @section('js') --}}
 
 
 {{-- https://www.youtube.com/watch?v=HU-hffAZqYw --}}
@@ -105,17 +100,22 @@
         
         
         $(document).ready(function() {
-            cargar_inicio();
-            cargar_fechas_matricula(); 
+            
+            //alert($('#anio').val());
+            cargar_Grafico();
+            cargar_fechas_matricula();
+            //cargar_resumen_matricula(); 
+            // alert($('#anio').val());
+            // alert($('#matricula_fechas').val());
         });
 
-        function cargar_inicio() {            
-            $('#hoja').val(0);
+        function cargar_Grafico() {
+            
             $.ajax({  
                 headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/inicio",
+                url: "{{ url('/') }}/Matricula/GraficoBarrasPrincipal/"+ $('#anio').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -123,7 +123,8 @@
                 alert("Lo sentimos a ocurrido un error");
             });
         }
-        
+
+
         function cargar_fechas_matricula() {
            
             $.ajax({
@@ -144,7 +145,7 @@
                     });
                     
                     $("#matricula_fechas").append(options);                  
-                    cambia_fecha(); 
+                    cargar_resumen_matricula(); 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -152,31 +153,19 @@
                 },
             });
             
-            //cargar_Grafico();
+            cargar_Grafico();
         }
 
-        function cambia_fecha() {   
+        function cargar_resumen_matricula() {   
 
-            if($('#hoja').val()==0)  
-                cargar_inicio();
+            if($('#hoja').val()==1)       
+                cargar_resumen_porUgel();          
             else  
             {
-                if($('#hoja').val()==1)
-                    cargar_resumen_porUgel();                      
+                if($('#hoja').val()==2)
+                    cargar_matricula_porDistrito();  
                 else
-                {
-                    if($('#hoja').val()==2)
-                        cargar_matricula_porDistrito();                       
-                    else
-                    {
-                        if($('#hoja').val()==3)
-                            cargar_matricula_porInstitucion();  
-                        else
-                            cargar_Grafico();
-                    }
-                        
-                }
-                    
+                    cargar_matricula_porInstitucion(); 
             }       
                                
         }
@@ -190,7 +179,7 @@
                 url: "{{ url('/') }}/Matricula/ReporteUgel/" + $('#anio').val() + "/" + $('#matricula_fechas').val(),
                 type: 'post',
             }).done(function (data) {               
-                $('#barra1').html(data);
+                $('#datos01').html(data);
             }).fail(function () {
                 alert("Lo sentimos a ocurrido un error");
             });
@@ -205,7 +194,7 @@
                 url: "{{ url('/') }}/Matricula/ReporteDistrito/" + $('#anio').val() + "/" + $('#matricula_fechas').val(),
                 type: 'post',
             }).done(function (data) {               
-                $('#barra1').html(data);
+                $('#datos01').html(data);
             }).fail(function () {
                 alert("Lo sentimos a ocurrido un error");
             });
@@ -220,28 +209,12 @@
                 url: "{{ url('/') }}/Matricula/ReporteInstitucion/" + $('#anio').val() + "/" + $('#matricula_fechas').val(),
                 type: 'post',
             }).done(function (data) {               
-                $('#barra1').html(data);
+                $('#datos01').html(data);
             }).fail(function () {
                 alert("Lo sentimos a ocurrido un error");
             });
         }
 
-        function cargar_Grafico() {
-            $('#hoja').val(4);
-            $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
-                url: "{{ url('/') }}/Matricula/GraficoBarrasPrincipal/"+ $('#anio').val(),
-                type: 'post',
-            }).done(function (data) {  
-                // $('#datos01').html();             
-                $('#barra1').html(data);                
-             
-            }).fail(function () {
-                alert("Lo sentimos a ocurrido un error");
-            });
-        }
 
         
   
@@ -250,4 +223,4 @@
 
 
 
-@endsection
+{{-- @endsection --}}

@@ -514,6 +514,22 @@ class MatriculaController extends Controller
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
 
         return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));  
+    }
+
+    public function inicio()
+    {
+        return view('educacion.Matricula.inicio');  
+
+    }
+
+    public function detalle()
+    {
+        $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
+        $anios =  MatriculaRepositorio ::matriculas_anio( );
+
+        $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
+
+        return view('educacion.Matricula.detalle',compact('matricula','anios','fechas_matriculas'));  
 
     }
     
@@ -581,10 +597,7 @@ class MatriculaController extends Controller
     }
 
     public function reporteInstitucion($anio_id,$matricula_id)
-    {     
-        //$lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id);
-
-
+    {  
         $fecha_Matricula_texto = $this->fecha_texto($matricula_id);
         return view('educacion.Matricula.ReporteInstitucion',compact('fecha_Matricula_texto','matricula_id'));
     }
