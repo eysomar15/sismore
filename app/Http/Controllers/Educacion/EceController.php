@@ -12,6 +12,7 @@ use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
 use App\Models\Ubigeo;
 use App\Repositories\Educacion\EceRepositorio;
+use App\Repositories\Educacion\GradoRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
 use Hamcrest\Type\IsNumeric;
@@ -29,7 +30,7 @@ class EceController extends Controller
     public function importar()
     {
         $materias = Materia::all();
-        $nivels = EceRepositorio::buscar_nivel1();
+        $nivels = GradoRepositorio::buscar_nivel1();
         //$eces=EceRepositorio::listar_importaciones();
         //return $eces;
         return view('educacion.Ece.importar', compact('nivels', 'materias'));
@@ -181,7 +182,7 @@ class EceController extends Controller
     }
     public function cargargrados(Request $request)
     {
-        $grados = EceRepositorio::buscar_grados1($request->nivel);
+        $grados = GradoRepositorio::buscar_grados1($request->nivel);
         return response()->json(compact('grados'));
     }
 }
