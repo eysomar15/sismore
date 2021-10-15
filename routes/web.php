@@ -77,16 +77,16 @@ Route::get('/Matricula/Aprobar/{importacion_id}', [MatriculaController::class, '
 Route::post('/Matricula/Aprobar/procesar/{importacion_id}', [MatriculaController::class, 'procesar'])->name('Matricula.procesar');
 
 Route::get('/Matricula/Principal', [MatriculaController::class, 'principal'])->name('Matricula.principal');
-Route::post('/Matricula/inicio', [MatriculaController::class, 'inicio'])->name('Matricula.inicio');
+Route::post('/Matricula/inicio/{matricula_id}/{gestion}', [MatriculaController::class, 'inicio'])->name('Matricula.inicio');
 Route::post('/Matricula/Detalle', [MatriculaController::class, 'Detalle'])->name('Matricula.Detalle');
-Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}', [MatriculaController::class, 'ReporteUgel'])->name('Matricula.ReporteUgel');
-Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
-Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');
+Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'ReporteUgel'])->name('Matricula.ReporteUgel');
+Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
+Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');
 
-Route::get('/Matricula/Institucion_DataTable/{matricula_id}/{nivel}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
+Route::get('/Matricula/Institucion_DataTable/{matricula_id}/{nivel}/{gestion}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
 
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
-Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
+Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}/{gestion}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
 
 Route::get('/InstEducativa/Principal', [InstEducativaController::class, 'principal'])->name('InstEducativa.principal');
 Route::post('/InstEducativa/ReporteDistrito', [InstEducativaController::class, 'ReporteDistrito'])->name('InstEducativa.ReporteDistrito');

@@ -89,18 +89,25 @@ class MatriculaRepositorio
         return $data;
     }
 
-    public static function total_matricula_EBR($matricula_id)
+    public static function total_matricula_EBR($matricula_id,$condicion, $filtro)
     { 
         $data = DB::table('edu_matricula as mat')           
                 ->join('edu_matricula_detalle as matDet', 'mat.id', '=', 'matDet.matricula_id')
                 ->join('edu_institucioneducativa as inst', 'matDet.institucioneducativa_id', '=', 'inst.id')  
                 ->join('edu_ugel as ugel', 'inst.Ugel_id', '=', 'ugel.id')         
                 ->where('mat.id','=', $matricula_id)
-                ->where('matDet.nivel','!=','E')   
+                ->where('matDet.nivel','!=','E')  
+                ->$condicion("inst.tipogestion_id", [$filtro]) 
                 ->orderBy('ugel.codigo', 'asc')              
                 ->groupBy('ugel.nombre')
+                ->groupBy('ugel.id')
                 ->get([  
-                    DB::raw('ugel.nombre'),                         
+                    DB::raw('ugel.nombre'),       
+                    DB::raw('ugel.id'),   
+                    DB::raw('count(*) as cantInstituciones'),   
+                    DB::raw('case when ugel.id = 10 then "bg-primary" 
+                                when ugel.id = 11 then "bg-info"
+                                when ugel.id = 12 then "bg-primary" else "bg-info" end as color'),                      
                     DB::raw('sum(           
                                 ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
                                 ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
@@ -120,6 +127,50 @@ class MatriculaRepositorio
 
     }
 
+    public static function total_matricula_EBR_porUgeles($matricula_id,$condicion, $filtro)
+    { 
+        $data = DB::table(
+                    DB::raw("(
+                                select id,codigo,nombre,
+                                sum(case when nivel = 'I' then cantidad else 0 end ) as inicial,
+                                sum(case when nivel = 'P' then cantidad else 0 end ) as primaria,
+                                sum(case when nivel = 'S' then cantidad else 0 end ) as secundaria
+                                
+                                from (
+                                        select ugel.id,ugel.codigo,ugel.nombre,matDet.nivel ,
+                                        sum(           
+                                            ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
+                                            ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
+                                            ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
+                                            ifnull(cinco_anios_hombre_ebe,0)+	      
+                                            ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
+                                            ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
+                                            ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
+                                            ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
+                                            ) as cantidad
+                                        from edu_matricula mat
+                                        inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
+                                        inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
+                                        inner join edu_ugel ugel on inst.Ugel_id = ugel.id
+                                        where mat.id = $matricula_id 
+                                        and inst.tipogestion_id $condicion ($filtro) 
+                                        /*and matDet.nivel in ('I','P','S')*/
+                                        group by ugel.id,ugel.codigo,ugel.nombre,matDet.nivel
+                                ) as datos
+                                group by id,codigo,nombre
+                                order by codigo     
+                        ) as datos"
+                    )
+                )           
+
+            ->orderBy('codigo', 'asc')
+            ->get(
+            );
+
+
+        return $data;
+
+    }
     
     public static function total_matricula_por_Nivel($matricula_id)
     { 
@@ -178,7 +229,7 @@ class MatriculaRepositorio
 
     }
 
-    public static function total_matricula_por_Nivel_Distrito($matricula_id)
+    public static function total_matricula_por_Nivel_Distrito($matricula_id,$condicion, $filtro)
     { 
         $data = DB::table('edu_matricula as mat')           
                 ->join('edu_matricula_detalle as matDet', 'mat.id', '=', 'matDet.matricula_id')
@@ -189,6 +240,7 @@ class MatriculaRepositorio
                 ->join('par_ubigeo as prov', 'dist.dependencia', '=', 'prov.id')
 
                 ->where('mat.id','=', $matricula_id)
+                ->$condicion("inst.tipogestion_id", [$filtro]) 
                 //->where('matDet.nivel','=',$nivel)  
                 ->orderBy('dist.codigo', 'asc')                 
                 ->groupBy('prov.nombre')   
@@ -242,7 +294,7 @@ class MatriculaRepositorio
 
     }
 
-    public static function total_matricula_por_Nivel_Institucion($matricula_id,$nivel)
+    public static function total_matricula_por_Nivel_Institucion($matricula_id,$nivel,$condicion, $filtro)
     { 
         $data = DB::table(
                         DB::raw("(
@@ -269,6 +321,7 @@ class MatriculaRepositorio
                                 inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                                 inner join par_ubigeo prov on dist.dependencia = prov.id
                                 where mat.id = '$matricula_id' and nivel = '$nivel'
+                                and inst.tipogestion_id $condicion ($filtro) 
                                 order by ugel.codigo     
                             ) as datos"
                         )
@@ -287,7 +340,7 @@ class MatriculaRepositorio
     }
 
 
-    public static function total_matricula_por_Nivel_Provincia($matricula_id)
+    public static function total_matricula_por_Nivel_Provincia($matricula_id,$condicion, $filtro)
     { 
         $data = DB::table(
 
@@ -307,6 +360,7 @@ class MatriculaRepositorio
                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                             inner join par_ubigeo prov on dist.dependencia = prov.id
                             where mat.id = '$matricula_id'
+                            and inst.tipogestion_id $condicion ($filtro) 
                         ) as datos"
                         )
 
@@ -364,7 +418,7 @@ class MatriculaRepositorio
 
     }
 
-    public static function total_matricula_EBR_Provincia($matricula_id)
+    public static function total_matricula_EBR_Provincia($matricula_id,$condicion, $filtro)
     { 
         //->where('matDet.nivel','!=','E') 
 
@@ -384,7 +438,8 @@ class MatriculaRepositorio
                             inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                             inner join par_ubigeo prov on dist.dependencia = prov.id
-                            where matDet.nivel != 'E' and  mat.id = '$matricula_id'
+                            where matDet.nivel != 'E' and  mat.id = $matricula_id
+                            and inst.tipogestion_id $condicion ($filtro) 
                         ) as datos" )
                     ) 
                          
@@ -412,7 +467,7 @@ class MatriculaRepositorio
     }
 
 
-    public static function total_matricula_anual($anio_id)
+    public static function total_matricula_anual($anio_id,$condicion, $filtro)
     { 
         //->where('matDet.nivel','!=','E') 
 
@@ -425,26 +480,27 @@ class MatriculaRepositorio
                             sum(case when id = 13 then cantidad else 0 end ) as ugel13
                             from (
 
-                                            select 
-                                            fechaactualizacion,
-                                            ugel.id,
-                                            sum(           
-                                                                            ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
-                                                                            ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
-                                                                            ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
-                                                                            ifnull(cinco_anios_hombre_ebe,0) + ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
-                                                                            ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
-                                                                            ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
-                                                                            ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
-                                                                            ) as cantidad
+                                    select 
+                                    fechaactualizacion,
+                                    ugel.id,
+                                    sum(           
+                                        ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
+                                        ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
+                                        ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
+                                        ifnull(cinco_anios_hombre_ebe,0) + ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
+                                        ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
+                                        ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
+                                        ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
+                                        ) as cantidad
 
-                                                                            from par_importacion as imp 
-                                            inner join edu_matricula as mat on imp.id = mat.importacion_id
-                                            inner join edu_matricula_detalle as matDet on mat.id = matDet.matricula_id
-                                            inner join edu_institucioneducativa as inst on matDet.institucioneducativa_id = inst.id
-                                            inner join edu_ugel as ugel on inst.Ugel_id = ugel.id
-                                            where mat.anio_id = '$anio_id' and matDet.nivel != 'E' and imp.estado = 'PR'
-                                            group By fechaactualizacion,ugel.id 
+                                        from par_importacion as imp 
+                                    inner join edu_matricula as mat on imp.id = mat.importacion_id
+                                    inner join edu_matricula_detalle as matDet on mat.id = matDet.matricula_id
+                                    inner join edu_institucioneducativa as inst on matDet.institucioneducativa_id = inst.id
+                                    inner join edu_ugel as ugel on inst.Ugel_id = ugel.id
+                                    where mat.anio_id = '$anio_id' and matDet.nivel != 'E' and imp.estado = 'PR'
+                                    and inst.tipogestion_id $condicion ($filtro) 
+                                    group By fechaactualizacion,ugel.id 
                                 
                             ) as dd
                             group by fechaactualizacion

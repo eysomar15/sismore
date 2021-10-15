@@ -267,7 +267,7 @@
 
 <script>
     $('#grid').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'I'))}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'I', $gestion ))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},
@@ -315,7 +315,7 @@
 
 
     $('#grid2').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'P'))}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'P', $gestion ))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},          
@@ -361,7 +361,7 @@
     );
 
     $('#grid3').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'S'))}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'S', $gestion ))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},          

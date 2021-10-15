@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
+@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI '])
 
 @section('css')
     
@@ -19,7 +19,7 @@
                 <div class="card-body">
 
                     <div class="form-group row">
-                        <label class="col-md-1 col-form-label">Año</label>
+                        <label class="col-md-1 col-form-label">Año:</label>
                         <div class="col-md-2">
                             <select id="anio" name="anio" class="form-control" onchange="cargar_fechas_matricula();">                               
                                 @foreach ($anios as $item)
@@ -28,12 +28,24 @@
                             </select>
                         </div>
                        
-                        <label class="col-md-1 col-form-label">Fecha</label>
+                        <label class="col-md-1 col-form-label">Fecha:</label>
                         <div class="col-md-2">
                             <select id="matricula_fechas" name="matricula_fechas" class="form-control"  onchange="cambia_fecha();">
                                 @foreach ($fechas_matriculas as $item)
                                     <option value="{{ $item->matricula_id }}"> {{ $item->fechaActualizacion }} </option>
                                 @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                        </div>
+
+                        <label class="col-md-1 col-form-label">Gestión:</label>
+                        <div class="col-md-2">
+                            <select id="gestion" name="gestion" class="form-control" onchange="cambia_gestion();" >                              
+                                    <option value="1"> Públicas y privadas</option>
+                                    <option value="2"> Pública</option>
+                                    <option value="3"> Privada</option>                              
                             </select>
                         </div>
                         
@@ -105,7 +117,7 @@
         
         
         $(document).ready(function() {
-            cargar_inicio();
+            //cargar_inicio();
             cargar_fechas_matricula(); 
         });
 
@@ -115,7 +127,7 @@
                 headers: {
                         'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/inicio",
+                url: "{{ url('/') }}/Matricula/inicio/" + $('#matricula_fechas').val() + "/" + $('#gestion').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -187,7 +199,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/ReporteUgel/" + $('#anio').val() + "/" + $('#matricula_fechas').val(),
+                url: "{{ url('/') }}/Matricula/ReporteUgel/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -202,7 +214,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/ReporteDistrito/" + $('#anio').val() + "/" + $('#matricula_fechas').val(),
+                url: "{{ url('/') }}/Matricula/ReporteDistrito/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -217,7 +229,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/ReporteInstitucion/" + $('#anio').val() + "/" + $('#matricula_fechas').val(),
+                url: "{{ url('/') }}/Matricula/ReporteInstitucion/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -232,7 +244,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/GraficoBarrasPrincipal/"+ $('#anio').val(),
+                url: "{{ url('/') }}/Matricula/GraficoBarrasPrincipal/"+ $('#anio').val()+ "/" + $('#gestion').val(),
                 type: 'post',
             }).done(function (data) {  
                 // $('#datos01').html();             
@@ -243,7 +255,11 @@
             });
         }
 
-        
+        function cambia_gestion() {            
+           
+            cambia_fecha();
+           
+        }
   
        
     </script>

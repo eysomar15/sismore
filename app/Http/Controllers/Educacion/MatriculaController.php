@@ -515,11 +515,21 @@ class MatriculaController extends Controller
 
         return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));  
     }
-
-    public function inicio()
+    
+    public function inicio($matricula_id,$gestion)
     {
-        return view('educacion.Matricula.inicio');  
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
+        $lista_total_matricula_EBR_porUgeles = MatriculaRepositorio::total_matricula_EBR_porUgeles($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
 
+        $fecha_Matricula_texto = $this->fecha_texto($matricula_id); 
+
+        $totalMatriculados = 0;
+        foreach($lista_total_matricula_EBR as $item)
+        {
+            $totalMatriculados+= ($item->hombres + $item->mujeres);
+        }
+
+        return view('educacion.Matricula.inicio',compact('lista_total_matricula_EBR','lista_total_matricula_EBR_porUgeles','fecha_Matricula_texto','totalMatriculados'));
     }
 
     public function detalle()
@@ -529,13 +539,12 @@ class MatriculaController extends Controller
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
 
-        return view('educacion.Matricula.detalle',compact('matricula','anios','fechas_matriculas'));  
-
+        return view('educacion.Matricula.detalle',compact('matricula','anios','fechas_matriculas'));
     }
     
-    public function reporteUgel($anio_id,$matricula_id)
+    public function reporteUgel($anio_id,$matricula_id,$gestion)
     {
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id);
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
 
         $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id);               
         $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
@@ -562,17 +571,17 @@ class MatriculaController extends Controller
                     'lista_total_matricula_Primaria','lista_total_matricula_Inicial','lista_total_matricula_EBE','contenedor','titulo_grafico','fecha_Matricula_texto'));
     }
 
-    public function reporteDistrito($anio_id,$matricula_id)
+    public function reporteDistrito($anio_id,$matricula_id,$gestion)
     {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR_Provincia($matricula_id);
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
 
-        $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id);    
+        $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));   
         $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
         $lista_total_matricula_Primaria = $lista_matricula->where('nivel', 'P')->all();  
         $lista_total_matricula_Secundaria = $lista_matricula->where('nivel', 'S')->all();       
 
         // cabeceras y/o totales en las tablas
-        $lista_total_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Provincia($matricula_id);
+        $lista_total_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
         $lista_matricula_Inicial_cabecera =  $lista_total_matricula->where('nivel', 'I')->all();  
         $lista_matricula_Primaria_cabecera =  $lista_total_matricula->where('nivel', 'P')->all();
         $lista_matricula_Secundaria_cabecera =  $lista_total_matricula->where('nivel', 'S')->all();
@@ -596,22 +605,22 @@ class MatriculaController extends Controller
         'lista_matricula_Secundaria_cabecera','contenedor','titulo_grafico'));
     }
 
-    public function reporteInstitucion($anio_id,$matricula_id)
+    public function reporteInstitucion($anio_id,$matricula_id,$gestion)
     {  
         $fecha_Matricula_texto = $this->fecha_texto($matricula_id);
-        return view('educacion.Matricula.ReporteInstitucion',compact('fecha_Matricula_texto','matricula_id'));
+        return view('educacion.Matricula.ReporteInstitucion',compact('fecha_Matricula_texto','matricula_id','gestion'));
     }
 
-    public function Institucion_DataTable($matricula_id,$nivel)
+    public function Institucion_DataTable($matricula_id,$nivel,$gestion)
     {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,$nivel);
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,$nivel,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
 
         return  datatables()->of($lista_total_matricula_EBR)->toJson();
     }
 
-    public function GraficoBarrasPrincipal($anio_id)
+    public function GraficoBarrasPrincipal($anio_id,$gestion)
     {     
-        $total_matricula_anual = MatriculaRepositorio:: total_matricula_anual($anio_id);
+        $total_matricula_anual = MatriculaRepositorio:: total_matricula_anual($anio_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
         
         $categoria1 = [];
         $categoria2 = [];
@@ -635,7 +644,7 @@ class MatriculaController extends Controller
 
         $nombreAnio = Anio::find($anio_id)->anio;
 
-        $titulo = 'Matriculas EBR '.$nombreAnio;
+        $titulo = 'Matriculas EBR según UGEL -  '.$nombreAnio;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de matriculados';
 
@@ -659,6 +668,54 @@ class MatriculaController extends Controller
         return response()->json(compact('fechas_matriculas'));
     }
 
-    
+    public function condicion_filtro($gestion)
+    {
+        // este valor del filtro se ejecutara en la consulta dentro del repositorio
+        // si se eleige como opcion privados ara un were in con el valor id = 20
+        $condicion ='';
+       
+        if($gestion==3)
+        {
+            $condicion ='whereIn';           
+        }
+        else
+        {
+            $condicion ='whereNotIn';
+        }
+        return  $condicion;
+    }
+
+    public function condicion_filtro_formato2($gestion)
+    {
+        // este valor del filtro se ejecutara en la consulta dentro del repositorio
+        // si se eleige como opcion privados ara un were in con el valor id = 20
+        $condicion ='';
+       
+        if($gestion==3)
+        {
+            $condicion ='in';           
+        }
+        else
+        {
+            $condicion ='not in';
+        }
+        return  $condicion;
+    }
+
+    public function valor_filtro($gestion)
+    {       
+        $filtro=0;
+
+        if($gestion==1)
+        {           
+            $filtro=0;
+        }
+        else
+        {
+            $filtro=20;
+        }
+
+        return  $filtro;
+    }
     
 }
