@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'GESTIONAR USUARIOS'])
+@extends('layouts.main',['activePage'=>'usuarios','titlePage'=>'GESTIONAR USUARIOS'])
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -9,25 +9,41 @@
 
 @section('content') 
 <div class="content">
+ 
     <div class="row">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-primary">
+                        {{-- <div class="card-header card-header-primary">
                             <h4 class="card-title">Relacion de Usuarios </h4>                            
-                        </div>                      
+                        </div>
+                        --}}
                         
-                        <div class="card-body">                                
+                        <div class="card-body"> 
+                            <div>
+                                <a href="{{route('Usuario.registrar')}}" class="btn btn-primary"> Nuevo </a>
+                            </div>                        
+
+                            @if(session('success'))                           
+                                <br>    
+                                <div class="card-header bg-success" role="success">
+                                    <h3 class="card-title text-white">{{session('success')}}</h3>
+                                </div>
+                            @endif                        
+                                                  
                             <div class="table-responsive">
-                                <table id="importaciones" class="table table-striped table-bordered" style="width:100%">
-                                    <thead class="cabecera-dataTable">                                    
+                                <br>
+                                <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%">
+                                    <thead class="cabecera-dataTable">  
+                                        <th>Codigo</th>                                  
                                         <th>Usuario</th>   
                                         <th>Email</th>                                       
                                         <th>Aciones</th>
                                     </thead>
                                 </table>
-                            </div>                                
+                            </div>   
+
                         </div>
                     </div>
                 </div>
@@ -36,7 +52,6 @@
     </div> <!-- End row -->
     
 </div>
- 
   
 <!-- Modal  Eliminar -->
 <div class="modal fade" id="confirmModalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -59,8 +74,6 @@
     </div>
 </div>  <!-- Fin Modal  Eliminar -->
 
-
-
 @endsection 
 
 @section('js')
@@ -74,9 +87,10 @@
     {{-- DATA TABLE --}}
     <script>
    
-        $('#importaciones').DataTable({
+        $('#dtPrincipal').DataTable({
             "ajax": "{{route('Usuario.Lista_DataTable')}}",
             "columns":[
+                {data:'id'},
                 {data:'usuario'},                
                 {data:'email'},
                 {data:'action', orderable : false}            
@@ -127,17 +141,17 @@
 
         $('#btnEliminar').click(function(){
             $.ajax({
-                url:"Importacionxxx/Eliminar/"+id,
+                // url:"Usuario/Eliminar/"+id,
+                url: "{{ url('/') }}/Usuario/Eliminar/" + id,
                 beforeSend:function(){
                     // $('#btnEliminar').text('Eliminando....');
                 },
                 success:function(data){
                     setTimeout(function(){
                         $('#confirmModalEliminar').modal('hide');
-                        toastr.success('El registro fue elimino correctamente','Mensaje',{timeOut:3000});                       
-                        $('#importaciones').DataTable().ajax.reload();
-                    },100);//02 segundos
-                    // $('#btnEliminar').text('Confirmar');
+                        toastr.success('El registro fue eliminado correctamente','Mensaje',{timeOut:3000});                       
+                        $('#dtPrincipal').DataTable().ajax.reload();
+                    },100);//02 segundos                   
                 }
             });
         });

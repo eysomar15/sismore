@@ -40,8 +40,7 @@
         </div>
     </div> <!-- End row -->
     
-</div>
- 
+</div> 
   
 <!-- Modal  Eliminar -->
 <div class="modal fade" id="confirmModalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -63,8 +62,6 @@
         </div>
     </div>
 </div>  <!-- Fin Modal  Eliminar -->
-
-
 
 @endsection 
 
@@ -145,7 +142,7 @@
                 success:function(data){
                     setTimeout(function(){
                         $('#confirmModalEliminar').modal('hide');
-                        toastr.success('El registro fue elimino correctamente','Mensaje',{timeOut:3000});                       
+                        toastr.success('El registro fue eliminado correctamente','Mensaje',{timeOut:3000});                       
                         $('#importaciones').DataTable().ajax.reload();
                     },100);//02 segundos
                     // $('#btnEliminar').text('Confirmar');
