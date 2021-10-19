@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Administracion;
 use App\Http\Controllers\Controller;
+use App\Models\Administracion\Usuario;
 use App\Repositories\Administracion\UsuarioRepositorio;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
@@ -12,39 +16,72 @@ class UsuarioController extends Controller
     }
 
     public function principal()
-    {
-       
+    { 
         return view('administracion.Usuario.Principal'); 
     }
 
     public function Lista_DataTable()
     {
         $data = UsuarioRepositorio::Listar_Usuarios();
-        // $padronWebLista = Importacion::select('id','comentario','fechaActualizacion','estado')
-        //  ->get();
-
-        // $data = ImportacionRepositorio::Listar_Importaciones(session('sistema_id'));
        
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {
-
-                // switch ($data->codigo) {
-                //     case('COD01'):  $acciones = '<a href="PadronWeb/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
-                //     case('COD02'): $acciones = '<a href="CuadroAsigPersonal/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
-                //     case('COD03'): $acciones = '<a href="ECE/Importar/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;                    
-                //     case('COD06'): $acciones = '<a href="Censo/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break; 
-                //     case('COD07'): $acciones = '<a href="Datass/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break; 
-                //     case('COD08'): $acciones = '<a href="Matricula/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break; 
-                //     case('COD09'): $acciones = '<a href="Tableta/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
-
-                //     default: $acciones = '<a href="PadronWeb/AprobarNN/' . $data->id . '"   class="btn btn-info btn-sm"> Aprobar </a>';break;
-                // }                
-                $acciones = '<a href="Tableta/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> Actualizar </a>';
+               
+                $acciones = '<a href="Editar/' .$data->id. '"   class="btn btn-info btn-sm"> Actualizar </a>';
                 $acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm"> Eliminar </button>';
                 return $acciones;
             })
             ->rawColumns(['action'])
             ->make(true);
-        // ->toJson();
+    }
+
+    public function registrar()
+    { 
+        return view('administracion.Usuario.Registrar'); 
+    }
+
+    public function guardar(Request $request)
+    { 
+        $request->validate([
+        'usuario' => ['required', 'string', 'max:255', 'unique:adm_usuario'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:adm_usuario'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        Usuario::create([
+            'usuario' => $request['usuario'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        return redirect()->route('Usuario.principal')->with('success','Registro creado correctamente'); 
+    }
+
+    public function editar(Usuario $usuario)
+    {     
+       
+       return view('administracion.Usuario.Editar',compact('usuario'));
+    }
+
+    public function actualizar(Request $request,$id)
+    { 
+        $entidad = Usuario::find($id);
+
+        $entidad->usuario = $request['usuario'] ;
+        $entidad->email = $request['email'] ;
+        $entidad->password = Hash::make($request['password']);
+        $entidad->save();
+
+       return redirect()->route('Usuario.principal')->with('success','Registro modificado correctamente'); 
+    }
+
+    public function eliminar($id)
+    {
+        $entidad = Usuario::find($id);
+
+        $entidad->estado = 0;
+        $entidad->save();
+
+        return back();
     }
 }
