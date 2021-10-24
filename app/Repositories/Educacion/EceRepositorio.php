@@ -42,7 +42,7 @@ class EceRepositorio
         return $query;
     }
 
-    public static function buscar_anios1($grado, $tipo)
+    public static function listarAniosIngresados($grado, $tipo)
     {
         $query = DB::table('edu_ece as v1')
             ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
@@ -55,7 +55,7 @@ class EceRepositorio
             ->get();
         return $query;
     }
-    public static function buscar_anios2($grado, $tipo)
+    public static function getaniomax($grado, $tipo)
     {
         $query = DB::table('edu_ece as v1')
             ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
@@ -66,9 +66,19 @@ class EceRepositorio
             ->orderBy('v1.anio', 'desc')
             ->get(['max(v1.anio)']);
         return $query;
-    }
-
-    
+    }    
+    public static function get($grado, $tipo)
+    {
+        $query = DB::table('edu_ece as v1')
+            ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
+            ->where('v1.grado_id', $grado)
+            ->where('v1.tipo', $tipo)
+            ->where('v2.estado', 'PR')
+            ->select('v1.anio')
+            ->orderBy('v1.anio', 'desc')
+            ->get(['max(v1.anio)']);
+        return $query;
+    }        
     public static function listar_indicadorsatisfactorio1($anio, $grado, $tipo, $materia)
     {
         $query = DB::table('edu_eceresultado as v1')
