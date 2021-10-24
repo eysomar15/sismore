@@ -14,6 +14,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
 use App\Http\Controllers\Vivienda\CentroPobladoController;
 use App\Http\Controllers\Vivienda\DatassController;
+use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -149,6 +150,13 @@ Route::get('/Datass/Aprobar/{importacion_id}', [DatassController::class, 'aproba
 Route::post('/Datass/Aprobar/procesar/{importacion_id}', [DatassController::class, 'procesar'])->name('Datass.procesar');
 
 Route::get('/CentroPoblado/Principal', [CentroPobladoController::class, 'principal'])->name('CentroPoblado.principal');
+
+Route::get('/PEmapacopsa/Importar', [PadronEmapacopsaController::class, 'importar'])->name('pemapacopsa.importar');
+Route::post('/PEmapacopsa/Importar', [PadronEmapacopsaController::class, 'importarGuardar'])->name('pemapacopsa.guardar');
+Route::get('/PEmapacopsa/Listado/{importacion_id}', [PadronEmapacopsaController::class, 'importarListado'])->name('pemapacopsa.listado');
+Route::get('/PEmapacopsa/listadoDT/{importacion_id}', [PadronEmapacopsaController::class, 'importarListadoDT'])->name('pemapacopsa.listadoDT');
+Route::get('/PEmapacopsa/Aprobar/{importacion_id}', [PadronEmapacopsaController::class, 'importarAprobar'])->name('pemapacopsa.aprobar');
+Route::post('/PEmapacopsa/Aprobar/procesar/{importacion_id}', [PadronEmapacopsaController::class, 'importarAprobarGuardar'])->name('pemapacopsa.procesar');
 /**************************************** FIN VIVIENDA ************************************************/
 
 /**************************************** ADMINISTRADOR ************************************************/
