@@ -4,7 +4,7 @@
            <div class="row">
                <div class="col-md-12">      
                    <div id="barra1">       
-                       {{-- se carga con el scrip lineas abajo --}}
+                     
                    </div> 
                </div> 
            </div> 
