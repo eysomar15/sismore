@@ -104,6 +104,7 @@ class ImportacionRepositorio
             ->where('estado','PR')
             ->distinct()
             ->select('v1.*')
+            ->orderBy('v1.id','desc')
             ->get();
         return $query;
     }
@@ -120,4 +121,17 @@ class ImportacionRepositorio
             ->get();
         return $query;
     }
+
+    public static function Listar_deEmapacopsa()
+    {
+        $query = DB::table('par_importacion as v1')
+            ->join('viv_emapacopsa as v2', 'v2.importacion_id', '=', 'v1.id')
+            ->where('estado','PR')
+            ->distinct()
+            ->select('v1.*')
+            ->orderBy('v1.id','desc')
+            ->get();
+        return $query;
+    }
+
 }

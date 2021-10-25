@@ -8,6 +8,7 @@ use App\Models\Educacion\Indicador;
 use App\Models\Educacion\Materia;
 use App\Models\Educacion\NivelModalidad;
 use App\Models\Ubigeo;
+use App\Models\Vivienda\EstadoConexion;
 use App\Repositories\Educacion\CensoRepositorio;
 use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\GradoRepositorio;
@@ -17,6 +18,7 @@ use App\Repositories\Educacion\MateriaRepositorio;
 use App\Repositories\Educacion\PlazaRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
+use App\Repositories\Vivienda\EmapacopsaRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -200,7 +202,7 @@ class IndicadorController extends Controller
         return view('parametro.indicador.educat2', compact('indicador_id', 'title', 'grado', 'tipo', 'sinaprobar', 'materias', 'gt', 'breadcrumb'));
     }
     public function indDetEdu($indicador_id, $grado, $tipo, $materia)
-    {//desplegable ugel
+    { //desplegable ugel
         $gt = GradoRepositorio::buscar_grado1($grado);
         $mt = Materia::find($materia);
         $title = 'Estudiantes del ' . $gt[0]->grado . ' grado de ' . $gt[0]->nivel . ' que logran el nivel satisfactorio en ' . $mt->descripcion;
@@ -219,7 +221,7 @@ class IndicadorController extends Controller
         return view('parametro.indicador.educat2detalle', compact('title', 'grado', 'tipo', 'materia', 'anios', 'breadcrumb'));
     }
     public function indResEdu($indicador_id, $grado, $tipo, $materia)
-    {//desplegable institucion
+    { //desplegable institucion
         $gt = GradoRepositorio::buscar_grado1($grado);
         $mt = Materia::find($materia);
         $title = 'Estudiantes del ' . $gt[0]->grado . ' grado de ' . $gt[0]->nivel . ' que logran el nivel satisfactorio en ' . $mt->descripcion;
@@ -254,29 +256,36 @@ class IndicadorController extends Controller
     public function indicadorDRVCS($indicador_id)
     {
         switch ($indicador_id) {
-            case 20: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
-            case 21: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
-            case 22: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
-            case 23: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
-            case 24: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
-            case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
-            case 26: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL
+            case 20: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL1
+            case 21: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL2
+            case 22: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL3
+            case 23: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL4
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $ingresos = ImportacionRepositorio::Listar_deDatass();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
+            case 24: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL5
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $econexion = EstadoConexion::all();
+                $ingresos = ImportacionRepositorio::Listar_deEmapacopsa();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat2', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos', 'econexion'));
+            case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL6
+            case 26: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL7
             case 27: //PROGRAMAS DE VIVIENDA
             case 28: //PROGRAMAS DE VIVIENDA
             case 29: //PROGRAMAS DE VIVIENDA
             case 30: //PROGRAMAS DE VIVIENDA
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                /*$tcdt1 = str_replace('_', ' ', isset(IndicadorRepositorio::$tipos[$indicador_id])?IndicadorRepositorio::$tipos[$indicador_id]:'');
-                $tcdt1=strtoupper($tcdt1);*/
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $ingresos = ImportacionRepositorio::Listar_deDatass();
-                //return $ingreso;
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
-                return view(
-                    'parametro.indicador.vivcat1',
-                    compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos')
-                );
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
             default:
                 return 'sin informacion';
                 break;
@@ -520,10 +529,15 @@ class IndicadorController extends Controller
         //return response()->json(compact('provincia', 'distrito', 'indicador_id', 'importacion_id'));
         //return $inds;
         return  datatables()->of($inds)->toJson(); //*/
-    }
+    }     
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
         $cp = CentroPobladoRepositotio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $fecha);
+        return response()->json($cp);
+    }
+    public function indicadorviv2pnsrcab($provincia, $distrito, $indicador_id, $estado_conexion_id,$fecha)
+    {
+        $cp = EmapacopsaRepositorio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $estado_conexion_id, $fecha);
         return response()->json($cp);
     }
     public function ajaxEdu5v1($provincia, $distrito, $indicador_id, $anio_id)
