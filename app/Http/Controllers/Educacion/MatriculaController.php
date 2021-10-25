@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Matricula;
+use App\Models\Educacion\MatriculaAnual;
+use App\Models\Educacion\MatriculaAnualDetalle;
 use App\Models\Educacion\MatriculaDetalle;
 use App\Models\Parametro\Anio;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -472,7 +474,7 @@ class MatriculaController extends Controller
     public function datos_matricula_importada($importacion_id)
     {
         $matricula = MatriculaRepositorio::matricula_porImportacion($importacion_id);        
-        return $datos_matricula_importada = MatriculaRepositorio::datos_matricula_importada($matricula->first()->id);
+        return MatriculaRepositorio::datos_matricula_importada($matricula->first()->id);
     }
 
     public function procesar($importacion_id)
@@ -504,6 +506,421 @@ class MatriculaController extends Controller
         }
         
     }    
+
+    /************************ConsolidadoAnual********************************/
+    public function importarConsolidadoAnual()
+    {  
+        $mensaje = "";
+        $anios = Anio::orderBy('anio', 'desc')->get();
+        
+        return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));
+    } 
+
+    public function guardarConsolidadoAnual(Request $request)
+    { 
+        $this->validate($request,['fileInicial' => 'required|mimes:xls,xlsx']);    
+        $archivoInicial = $request->file('fileInicial');
+        $arrayInicial = (new tablaXImport )-> toArray($archivoInicial);  
+
+        $this->validate($request,['filePrimaria' => 'required|mimes:xls,xlsx']);    
+        $archivoPrimaria = $request->file('filePrimaria');
+        $arrayPrimaria = (new tablaXImport )-> toArray($archivoPrimaria); 
+
+        $this->validate($request,['fileSecundaria' => 'required|mimes:xls,xlsx']);    
+        $archivoSecundaria = $request->file('fileSecundaria');
+        $arraySecundaria = (new tablaXImport )-> toArray($archivoSecundaria); 
+
+        $anios = Anio::orderBy('anio', 'desc')->get();
+
+        // VALIDACION DE LOS FORMATOS DE LOS 03 NIVELES
+        $i = 0;
+        $cadena ='';
+        
+        try{
+            foreach ($arrayInicial as $key => $value) {
+                foreach ($value as $row) {
+                   if(++$i > 1) break;
+                   $cadena =  $cadena 
+
+                   .$row['dreu'].$row['ugel'].$row['departamento'].$row['provincia'].$row['distrito']
+                    .$row['centro_poblado'].$row['cod_mod'].$row['nombreie'].$row['nivel'].$row['modalidad']
+                    .$row['tipo_ie'].$row['total_grados'].$row['total_secciones'].$row['actas_generadas_regular']
+                    .$row['actas_aprobadas_regular'].$row['actas_rectificar_regular'].$row['estado_fase_regular']
+                    .$row['estado_anio_escolar'].$row['total_estud_matriculados'].$row['cero_nivel_concluyeron']
+                    .$row['cero_nivel_trasladado'].$row['cero_nivel_retirados'].$row['primer_nivel_aprobados']
+                    .$row['primer_nivel_trasladados'].$row['primer_nivel_retirados'].$row['segundo_nivel_aprobados']
+                    .$row['segundo_nivel_trasladados'].$row['segundo_nivel_retirados'].$row['tercer_nivel_aprobados']
+                    .$row['tercer_nivel_trasladados'].$row['tercer_nivel_retirados'].$row['cuarto_nivel_aprobados']
+                    .$row['cuarto_nivel_trasladados'].$row['cuarto_nivel_retirados'].$row['quinto_nivel_aprobados']
+                    .$row['quinto_nivel_trasladados'].$row['quinto_nivel_retirados'].$row['sexto_nivel_aprobados']
+                    .$row['sexto_nivel_trasladados'].$row['sexto_nivel_retirados'];
+
+                }
+            }
+        }catch (Exception $e) {
+           $mensaje = "Formato de archivo Nivel Inicial no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
+           return  view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));            
+        }       
+        
+        $i = 0;
+        $cadena ='';
+
+        try{
+             foreach ($arrayPrimaria as $key => $value) {
+                 foreach ($value as $row) {
+                    if(++$i > 1) break;
+                    $cadena =  $cadena
+                   
+                    .$row['dreu'].$row['ugel'].$row['departamento'].$row['provincia'].$row['distrito']
+                    .$row['centro_poblado'].$row['cod_mod'].$row['nombreie'].$row['nivel'].$row['modalidad']
+                    .$row['tipo_ie'].$row['total_grados'].$row['total_secciones'].$row['actas_generadas_regular']
+                    .$row['actas_aprobadas_regular'].$row['actas_rectificar_regular'].$row['estado_fase_regular']
+                    .$row['actas_generadas_recup'].$row['actas_aprobadas_recup'].$row['actas_por_rectificar_recup']
+                    .$row['estado_fase_recuperacion'].$row['estado_anio_escolar'].$row['total_estud_matriculados']
+                    .$row['primer_nivel_aprobados'].$row['primer_nivel_trasladados'].$row['primer_nivel_retirados']
+                    .$row['primer_nivel_requieren_recup'].$row['primer_nivel_desaprobados'].$row['segundo_nivel_aprobados']
+                    .$row['segundo_nivel_trasladados'].$row['segundo_nivel_retirados'].$row['segundo_nivel_requieren_recup']
+                    .$row['segundo_nivel_desaprobados'].$row['tercer_nivel_aprobados'].$row['tercer_nivel_trasladados']
+                    .$row['tercer_nivel_retirados'].$row['tercer_nivel_requieren_recup'].$row['tercer_nivel_desaprobados']
+                    .$row['cuarto_nivel_aprobados'].$row['cuarto_nivel_trasladados'].$row['cuarto_nivel_retirados']
+                    .$row['cuarto_nivel_requieren_recup'].$row['cuarto_nivel_desaprobados'].$row['quinto_nivel_aprobados']
+                    .$row['quinto_nivel_trasladados'].$row['quinto_nivel_retirados'].$row['quinto_requieren_recup']
+                    .$row['quinto_nivel_desaprobados'].$row['sexto_nivel_aprobados'].$row['sexto_nivel_trasladados']
+                    .$row['sexto_nivel_retirados'].$row['sexto_nivel_requieren_recup'].$row['sexto_nivel_desaprobados'];
+
+                }
+             }
+        }catch (Exception $e) {
+            $mensaje = "Formato de archivo Nivel Primaria no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
+            return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));            
+        }  
+        
+        $i = 0;
+        $cadena ='';
+
+        try{
+             foreach ($arraySecundaria as $key => $value) {
+                 foreach ($value as $row) {
+                    if(++$i > 1) break;
+                    $cadena =  $cadena
+                    .$row['dreu'].$row['ugel'].$row['departamento'].$row['provincia'].$row['distrito']
+                    .$row['centro_poblado'].$row['cod_mod'].$row['nombreie'].$row['nivel'].$row['modalidad']
+                    .$row['tipo_ie'].$row['total_grados'].$row['total_secciones'].$row['actas_generadas_regular']
+                    .$row['actas_aprobadas_regular'].$row['actas_rectificar_regular'].$row['estado_fase_regular']
+                    .$row['actas_generadas_recup'].$row['actas_aprobadas_recup'].$row['actas_por_rectificar_recup']
+                    .$row['estado_fase_recuperacion'].$row['estado_anio_escolar'].$row['total_estud_matriculados']
+                    .$row['primer_nivel_aprobados'].$row['primer_nivel_trasladados'].$row['primer_nivel_retirados']
+                    .$row['primer_nivel_requieren_recup'].$row['primer_nivel_desaprobados'].$row['segundo_nivel_aprobados']
+                    .$row['segundo_nivel_trasladados'].$row['segundo_nivel_retirados'].$row['segundo_nivel_requieren_recup']
+                    .$row['segundo_nivel_desaprobados'].$row['tercer_nivel_aprobados'].$row['tercer_nivel_trasladados']
+                    .$row['tercer_nivel_retirados'].$row['tercer_nivel_requieren_recup'].$row['tercer_nivel_desaprobados']
+                    .$row['cuarto_nivel_aprobados'].$row['cuarto_nivel_trasladados'].$row['cuarto_nivel_retirados']
+                    .$row['cuarto_nivel_requieren_recup'].$row['cuarto_nivel_desaprobados'].$row['quinto_nivel_aprobados']
+                    .$row['quinto_nivel_trasladados'].$row['quinto_nivel_retirados'].$row['quinto_requieren_recup']
+                    .$row['quinto_nivel_desaprobados'];            
+                }
+             }
+        }catch (Exception $e) {
+            $mensaje = "Formato de archivo Nivel Secundaria no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
+            return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));            
+        } 
+
+        
+        // FIN VALIDACION DE LOS FORMATOS DE LOS 04 NIVELES
+
+        $existeMismaFecha = ImportacionRepositorio :: Importacion_PE($request['fechaActualizacion'],10);
+
+        if( $existeMismaFecha != null)
+        {
+            $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";          
+            return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));            
+        }
+
+        else
+        {
+            $creacionExitosa = 1;
+
+            try{
+                $importacion = Importacion::Create([
+                    'fuenteImportacion_id'=>10, // valor predeterminado
+                    'usuarioId_Crea'=> auth()->user()->id,
+                    'usuarioId_Aprueba'=>null,
+                    'fechaActualizacion'=>$request['fechaActualizacion'],
+                    'comentario'=>$request['comentario'],
+                    'estado'=>'PE'
+                  ]); 
+    
+                $Matricula = MatriculaAnual::Create([
+                    'importacion_id'=>$importacion->id, // valor predeterminado
+                    'anio_id'=> $request['anio'],
+                    'estado'=>'PE'
+                  ]); 
+               
+            }catch (Exception $e) {
+                $creacionExitosa = 0;
+            }
+            
+            $mensajeNivel = "";
+    
+            if($creacionExitosa==1)
+            {
+                $creacionExitosa = $this->guardar_inicial_anual($arrayInicial,$Matricula->id);
+    
+                if($creacionExitosa==1)
+                {
+                    $creacionExitosa = $this->guardar_primaria_anual($arrayPrimaria,$Matricula->id);
+                    if($creacionExitosa==1)
+                    {
+                        $creacionExitosa = $this->guardar_secundaria_anual($arraySecundaria,$Matricula->id);
+                        if($creacionExitosa==0)
+                        {
+                            $mensajeNivel = "Nivel SECUNDARIA";  
+                        }
+                    }
+                    else
+                    {
+                        $mensajeNivel = "Nivel PRIMARIA";  
+                    }
+                }
+                else
+                { 
+                    $mensajeNivel ="Nivel INICIAL";
+                }
+            }
+    
+            if($creacionExitosa==0)
+            {
+                $importacion->estado = 'EL';
+                $importacion->save();
+    
+                $Matricula->estado = 'EL';
+                $Matricula->save();
+    
+                $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
+                return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));
+            }
+    
+            return 'CORRECTO';
+            //return redirect()->route('Matricula.Matricula_Lista',$importacion->id);
+        }
+
+        //return 'CORRECTO';
+    }  
+
+
+    public function guardar_inicial_anual($array,$matricula_id)
+    {
+        $creacionExitosa = 1;
+
+        try{
+            foreach ($array as $key => $value) {
+                foreach ($value as $row) {
+                   
+                    $MatriculaDetalle = MatriculaAnualDetalle::Create([
+                    
+                        'matricula_anual_id'=>$matricula_id,  
+                        'nivel'=>'I',
+                        'dreu'=>$row['dreu'],
+                        'ugel'=>$row['ugel'],
+                        'departamento'=>$row['departamento'],
+                        'provincia'=>$row['provincia'],
+                        'distrito'=>$row['distrito'],
+                        'centro_poblado'=>$row['centro_poblado'],
+                        'cod_mod'=>$row['cod_mod'],
+                        'nombreIE'=>$row['nombreie'],
+                        'nivel_especifico'=>$row['nivel'],
+                        'modalidad'=>$row['modalidad'],
+                        'tipo_ie'=>$row['tipo_ie'],
+                        'total_grados'=>$row['total_grados'],
+                        'total_secciones'=>$row['total_secciones'],
+                        'actas_generadas_regular'=>$row['actas_generadas_regular'],
+                        'actas_aprobadas_regular'=>$row['actas_aprobadas_regular'],
+                        'actas_rectificar_regular'=>$row['actas_rectificar_regular'],
+                        'estado_fase_regular'=>$row['estado_fase_regular'],
+                        'estado_anio_escolar'=>$row['estado_anio_escolar'],
+                        'total_estud_matriculados'=>$row['total_estud_matriculados'],
+                        'cero_nivel_concluyeron'=>$row['cero_nivel_concluyeron'],
+                        'cero_nivel_trasladado'=>$row['cero_nivel_trasladado'],
+                        'cero_nivel_retirados'=>$row['cero_nivel_retirados'],
+                        'primer_nivel_aprobados'=>$row['primer_nivel_aprobados'],
+                        'primer_nivel_trasladados'=>$row['primer_nivel_trasladados'],
+                        'primer_nivel_retirados'=>$row['primer_nivel_retirados'],
+                        'segundo_nivel_aprobados'=>$row['segundo_nivel_aprobados'],
+                        'segundo_nivel_trasladados'=>$row['segundo_nivel_trasladados'],
+                        'segundo_nivel_retirados'=>$row['segundo_nivel_retirados'],
+                        'tercer_nivel_aprobados'=>$row['tercer_nivel_aprobados'],
+                        'tercer_nivel_trasladados'=>$row['tercer_nivel_trasladados'],
+                        'tercer_nivel_retirados'=>$row['tercer_nivel_retirados'],
+                        'cuarto_nivel_aprobados'=>$row['cuarto_nivel_aprobados'],
+                        'cuarto_nivel_trasladados'=>$row['cuarto_nivel_trasladados'],
+                        'cuarto_nivel_retirados'=>$row['cuarto_nivel_retirados'],
+                        'quinto_nivel_aprobados'=>$row['quinto_nivel_aprobados'],
+                        'quinto_nivel_trasladados'=>$row['quinto_nivel_trasladados'],
+                        'quinto_nivel_retirados'=>$row['quinto_nivel_retirados'],
+                        'sexto_nivel_aprobados'=>$row['sexto_nivel_aprobados'],
+                        'sexto_nivel_trasladados'=>$row['sexto_nivel_trasladados'],
+                        'sexto_nivel_retirados'=>$row['sexto_nivel_retirados'],
+        
+                    ]);                    
+                    
+                }
+            }
+        }catch (Exception $e) {            
+             $creacionExitosa = 0;            
+        }
+       
+        return $creacionExitosa;
+    }
+
+    public function guardar_primaria_anual($array,$matricula_id)
+    {
+        $creacionExitosa = 1;
+
+        try{
+            foreach ($array as $key => $value) {
+                foreach ($value as $row) {
+                   
+                    $MatriculaDetalle = MatriculaAnualDetalle::Create([
+                    
+                        'matricula_anual_id'=>$matricula_id,  
+                        'nivel'=>'P',                        
+                        'dreu'=>$row['dreu'],
+                        'ugel'=>$row['ugel'],
+                        'departamento'=>$row['departamento'],
+                        'provincia'=>$row['provincia'],
+                        'distrito'=>$row['distrito'],
+                        'centro_poblado'=>$row['centro_poblado'],
+                        'cod_mod'=>$row['cod_mod'],
+                        'nombreIE'=>$row['nombreie'],
+                        'nivel_especifico'=>$row['nivel'],
+                        'modalidad'=>$row['modalidad'],
+                        'tipo_ie'=>$row['tipo_ie'],
+                        'total_grados'=>$row['total_grados'],
+                        'total_secciones'=>$row['total_secciones'],
+                        'actas_generadas_regular'=>$row['actas_generadas_regular'],
+                        'actas_aprobadas_regular'=>$row['actas_aprobadas_regular'],
+                        'actas_rectificar_regular'=>$row['actas_rectificar_regular'],
+                        'estado_fase_regular'=>$row['estado_fase_regular'],
+                        'actas_generadas_recup'=>$row['actas_generadas_recup'],
+                        'actas_aprobadas_recup'=>$row['actas_aprobadas_recup'],
+                        'actas_por_rectificar_recup'=>$row['actas_por_rectificar_recup'],
+                        'estado_fase_recuperacion'=>$row['estado_fase_recuperacion'],
+                        'estado_anio_escolar'=>$row['estado_anio_escolar'],
+                        'total_estud_matriculados'=>$row['total_estud_matriculados'],
+                        'primer_nivel_aprobados'=>$row['primer_nivel_aprobados'],
+                        'primer_nivel_trasladados'=>$row['primer_nivel_trasladados'],
+                        'primer_nivel_retirados'=>$row['primer_nivel_retirados'],
+                        'primer_nivel_requieren_recup'=>$row['primer_nivel_requieren_recup'],
+                        'primer_nivel_desaprobados'=>$row['primer_nivel_desaprobados'],
+                        'segundo_nivel_aprobados'=>$row['segundo_nivel_aprobados'],
+                        'segundo_nivel_trasladados'=>$row['segundo_nivel_trasladados'],
+                        'segundo_nivel_retirados'=>$row['segundo_nivel_retirados'],
+                        'segundo_nivel_requieren_recup'=>$row['segundo_nivel_requieren_recup'],
+                        'segundo_nivel_desaprobados'=>$row['segundo_nivel_desaprobados'],
+                        'tercer_nivel_aprobados'=>$row['tercer_nivel_aprobados'],
+                        'tercer_nivel_trasladados'=>$row['tercer_nivel_trasladados'],
+                        'tercer_nivel_retirados'=>$row['tercer_nivel_retirados'],
+                        'tercer_nivel_requieren_recup'=>$row['tercer_nivel_requieren_recup'],
+                        'tercer_nivel_desaprobados'=>$row['tercer_nivel_desaprobados'],
+                        'cuarto_nivel_aprobados'=>$row['cuarto_nivel_aprobados'],
+                        'cuarto_nivel_trasladados'=>$row['cuarto_nivel_trasladados'],
+                        'cuarto_nivel_retirados'=>$row['cuarto_nivel_retirados'],
+                        'cuarto_nivel_requieren_recup'=>$row['cuarto_nivel_requieren_recup'],
+                        'cuarto_nivel_desaprobados'=>$row['cuarto_nivel_desaprobados'],
+                        'quinto_nivel_aprobados'=>$row['quinto_nivel_aprobados'],
+                        'quinto_nivel_trasladados'=>$row['quinto_nivel_trasladados'],
+                        'quinto_nivel_retirados'=>$row['quinto_nivel_retirados'],
+                        'quinto_requieren_recup'=>$row['quinto_requieren_recup'],
+                        'quinto_nivel_desaprobados'=>$row['quinto_nivel_desaprobados'],
+                        'sexto_nivel_aprobados'=>$row['sexto_nivel_aprobados'],
+                        'sexto_nivel_trasladados'=>$row['sexto_nivel_trasladados'],
+                        'sexto_nivel_retirados'=>$row['sexto_nivel_retirados'],
+                        'sexto_nivel_requieren_recup'=>$row['sexto_nivel_requieren_recup'],
+                        'sexto_nivel_desaprobados'=>$row['sexto_nivel_desaprobados'],                        
+        
+                    ]); 
+                }
+            }
+        }catch (Exception $e) {            
+             $creacionExitosa = 0;            
+        }
+       
+        return $creacionExitosa;
+    }
+
+    public function guardar_secundaria_anual($array,$matricula_id)
+    {
+        $creacionExitosa = 1;
+
+        try{
+            foreach ($array as $key => $value) {
+                foreach ($value as $row) {
+                   
+                    $MatriculaDetalle = MatriculaAnualDetalle::Create([
+                    
+                        'matricula_anual_id'=>$matricula_id,  
+                        'nivel'=>'S',                        
+                        'dreu'=>$row['dreu'],
+                        'ugel'=>$row['ugel'],
+                        'departamento'=>$row['departamento'],
+                        'provincia'=>$row['provincia'],
+                        'distrito'=>$row['distrito'],
+                        'centro_poblado'=>$row['centro_poblado'],
+                        'cod_mod'=>$row['cod_mod'],
+                        'nombreIE'=>$row['nombreie'],
+                        'nivel_especifico'=>$row['nivel'],
+                        'modalidad'=>$row['modalidad'],
+                        'tipo_ie'=>$row['tipo_ie'],
+                        'total_grados'=>$row['total_grados'],
+                        'total_secciones'=>$row['total_secciones'],
+                        'actas_generadas_regular'=>$row['actas_generadas_regular'],
+                        'actas_aprobadas_regular'=>$row['actas_aprobadas_regular'],
+                        'actas_rectificar_regular'=>$row['actas_rectificar_regular'],
+                        'estado_fase_regular'=>$row['estado_fase_regular'],
+                        'actas_generadas_recup'=>$row['actas_generadas_recup'],
+                        'actas_aprobadas_recup'=>$row['actas_aprobadas_recup'],
+                        'actas_por_rectificar_recup'=>$row['actas_por_rectificar_recup'],
+                        'estado_fase_recuperacion'=>$row['estado_fase_recuperacion'],
+                        'estado_anio_escolar'=>$row['estado_anio_escolar'],
+                        'total_estud_matriculados'=>$row['total_estud_matriculados'],
+                        'primer_nivel_aprobados'=>$row['primer_nivel_aprobados'],
+                        'primer_nivel_trasladados'=>$row['primer_nivel_trasladados'],
+                        'primer_nivel_retirados'=>$row['primer_nivel_retirados'],
+                        'primer_nivel_requieren_recup'=>$row['primer_nivel_requieren_recup'],
+                        'primer_nivel_desaprobados'=>$row['primer_nivel_desaprobados'],
+                        'segundo_nivel_aprobados'=>$row['segundo_nivel_aprobados'],
+                        'segundo_nivel_trasladados'=>$row['segundo_nivel_trasladados'],
+                        'segundo_nivel_retirados'=>$row['segundo_nivel_retirados'],
+                        'segundo_nivel_requieren_recup'=>$row['segundo_nivel_requieren_recup'],
+                        'segundo_nivel_desaprobados'=>$row['segundo_nivel_desaprobados'],
+                        'tercer_nivel_aprobados'=>$row['tercer_nivel_aprobados'],
+                        'tercer_nivel_trasladados'=>$row['tercer_nivel_trasladados'],
+                        'tercer_nivel_retirados'=>$row['tercer_nivel_retirados'],
+                        'tercer_nivel_requieren_recup'=>$row['tercer_nivel_requieren_recup'],
+                        'tercer_nivel_desaprobados'=>$row['tercer_nivel_desaprobados'],
+                        'cuarto_nivel_aprobados'=>$row['cuarto_nivel_aprobados'],
+                        'cuarto_nivel_trasladados'=>$row['cuarto_nivel_trasladados'],
+                        'cuarto_nivel_retirados'=>$row['cuarto_nivel_retirados'],
+                        'cuarto_nivel_requieren_recup'=>$row['cuarto_nivel_requieren_recup'],
+                        'cuarto_nivel_desaprobados'=>$row['cuarto_nivel_desaprobados'],
+                        'quinto_nivel_aprobados'=>$row['quinto_nivel_aprobados'],
+                        'quinto_nivel_trasladados'=>$row['quinto_nivel_trasladados'],
+                        'quinto_nivel_retirados'=>$row['quinto_nivel_retirados'],
+                        'quinto_requieren_recup'=>$row['quinto_requieren_recup'],
+                        'quinto_nivel_desaprobados'=>$row['quinto_nivel_desaprobados'],
+                     
+        
+                    ]); 
+                }
+            }
+        }catch (Exception $e) {            
+             $creacionExitosa = 0;            
+        }
+       
+        return $creacionExitosa;
+    }
+
+
 
     //**************************************************************************************** */
     public function principal()

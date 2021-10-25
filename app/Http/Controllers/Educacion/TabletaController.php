@@ -120,7 +120,7 @@ class TabletaController extends Controller
                   }
          }
 
-         return 'CARGA EXITOSA';
+         return view('correcto');
 
     } 
 

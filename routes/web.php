@@ -89,6 +89,10 @@ Route::get('/Matricula/Institucion_DataTable/{matricula_id}/{nivel}/{gestion}', 
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
 Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}/{gestion}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
 
+Route::get('/Matricula/importarconsolidadoAnual', [MatriculaController::class, 'importarConsolidadoAnual'])->name('Matricula.importarConsolidadoAnual');
+Route::post('/Matricula/importarconsolidadoAnual', [MatriculaController::class, 'guardarConsolidadoAnual'])->name('Matricula.guardarConsolidadoAnual');
+Route::post('/Matricula/consolidadoAnual/', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.consolidadoAnual');
+
 Route::get('/InstEducativa/Principal', [InstEducativaController::class, 'principal'])->name('InstEducativa.principal');
 Route::post('/InstEducativa/ReporteDistrito', [InstEducativaController::class, 'ReporteDistrito'])->name('InstEducativa.ReporteDistrito');
 
