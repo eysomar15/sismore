@@ -267,6 +267,8 @@ class IndicadorController extends Controller
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
             case 24: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL5
+
+            case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL6
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
@@ -274,7 +276,6 @@ class IndicadorController extends Controller
                 $ingresos = ImportacionRepositorio::Listar_deEmapacopsa();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat2', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos', 'econexion'));
-            case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL6
             case 26: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL7
             case 27: //PROGRAMAS DE VIVIENDA
             case 28: //PROGRAMAS DE VIVIENDA
@@ -529,13 +530,13 @@ class IndicadorController extends Controller
         //return response()->json(compact('provincia', 'distrito', 'indicador_id', 'importacion_id'));
         //return $inds;
         return  datatables()->of($inds)->toJson(); //*/
-    }     
+    }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)
     {
         $cp = CentroPobladoRepositotio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $fecha);
         return response()->json($cp);
     }
-    public function indicadorviv2pnsrcab($provincia, $distrito, $indicador_id, $estado_conexion_id,$fecha)
+    public function indicadorviv2pnsrcab($provincia, $distrito, $indicador_id, $estado_conexion_id, $fecha)
     {
         $cp = EmapacopsaRepositorio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $estado_conexion_id, $fecha);
         return response()->json($cp);
