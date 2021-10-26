@@ -108,9 +108,9 @@
             <div class="card card-border card-primary">
                 <div class="card-header bg-transparent pb-0">
                     @if ($indicador_id==24)
-                    <h3 class="card-title">TOTAL CONEXIONES CON AGUA POR CATEGORIA EN CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL CONEXIONES CON AGUA POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @else
-                    <h3 class="card-title">TOTAL CONEXIONES CON DESAGUE POR CATEGORIA EN CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL CONEXIONES CON DESAGUE POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @endif                    
                 </div>
                 <div class="card-body">
@@ -138,9 +138,9 @@
             <div class="card card-border card-primary">
                 <div class="card-header bg-transparent pb-0">
                     @if ($indicador_id==24)
-                    <h3 class="card-title">TOTAL CONEXIONES SIN AGUA POR CATEGORIA EN CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL CONEXIONES SIN AGUA POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @else
-                    <h3 class="card-title">TOTAL CONEXIONES SIN DESAGUE POR CATEGORIA EN CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL CONEXIONES SIN DESAGUE POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @endif                 
                 </div>
                 <div class="card-body">
