@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <label class="col-md-1 col-form-label">Provincia</label>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <select id="provincia" name="provincia" class="form-control" onchange="cargardistritos();cargarhistorial();">
                                 <option value="0">TODOS</option>
                                 @foreach ($provincias as $prov)
@@ -34,15 +34,22 @@
                             </select>
                         </div>
                         <label class="col-md-1 col-form-label">Distrito</label>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <select id="distrito" name="distrito" class="form-control" onchange="cargarhistorial();">
                                 <option value="0">TODOS</option>
                             </select>
                         </div>
-                         
+                        <label class="col-md-1 col-form-label">Fecha</label>
+                        <div class="col-md-3">
+                            <select id="fecha" name="fecha" class="form-control" onchange="cargarhistorial();">
+                                @foreach ($ingresos as $item)
+                                <option value="{{$item->id}}">{{date('d-m-Y',strtotime($item->fechaActualizacion))}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         
                     </div>
-                    <div class="form-group row">
+                    <!--div class="form-group row">
                         <label class="col-md-1 col-form-label">Conexion</label>
                         <div class="col-md-5">
                             <select id="econexion" name="econexion" class="form-control" onchange="cargarhistorial();">
@@ -52,16 +59,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <label class="col-md-1 col-form-label">Fecha</label>
-                        <div class="col-md-5">
-                            <select id="fecha" name="fecha" class="form-control" onchange="cargarhistorial();">
-                                @foreach ($ingresos as $item)
-                                <option value="{{$item->id}}">{{date('d-m-Y',strtotime($item->fechaActualizacion))}}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         
-                    </div>
+                        
+                    </div-->
                 </div>
             </div>
         </div>
@@ -108,9 +108,9 @@
             <div class="card card-border card-primary">
                 <div class="card-header bg-transparent pb-0">
                     @if ($indicador_id==24)
-                    <h3 class="card-title">TOTAL CONEXIONES CON AGUA POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE AGUA POR RED PÚBLICA, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @else
-                    <h3 class="card-title">TOTAL CONEXIONES CON DESAGUE POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE ALCANTARILLADO U OTRAS FORMAS DE DISPOSICIÓN SANITARIA DE EXCRETAS, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @endif                    
                 </div>
                 <div class="card-body">
@@ -138,9 +138,9 @@
             <div class="card card-border card-primary">
                 <div class="card-header bg-transparent pb-0">
                     @if ($indicador_id==24)
-                    <h3 class="card-title">TOTAL CONEXIONES SIN AGUA POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL DE HOGARES SIN COBERTURA DE AGUA POR RED PÚBLICA, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @else
-                    <h3 class="card-title">TOTAL CONEXIONES SIN DESAGUE POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL DE HOGARES SIN COBERTURA DE ALCANTARILLADO U OTRAS FORMAS DE DISPOSICIÓN SANITARIA DE EXCRETAS, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @endif                 
                 </div>
                 <div class="card-body">
@@ -246,9 +246,9 @@
                     data.indicador.forEach(element => {total+=element.y});
                     data.indicador.forEach(element => {
                         por=element.y*100/total;
-                        vista+='<tr><td>'+element.name+'</td><td>'+separator(element.y)+'</td><td>'+por.toFixed(2)+'</td></tr>';
+                        vista+='<tr><td>'+element.name+'</td><td>'+separator(element.y)+'</td><td>'+por.toFixed(2)+'%</td></tr>';
                     });
-                    vista+='<tr><th>Total</th><th>'+separator(total)+'</th><th>100</th></tr>';
+                    vista+='<tr><th>Total</th><th>'+separator(total)+'</th><th>100%</th></tr>';
                     $('#vistax1').html(vista);
                     vista='';
                     total1=0;
