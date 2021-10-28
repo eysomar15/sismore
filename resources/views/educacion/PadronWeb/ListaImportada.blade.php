@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>'DATOS IMPORTADOS - PADRON WEB'])
+@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>'IMPORTACION REALIZADA CON EXITO - PADRON WEB'])
 
 @section('css')
    
