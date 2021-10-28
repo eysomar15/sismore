@@ -54,6 +54,8 @@ class UsuarioController extends Controller
             'password' => Hash::make($request['password']),
         ]);
 
+        
+
         return redirect()->route('Usuario.principal')->with('success','Registro creado correctamente'); 
     }
 
