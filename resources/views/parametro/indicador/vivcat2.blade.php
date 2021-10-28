@@ -103,31 +103,70 @@
         </div>
         
     </div><!-- End row -->  
-    <!--div class="row">
-        <div class="col-xl-12">
+    <div class="row">
+        <div class="col-md-6">
             <div class="card card-border card-primary">
-                <div class="card-header border-primary bg-transparent pb-0">
-                    <h3 class="card-title text-primary"></h3>
-                </div> 
+                <div class="card-header bg-transparent pb-0">
+                    @if ($indicador_id==24)
+                    <h3 class="card-title">TOTAL CONEXIONES CON AGUA POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    @else
+                    <h3 class="card-title">TOTAL CONEXIONES CON DESAGUE POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    @endif                    
+                </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-xl-12">
+                        <div class="col-12">
                             <div class="table-responsive">
-                                <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
-                                    <thead class="cabecera-dataTable">                                    
-                                        <th >PROVINCIA</th>
-                                        <th >DISTRITO</th>
-                                        <th >CENTRO POBLADO</th>
-                                        <th >TIENE SERVICIO</th>
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>CATEGORIAS</th>
+                                            <th>CON SERVICIO</th>
+                                            <th>UNIDADES DE USO</th>
+                                        </tr>
                                     </thead>
+                                    <tbody id='vistaca'>
+                                    </tbody>
                                 </table>
-                            </div>   
-                        </div>                           
-                    </div>
+                            </div>
+                        </div>
+                    </div>                    
                 </div>
             </div>
-        </div>    
-    </div><!-- End row -->      
+        </div>
+        <div class="col-md-6">
+            <div class="card card-border card-primary">
+                <div class="card-header bg-transparent pb-0">
+                    @if ($indicador_id==24)
+                    <h3 class="card-title">TOTAL CONEXIONES SIN AGUA POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    @else
+                    <h3 class="card-title">TOTAL CONEXIONES SIN DESAGUE POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    @endif                 
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>CATEGORIAS</th>
+                                            <th>SIN SERVICIO</th>
+                                            <th>UNIDADES DE USO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id='vistasa'>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        
+    </div><!-- End row -->  
+    
 @endsection
 
 @section('js')
@@ -149,6 +188,11 @@
             //cargardatatable1();
             //cargarDT();
         });
+        function separator(numb) {
+            var str = numb.toString().split(".");
+            str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return str.join(".");
+        }
         function cargarDT() {
             $.ajax({
                 headers: {
@@ -202,10 +246,30 @@
                     data.indicador.forEach(element => {total+=element.y});
                     data.indicador.forEach(element => {
                         por=element.y*100/total;
-                        vista+='<tr><td>'+element.name+'</td><td>'+element.y+'</td><td>'+por.toFixed(2)+'</td></tr>';
+                        vista+='<tr><td>'+element.name+'</td><td>'+separator(element.y)+'</td><td>'+por.toFixed(2)+'</td></tr>';
                     });
-                    vista+='<tr><th>Total</th><th>'+total+'</th><th>100</th></tr>';
+                    vista+='<tr><th>Total</th><th>'+separator(total)+'</th><th>100</th></tr>';
                     $('#vistax1').html(vista);
+                    vista='';
+                    total1=0;
+                    total2=0;
+                    data.categoriaconagua.forEach(element => {
+                        vista+='<tr><td>'+element.categoria+'</td><td align=center>'+separator(element.con_agua)+'</td><td align=center>'+separator(element.unid_uso)+'</td></tr>';
+                        total1+=element.con_agua;
+                        total2+=element.unid_uso;
+                    });
+                    vista+='<tr><th>Total</th><th><center>'+separator(total1)+'</center></th><th><center>'+separator(total2)+'</center></th></tr>';
+                    $('#vistaca').html(vista);
+                    vista='';
+                    total1=0;
+                    total2=0;
+                    data.categoriasinagua.forEach(element => {
+                        vista+='<tr><td>'+element.categoria+'</td><td align=center>'+separator(element.sin_agua)+'</td><td align=center>'+separator(element.unid_uso)+'</td></tr>';
+                        total1+=element.sin_agua;
+                        total2+=element.unid_uso;
+                    });
+                    vista+='<tr><th>Total</th><th><center>'+separator(total1)+'</center></th><th><center>'+separator(total2)+'</center></th></tr>';
+                    $('#vistasa').html(vista);
                     grafica1(data.indicador);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
