@@ -237,7 +237,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },
-                url: "{{ url('/') }}/INDICADOR/PNSR2/" + $('#provincia').val()+"/"+$('#distrito').val()+"/{{$indicador_id}}/"+$('#fecha').val(),
+                url: "{{ url('/') }}/INDICADOR/PNSR2/" + $('#provincia').val()+"/"+$('#distrito').val()+"/{{$indicador_id}}/"+$('#econexion').val()+"/"+$('#fecha').val(),
                 type: 'post',
                 dataType: 'JSON',
                 success: function(data) {

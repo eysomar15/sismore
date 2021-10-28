@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class EmapacopsaRepositorio
 {
-    public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $estado_conexion_id, $importacion_id)
+    public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
     {
         switch ($indicador_id) {
             case 24:
@@ -31,7 +31,7 @@ class EmapacopsaRepositorio
         $query['indicador'] = $query['indicador']->get();//*/
                 $estadoconexion = '';
                 $ubicacion = '';
-                if ($estado_conexion_id != 0) $estadoconexion = ' and v1.estado_conexion_id=' . $estado_conexion_id;
+                //if ($estado_conexion_id != 0) $estadoconexion = ' and v1.estado_conexion_id=' . $estado_conexion_id;
                 if ($provincia > 0 && $distrito > 0) $ubicacion = ' and v6.id=' . $distrito;
                 else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and v6.dependencia=' . $provincia;
 
@@ -41,7 +41,7 @@ class EmapacopsaRepositorio
         inner join `viv_manzana` as `v4` on `v4`.`id` = `v1`.`manzana_id` 
         inner join `viv_sector` as `v5` on `v5`.`id` = `v4`.`sector_id` 
         inner join `par_ubigeo` as `v6` on `v6`.`id` = `v5`.`ubigeo_id`  
-        where 1 and v1.importacion_id=' . $importacion_id . $estadoconexion . $ubicacion . '
+        where 1 and v1.importacion_id=' . $importacion_id  . $ubicacion . '
         group by `v2`.`nombre`) as xx'))
                     ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
                     ->groupBy('xx.servicio')
@@ -71,7 +71,7 @@ class EmapacopsaRepositorio
             case 25:
                 $estadoconexion = '';
                 $ubicacion = '';
-                if ($estado_conexion_id != 0) $estadoconexion = ' and v1.estado_conexion_id=' . $estado_conexion_id;
+                //if ($estado_conexion_id != 0) $estadoconexion = ' and v1.estado_conexion_id=' . $estado_conexion_id;
                 if ($provincia > 0 && $distrito > 0) $ubicacion = ' and v6.id=' . $distrito;
                 else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and v6.dependencia=' . $provincia;
 
@@ -81,7 +81,7 @@ class EmapacopsaRepositorio
         inner join `viv_manzana` as `v4` on `v4`.`id` = `v1`.`manzana_id` 
         inner join `viv_sector` as `v5` on `v5`.`id` = `v4`.`sector_id` 
         inner join `par_ubigeo` as `v6` on `v6`.`id` = `v5`.`ubigeo_id`  
-        where 1 and v1.importacion_id=' . $importacion_id . $estadoconexion . $ubicacion . '
+        where 1 and v1.importacion_id=' . $importacion_id  . $ubicacion . '
         group by `v2`.`nombre`) as xx'))
                     ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
                     ->groupBy('xx.servicio')

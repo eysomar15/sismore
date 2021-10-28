@@ -541,9 +541,9 @@ class IndicadorController extends Controller
         $cp = CentroPobladoRepositotio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $fecha);
         return response()->json($cp);
     }
-    public function indicadorviv2pnsrcab($provincia, $distrito, $indicador_id, $estado_conexion_id, $fecha)
+    public function indicadorviv2pnsrcab($provincia, $distrito, $indicador_id,  $fecha)
     {
-        $cp = EmapacopsaRepositorio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $estado_conexion_id, $fecha);
+        $cp = EmapacopsaRepositorio::ListarSINO_porIndicador($provincia, $distrito, $indicador_id,  $fecha);
         return response()->json($cp);
     }
     public function ajaxEdu5v1($provincia, $distrito, $indicador_id, $anio_id)
