@@ -77,75 +77,142 @@ class CentroPobladoRepositotio
     }
     public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
     {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and v2.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and v2.dependencia=' . $provincia;
         switch ($indicador_id) {
-            case 20:
-                $queryx =  DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.sistema_agua');
-                if ($provincia > 0 && $distrito > 0) {
-                    $queryx = $queryx->where('v2.id', $distrito);
-                } else if ($provincia > 0 && $distrito == 0) {
-                    $queryx = $queryx->where('v2.dependencia', $provincia);
-                } else {
-                }
-                $queryx = $queryx->get(['v1.sistema_agua as name', DB::raw('count(v1.id) as y')]);
+            case 20: //1
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.sistema_agua="SI","SI","NO") as servicio, count(v1.id) as conteo 
+                    from `viv_centropoblado_datass` as `v1` 
+                    inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                    where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                    group by `v1`.`sistema_agua`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
+                    ->get();
                 break;
-            case 21:
-                $queryx =  DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.sistema_cloracion');
-                if ($provincia > 0 && $distrito > 0) {
-                    $queryx = $queryx->where('v2.id', $distrito);
-                } else if ($provincia > 0 && $distrito == 0) {
-                    $queryx = $queryx->where('v2.dependencia', $provincia);
-                } else {
-                }
-                $queryx = $queryx->get(['v1.sistema_cloracion as name', DB::raw('count(v1.id) as y')]);
+            case 21: //2
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.sistema_cloracion="SI","SI","NO") as servicio, count(v1.id) as conteo 
+                    from `viv_centropoblado_datass` as `v1` 
+                    inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                    where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                    group by `v1`.`sistema_cloracion`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
+                    ->get();
                 break;
-            case 22:
-                $queryx =   DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.servicio_agua_continuo');
-                if ($provincia > 0 && $distrito > 0) {
-                    $queryx = $queryx->where('v2.id', $distrito);
-                } else if ($provincia > 0 && $distrito == 0) {
-                    $queryx = $queryx->where('v2.dependencia', $provincia);
-                } else {
-                }
-                $queryx = $queryx->get(['v1.servicio_agua_continuo as name', DB::raw('count(v1.id) as y')]);
+            case 22: //3
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.servicio_agua_continuo="SI","SI","NO") as servicio, cast(SUM(v1.total_viviendas)as SIGNED) as conteo 
+                from `viv_centropoblado_datass` as `v1` 
+                inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                group by `v1`.`servicio_agua_continuo`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
+                    ->get();
                 break;
-            case 23:
-                $queryx =  DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.sistema_disposicion_excretas');
-                if ($provincia > 0 && $distrito > 0) {
-                    $queryx = $queryx->where('v2.id', $distrito);
-                } else if ($provincia > 0 && $distrito == 0) {
-                    $queryx = $queryx->where('v2.dependencia', $provincia);
-                } else {
-                }
-                $queryx = $queryx->get(['v1.sistema_disposicion_excretas as name', DB::raw('count(v1.id) as y')]);
+            case 23: //4
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.sistema_disposicion_excretas="SI","SI","NO") as servicio, cast(SUM(v1.total_viviendas)as SIGNED) as conteo 
+                from `viv_centropoblado_datass` as `v1` 
+                inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                group by `v1`.`sistema_disposicion_excretas`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
+                    ->get();
                 break;
             case 24:
                 break;
             case 25:
                 break;
-            case 26:
+            case 26: //5
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.realiza_cloracion_agua="SI","SI","NO") as servicio, cast(SUM(v1.total_viviendas)as SIGNED) as conteo 
+                from `viv_centropoblado_datass` as `v1` 
+                inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                group by `v1`.`realiza_cloracion_agua`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
+                    ->get();
+                break;
+
+            default:
+                break;
+        }
+        return $query;
+    }
+    /**
+    public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
+    {
+        switch ($indicador_id) {
+            case 20://1
                 $queryx =  DB::table('viv_centropoblado_datass as v1')
                     ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
                     ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.realiza_cloracion_agua');
-                if ($provincia > 0 && $distrito > 0) {
-                    $queryx = $queryx->where('v2.id', $distrito);
-                } else if ($provincia > 0 && $distrito == 0) {
-                    $queryx = $queryx->where('v2.dependencia', $provincia);
-                } else {
-                }
-                $queryx = $queryx->get(['v1.realiza_cloracion_agua as name', DB::raw('count(v1.id) as y')]);
+                    ->groupBy('v1.sistema_agua')
+                    ->select(DB::raw('v1.sistema_agua as name'), DB::raw('count(v1.id) as y'));
+                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
+                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
+                $queryx = $queryx->get();
+                break;
+            case 21://2
+                $queryx =  DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.sistema_cloracion')
+                    ->select(DB::raw('v1.sistema_cloracion as name'), DB::raw('count(v1.id) as y'));
+                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
+                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
+                $queryx = $queryx->get();
+                break;
+            case 22://3
+                $queryx =   DB::table('viv_centropoblado_datassc as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.servicio_agua_continuo')
+                    ->select(DB::raw('v1.servicio_agua_continuo as name'), DB::raw('cast(SUM(v1.total_viviendas)as SIGNED) as y'));
+                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
+                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
+                $queryx = $queryx->get();
+                break;
+            case 23://4
+                $queryx =  DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.sistema_disposicion_excretas')
+                    ->select(DB::raw('v1.sistema_disposicion_excretas as name'), DB::raw('cast(SUM(v1.total_viviendas)as SIGNED) as y'));
+                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
+                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
+                $queryx = $queryx->get();
+                break;
+            case 24:
+                break;
+            case 25:
+                break;
+            case 26://5
+                $queryx =  DB::table('viv_centropoblado_datass as v1')
+                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
+                    ->where('v1.importacion_id', $importacion_id)
+                    ->groupBy('v1.realiza_cloracion_agua')
+                    ->select(DB::raw('v1.realiza_cloracion_agua as name'), DB::raw('cast(SUM(v1.total_viviendas)as SIGNED) as y'));
+                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
+                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
+                $queryx = $queryx->get();
                 break;
 
             default:
@@ -156,10 +223,11 @@ class CentroPobladoRepositotio
             if ($item->name == 'SI') $coor[0]['y'] += $item->y;
             else $coor[1]['y'] += $item->y;
         }
-        $query['indicador'] = $coor;
+        $query['indicador'] = $queryx;
 
         return $query;
-    }
+    }    
+     */
     public static function listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id)
     {
         $buscar = CentroPobladoRepositotio::$servicios[$indicador_id];

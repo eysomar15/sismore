@@ -258,6 +258,12 @@ class IndicadorController extends Controller
         switch ($indicador_id) {
             case 20: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL1
             case 21: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL2
+                $indicador = Indicador::find($indicador_id);
+                $title = $indicador->nombre;
+                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $ingresos = ImportacionRepositorio::Listar_deDatass();
+                $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
+                return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
             case 22: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL3
             case 23: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL4
                 $indicador = Indicador::find($indicador_id);
@@ -528,7 +534,6 @@ class IndicadorController extends Controller
     {
         $inds = CentroPobladoRepositotio::listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id);
         //return response()->json(compact('provincia', 'distrito', 'indicador_id', 'importacion_id'));
-        //return $inds;
         return  datatables()->of($inds)->toJson(); //*/
     }
     public function indicadorvivpnsrcab($provincia, $distrito, $indicador_id, $fecha)

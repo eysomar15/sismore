@@ -135,6 +135,11 @@
             cargardatatable1();
             cargarDT();
         });
+        function separator(numb) {
+            var str = numb.toString().split(".");
+            str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return str.join(".");
+        }        
         function cargarDT() {
             $.ajax({
                 headers: {
@@ -188,9 +193,9 @@
                     data.indicador.forEach(element => {total+=element.y});
                     data.indicador.forEach(element => {
                         por=element.y*100/total;
-                        vista+='<tr><td>'+element.name+'</td><td>'+element.y+'</td><td>'+por.toFixed(2)+'</td></tr>';
+                        vista+='<tr><td>'+element.name+'</td><td>'+separator(element.y)+'</td><td>'+por.toFixed(2)+'</td></tr>';
                     });
-                    vista+='<tr><th>Total</th><th>'+total+'</th><th>100</th></tr>';
+                    vista+='<tr><th>Total</th><th>'+separator(total)+'</th><th>100</th></tr>';
                     $('#vistax1').html(vista);
                     grafica1(data.indicador);
                 },
