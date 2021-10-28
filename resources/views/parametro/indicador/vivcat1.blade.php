@@ -67,12 +67,8 @@
                                     <thead>
                                         <tr>
                                             <th>Tiene Servicio</th>
-                                            @if ($indicador)
-                                                
-                                            @else
-                                                
-                                            @endif
-                                            <th>Nro de Hogares</th>
+                                            
+                                            <th>Cantidad</th>
                                             <th>Porcentaje</th>
                                         </tr>
                                     </thead>
