@@ -3,6 +3,7 @@
 namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\Matricula;
+use App\Models\Educacion\MatriculaAnual;
 use Illuminate\Support\Facades\DB;
 
 class MatriculaRepositorio
@@ -524,9 +525,45 @@ class MatriculaRepositorio
     }
 
 
-    
+    /**********************************  ConsolidadoAnual *********************************/
+    public static function matricula_porImportacion_ConsolidadoAnual($importacion_id)
+    {         
+        $data = MatriculaAnual::select('id','estado')                
+                ->where("importacion_id", "=", $importacion_id)
+                ->get();
 
-    
+        return $data;
+    } 
+
+    public static function datos_matricula_importada_ConsolidadoAnual($importacion_id)
+    {         
+        $data = DB::table("edu_matricula_anual_detalle as det")   
+                ->join('edu_matricula_anual as mat', 'det.matricula_anual_id', '=', 'mat.id')            
+                ->where("importacion_id", "=", $importacion_id)
+                ->orderBy('nivel', 'asc')
+                ->groupBy("nivel")               
+                ->get([                       
+                    DB::raw('(case when nivel="I" then "1. INICIAL" 
+                                   when nivel="P" then "2. PRIMARIA" else "3. SECUNDARIA" end) as nivel') ,              
+                    DB::raw('count(*) as numeroFilas')        
+                ])
+                ;
+
+        return $data;
+    }
+
+    public static function anio_matricula_importada_ConsolidadoAnual($matricula_id)
+    {         
+        $data = DB::table("edu_matricula_anual as mat")  
+                ->join('par_anio as vanio', 'mat.anio_id', '=', 'vanio.id')                
+                ->where("mat.id", "=", $matricula_id)
+                ->select('vanio.id','vanio.anio')     
+                ->get();
+                ;
+
+        return $data;
+    }
+
     /**pruebassssss */
     public static function total_matricula_por_Nivel_Provincia2($matricula_id)
     {

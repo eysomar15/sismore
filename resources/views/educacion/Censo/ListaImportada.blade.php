@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>'DATOS IMPORTADOS - CENSO EDUCATIVO'])
+@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>'IMPORTACION REALIZADA CON EXITO - CENSO EDUCATIVO'])
 
 @section('css')
      <!-- Table datatable css -->

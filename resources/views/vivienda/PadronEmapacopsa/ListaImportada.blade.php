@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>'DATOS IMPORTADOS - DATASS'])
+@extends('layouts.main',['activePage'=>'FuenteImportacion','titlePage'=>'IMPORTACION REALIZADA CON EXITO '])
 
 @section('css')
      <!-- Table datatable css -->
@@ -15,7 +15,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="grid" class="table table-striped table-bordered">
+                    <table id="grid" class="table table-striped table-bordered"  style="width:7200px">
                         <thead class="text-primary">                              
                             
                             <th>cod_dist</th>

@@ -464,8 +464,9 @@ class MatriculaController extends Controller
     }
 
     public function aprobar($importacion_id)
-    {
-        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);        
+    {  
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);     
+ 
         $datos_matricula_importada = $this->datos_matricula_importada($importacion_id);
 
         return view('educacion.Matricula.Aprobar',compact('importacion_id','importacion','datos_matricula_importada'));
@@ -699,14 +700,54 @@ class MatriculaController extends Controller
                 $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
                 return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));
             }
-    
-            return 'CORRECTO';
-            //return redirect()->route('Matricula.Matricula_Lista',$importacion->id);
+           
+            return redirect()->route('Matricula.Matricula_Lista_ConsolidadoAnual',$importacion->id);
         }
+       
+    }
 
-        //return 'CORRECTO';
-    }  
+    public function ListaImportada_ConsolidadoAnual($importacion_id)
+    {
+        $datos_matricula_importada = $this->datos_matricula_importada_ConsolidadoAnual($importacion_id);  
+        return view('Educacion.Matricula.ListaImportada',compact('importacion_id','datos_matricula_importada'));
+    }
 
+    public function aprobarConsolidadoAnual($importacion_id)
+    {  
+        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);     
+
+        $matricula = MatriculaRepositorio::matricula_porImportacion_ConsolidadoAnual($importacion_id);
+ 
+        $datos_matricula_importada = $this->datos_matricula_importada_ConsolidadoAnual($importacion_id);    
+  
+        $anio_matricula = MatriculaRepositorio::anio_matricula_importada_ConsolidadoAnual($matricula->first()->id)->first()->anio;  
+
+        //return $anio_matricula;
+
+        return view('educacion.Matricula.AprobarConsolidadoAnual',compact('importacion_id','importacion','datos_matricula_importada','anio_matricula'));
+    } 
+
+    public function datos_matricula_importada_ConsolidadoAnual($importacion_id)
+    {           
+        return MatriculaRepositorio::datos_matricula_importada_ConsolidadoAnual($importacion_id);
+    }
+
+    public function procesarConsolidadoAnual($importacion_id)
+    {
+        $importacion  = Importacion::find($importacion_id);
+
+        $importacion->estado = 'PR';    
+        $importacion->usuarioId_Aprueba = auth()->user()->id;    
+        $importacion->save();
+
+        //$this->elimina_mismaFecha($importacion->fechaActualizacion,$importacion->fuenteImportacion_id,$importacion_id);
+
+        $matricula = MatriculaRepositorio :: matricula_porImportacion_ConsolidadoAnual($importacion_id)->first();
+        $matricula->estado = 'PR';
+        $matricula->save();
+
+        return view('correcto');
+    }
 
     public function guardar_inicial_anual($array,$matricula_id)
     {
@@ -919,6 +960,7 @@ class MatriculaController extends Controller
        
         return $creacionExitosa;
     }
+
 
 
 
