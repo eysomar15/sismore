@@ -95,8 +95,9 @@ class EmapacopsaRepositorio
                     ->select(
                         db::raw('distrito'),
                         DB::raw('cast(SUM(hogares) as SIGNED) as hogares'),
-                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1,2)),2) as double) as porcentaje'),
+                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1,2)),2) as double) as porcentaje_con'),
                         DB::raw('cast(SUM(con_servicio) as SIGNED) as con_servicio'),
+                        DB::raw('cast(ROUND(SUM(sin_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (3)),2) as double) as porcentaje_sin'),
                         DB::raw('cast(SUM(sin_servicio) as SIGNED) as sin_servicio')
                     )
                     ->groupBy('distrito')
@@ -175,8 +176,9 @@ class EmapacopsaRepositorio
                     ->select(
                         db::raw('distrito'),
                         DB::raw('cast(SUM(hogares) as SIGNED) as hogares'),
-                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (2,3)),2) as double) as porcentaje'),
+                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (2,3)),2) as double) as porcentaje_con'),
                         DB::raw('cast(SUM(con_servicio) as SIGNED) as con_servicio'),
+                        DB::raw('cast(ROUND(SUM(sin_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1)),2) as double) as porcentaje_sin'),
                         DB::raw('cast(SUM(sin_servicio) as SIGNED) as sin_servicio')
                     )
                     ->groupBy('distrito')

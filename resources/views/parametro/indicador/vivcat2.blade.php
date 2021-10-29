@@ -120,17 +120,32 @@
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th>DISTRITOS</th>
-                                            <th>TOTAL HOGARES</th>
+                                            <th rowspan="2">DISTRITOS</th>
+                                            <th rowspan="2">TOTAL HOGARES</th>
                                             @if ($indicador_id==24)
-                                            <th>TOTAL CON AGUA</th>
-                                            <th>PORCENTAJE CON AGUA</th>
-                                            <th>SIN AGUA</th>
+                                            <th colspan="2"><CENTER>CON AGUA</CENTER></th>
+                                            <th colspan="2"><CENTER>SIN AGUA</CENTER></th>
                                             @else
-                                            <th>TOTAL CON DESAGUE</th>
-                                            <th>PORCENTAJE CON DESAGUE</th>
-                                            <th>SIN DESAGUE</th>
-                                            @endif                    
+                                            <th colspan="2"><CENTER>CON DESAGUE</CENTER></th>
+                                            <th colspan="2"><CENTER>SIN DESAGUE</CENTER></th>
+                                            @endif
+                                        </tr>
+                                        <tr>
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJE</th>
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJE</th>
+                                            {{--@if ($indicador_id==24)
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJE</th>
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJE</th>
+                                            @else
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJE</th>
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJE</th>
+                                            @endif     --}}               
                                             
                                         </tr>
                                     </thead>
@@ -331,12 +346,12 @@
                     total1=0;
                     total2=0;
                     data.filtro1.forEach(element => {
-                        vista+='<tr><td>'+element.distrito+'</td><td align=center>'+separator(element.hogares)+'</td><td align=center>'+separator(element.con_servicio)+'</td><td align=center>'+separator(element.porcentaje)+'%</td><td align=center>'+separator(element.sin_servicio)+'</td></tr>';
+                        vista+='<tr><td>'+element.distrito+'</td><td align=center>'+separator(element.hogares)+'</td><td align=center>'+separator(element.con_servicio)+'</td><td align=center>'+separator(element.porcentaje_con)+'%</td><td align=center>'+separator(element.sin_servicio)+'</td><td align=center>'+separator(element.porcentaje_sin)+'%</td></tr>';
                         total0+=element.hogares;
                         total1+=element.con_servicio;
                         total2+=element.sin_servicio;
                     });
-                    vista+='<tr><th>Total</th><th><center>'+separator(total0)+'</center></th><th><center>'+separator(total1)+'</center></th><th><center>100%</center></th><th><center>'+separator(total2)+'</center></th></tr>';
+                    vista+='<tr><th>Total</th><th><center>'+separator(total0)+'</center></th><th><center>'+separator(total1)+'</center></th><th><center>100%</center></th><th><center>'+separator(total2)+'</center></th><th><center>100%</center></th></tr>';
                     $('#vistafiltro1').html(vista);
                     grafica1(data.indicador);
                     @if ($indicador_id==24)
