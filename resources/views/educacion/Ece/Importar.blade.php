@@ -133,7 +133,7 @@
             <!-- col -->
         </div>
         <!-- End row -->
-        <div class="row">
+        {{--<div class="row">
             <div class="col-md-12">           
                 <div class="card">
                     <div class="card-header">
@@ -143,7 +143,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" {{--style="border-collapse: collapse; border-spacing: 0;font-size:11px; width: 100%;"--}}>
+                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" >
                                         <thead class="text-primary">    
                                             <tr>
                                                 <th>Id</th>
@@ -156,23 +156,6 @@
                                                 <th>Accion</th>  
                                             </tr>
                                         </thead>
-                                        {{--
-                                        <tbody>
-                                            @foreach ($eces as $item)
-                                            <tr>
-                                                <td>{{$item->id}}</td>
-                                                <td>{{date('d-m-Y',strtotime($item->fecha))}}</td>
-                                                <td>{{$item->anio}}</td>
-                                                <td>{{$item->tipo==0?'':'SI'}}</td>
-                                                <td>{{$item->grado}}</td>
-                                                <td>{{$item->nivel}}</td>
-                                                <td>{{$item->estado}}</td>
-                                                <td><button type="button" onclick="" class="btn btn-primary btn-xs">Eliminar</button></td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                            --}}
-                                        
                                     </table>
                                 </div>
                             </div>
@@ -185,7 +168,7 @@
                 </div>
                   
             </div> <!-- End col -->
-        </div> <!-- End row -->
+        </div> <!-- End row -->--}}
 
     </div>
 
@@ -203,7 +186,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(document).ready(function(){
-            $('#datatable').DataTable({
+            {{--$('#datatable').DataTable({
                 "ajax":"{{route('ece.listar.importados')}}",
                 "columns":[
                     {data:'id'},
@@ -245,7 +228,7 @@
                         "previous":"anterior"
                         }
                 }
-            }); 
+            }); --}}
         });
         function cargargrados() {
             $.ajax({
