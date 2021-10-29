@@ -95,13 +95,13 @@ class EmapacopsaRepositorio
                     ->select(
                         db::raw('distrito'),
                         DB::raw('cast(SUM(hogares) as SIGNED) as hogares'),
-                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.tipo_servicio_id in (1,2)),2) as double) as porcentaje'),
+                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1,2)),2) as double) as porcentaje'),
                         DB::raw('cast(SUM(con_servicio) as SIGNED) as con_servicio'),
                         DB::raw('cast(SUM(sin_servicio) as SIGNED) as sin_servicio')
                     )
                     ->groupBy('distrito')
                     ->get();
-                $query['gfiltro1'] = DB::table(DB::raw('(select v4.nombre as name,ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.tipo_servicio_id in (1,2)),2) as y from viv_emapacopsa as v1 
+                $query['gfiltro1'] = DB::table(DB::raw('(select v4.nombre as name,ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1,2)),2) as y from viv_emapacopsa as v1 
                     join viv_manzana as v2 on v2.id=v1.manzana_id 
                     join viv_sector as v3 on v3.id=v2.sector_id 
                     join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
@@ -175,13 +175,13 @@ class EmapacopsaRepositorio
                     ->select(
                         db::raw('distrito'),
                         DB::raw('cast(SUM(hogares) as SIGNED) as hogares'),
-                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.tipo_servicio_id in (2,3)),2) as double) as porcentaje'),
+                        DB::raw('cast(ROUND(SUM(con_servicio)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (2,3)),2) as double) as porcentaje'),
                         DB::raw('cast(SUM(con_servicio) as SIGNED) as con_servicio'),
                         DB::raw('cast(SUM(sin_servicio) as SIGNED) as sin_servicio')
                     )
                     ->groupBy('distrito')
                     ->get();
-                $query['gfiltro1'] = DB::table(DB::raw('(select v4.nombre as name,ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.tipo_servicio_id in (2,3)),2) as y from viv_emapacopsa as v1 
+                $query['gfiltro1'] = DB::table(DB::raw('(select v4.nombre as name,ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (2,3)),2) as y from viv_emapacopsa as v1 
                     join viv_manzana as v2 on v2.id=v1.manzana_id 
                     join viv_sector as v3 on v3.id=v2.sector_id 
                     join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
