@@ -108,6 +108,52 @@
             <div class="card card-border card-primary">
                 <div class="card-header bg-transparent pb-0">
                     @if ($indicador_id==24)
+                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE AGUA POR RED PÚBLICA, POR DISTRITO EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    @else
+                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE ALCANTARILLADO U OTRAS FORMAS DE DISPOSICIÓN SANITARIA DE EXCRETAS, POR DISTRITO EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    @endif                    
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>DISTRITOS</th>
+                                            <th>TOTAL HOGARES</th>
+                                            @if ($indicador_id==24)
+                                            <th>CON AGUA</th>
+                                            <th>SIN AGUA</th>
+                                            @else
+                                            <th>CON DESAGUE</th>
+                                            <th>SIN DESAGUE</th>
+                                            @endif                    
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody id='vistafiltro1'>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-border card-primary">
+                <div class="card-body">
+                    <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+                </div>
+            </div>
+        </div>        
+    </div><!-- End row -->  
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-border card-primary">
+                <div class="card-header bg-transparent pb-0">
+                    @if ($indicador_id==24)
                     <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE AGUA POR RED PÚBLICA, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @else
                     <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE ALCANTARILLADO U OTRAS FORMAS DE DISPOSICIÓN SANITARIA DE EXCRETAS, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
@@ -121,7 +167,11 @@
                                     <thead>
                                         <tr>
                                             <th>CATEGORIAS</th>
-                                            <th>CON SERVICIO</th>
+                                            @if ($indicador_id==24)
+                                            <th>CON AGUA</th>
+                                            @else
+                                            <th>CON DESAGUE</th>
+                                            @endif 
                                             <th>UNIDADES DE USO</th>
                                         </tr>
                                     </thead>
@@ -151,7 +201,11 @@
                                     <thead>
                                         <tr>
                                             <th>CATEGORIAS</th>
-                                            <th>SIN SERVICIO</th>
+                                            @if ($indicador_id==24)
+                                            <th>SIN AGUA</th>
+                                            @else
+                                            <th>SIN DESAGUE</th>
+                                            @endif 
                                             <th>UNIDADES DE USO</th>
                                         </tr>
                                     </thead>
@@ -216,7 +270,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },
-                url: "{{ url('/') }}/INDICADOR/Distritos/" + $('#provincia').val(),
+                url: "{{ url('/') }}/PEmapacopsa/Distritos/" + $('#provincia').val(),
                 type: 'post',
                 dataType: 'JSON',
                 success: function(data) {
@@ -270,7 +324,20 @@
                     });
                     vista+='<tr><th>Total</th><th><center>'+separator(total1)+'</center></th><th><center>'+separator(total2)+'</center></th></tr>';
                     $('#vistasa').html(vista);
+                    vista='';
+                    total0=0;
+                    total1=0;
+                    total2=0;
+                    data.filtro1.forEach(element => {
+                        vista+='<tr><td>'+element.distrito+'</td><td align=center>'+separator(element.hogares)+'</td><td align=center>'+separator(element.con_servicio)+'</td><td align=center>'+separator(element.sin_servicio)+'</td></tr>';
+                        total0+=element.hogares;
+                        total1+=element.con_servicio;
+                        total2+=element.sin_servicio;
+                    });
+                    vista+='<tr><th>Total</th><th><center>'+separator(total0)+'</center></th><th><center>'+separator(total1)+'</center></th><th><center>'+separator(total2)+'</center></th></tr>';
+                    $('#vistafiltro1').html(vista);
                     grafica1(data.indicador);
+                    graficar2(data.gfiltro1)
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -352,7 +419,36 @@
                         }
                     }
             }); 
-        }        
+        }   
+        function graficar2(datax){
+            Highcharts.chart('con2',{
+                chart:{
+                    type:'column',
+                },
+                title:{text:'',},
+                xAxis:{
+                    type:'category',
+                },
+                yAxis:{
+                    title:{enabled:false,text:'Porcentaje',}
+                },
+                series:[{
+                    name:'Distritos',
+                    colorByPoint:true,
+                    data:datax,
+                }],
+                plotOptions:{
+                    series:{
+                        borderWidth:0,
+                        dataLabels:{
+                            enabled:true,
+                            format:'{point.y:.1f}%',
+                        },
+                    }
+                },
+                credits:false,
+            });
+        }             
     </script>
 
 @endsection
