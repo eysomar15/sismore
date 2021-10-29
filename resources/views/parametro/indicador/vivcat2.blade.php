@@ -123,10 +123,12 @@
                                             <th>DISTRITOS</th>
                                             <th>TOTAL HOGARES</th>
                                             @if ($indicador_id==24)
-                                            <th>CON AGUA</th>
+                                            <th>TOTAL CON AGUA</th>
+                                            <th>PORCENTAJE CON AGUA</th>
                                             <th>SIN AGUA</th>
                                             @else
-                                            <th>CON DESAGUE</th>
+                                            <th>TOTAL CON DESAGUE</th>
+                                            <th>PORCENTAJE CON DESAGUE</th>
                                             <th>SIN DESAGUE</th>
                                             @endif                    
                                             
@@ -171,7 +173,7 @@
                                             <th>CON AGUA</th>
                                             @else
                                             <th>CON DESAGUE</th>
-                                            @endif 
+                                            @endif                                             
                                             <th>UNIDADES DE USO</th>
                                         </tr>
                                     </thead>
@@ -329,15 +331,21 @@
                     total1=0;
                     total2=0;
                     data.filtro1.forEach(element => {
-                        vista+='<tr><td>'+element.distrito+'</td><td align=center>'+separator(element.hogares)+'</td><td align=center>'+separator(element.con_servicio)+'</td><td align=center>'+separator(element.sin_servicio)+'</td></tr>';
+                        vista+='<tr><td>'+element.distrito+'</td><td align=center>'+separator(element.hogares)+'</td><td align=center>'+separator(element.con_servicio)+'</td><td align=center>'+separator(element.porcentaje)+'%</td><td align=center>'+separator(element.sin_servicio)+'</td></tr>';
                         total0+=element.hogares;
                         total1+=element.con_servicio;
                         total2+=element.sin_servicio;
                     });
-                    vista+='<tr><th>Total</th><th><center>'+separator(total0)+'</center></th><th><center>'+separator(total1)+'</center></th><th><center>'+separator(total2)+'</center></th></tr>';
+                    vista+='<tr><th>Total</th><th><center>'+separator(total0)+'</center></th><th><center>'+separator(total1)+'</center></th><th><center>100%</center></th><th><center>'+separator(total2)+'</center></th></tr>';
                     $('#vistafiltro1').html(vista);
                     grafica1(data.indicador);
-                    graficar2(data.gfiltro1)
+                    @if ($indicador_id==24)
+                    titulo='Distritos con servicio de agua potable';
+                    @else
+                    titulo='Distritos con servicio de desague';
+                    @endif
+                    
+                    graficar2(data.gfiltro1,titulo)
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -420,7 +428,7 @@
                     }
             }); 
         }   
-        function graficar2(datax){
+        function graficar2(datax,titulo){
             Highcharts.chart('con2',{
                 chart:{
                     type:'column',
@@ -433,7 +441,7 @@
                     title:{enabled:false,text:'Porcentaje',}
                 },
                 series:[{
-                    name:'Distritos',
+                    name:titulo,//'Distritos con servicio de agua potable',
                     colorByPoint:true,
                     data:datax,
                 }],
