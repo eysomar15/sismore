@@ -7,6 +7,26 @@ use Illuminate\Support\Facades\DB;
 
 class EmapacopsaRepositorio
 {
+    public static function listarProvincias()
+    {
+        $query = DB::table(DB::raw('(select v5.id,v5.nombre  from viv_emapacopsa as v1 
+        join viv_manzana as v2 on v2.id=v1.manzana_id 
+        join viv_sector as v3 on v3.id=v2.sector_id 
+        join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
+        join par_ubigeo as v5 on v5.id=v4.dependencia 
+        group by v5.id,v5.nombre ) nuevo'))->get();
+        return $query;
+    }
+    public static function listarDistrito($provincia)
+    {
+        $query = DB::table(DB::raw('(select v4.id,v4.nombre  from viv_emapacopsa as v1 
+        join viv_manzana as v2 on v2.id=v1.manzana_id 
+        join viv_sector as v3 on v3.id=v2.sector_id 
+        join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
+        where v4.dependencia=' . $provincia . '
+        group by v4.id,v4.nombre ) nuevo'))->get();
+        return $query;
+    }
     public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
     {
         switch ($indicador_id) {
@@ -55,20 +75,21 @@ class EmapacopsaRepositorio
                 join viv_manzana as v2 on v2.id=v1.manzana_id 
                 join viv_sector as v3 on v3.id=v2.sector_id 
                 join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
+                WHERE v1.importacion_id=' . $importacion_id . '
                 group by v4.nombre 
                 union all 
                 select v4.nombre as distrito,0 as hogares,count(v1.id) as con_servicio,0 as sin_servicio from viv_emapacopsa as v1 
                 join viv_manzana as v2 on v2.id=v1.manzana_id 
                 join viv_sector as v3 on v3.id=v2.sector_id 
                 join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
-                where v1.tipo_servicio_id in (1,2) 
+                where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1,2) 
                 group by v4.nombre 
                 union all
                 select v4.nombre as distrito,0 as hogares,0 as con_servicio,count(v1.id) as sin_servicio from viv_emapacopsa as v1 
                 join viv_manzana as v2 on v2.id=v1.manzana_id 
                 join viv_sector as v3 on v3.id=v2.sector_id 
                 join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
-                where v1.tipo_servicio_id in (3) 
+                where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (3) 
                 group by v4.nombre ) nuevo'
                 ))
                     ->select(
@@ -83,9 +104,9 @@ class EmapacopsaRepositorio
                     join viv_manzana as v2 on v2.id=v1.manzana_id 
                     join viv_sector as v3 on v3.id=v2.sector_id 
                     join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
-                    where v1.tipo_servicio_id in (1,2) 
+                    where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1,2) 
                     group by v4.nombre ) filtro'))
-                    ->select(DB::raw('name'),DB::raw('cast(y as SIGNED) as y'))
+                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) as y'))
                     ->get();
                 return $query;
             case 25:
@@ -133,20 +154,21 @@ class EmapacopsaRepositorio
                 join viv_manzana as v2 on v2.id=v1.manzana_id 
                 join viv_sector as v3 on v3.id=v2.sector_id 
                 join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
+                WHERE v1.importacion_id=' . $importacion_id . '
                 group by v4.nombre 
                 union all 
                 select v4.nombre as distrito,0 as hogares,count(v1.id) as con_servicio,0 as sin_servicio from viv_emapacopsa as v1 
                 join viv_manzana as v2 on v2.id=v1.manzana_id 
                 join viv_sector as v3 on v3.id=v2.sector_id 
                 join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
-                where v1.tipo_servicio_id in (2,3) 
+                where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (2,3) 
                 group by v4.nombre 
                 union all
                 select v4.nombre as distrito,0 as hogares,0 as con_servicio,count(v1.id) as sin_servicio from viv_emapacopsa as v1 
                 join viv_manzana as v2 on v2.id=v1.manzana_id 
                 join viv_sector as v3 on v3.id=v2.sector_id 
                 join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
-                where v1.tipo_servicio_id in (1) 
+                where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1) 
                 group by v4.nombre ) nuevo'
                 ))
                     ->select(
@@ -161,9 +183,9 @@ class EmapacopsaRepositorio
                     join viv_manzana as v2 on v2.id=v1.manzana_id 
                     join viv_sector as v3 on v3.id=v2.sector_id 
                     join par_ubigeo as v4 on v4.id=v3.ubigeo_id 
-                    where v1.tipo_servicio_id in (2,3) 
+                    where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (2,3) 
                     group by v4.nombre ) filtro'))
-                    ->select(DB::raw('name'),DB::raw('cast(y as SIGNED) as y'))
+                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) as y'))
                     ->get();
                 return $query;
 

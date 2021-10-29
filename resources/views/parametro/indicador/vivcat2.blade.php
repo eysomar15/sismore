@@ -108,9 +108,9 @@
             <div class="card card-border card-primary">
                 <div class="card-header bg-transparent pb-0">
                     @if ($indicador_id==24)
-                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE AGUA POR RED PÚBLICA, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE AGUA POR RED PÚBLICA, POR DISTRITO EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @else
-                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE ALCANTARILLADO U OTRAS FORMAS DE DISPOSICIÓN SANITARIA DE EXCRETAS, POR CATEGORIA EN LA PROVINCIA CORONEL PORTILLO</h3>
+                    <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE ALCANTARILLADO U OTRAS FORMAS DE DISPOSICIÓN SANITARIA DE EXCRETAS, POR DISTRITO EN LA PROVINCIA CORONEL PORTILLO</h3>
                     @endif                    
                 </div>
                 <div class="card-body">
@@ -270,7 +270,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },
-                url: "{{ url('/') }}/INDICADOR/Distritos/" + $('#provincia').val(),
+                url: "{{ url('/') }}/PEmapacopsa/Distritos/" + $('#provincia').val(),
                 type: 'post',
                 dataType: 'JSON',
                 success: function(data) {

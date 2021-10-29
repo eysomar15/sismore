@@ -268,7 +268,7 @@ class IndicadorController extends Controller
             case 23: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL4
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $provincias =  Ubigeo::whereRaw('LENGTH(codigo)=4')->get();                
                 $ingresos = ImportacionRepositorio::Listar_deDatass();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
@@ -277,8 +277,9 @@ class IndicadorController extends Controller
             case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL6
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $provincias = EmapacopsaRepositorio::listarProvincias();//Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $econexion = EstadoConexion::all();
+                //return EmapacopsaRepositorio::listarDistrito(35);
                 $ingresos = ImportacionRepositorio::Listar_deEmapacopsa();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat2', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos', 'econexion'));
