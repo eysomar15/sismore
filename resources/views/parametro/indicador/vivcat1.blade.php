@@ -67,8 +67,12 @@
                                     <thead>
                                         <tr>
                                             <th>Tiene Servicio</th>
+                                            @if ($indicador_id==20||$indicador_id==21)
+                                            <th>Total Centro Poblado</th>
+                                            @else
+                                            <th>Total Hogares</th>
+                                            @endif
                                             
-                                            <th>Cantidad</th>
                                             <th>Porcentaje</th>
                                         </tr>
                                     </thead>

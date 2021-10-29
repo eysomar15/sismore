@@ -135,18 +135,6 @@
                                             <th>PORCENTAJE</th>
                                             <th>HOGARES</th>
                                             <th>PORCENTAJE</th>
-                                            {{--@if ($indicador_id==24)
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            @else
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            @endif     --}}               
-                                            
                                         </tr>
                                     </thead>
                                     <tbody id='vistafiltro1'>
