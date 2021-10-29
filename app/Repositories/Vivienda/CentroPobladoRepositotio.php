@@ -93,6 +93,19 @@ class CentroPobladoRepositotio
                     ->groupBy('xx.servicio')
                     ->orderBy('xx.servicio', 'desc')
                     ->get();
+                $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPProvincia($importacion_id, 'sistema_agua')))
+                    ->select(
+                        DB::raw('provincia'),
+                        DB::raw('cast(centro_poblado as SIGNED)centro_poblado'),
+                        DB::raw('cast(servicio_si as SIGNED)servicio_si'),
+                        DB::raw('cast(porcentaje_si as double)porcentaje_si'),
+                        DB::raw('cast(servicio_no as SIGNED) servicio_no'),
+                        DB::raw('cast(porcentaje_no as double)porcentaje_no')
+                    )
+                    ->get();
+                $query['gfiltro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPProvinciaPuntos($importacion_id, 'sistema_agua')))
+                    ->select(DB::raw('name'), DB::raw('cast(y as double)y'))
+                    ->get();
                 break;
             case 21: //2
                 $query['indicador'] = DB::table(DB::raw(
@@ -105,6 +118,19 @@ class CentroPobladoRepositotio
                     ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
                     ->groupBy('xx.servicio')
                     ->orderBy('xx.servicio', 'desc')
+                    ->get();
+                $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPProvincia($importacion_id, 'sistema_cloracion')))
+                    ->select(
+                        DB::raw('provincia'),
+                        DB::raw('cast(centro_poblado as SIGNED)centro_poblado'),
+                        DB::raw('cast(servicio_si as SIGNED)servicio_si'),
+                        DB::raw('cast(porcentaje_si as double)porcentaje_si'),
+                        DB::raw('cast(servicio_no as SIGNED) servicio_no'),
+                        DB::raw('cast(porcentaje_no as double)porcentaje_no')
+                    )
+                    ->get();
+                $query['gfiltro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPProvinciaPuntos($importacion_id, 'sistema_cloracion')))
+                    ->select(DB::raw('name'), DB::raw('cast(y as double)y'))
                     ->get();
                 break;
             case 22: //3
@@ -119,6 +145,19 @@ class CentroPobladoRepositotio
                     ->groupBy('xx.servicio')
                     ->orderBy('xx.servicio', 'desc')
                     ->get();
+                $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvincia($importacion_id, 'servicio_agua_continuo')))
+                    ->select(
+                        DB::raw('provincia'),
+                        DB::raw('cast(centro_poblado as SIGNED)centro_poblado'),
+                        DB::raw('cast(servicio_si as SIGNED)servicio_si'),
+                        DB::raw('cast(porcentaje_si as double)porcentaje_si'),
+                        DB::raw('cast(servicio_no as SIGNED) servicio_no'),
+                        DB::raw('cast(porcentaje_no as double)porcentaje_no')
+                    )
+                    ->get();
+                $query['gfiltro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvinciaPuntos($importacion_id, 'servicio_agua_continuo')))
+                    ->select(DB::raw('name'), DB::raw('cast(y as double)y'))
+                    ->get();
                 break;
             case 23: //4
                 $query['indicador'] = DB::table(DB::raw(
@@ -131,6 +170,19 @@ class CentroPobladoRepositotio
                     ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
                     ->groupBy('xx.servicio')
                     ->orderBy('xx.servicio', 'desc')
+                    ->get();
+                $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvincia($importacion_id, 'sistema_disposicion_excretas')))
+                    ->select(
+                        DB::raw('provincia'),
+                        DB::raw('cast(centro_poblado as SIGNED)centro_poblado'),
+                        DB::raw('cast(servicio_si as SIGNED)servicio_si'),
+                        DB::raw('cast(porcentaje_si as double)porcentaje_si'),
+                        DB::raw('cast(servicio_no as SIGNED) servicio_no'),
+                        DB::raw('cast(porcentaje_no as double)porcentaje_no')
+                    )
+                    ->get();
+                $query['gfiltro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvinciaPuntos($importacion_id, 'sistema_disposicion_excretas')))
+                    ->select(DB::raw('name'), DB::raw('cast(y as double)y'))
                     ->get();
                 break;
             case 24:
@@ -149,6 +201,19 @@ class CentroPobladoRepositotio
                     ->groupBy('xx.servicio')
                     ->orderBy('xx.servicio', 'desc')
                     ->get();
+                $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvincia($importacion_id, 'realiza_cloracion_agua')))
+                    ->select(
+                        DB::raw('provincia'),
+                        DB::raw('cast(centro_poblado as SIGNED)centro_poblado'),
+                        DB::raw('cast(servicio_si as SIGNED)servicio_si'),
+                        DB::raw('cast(porcentaje_si as double)porcentaje_si'),
+                        DB::raw('cast(servicio_no as SIGNED) servicio_no'),
+                        DB::raw('cast(porcentaje_no as double)porcentaje_no')
+                    )
+                    ->get();
+                $query['gfiltro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvinciaPuntos($importacion_id, 'realiza_cloracion_agua')))
+                    ->select(DB::raw('name'), DB::raw('cast(y as double)y'))
+                    ->get();
                 break;
 
             default:
@@ -156,78 +221,136 @@ class CentroPobladoRepositotio
         }
         return $query;
     }
-    /**
-    public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)
+    public static function querysCPProvincia($importacion_id, $campo)
     {
-        switch ($indicador_id) {
-            case 20://1
-                $queryx =  DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.sistema_agua')
-                    ->select(DB::raw('v1.sistema_agua as name'), DB::raw('count(v1.id) as y'));
-                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
-                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
-                $queryx = $queryx->get();
-                break;
-            case 21://2
-                $queryx =  DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.sistema_cloracion')
-                    ->select(DB::raw('v1.sistema_cloracion as name'), DB::raw('count(v1.id) as y'));
-                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
-                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
-                $queryx = $queryx->get();
-                break;
-            case 22://3
-                $queryx =   DB::table('viv_centropoblado_datassc as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.servicio_agua_continuo')
-                    ->select(DB::raw('v1.servicio_agua_continuo as name'), DB::raw('cast(SUM(v1.total_viviendas)as SIGNED) as y'));
-                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
-                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
-                $queryx = $queryx->get();
-                break;
-            case 23://4
-                $queryx =  DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.sistema_disposicion_excretas')
-                    ->select(DB::raw('v1.sistema_disposicion_excretas as name'), DB::raw('cast(SUM(v1.total_viviendas)as SIGNED) as y'));
-                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
-                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
-                $queryx = $queryx->get();
-                break;
-            case 24:
-                break;
-            case 25:
-                break;
-            case 26://5
-                $queryx =  DB::table('viv_centropoblado_datass as v1')
-                    ->join('par_ubigeo as v2', 'v2.id', '=', 'v1.ubigeo_id')
-                    ->where('v1.importacion_id', $importacion_id)
-                    ->groupBy('v1.realiza_cloracion_agua')
-                    ->select(DB::raw('v1.realiza_cloracion_agua as name'), DB::raw('cast(SUM(v1.total_viviendas)as SIGNED) as y'));
-                if ($provincia > 0 && $distrito > 0) $queryx = $queryx->where('v2.id', $distrito);
-                else if ($provincia > 0 && $distrito == 0) $queryx = $queryx->where('v2.dependencia', $provincia);
-                $queryx = $queryx->get();
-                break;
-
-            default:
-                break;
-        }
-        $coor = [['name' => 'SI', 'y' => 0], ['name' => 'NO', 'y' => 0]];
-        foreach ($queryx as $item) {
-            if ($item->name == 'SI') $coor[0]['y'] += $item->y;
-            else $coor[1]['y'] += $item->y;
-        }
-        $query['indicador'] = $queryx;
-
+        $query = '(select 
+        provincia,sum(centro_poblado) as centro_poblado ,
+        sum(servicio_si) as servicio_si,
+        ROUND(sum(servicio_si)*100/(
+            select count(v1.id)
+            from viv_centropoblado_datass as v1 
+            join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+            join par_ubigeo as v3 on v3.id = v2.dependencia 
+            where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" ),2) as porcentaje_si,
+        SUM(servicio_no) as servicio_no,
+        ROUND(sum(servicio_no)*100/(
+            select count(v1.id)
+            from viv_centropoblado_datass as v1 
+            join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+            join par_ubigeo as v3 on v3.id = v2.dependencia 
+            where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '!="SI" ),2) as porcentaje_no
+    from (
+        select v3.nombre as provincia,count(v1.id) as centro_poblado, 0 as servicio_si ,0 as servicio_no
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' 
+        group by v3.nombre
+        union all
+        select v3.nombre as provincia,0 as centro_poblado, count(v1.id) as servicio_si ,0 as servicio_no
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" 
+        group by v3.nombre,v1.' . $campo . '
+        union all
+        select v3.nombre as provincia,0 as centro_poblado,0 as servicio_si, count(v1.id) as servicio_no 
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '!="SI" 
+        group by v3.nombre,v1.' . $campo . '
+        ) as filtro 
+    group by provincia) nueva';
         return $query;
-    }    
-     */
+    }
+    public static function querysCPProvinciaPuntos($importacion_id, $campo)
+    {
+        $query = '(select 
+        provincia as name,
+        ROUND(sum(servicio_si)*100/(
+            select count(v1.id)
+            from viv_centropoblado_datass as v1 
+            join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+            join par_ubigeo as v3 on v3.id = v2.dependencia 
+            where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" ),2) as y 
+    from (
+        select v3.nombre as provincia,count(v1.id) as servicio_si 
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" 
+        group by v3.nombre,v1.' . $campo . ' 
+        ) as filtro 
+    group by provincia) nueva';
+        return $query;
+    }
+
+    public static function querysHProvincia($importacion_id, $campo)
+    {
+        $query = '(select 
+        provincia,sum(centro_poblado) as centro_poblado ,
+        sum(servicio_si) as servicio_si,
+        ROUND(sum(servicio_si)*100/(
+            select SUM(v1.total_viviendas)
+            from viv_centropoblado_datass as v1 
+            join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+            join par_ubigeo as v3 on v3.id = v2.dependencia 
+            where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" ),2) as porcentaje_si,
+        SUM(servicio_no) as servicio_no,
+        ROUND(sum(servicio_no)*100/(
+            select SUM(v1.total_viviendas)
+            from viv_centropoblado_datass as v1 
+            join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+            join par_ubigeo as v3 on v3.id = v2.dependencia 
+            where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '!="SI" ),2) as porcentaje_no
+    from (
+        select v3.nombre as provincia,SUM(v1.total_viviendas) as centro_poblado, 0 as servicio_si ,0 as servicio_no
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' 
+        group by v3.nombre
+        union all
+        select v3.nombre as provincia,0 as centro_poblado, SUM(v1.total_viviendas) as servicio_si ,0 as servicio_no
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" 
+        group by v3.nombre,v1.' . $campo . '
+        union all
+        select v3.nombre as provincia,0 as centro_poblado,0 as servicio_si, SUM(v1.total_viviendas) as servicio_no 
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '!="SI" 
+        group by v3.nombre,v1.' . $campo . '
+        ) as filtro 
+    group by provincia) nueva';
+        return $query;
+    }
+    public static function querysHProvinciaPuntos($importacion_id, $campo)
+    {
+        $query = '(select 
+        provincia as name,
+        ROUND(sum(servicio_si)*100/(
+            select SUM(v1.total_viviendas)
+            from viv_centropoblado_datass as v1 
+            join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+            join par_ubigeo as v3 on v3.id = v2.dependencia 
+            where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" ),2) as y 
+    from (
+        select v3.nombre as provincia,SUM(v1.total_viviendas) as servicio_si 
+        from viv_centropoblado_datass as v1 
+        join par_ubigeo as v2 on v2.id = v1.ubigeo_id 
+        join par_ubigeo as v3 on v3.id = v2.dependencia 
+        where v1.importacion_id = ' . $importacion_id . ' and v1.' . $campo . '="SI" 
+        group by v3.nombre,v1.' . $campo . '
+        ) as filtro 
+    group by provincia) nueva';
+        return $query;
+    }
+
     public static function listar_porProvinciaDistrito($provincia, $distrito, $importacion_id, $indicador_id)
     {
         $buscar = CentroPobladoRepositotio::$servicios[$indicador_id];

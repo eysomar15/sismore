@@ -94,6 +94,220 @@
         </div>
         
     </div><!-- End row -->  
+@if ($indicador_id==20)
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-header bg-transparent pb-0">                    
+                <h3 class="card-title">TOTAL DE CENTROS POBLADOS RURALES CON SISTEMA DE AGUA EN LA REGION DE UCAYALI POR PROVINCIA</h3>                                    
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">PROVINCIA</th>
+                                        <th rowspan="2">TOTAL CENTRO POBLADO</th>
+                                        <th colspan="2"><CENTER>CON SISTEMA DE AGUA</CENTER></th>
+                                        <th colspan="2"><CENTER>SIN SISTEMA DE AGUA</CENTER></th>
+                                    <tr>
+                                        <th>CENTRO POBLADO</th>
+                                        <th>PORCENTAJE</th>
+                                        <th>CENTRO POBLADO</th>
+                                        <th>PORCENTAJE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='vistafiltro1'>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-body">
+                <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+            </div>
+        </div>
+    </div>        
+</div><!-- End row -->      
+@elseif ($indicador_id==21)
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-header bg-transparent pb-0">                    
+                <h3 class="card-title">TOTAL DE CENTROS POBLADOS RURALES CON SISTEMA DE CLORACIÓN EN LA REGION DE UCAYALI POR PROVINCIA</h3>                                    
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">PROVINCIA</th>
+                                        <th rowspan="2">TOTAL CENTRO POBLADO</th>
+                                        <th colspan="2"><CENTER>CON SISTEMA DE CLORACIÓN</CENTER></th>
+                                        <th colspan="2"><CENTER>SIN SISTEMA DE CLORACIÓN</CENTER></th>
+                                    <tr>
+                                        <th>CENTRO POBLADO</th>
+                                        <th>PORCENTAJE</th>
+                                        <th>CENTRO POBLADO</th>
+                                        <th>PORCENTAJE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='vistafiltro1'>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-body">
+                <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+            </div>
+        </div>
+    </div>        
+</div><!-- End row -->     
+@elseif ($indicador_id==22)
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-header bg-transparent pb-0">                    
+                <h3 class="card-title">TOTAL DE HOGARES CON COBERTURA DE AGUA EN LA REGION DE UCAYALI POR PROVINCIA</h3>                                    
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">PROVINCIA</th>
+                                        <th rowspan="2">TOTAL HOGARES</th>
+                                        <th colspan="2"><CENTER>CON COBERTURA DE AGUA</CENTER></th>
+                                        <th colspan="2"><CENTER>SIN COBERTURA DE AGUA</CENTER></th>
+                                    <tr>
+                                        <th>HOGARES</th>
+                                        <th>PORCENTAJE</th>
+                                        <th>HOGARES</th>
+                                        <th>PORCENTAJE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='vistafiltro1'>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-body">
+                <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+            </div>
+        </div>
+    </div>        
+</div><!-- End row -->         
+@elseif ($indicador_id==23)
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-header bg-transparent pb-0">                    
+                <h3 class="card-title">TOTAL DE HOGARES CON DESAGUE EN LA REGION DE UCAYALI POR PROVINCIA</h3>                                    
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">PROVINCIA</th>
+                                        <th rowspan="2">TOTAL HOGARES</th>
+                                        <th colspan="2"><CENTER>CON DESAGUE</CENTER></th>
+                                        <th colspan="2"><CENTER>SIN DESAGUE</CENTER></th>
+                                    <tr>
+                                        <th>HOGARES</th>
+                                        <th>PORCENTAJE</th>
+                                        <th>HOGARES</th>
+                                        <th>PORCENTAJE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='vistafiltro1'>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-body">
+                <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+            </div>
+        </div>
+    </div>        
+</div><!-- End row -->      
+@elseif ($indicador_id==26)
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-header bg-transparent pb-0">                    
+                <h3 class="card-title">TOTAL DE HOGARES QUE CONSUMEN AGUA SEGURA(CLORADA) EN LA REGION DE UCAYALI POR PROVINCIA</h3>                                    
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">PROVINCIA</th>
+                                        <th rowspan="2">TOTAL HOGARES</th>
+                                        <th colspan="2"><CENTER>CON CONSUMEN AGUA SEGURA</CENTER></th>
+                                        <th colspan="2"><CENTER>SIN CONSUMEN AGUA SEGURA</CENTER></th>
+                                    <tr>
+                                        <th>HOGARES</th>
+                                        <th>PORCENTAJE</th>
+                                        <th>HOGARES</th>
+                                        <th>PORCENTAJE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='vistafiltro1'>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-border card-primary">
+            <div class="card-body">
+                <div id="con2" style="min-width:400px;height:300px;margin:0 auto;" ></div>
+            </div>
+        </div>
+    </div>        
+</div><!-- End row -->         
+@else
+    
+@endif
+
     <div class="row">
         <div class="col-xl-12">
             <div class="card card-border card-primary">
@@ -202,7 +416,46 @@
                     });
                     vista+='<tr><th>Total</th><th>'+separator(total)+'</th><th>100%</th></tr>';
                     $('#vistax1').html(vista);
+                    /**/
+                    vista='';
+                    total0=0;
+                    total1=0;
+                    total2=0;
+                    data.filtro1.forEach(element => {
+                        vista+='<tr><td>'+element.provincia+'</td>'+
+                        '<td>'+separator(element.centro_poblado)+'</td>'+
+                        '<td>'+separator(element.servicio_si)+'</td>'+
+                        '<td>'+separator(element.porcentaje_si)+'%</td>'+
+                        '<td>'+separator(element.servicio_no)+'</td>'+
+                        '<td>'+separator(element.porcentaje_no)+'%</td>'+
+                        '</tr>';
+                        total0+=element.centro_poblado;
+                        total1+=element.servicio_si;
+                        total2+=element.servicio_no;
+                    });
+                    vista+='<tr><th>Total</th>'+
+                    '<th>'+separator(total0)+'</th>'+
+                    '<th>'+separator(total1)+'</th>'+
+                    '<th>100%</th>'+
+                    '<th>'+separator(total2)+'</th>'+
+                    '<th>100%</th></tr>';
+                    $('#vistafiltro1').html(vista);
                     grafica1(data.indicador);
+
+                    @if ($indicador_id==20)
+                    titulo='Provincias con sistema de agua';
+                    @elseif ($indicador_id==21)
+                    titulo='Provincias con sistema de cloración';
+                    @elseif ($indicador_id==22)
+                    titulo='Provincias con cobertura de agua';
+                    @elseif ($indicador_id==23)
+                    titulo='Provincias con desague';
+                    @elseif ($indicador_id==26)
+                    titulo='Provincias que consume agua segura';
+                    @else
+                    titulo='';
+                    @endif
+                    graficar2(data.gfiltro1,titulo)
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -285,6 +538,35 @@
                     }
             }); 
         }        
+        function graficar2(datax,titulo){
+            Highcharts.chart('con2',{
+                chart:{
+                    type:'column',
+                },
+                title:{text:'',},
+                xAxis:{
+                    type:'category',
+                },
+                yAxis:{
+                    title:{enabled:false,text:'Porcentaje',}
+                },
+                series:[{
+                    name:titulo,//'Distritos con servicio de agua potable',
+                    colorByPoint:true,
+                    data:datax,
+                }],
+                plotOptions:{
+                    series:{
+                        borderWidth:0,
+                        dataLabels:{
+                            enabled:true,
+                            format:'{point.y:.1f}%',
+                        },
+                    }
+                },
+                credits:false,
+            });
+        }           
     </script>
 
 @endsection

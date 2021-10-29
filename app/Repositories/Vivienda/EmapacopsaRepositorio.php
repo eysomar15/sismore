@@ -48,7 +48,12 @@ class EmapacopsaRepositorio
                     ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
                     ->groupBy('xx.servicio')
                     ->get();
-                $query['categoriaconagua'] = DB::table(DB::raw('(select v7.nombre as categoria, count(v1.id) as "con_agua",cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso"
+                $query['categoriaconagua'] = DB::table(DB::raw(
+                    '(select 
+                    v7.nombre as categoria, 
+                    count(v1.id) as "con_agua",
+                    cast(ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1,2)),2) as double) as porcentaje_con,
+                    cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso" 
                 from `viv_emapacopsa` as `v1` 
                 inner join `viv_tipo_servicio` as `v2` on `v2`.`id` = `v1`.`tipo_servicio_id`         
                 inner join `viv_estado_conexion` as `v3` on `v3`.`id` = `v1`.`estado_conexion_id`   
@@ -59,7 +64,12 @@ class EmapacopsaRepositorio
                 WHERE `v1`.`importacion_id`=' . $importacion_id . ' and `v1`.`tipo_servicio_id` in(1,2) 
                 group by `v7`.`nombre`) as xx'))->get();
 
-                $query['categoriasinagua'] = DB::table(DB::raw('(select v7.nombre as categoria, count(v1.id) as "sin_agua",cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso"
+                $query['categoriasinagua'] = DB::table(DB::raw(
+                    '(select 
+                    v7.nombre as categoria, 
+                    count(v1.id) as "sin_agua",
+                    cast(ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (3)),2) as double) as porcentaje_sin,
+                    cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso"
                 from `viv_emapacopsa` as `v1` 
                 inner join `viv_tipo_servicio` as `v2` on `v2`.`id` = `v1`.`tipo_servicio_id`         
                 inner join `viv_estado_conexion` as `v3` on `v3`.`id` = `v1`.`estado_conexion_id`   
@@ -130,7 +140,12 @@ class EmapacopsaRepositorio
                     ->groupBy('xx.servicio')
                     //->orderBy('xx.servicio','desc')
                     ->get();
-                $query['categoriaconagua'] = DB::table(DB::raw('(select v7.nombre as categoria, count(v1.id) as "con_agua",cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso"
+                $query['categoriaconagua'] = DB::table(DB::raw(
+                    '(select 
+                    v7.nombre as categoria, 
+                    count(v1.id) as "con_agua",
+                    cast(ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (2,3)),2) as double) as porcentaje_con,
+                    cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso"
                 from `viv_emapacopsa` as `v1` 
                 inner join `viv_tipo_servicio` as `v2` on `v2`.`id` = `v1`.`tipo_servicio_id`         
                 inner join `viv_estado_conexion` as `v3` on `v3`.`id` = `v1`.`estado_conexion_id`   
@@ -141,7 +156,12 @@ class EmapacopsaRepositorio
                 WHERE `v1`.`importacion_id`=' . $importacion_id . ' and `v1`.`tipo_servicio_id` in(2,3) 
                 group by `v7`.`nombre`) as xx'))->get();
 
-                $query['categoriasinagua'] = DB::table(DB::raw('(select v7.nombre as categoria, count(v1.id) as "sin_agua",cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso"
+                $query['categoriasinagua'] = DB::table(DB::raw(
+                    '(select 
+                    v7.nombre as categoria, 
+                    count(v1.id) as "sin_agua",
+                    cast(ROUND(count(v1.id)*100/(select count(v1.id) as conteo from viv_emapacopsa as v1 where v1.importacion_id=' . $importacion_id . ' and v1.tipo_servicio_id in (1)),2) as double) as porcentaje_sin,
+                    cast(SUM(v1.unid_uso) as SIGNED) as "unid_uso"
                 from `viv_emapacopsa` as `v1` 
                 inner join `viv_tipo_servicio` as `v2` on `v2`.`id` = `v1`.`tipo_servicio_id`         
                 inner join `viv_estado_conexion` as `v3` on `v3`.`id` = `v1`.`estado_conexion_id`   
