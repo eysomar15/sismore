@@ -122,6 +122,8 @@ Route::get('/ECE/Importar', [EceController::class, 'importar'])->name('ece.impor
 Route::get('/ECE/Importar/Aprobar/{importacion_id}', [EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
 Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}', [EceController::class, 'importarAprobarGuardar'])->name('ece.importar.aprobar.guardar');
 Route::post('/ECE/ImportarGuardar', [EceController::class, 'importarGuardar'])->name('ece.importar.store');
+Route::get('/ECE/listadoDT/{importacion_id}', [EceController::class, 'importarListadoDT'])->name('ece.importar.listadoDT');
+Route::get('/ECE/Listado/{importacion_id}', [EceController::class, 'importarListado'])->name('ece.importar.listado');
 Route::get('/ECE/Listar/ImportarDT', [EceController::class, 'ListarEceImportadosDT'])->name('ece.listar.importados');
 Route::get('/ECE/Eliminar/ImportarDT/{id}', [EceController::class, 'EliminarImportados']);
 Route::post('/ECE/CargarGrados', [EceController::class, 'cargargrados'])->name('ece.ajax.cargargrados');

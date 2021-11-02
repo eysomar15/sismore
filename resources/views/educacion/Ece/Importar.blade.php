@@ -77,9 +77,9 @@
                                         <div class="col-md-4">
                                             <select class="form-control" name="anio" id="anio" required>
                                                 <option value="">Seleccionar</option>
-                                                @for ($i = 2016; $i <= date('Y'); $i++)
-                                                    <option value="{{ $i }}">{{ $i }}</option>
-                                                @endfor
+                                                @foreach ($anios as $item)
+                                                <option value="{{$item->id}}">{{$item->anio}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
 
@@ -133,11 +133,11 @@
             <!-- col -->
         </div>
         <!-- End row -->
-        {{--<div class="row">
+        <div class="row">
             <div class="col-md-12">           
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">LISTA DE IMPORTACION </h3>                           
+                        <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>                           
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -168,7 +168,7 @@
                 </div>
                   
             </div> <!-- End col -->
-        </div> <!-- End row -->--}}
+        </div> <!-- End row -->
 
     </div>
 
@@ -186,7 +186,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         $(document).ready(function(){
-            {{--$('#datatable').DataTable({
+            $('#datatable').DataTable({
                 "ajax":"{{route('ece.listar.importados')}}",
                 "columns":[
                     {data:'id'},
@@ -228,7 +228,7 @@
                         "previous":"anterior"
                         }
                 }
-            }); --}}
+            }); 
         });
         function cargargrados() {
             $.ajax({
