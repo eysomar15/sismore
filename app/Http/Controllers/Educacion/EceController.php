@@ -10,6 +10,7 @@ use App\Models\Educacion\Grado;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
+use App\Models\Parametro\Anio;
 use App\Models\Ubigeo;
 use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\GradoRepositorio;
@@ -31,9 +32,11 @@ class EceController extends Controller
     {
         $materias = Materia::all();
         $nivels = GradoRepositorio::buscar_nivel1();
+        $anios = Anio::orderBy('anio', 'desc')->get();
+        //return $anios;
         //$eces=EceRepositorio::listar_importaciones();
         //return $eces;
-        return view('educacion.Ece.importar', compact('nivels', 'materias'));
+        return view('educacion.Ece.importar', compact('nivels', 'materias', 'anios'));
     }
     public function importarGuardar(Request $request)
     {
@@ -88,59 +91,68 @@ class EceController extends Controller
         }
 
         /** agregar excel al sistema */
-        if (count($array) > 0) {
-            $importacion = Importacion::Create([
-                'fuenteImportacion_id' => $request->fuenteImportacion, // valor predeterminado
-                'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
-                'fechaActualizacion' => $request->fechaActualizacion,
-                'comentario' => $request->comentario,
-                'estado' => 'PE'
-            ]);
-            $ece = Ece::Create([
-                'anio' => $request->anio,
-                'tipo' => $request->tipo,
-                'grado_id' => $request->grado,
-                'importacion_id' => $importacion->id,
-            ]);
-            foreach ($array as $key => $value) {
-                foreach ($value as $key2 => $row) {
-                    $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
-                    if ($request->tipo == 0) {
-                        $eceresultado = EceResultado::Create([
-                            'ece_id' => $ece->id,
-                            'institucioneducativa_id' => $insedu->id,
-                            'materia_id' => $row['materia'],
-                            'programados' => $row['programados'],
-                            'evaluados' => $row['evaluados'],
-                            'previo' => $row['previo'],
-                            'inicio' => $row['inicio'],
-                            'proceso' => $row['proceso'],
-                            'mediapromedio' => $row['media_promedio'],
-                            'satisfactorio' => $row['satisfactorio'],
-                        ]);
-                    } else {
-                        if ($row['evaluados'] != null)
-                            if ($row['evaluados'] != '') {
-                                $eceresultado = EceResultado::Create([
-                                    'ece_id' => $ece->id,
-                                    'institucioneducativa_id' => $insedu->id,
-                                    'materia_id' => $row['materia'],
-                                    'lengua' => $row['lengua_evaluada'],
-                                    'programados' => $row['programados'],
-                                    'evaluados' => $row['evaluados'],
-                                    //'previo' => '0',
-                                    'inicio' => $row['inicio'],
-                                    'proceso' => $row['proceso'],
-                                    'mediapromedio' => $row['media_promedio'],
-                                    'satisfactorio' => $row['satisfactorio'],
-                                ]);
-                            }
+        try {
+            if (count($array) > 0) {
+                $importacion = Importacion::Create([
+                    'fuenteImportacion_id' => $request->fuenteImportacion, // valor predeterminado
+                    'usuarioId_Crea' => auth()->user()->id,
+                    'usuarioId_Aprueba' => null,
+                    'fechaActualizacion' => $request->fechaActualizacion,
+                    'comentario' => $request->comentario,
+                    'estado' => 'PE'
+                ]);
+                $ece = Ece::Create([
+                    'anio_id' => $request->anio,
+                    'tipo' => $request->tipo,
+                    'grado_id' => $request->grado,
+                    'importacion_id' => $importacion->id,
+                ]);
+                foreach ($array as $key => $value) {
+                    foreach ($value as $key2 => $row) {
+                        $insedu = InstitucionEducativa::where('codModular', $row['codigo_modular'])->first();
+                        if ($request->tipo == 0) {
+                            $eceresultado = EceResultado::Create([
+                                'ece_id' => $ece->id,
+                                'institucioneducativa_id' => $insedu->id,
+                                'materia_id' => $row['materia'],
+                                'programados' => $row['programados'],
+                                'evaluados' => $row['evaluados'],
+                                'previo' => $row['previo'],
+                                'inicio' => $row['inicio'],
+                                'proceso' => $row['proceso'],
+                                'mediapromedio' => $row['media_promedio'],
+                                'satisfactorio' => $row['satisfactorio'],
+                            ]);
+                        } else {
+                            if ($row['evaluados'] != null)
+                                if ($row['evaluados'] != '') {
+                                    $eceresultado = EceResultado::Create([
+                                        'ece_id' => $ece->id,
+                                        'institucioneducativa_id' => $insedu->id,
+                                        'materia_id' => $row['materia'],
+                                        'lengua' => $row['lengua_evaluada'],
+                                        'programados' => $row['programados'],
+                                        'evaluados' => $row['evaluados'],
+                                        //'previo' => '0',
+                                        'inicio' => $row['inicio'],
+                                        'proceso' => $row['proceso'],
+                                        'mediapromedio' => $row['media_promedio'],
+                                        'satisfactorio' => $row['satisfactorio'],
+                                    ]);
+                                }
+                        }
                     }
                 }
             }
+        } catch (Exception $e) {
+            $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema \n" . $e->getMessage();
+            EceResultado::where('ece_id', $ece->id)->delete(); //elimina eceresultados cargados
+            $ece->delete(); //elimina ece creada
+            $importacion->delete(); // elimina la importacion creada
+            return view('Vivienda.PadronEmapacopsa.Importar', compact('mensaje'));
         }
-        return back()->with('message', 'IMPORTACION EXITOSA');
+        //return back()->with('message', 'IMPORTACION EXITOSA');
+        return redirect()->route('ece.importar.listado', $importacion->id);
     }
     public function importarAprobar($importacion_id)
     {
@@ -155,20 +167,29 @@ class EceController extends Controller
         $importacion->save();
         return back()->with('message', 'Importacion Aprobada Correctamente');
     }
+    public function importarListado($importacion_id)
+    {
+        return view('educacion.Ece.ListaImportada', compact('importacion_id'));
+    }
+    public function importarListadoDT($importacion_id)
+    {
+        $Lista = EceRepositorio::ListarImportados($importacion_id);
+        return  datatables()->of($Lista)->toJson();
+    }
     public function ListarEceImportadosDT()
     {
         $eces = EceRepositorio::listar_importaciones();
         return datatables()
             ->of($eces)
-            ->editColumn('fecha','{{date("d-m-Y",strtotime($fecha))}}')
-            ->editColumn('tipo','{{$tipo==0?"":"SI"}}')
+            ->editColumn('fecha', '{{date("d-m-Y",strtotime($fecha))}}')
+            ->editColumn('tipo', '{{$tipo==0?"":"SI"}}')
             //->addColumn('acciones','<button type="button" onclick="eliminarImportacion({{$importacion_id}})" class="btn btn-danger btn-xs">E</button>')
-            ->addColumn('acciones',function($obj){
-                if($obj->estado=='PR')
-                    return '<button type="button" onclick="eliminarImportacion('.$obj->importacion_id.')" class="btn btn-danger btn-xs">E</button>';
+            ->addColumn('acciones', function ($obj) {
+                /*if ($obj->estado == 'PR')
+                    return '<button type="button" onclick="eliminarImportacion(' . $obj->importacion_id . ')" class="btn btn-danger btn-xs">E</button>';*/
                 return '';
             })
-            ->rawColumns(['fecha','tipo','acciones'])
+            ->rawColumns(['fecha', 'tipo', 'acciones'])
             ->toJson();
     }
     public function EliminarImportados($id)
@@ -178,7 +199,7 @@ class EceController extends Controller
         $query->save();
         //$status=true;
         //return response()->json(compact('status'));
-        return response()->json(['status'=>true]);
+        return response()->json(['status' => true]);
     }
     public function cargargrados(Request $request)
     {

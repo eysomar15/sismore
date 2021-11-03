@@ -82,7 +82,18 @@ class CentroPobladoRepositotio
         else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and v2.dependencia=' . $provincia;
         switch ($indicador_id) {
             case 20: //1
-                $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPIndicador($importacion_id, 'sistema_agua', $ubicacion)))
+                /*$query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.sistema_agua="SI","SI","NO") as servicio, count(v1.id) as conteo 
+                    from `viv_centropoblado_datass` as `v1` 
+                    inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                    where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                    group by `v1`.`sistema_agua`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
+                    ->get();*/
+                $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysIndicador($importacion_id, 'sistema_agua', $ubicacion)))
                     ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
                     ->get();
                 $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPProvincia($importacion_id, 'sistema_agua')))
@@ -100,8 +111,16 @@ class CentroPobladoRepositotio
                     ->get();
                 break;
             case 21: //2
-                $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPIndicador($importacion_id, 'sistema_cloracion', $ubicacion)))
-                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.sistema_cloracion="SI","SI","NO") as servicio, count(v1.id) as conteo 
+                    from `viv_centropoblado_datass` as `v1` 
+                    inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                    where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                    group by `v1`.`sistema_cloracion`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
                     ->get();
                 $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPProvincia($importacion_id, 'sistema_cloracion')))
                     ->select(
@@ -118,8 +137,16 @@ class CentroPobladoRepositotio
                     ->get();
                 break;
             case 22: //3
-                $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHIndicador($importacion_id, 'servicio_agua_continuo', $ubicacion)))
-                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.servicio_agua_continuo="SI","SI","NO") as servicio, cast(SUM(v1.total_viviendas)as SIGNED) as conteo 
+                from `viv_centropoblado_datass` as `v1` 
+                inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                group by `v1`.`servicio_agua_continuo`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
                     ->get();
                 $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvincia($importacion_id, 'servicio_agua_continuo')))
                     ->select(
@@ -136,8 +163,16 @@ class CentroPobladoRepositotio
                     ->get();
                 break;
             case 23: //4
-                $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHIndicador($importacion_id, 'sistema_disposicion_excretas', $ubicacion)))
-                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.sistema_disposicion_excretas="SI","SI","NO") as servicio, cast(SUM(v1.total_viviendas)as SIGNED) as conteo 
+                from `viv_centropoblado_datass` as `v1` 
+                inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                group by `v1`.`sistema_disposicion_excretas`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
                     ->get();
                 $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvincia($importacion_id, 'sistema_disposicion_excretas')))
                     ->select(
@@ -158,8 +193,16 @@ class CentroPobladoRepositotio
             case 25:
                 break;
             case 26: //5
-                $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHIndicador($importacion_id, 'realiza_cloracion_agua', $ubicacion)))
-                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
+                $query['indicador'] = DB::table(DB::raw(
+                    '(select IF(v1.realiza_cloracion_agua="SI","SI","NO") as servicio, cast(SUM(v1.total_viviendas)as SIGNED) as conteo 
+                from `viv_centropoblado_datass` as `v1` 
+                inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
+                where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
+                group by `v1`.`realiza_cloracion_agua`) as xx'
+                ))
+                    ->select(DB::raw('xx.servicio as name'), DB::raw('cast(SUM(xx.conteo) as SIGNED) as y'))
+                    ->groupBy('xx.servicio')
+                    ->orderBy('xx.servicio', 'desc')
                     ->get();
                 $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvincia($importacion_id, 'realiza_cloracion_agua')))
                     ->select(
@@ -181,23 +224,10 @@ class CentroPobladoRepositotio
         }
         return $query;
     }
-    public static function querysCPIndicador($importacion_id, $campo, $ubicacion)
+    public static function querysIndicador($importacion_id, $campo, $ubicacion)
     {
         $query = '(select servicio as name,SUM(conteo) as y from (
             select IF(v1.' . $campo . '="SI","SI","NO") as servicio, count(v1.id) as conteo 
-            from `viv_centropoblado_datass` as `v1` 
-            inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
-            where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 
-            group by `v1`.`' . $campo . '`
-            ) nueva 
-            group by servicio 
-            order by servicio desc) xxx';
-        return $query;
-    }
-    public static function querysHIndicador($importacion_id, $campo, $ubicacion)
-    {
-        $query = '(select servicio as name,SUM(conteo) as y from (
-            select IF(v1.' . $campo . '="SI","SI","NO") as servicio, SUM(v1.total_viviendas) as conteo 
             from `viv_centropoblado_datass` as `v1` 
             inner join `par_ubigeo` as `v2` on `v2`.`id` = `v1`.`ubigeo_id` 
             where `v1`.`importacion_id` = ' . $importacion_id . $ubicacion . ' 

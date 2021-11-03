@@ -13,7 +13,7 @@ class Ece extends Model
     protected $fillable=[
         'importacion_id',
         'grado_id',
-        'anio',
+        'anio_id',
         'tipo',
     ];
 }

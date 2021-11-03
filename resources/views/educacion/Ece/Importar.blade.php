@@ -77,9 +77,9 @@
                                         <div class="col-md-4">
                                             <select class="form-control" name="anio" id="anio" required>
                                                 <option value="">Seleccionar</option>
-                                                @for ($i = 2016; $i <= date('Y'); $i++)
-                                                    <option value="{{ $i }}">{{ $i }}</option>
-                                                @endfor
+                                                @foreach ($anios as $item)
+                                                <option value="{{$item->id}}">{{$item->anio}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
 
@@ -137,13 +137,13 @@
             <div class="col-md-12">           
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">LISTA DE IMPORTACION </h3>                           
+                        <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>                           
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" {{--style="border-collapse: collapse; border-spacing: 0;font-size:11px; width: 100%;"--}}>
+                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" >
                                         <thead class="text-primary">    
                                             <tr>
                                                 <th>Id</th>
@@ -156,23 +156,6 @@
                                                 <th>Accion</th>  
                                             </tr>
                                         </thead>
-                                        {{--
-                                        <tbody>
-                                            @foreach ($eces as $item)
-                                            <tr>
-                                                <td>{{$item->id}}</td>
-                                                <td>{{date('d-m-Y',strtotime($item->fecha))}}</td>
-                                                <td>{{$item->anio}}</td>
-                                                <td>{{$item->tipo==0?'':'SI'}}</td>
-                                                <td>{{$item->grado}}</td>
-                                                <td>{{$item->nivel}}</td>
-                                                <td>{{$item->estado}}</td>
-                                                <td><button type="button" onclick="" class="btn btn-primary btn-xs">Eliminar</button></td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                            --}}
-                                        
                                     </table>
                                 </div>
                             </div>

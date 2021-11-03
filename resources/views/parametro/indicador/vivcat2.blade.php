@@ -49,19 +49,6 @@
                         </div>
                         
                     </div>
-                    <!--div class="form-group row">
-                        <label class="col-md-1 col-form-label">Conexion</label>
-                        <div class="col-md-5">
-                            <select id="econexion" name="econexion" class="form-control" onchange="cargarhistorial();">
-                                <option value="0">TODOS</option>
-                                @foreach ($econexion as $prov)
-                                <option value="{{$prov->id}}">{{$prov->nombre}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                        
-                    </div-->
                 </div>
             </div>
         </div>
@@ -135,18 +122,6 @@
                                             <th>PORCENTAJE</th>
                                             <th>HOGARES</th>
                                             <th>PORCENTAJE</th>
-                                            {{--@if ($indicador_id==24)
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            @else
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            <th>HOGARES</th>
-                                            <th>PORCENTAJE</th>
-                                            @endif     --}}               
-                                            
                                         </tr>
                                     </thead>
                                     <tbody id='vistafiltro1'>
@@ -183,13 +158,17 @@
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th>CATEGORIAS</th>
+                                            <th rowspan="2">CATEGORIAS</th>
                                             @if ($indicador_id==24)
-                                            <th>CON AGUA</th>
+                                            <th colspan="2"><CENTER>CON AGUA</CENTER></th>
                                             @else
-                                            <th>CON DESAGUE</th>
-                                            @endif                                             
-                                            <th>UNIDADES DE USO</th>
+                                            <th colspan="2"><CENTER>CON DESAGUE</CENTER></th>
+                                            @endif 
+                                            <th rowspan="2">UNIDADES DE USO</th>
+                                        </tr>
+                                        <tr>
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJES</th>
                                         </tr>
                                     </thead>
                                     <tbody id='vistaca'>
@@ -217,13 +196,17 @@
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th>CATEGORIAS</th>
+                                            <th rowspan="2">CATEGORIAS</th>
                                             @if ($indicador_id==24)
-                                            <th>SIN AGUA</th>
+                                            <th colspan="2"><CENTER>SIN AGUA</CENTER></th>
                                             @else
-                                            <th>SIN DESAGUE</th>
+                                            <th colspan="2"><CENTER>SIN DESAGUE</CENTER></th>
                                             @endif 
-                                            <th>UNIDADES DE USO</th>
+                                            <th rowspan="2">UNIDADES DE USO</th>
+                                        </tr>
+                                        <tr>
+                                            <th>HOGARES</th>
+                                            <th>PORCENTAJES</th>
                                         </tr>
                                     </thead>
                                     <tbody id='vistasa'>
@@ -325,21 +308,21 @@
                     total1=0;
                     total2=0;
                     data.categoriaconagua.forEach(element => {
-                        vista+='<tr><td>'+element.categoria+'</td><td align=center>'+separator(element.con_agua)+'</td><td align=center>'+separator(element.unid_uso)+'</td></tr>';
+                        vista+='<tr><td>'+element.categoria+'</td><td align=center>'+separator(element.con_agua)+'</td><td align=center>'+separator(element.porcentaje_con)+'%</td><td align=center>'+separator(element.unid_uso)+'</td></tr>';
                         total1+=element.con_agua;
                         total2+=element.unid_uso;
                     });
-                    vista+='<tr><th>Total</th><th><center>'+separator(total1)+'</center></th><th><center>'+separator(total2)+'</center></th></tr>';
+                    vista+='<tr><th>Total</th><th><center>'+separator(total1)+'</center></th><th><center>100%</center></th><th><center>'+separator(total2)+'</center></th></tr>';
                     $('#vistaca').html(vista);
                     vista='';
                     total1=0;
                     total2=0;
                     data.categoriasinagua.forEach(element => {
-                        vista+='<tr><td>'+element.categoria+'</td><td align=center>'+separator(element.sin_agua)+'</td><td align=center>'+separator(element.unid_uso)+'</td></tr>';
+                        vista+='<tr><td>'+element.categoria+'</td><td align=center>'+separator(element.sin_agua)+'</td><td align=center>'+separator(element.porcentaje_sin)+'%</td><td align=center>'+separator(element.unid_uso)+'</td></tr>';
                         total1+=element.sin_agua;
                         total2+=element.unid_uso;
                     });
-                    vista+='<tr><th>Total</th><th><center>'+separator(total1)+'</center></th><th><center>'+separator(total2)+'</center></th></tr>';
+                    vista+='<tr><th>Total</th><th><center>'+separator(total1)+'</center></th><th><center>100%</center></th><th><center>'+separator(total2)+'</center></th></tr>';
                     $('#vistasa').html(vista);
                     vista='';
                     total0=0;
