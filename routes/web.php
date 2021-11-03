@@ -97,7 +97,7 @@ Route::get('/Matricula/ListaImportadaConsolidadoAnual/{importacion_id}', [Matric
 Route::get('/Matricula/AprobarConsolidadoAnual/{importacion_id}', [MatriculaController::class, 'aprobarConsolidadoAnual'])->name('Matricula.aprobarConsolidadoAnual');
 Route::post('/Matricula/AprobarConsolidadoAnual/procesarConsolidadoAnual/{importacion_id}', [MatriculaController::class, 'procesarConsolidadoAnual'])->name('Matricula.procesarConsolidadoAnual');
 
-Route::get('/Matricula/consolidadoAnual/', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.consolidadoAnual');
+Route::get('/Matricula/consolidadoAnual/', [MatriculaController::class, 'principalConsolidadoAnual'])->name('Matricula.consolidadoAnual');
 
 Route::get('/InstEducativa/Principal', [InstEducativaController::class, 'principal'])->name('InstEducativa.principal');
 Route::post('/InstEducativa/ReporteDistrito', [InstEducativaController::class, 'ReporteDistrito'])->name('InstEducativa.ReporteDistrito');
