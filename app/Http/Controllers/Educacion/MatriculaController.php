@@ -536,9 +536,7 @@ class MatriculaController extends Controller
         // VALIDACION DE LOS FORMATOS DE LOS 03 NIVELES
         $i = 0;
         $cadena ='';
-
-
-        
+       
         try{
             foreach ($arrayInicial as $key => $value) {
                 foreach ($value as $row) {
@@ -632,83 +630,77 @@ class MatriculaController extends Controller
 
         $existemMismoAnio = MatriculaRepositorio :: busca_ConsolidadoAnual_segunAnio($request['anio']);
 
-        //return $existemMismoAnio;
-        if( $existemMismoAnio != null)
+        if( $existemMismoAnio->count()>=1)
         {
-            return "enytra";
-            // $mensaje = "Error, existe un archivo ".$existemMismoAnio->first()->estado." importado para el año seleccionado";          
-            // return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));            
+            $mensaje = "Error, existe un archivo con estado ".$existemMismoAnio->first()->estado." para el año seleccionado";          
+            return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));            
         }
         else
         {
-            return "nooooo entra";
-        }
-        // else
-        // {
-        //     $creacionExitosa = 1;
+            $creacionExitosa = 1;
 
-        //     try{
-        //         $importacion = Importacion::Create([
-        //             'fuenteImportacion_id'=>10, // valor predeterminado
-        //             'usuarioId_Crea'=> auth()->user()->id,
-        //             'usuarioId_Aprueba'=>null,
-        //             'fechaActualizacion'=>$request['fechaActualizacion'],
-        //             'comentario'=>$request['comentario'],
-        //             'estado'=>'PE'
-        //           ]); 
+            try{
+                $importacion = Importacion::Create([
+                    'fuenteImportacion_id'=>10, // valor predeterminado
+                    'usuarioId_Crea'=> auth()->user()->id,
+                    'usuarioId_Aprueba'=>null,
+                    'fechaActualizacion'=>$request['fechaActualizacion'],
+                    'comentario'=>$request['comentario'],
+                    'estado'=>'PE'
+                  ]); 
     
-        //         $Matricula = MatriculaAnual::Create([
-        //             'importacion_id'=>$importacion->id, // valor predeterminado
-        //             'anio_id'=> $request['anio'],
-        //             'estado'=>'PE'
-        //           ]); 
+                $Matricula = MatriculaAnual::Create([
+                    'importacion_id'=>$importacion->id, // valor predeterminado
+                    'anio_id'=> $request['anio'],
+                    'estado'=>'PE'
+                  ]); 
                
-        //     }catch (Exception $e) {
-        //         $creacionExitosa = 0;
-        //     }
+            }catch (Exception $e) {
+                $creacionExitosa = 0;
+            }
             
-        //     $mensajeNivel = "";
+            $mensajeNivel = "";
     
-        //     if($creacionExitosa==1)
-        //     {
-        //         $creacionExitosa = $this->guardar_inicial_anual($arrayInicial,$Matricula->id);
+            if($creacionExitosa==1)
+            {
+                $creacionExitosa = $this->guardar_inicial_anual($arrayInicial,$Matricula->id);
     
-        //         if($creacionExitosa==1)
-        //         {
-        //             $creacionExitosa = $this->guardar_primaria_anual($arrayPrimaria,$Matricula->id);
-        //             if($creacionExitosa==1)
-        //             {
-        //                 $creacionExitosa = $this->guardar_secundaria_anual($arraySecundaria,$Matricula->id);
-        //                 if($creacionExitosa==0)
-        //                 {
-        //                     $mensajeNivel = "Nivel SECUNDARIA";  
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 $mensajeNivel = "Nivel PRIMARIA";  
-        //             }
-        //         }
-        //         else
-        //         { 
-        //             $mensajeNivel ="Nivel INICIAL";
-        //         }
-        //     }
+                if($creacionExitosa==1)
+                {
+                    $creacionExitosa = $this->guardar_primaria_anual($arrayPrimaria,$Matricula->id);
+                    if($creacionExitosa==1)
+                    {
+                        $creacionExitosa = $this->guardar_secundaria_anual($arraySecundaria,$Matricula->id);
+                        if($creacionExitosa==0)
+                        {
+                            $mensajeNivel = "Nivel SECUNDARIA";  
+                        }
+                    }
+                    else
+                    {
+                        $mensajeNivel = "Nivel PRIMARIA";  
+                    }
+                }
+                else
+                { 
+                    $mensajeNivel ="Nivel INICIAL";
+                }
+            }
     
-        //     if($creacionExitosa==0)
-        //     {
-        //         $importacion->estado = 'EL';
-        //         $importacion->save();
+            if($creacionExitosa==0)
+            {
+                $importacion->estado = 'EL';
+                $importacion->save();
     
-        //         $Matricula->estado = 'EL';
-        //         $Matricula->save();
+                $Matricula->estado = 'EL';
+                $Matricula->save();
     
-        //         $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
-        //         return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));
-        //     }
+                $mensaje = "Error en la carga de ".$mensajeNivel.", verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
+                return view('Educacion.Matricula.ImportarConsolidadoAnual',compact('mensaje','anios'));
+            }
            
-        //     return redirect()->route('Matricula.Matricula_Lista_ConsolidadoAnual',$importacion->id);
-        // }       
+            return redirect()->route('Matricula.Matricula_Lista_ConsolidadoAnual',$importacion->id);
+        }       
     }
 
     public function ListaImportada_ConsolidadoAnual($importacion_id)
@@ -966,10 +958,7 @@ class MatriculaController extends Controller
         return $creacionExitosa;
     }
 
-
-
-
-    //**************************************************************************************** */
+    //**********************************MATRICULA FECHAS****************************************************** */
     public function principal()
     {
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
@@ -1167,7 +1156,8 @@ class MatriculaController extends Controller
     }
 
     public function valor_filtro($gestion)
-    {       
+    {   
+
         $filtro=0;
 
         if($gestion==1)
@@ -1182,4 +1172,16 @@ class MatriculaController extends Controller
         return  $filtro;
     }
     
+    //**********************************MATRICULA ANUAL CONSOLIDADO****************************************************** */
+
+    public function principalConsolidadoAnual()
+    {
+        $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
+        $anios =  MatriculaRepositorio ::matriculas_anio( );
+
+        $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
+
+        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));  
+    }
+
 }
