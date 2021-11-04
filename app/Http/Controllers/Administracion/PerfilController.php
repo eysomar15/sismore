@@ -159,7 +159,6 @@ class PerfilController extends Controller
                 Menuperfil::where('perfil_id',$request->perfil)->where('menu_id',$modulo->id)->delete();
             }
         }
-        //echo json_encode(array("status" => TRUE));
         return response()->json(array('status' => true, 'modulos' => $menuperfil,'sis'=>$request->perfil));
     }
 }
