@@ -21,15 +21,28 @@ class SistemaController extends Controller
 
     public function listarDT()
     {
-        $data = Sistema::orderBy('id','desc')->get();
-
-        return  datatables()::of($data)
+        $data = Sistema::orderBy('id', 'desc')->get();
+        /*return  datatables()->of($data)
+            ->editColumn('icono', '<i class="{{$icono}}"></i>')
             ->addColumn('action', function ($data) {
                 $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"> <i class="fa fa-pen"></i> </a>';
                 $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','icono'])
+            ->toJson();*/
+        return  datatables()::of($data)
+            ->editColumn('icono', '<i class="{{$icono}}"></i>')
+            ->editColumn('estado', function ($data) {
+                if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
+                else return '<span class="badge badge-success">ACTIVO</span>';
+            })
+            ->addColumn('action', function ($data) {
+                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"> <i class="fa fa-pen"></i> </a>';
+                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"> <i class="fa fa-trash"></i> </a>';
+                return $acciones;
+            })
+            ->rawColumns(['action', 'icono', 'estado'])
             ->make(true);
     }
 

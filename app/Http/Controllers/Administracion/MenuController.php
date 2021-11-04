@@ -34,7 +34,12 @@ class MenuController extends Controller
                 $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
-            ->rawColumns(['action'])
+            ->editColumn('icono', '<i class="{{$icono}}"></i>')
+            ->editColumn('estado', function ($data) {
+                if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
+                else return '<span class="badge badge-success">ACTIVO</span>';
+            })
+            ->rawColumns(['action', 'icono','estado'])
             ->make(true);
     }
 

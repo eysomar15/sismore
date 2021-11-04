@@ -79,6 +79,7 @@
                                             <th>Parametro</th>
                                             <th>Posicion</th>
                                             <th>Grupo</th>
+                                            <th>Estado</th>
                                             <th>Aciones</th>
                                         </thead>
                                     </table>
@@ -354,28 +355,15 @@
         function listarDT() {
             $('#dtPrincipal').DataTable({
                 "ajax": "{{ url('/') }}/Menu/listarDT/" + $('#sistema').val(),
-                "columns": [{
-                        data: 'nombre'
-                    },
-                    {
-                        data: 'url'
-                    },
-                    {
-                        data: 'icono'
-                    },
-                    {
-                        data: 'parametro'
-                    },
-                    {
-                        data: 'posicion'
-                    },
-                    {
-                        data: 'grupo'
-                    },
-                    {
-                        data: 'action',
-                        orderable: false
-                    }
+                "columns": [
+                    {data: 'nombre'},
+                    {data: 'url'},
+                    {data: 'icono'},
+                    {data: 'parametro'},
+                    {data: 'posicion'},
+                    {data: 'grupo'},
+                    {data: 'estado'},
+                    {data: 'action',orderable: false}
                 ],
                 responsive: true,
                 autoWidth: false,
