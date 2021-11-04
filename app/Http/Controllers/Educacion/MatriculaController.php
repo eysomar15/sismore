@@ -585,7 +585,7 @@ class MatriculaController extends Controller
                     .$row['tercer_nivel_retirados'].$row['tercer_nivel_requieren_recup'].$row['tercer_nivel_desaprobados']
                     .$row['cuarto_nivel_aprobados'].$row['cuarto_nivel_trasladados'].$row['cuarto_nivel_retirados']
                     .$row['cuarto_nivel_requieren_recup'].$row['cuarto_nivel_desaprobados'].$row['quinto_nivel_aprobados']
-                    .$row['quinto_nivel_trasladados'].$row['quinto_nivel_retirados'].$row['quinto_requieren_recup']
+                    .$row['quinto_nivel_trasladados'].$row['quinto_nivel_retirados'].$row['quinto_nivel_requieren_recup']
                     .$row['quinto_nivel_desaprobados'].$row['sexto_nivel_aprobados'].$row['sexto_nivel_trasladados']
                     .$row['sexto_nivel_retirados'].$row['sexto_nivel_requieren_recup'].$row['sexto_nivel_desaprobados'];
 
@@ -617,7 +617,7 @@ class MatriculaController extends Controller
                     .$row['tercer_nivel_retirados'].$row['tercer_nivel_requieren_recup'].$row['tercer_nivel_desaprobados']
                     .$row['cuarto_nivel_aprobados'].$row['cuarto_nivel_trasladados'].$row['cuarto_nivel_retirados']
                     .$row['cuarto_nivel_requieren_recup'].$row['cuarto_nivel_desaprobados'].$row['quinto_nivel_aprobados']
-                    .$row['quinto_nivel_trasladados'].$row['quinto_nivel_retirados'].$row['quinto_requieren_recup']
+                    .$row['quinto_nivel_trasladados'].$row['quinto_nivel_retirados'].$row['quinto_nivel_requieren_recup']
                     .$row['quinto_nivel_desaprobados'];            
                 }
              }
@@ -868,7 +868,7 @@ class MatriculaController extends Controller
                         'quinto_nivel_aprobados'=>$row['quinto_nivel_aprobados'],
                         'quinto_nivel_trasladados'=>$row['quinto_nivel_trasladados'],
                         'quinto_nivel_retirados'=>$row['quinto_nivel_retirados'],
-                        'quinto_requieren_recup'=>$row['quinto_requieren_recup'],
+                        'quinto_nivel_requieren_recup'=>$row['quinto_nivel_requieren_recup'],
                         'quinto_nivel_desaprobados'=>$row['quinto_nivel_desaprobados'],
                         'sexto_nivel_aprobados'=>$row['sexto_nivel_aprobados'],
                         'sexto_nivel_trasladados'=>$row['sexto_nivel_trasladados'],
@@ -944,9 +944,8 @@ class MatriculaController extends Controller
                         'quinto_nivel_aprobados'=>$row['quinto_nivel_aprobados'],
                         'quinto_nivel_trasladados'=>$row['quinto_nivel_trasladados'],
                         'quinto_nivel_retirados'=>$row['quinto_nivel_retirados'],
-                        'quinto_requieren_recup'=>$row['quinto_requieren_recup'],
-                        'quinto_nivel_desaprobados'=>$row['quinto_nivel_desaprobados'],
-                     
+                        'quinto_nivel_requieren_recup'=>$row['quinto_nivel_requieren_recup'],
+                        'quinto_nivel_desaprobados'=>$row['quinto_nivel_desaprobados'],                     
         
                     ]); 
                 }
@@ -1172,16 +1171,14 @@ class MatriculaController extends Controller
         return  $filtro;
     }
     
-    //**********************************MATRICULA ANUAL CONSOLIDADO****************************************************** */
+    //********************************** MATRICULA ANUAL CONSOLIDADO ****************************************************** */
 
     public function principalConsolidadoAnual()
     {
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
-        $anios =  MatriculaRepositorio ::matriculas_anio( );
+        $anios =  MatriculaRepositorio ::matriculas_anio_ConsolidadoAnual( );
 
-        $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
-
-        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));  
+        return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('matricula','anios'));  
     }
 
 }

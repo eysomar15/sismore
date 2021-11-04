@@ -41,18 +41,20 @@ class ImportacionRepositorio
                         ->leftJoin('edu_matricula as mat', 'imp.id', '=', 'mat.importacion_id')
                         ->leftJoin('par_anio as anioMat', 'mat.anio_id', '=', 'anioMat.id')
 
-
                         ->leftJoin('edu_censo as censo', 'imp.id', '=', 'censo.importacion_id')
                         ->leftJoin('par_anio as anioCenso', 'censo.anio_id', '=', 'anioCenso.id')
 
                         ->leftJoin('edu_tableta as tableta', 'imp.id', '=', 'tableta.importacion_id')
                         ->leftJoin('par_anio as anioTableta', 'tableta.anio_id', '=', 'anioTableta.id')
 
+                        ->leftJoin('edu_ece as ece', 'imp.id', '=', 'ece.importacion_id')
+                        ->leftJoin('par_anio as anioEce', 'ece.anio_id', '=', 'anioEce.id')
+
                         ->where("imp.estado", "!=", "EL")
                         ->where("par_fuenteimportacion.sistema_id", "=", $sistema_id)
                         ->orderBy('imp.estado', 'asc')
                         ->orderBy('imp.id', 'desc')
-                    ->get([  
+                        ->get([  
                              DB::raw('imp.id'),                            
                              DB::raw('imp.comentario'), 
                              DB::raw('imp.fechaActualizacion'), 
@@ -61,7 +63,8 @@ class ImportacionRepositorio
                              DB::raw('aprueba.usuario as aprueba'),
                              DB::raw('par_fuenteimportacion.nombre'), 
                              DB::raw('par_fuenteimportacion.codigo'), 
-                             DB::raw('(concat( par_fuenteimportacion.formato ," ",ifnull(anioMatAnu.anio,""),ifnull(anioMat.anio,"") ,ifnull(anioCenso.anio,"") ,ifnull(anioTableta.anio,"")      )) as formato '), 
+                             DB::raw('(concat( par_fuenteimportacion.formato ," ",ifnull(anioMatAnu.anio,""),ifnull(anioMat.anio,"") ,
+                                        ifnull(anioCenso.anio,"") ,ifnull(anioTableta.anio,"") ,ifnull(anioEce.anio,"")      )) as formato '), 
 
                             ]);
 
