@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Administracion\MenuController;
+use App\Http\Controllers\Administracion\PerfilController;
+use App\Http\Controllers\Administracion\SistemaController;
 use App\Http\Controllers\Administracion\UsuarioController;
 use App\Http\Controllers\Educacion\CensoController;
 use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
@@ -182,5 +185,30 @@ Route::post('/Usuario/Registrar', [UsuarioController::class, 'guardar'])->name('
 Route::get('/Usuario/Editar/{usuario}', [UsuarioController::class, 'editar'])->name('Usuario.Editar');
 Route::post('/Usuario/Editar/{id}', [UsuarioController::class, 'actualizar'])->name('Usuario.Actualizar');
 Route::get('/Usuario/Eliminar/{id}', [UsuarioController::class, 'eliminar'])->name('Usuario.Eliminar');
+
+Route::get('/Sistema/Principal', [SistemaController::class, 'principal'])->name('sistema.principal');
+Route::get('/Sistema/listarDT', [SistemaController::class, 'listarDT'])->name('sistema.listarDT');
+Route::get('/Sistema/ajax_edit/{sistema_id}', [SistemaController::class, 'ajax_edit']);
+Route::post('/Sistema/ajax_add', [SistemaController::class, 'ajax_add']);
+Route::post('/Sistema/ajax_update', [SistemaController::class, 'ajax_update']);
+Route::get('/Sistema/ajax_delete/{sistema_id}', [SistemaController::class, 'ajax_delete']);
+
+Route::get('/Menu/Principal', [MenuController::class, 'principal'])->name('menu.principal');
+Route::get('/Menu/listarDT/{sistema_id}', [MenuController::class, 'listarDT'])->name('menu.listarDT');
+Route::get('/Menu/cargarGrupo/{sistema_id}', [MenuController::class, 'cargarGrupo']);
+Route::get('/Menu/ajax_edit/{menu_id}', [MenuController::class, 'ajax_edit']);
+Route::post('/Menu/ajax_add', [MenuController::class, 'ajax_add']);
+Route::post('/Menu/ajax_update', [MenuController::class, 'ajax_update']);
+Route::get('/Menu/ajax_delete/{menu_id}', [MenuController::class, 'ajax_delete']);
+
+Route::get('/Perfil/Principal', [PerfilController::class, 'principal'])->name('perfil.principal');
+Route::get('/Perfil/listarDT/{sistema_id}', [PerfilController::class, 'listarDT'])->name('perfil.listarDT');
+Route::get('/Perfil/ajax_edit/{perfil_id}', [PerfilController::class, 'ajax_edit']);
+Route::post('/Perfil/ajax_add', [PerfilController::class, 'ajax_add']);
+Route::post('/Perfil/ajax_update', [PerfilController::class, 'ajax_update']);
+Route::get('/Perfil/ajax_delete/{perfil_id}', [PerfilController::class, 'ajax_delete']);
+
+Route::get('/Perfil/listarmenu/{perfil_id}/{sistema_id}', [PerfilController::class, 'listarmenu']);
+Route::post('/Perfil/ajax_add_menu', [PerfilController::class, 'ajax_add_menu']);
 
 /**************************************** FIN ADMINISTRADOR ************************************************/
