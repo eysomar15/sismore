@@ -97,6 +97,9 @@
         <!-- Todo app -->
         <script src="{{ asset('/') }}assets/js/pages/jquery.todo.js"></script>
 
+        <script src="{{ asset('/') }}assets/libs/toastr/toastr.min.js"></script>
+        <script src="{{ asset('/') }}assets/js/bootbox.js"></script>
+
         <!-- flot chart -->
         {{-- <script src="assets/libs/flot-charts/jquery.flot.js"></script>
         <script src="assets/libs/flot-charts/jquery.flot.time.js"></script>
@@ -112,6 +115,21 @@
 
         <!-- App js -->
         <script src="{{ asset('/') }}assets/js/app.min.js"></script>
+        <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "2000",
+            "extendedTimeOut": "1000"
+            } 
+        </script>
         @yield('js')
     </body>
 
