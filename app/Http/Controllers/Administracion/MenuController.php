@@ -30,8 +30,8 @@ class MenuController extends Controller
 
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {
-                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"> <i class="fa fa-pen"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"> <i class="fa fa-trash"></i> </a>';
+                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
             ->editColumn('icono', '<i class="{{$icono}}"></i>')

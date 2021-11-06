@@ -30,16 +30,16 @@ class PerfilController extends Controller
 
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {
-                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"> <i class="fa fa-pen"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="menu(' . $data->id . ')"> <i class="fa fa-list-ul"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"> <i class="fa fa-trash"></i> </a>';
+                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="menu(' . $data->id . ')" title="AGREGAR MENU"> <i class="fa fa-list-ul"></i> </a>';
+                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
             ->editColumn('estado', function ($data) {
                 if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
                 else return '<span class="badge badge-success">ACTIVO</span>';
             })
-            ->rawColumns(['action','estado'])
+            ->rawColumns(['action', 'estado'])
             ->make(true);
     }
 
@@ -129,40 +129,27 @@ class PerfilController extends Controller
     }
     public function ajax_add_menu(Request $request)
     {
-        $modulos = Menu::where('sistema_id',$request->msistema_id)->get();
+        $modulos = Menu::where('sistema_id', $request->msistema_id)->get();
         foreach ($modulos as $modulo) {
             if ($request->menu) {
                 $encontrado = false;
                 foreach ($request->menu as $menu) {
                     if ($menu == $modulo->id) {
                         $encontrado = true;
-                        $menuperfil = Menuperfil::where('perfil_id',$request->perfil)->where('menu_id',$menu)->first();
+                        $menuperfil = Menuperfil::where('perfil_id', $request->perfil)->where('menu_id', $menu)->first();
                         if (!$menuperfil) {
-                            $menus = Menu::find($menu);
-                            $data['perfil_id'] =$request->perfil;
-                            $data['menu_id'] = $menu;
-                            if ($menus->dependencia > 0) {
-                                $menuperfils = Menuperfil::where('perfil_id',$request->perfil)->where('menu_id',$menu)->first();
-                                if ($menuperfils) {
-                                } else {
-                                    $prince['perfil_id'] = $request->perfil;
-                                    $prince['menu_id'] = $menus->id;
-                                    Menuperfil::Create($prince);
-                                }
-                            } else {
-                            }
-                            Menuperfil::Create($data);
+                            Menuperfil::Create(['perfil_id' => $request->perfil, 'menu_id' => $menu]);
                         }
                         break;
                     }
                 }
                 if ($encontrado == false) {
-                    Menuperfil::where('perfil_id',$request->perfil)->where('menu_id',$modulo->id)->delete();
+                    Menuperfil::where('perfil_id', $request->perfil)->where('menu_id', $modulo->id)->delete();
                 }
             } else {
-                Menuperfil::where('perfil_id',$request->perfil)->where('menu_id',$modulo->id)->delete();
+                Menuperfil::where('perfil_id', $request->perfil)->where('menu_id', $modulo->id)->delete();
             }
         }
-        return response()->json(array('status' => true, 'modulos' => $menuperfil,'sis'=>$request->perfil));
+        return response()->json(array('status' => true));
     }
 }
