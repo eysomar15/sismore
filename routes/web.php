@@ -184,7 +184,9 @@ Route::get('/Usuario/Registrar', [UsuarioController::class, 'registrar'])->name(
 Route::post('/Usuario/Registrar', [UsuarioController::class, 'guardar'])->name('Usuario.guardar');
 Route::get('/Usuario/Editar/{usuario}', [UsuarioController::class, 'editar'])->name('Usuario.Editar');
 Route::post('/Usuario/Editar/{id}', [UsuarioController::class, 'actualizar'])->name('Usuario.Actualizar');
-Route::get('/Usuario/Eliminar/{id}', [UsuarioController::class, 'eliminar'])->name('Usuario.Eliminar');
+Route::get('/Usuario/Eliminar/{id}', [UsuarioController::class, 'eliminar'])->name('Usuario.Eliminar');//*/
+Route::get('/Usuario/CargarPerfil/{sistema_id}/{usuario_id}', [UsuarioController::class, 'cargarPerfil']);
+Route::post('/Usuario/ajax_add_perfil/', [UsuarioController::class, 'ajax_add_perfil']);
 
 Route::get('/Sistema/Principal', [SistemaController::class, 'principal'])->name('sistema.principal');
 Route::get('/Sistema/listarDT', [SistemaController::class, 'listarDT'])->name('sistema.listarDT');

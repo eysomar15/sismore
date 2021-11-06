@@ -9,7 +9,6 @@
 
 @section('content') 
 <div class="content">
- 
     <div class="row">
         <div class="col-md-12">
             <div class="row">
@@ -73,6 +72,50 @@
         </div>
     </div>
 </div>  <!-- Fin Modal  Eliminar -->
+
+<!-- Bootstrap modal -->
+<div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="form" class="form-horizontal" autocomplete="off">
+                        @csrf
+                        <input type="hidden" class="form-control" id="usuario_id" name="usuario_id">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label>Sistema<span class="required">*</span></label>
+                                <select class="form-control" name="sistema_id" id="sistema_id" onchange="cargarPerfil();">
+                                    <option value="">Seleccionar</option>
+                                    @foreach ($sistemas as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Perfiles<span class="required">*</span></label>
+                                <ul class="" id="perfiles"></ul>
+                                <span class="help-block"></span>
+                            </div>
+                            
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSavePerfil" onclick="savePerfil()" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- End Bootstrap modal -->
 
 @endsection 
 
@@ -138,6 +181,67 @@
             id = $(this).attr('id');
             $('#confirmModalEliminar').modal('show');
         });
+
+        function perfil(id) {
+            $('#form')[0].reset();
+            $('.form-group').removeClass('has-error');
+            $('.help-block').empty();
+            $('#modal_form').modal('show');
+            $('.modal-title').text('Seleccionar Perfil');
+            $('#usuario_id').val(id);
+            $("#perfiles li").remove();
+        };
+
+        function cargarPerfil() {
+            $.ajax({
+                url: "{{ url('/') }}/Usuario/CargarPerfil/" + $('#sistema_id').val()+"/"+$('#usuario_id').val(),
+                type: 'get',
+                success: function(data) {
+                    $("#perfiles li").remove();
+                    var options = '';
+                    $.each(data.perfil, function(index, value) {
+                        activo='';
+                        $.each(data.usuarioperfil,function(index2,value2){
+                            if(value2.perfil_id==value.id) activo='checked';
+                        });                        
+                        options += "<li><label><input id='perfil' name='perfil[]' type='checkbox' value='"+value.id+"' "+activo+"> "+value.nombre+"</label></li>"
+                    });
+                    $("#perfiles").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }     
+        function savePerfil() {
+            $('#btnSavePerfil').text('guardando...'); 
+            $('#btnSavePerfil').attr('disabled', true); 
+            $.ajax({
+            url: "{{ url('/') }}/Usuario/ajax_add_perfil",
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "JSON",
+            success: function(data) {
+                console.log(data)
+                if (data.status) {
+                    $('#modal_form').modal('hide');
+                    toastr.success('El registro fue creado exitosamente.', 'Mensaje');
+                } else {
+                    for (var i = 0; i < data.inputerror.length; i++) {
+                        $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error'); 
+                        $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); 
+                    }
+                }
+                $('#btnSavePerfil').text('Guardar');  
+                $('#btnSavePerfil').attr('disabled', false); 
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                toastr.error('El registro no se pudo crear verifique las validaciones.', 'Mensaje');
+                $('#btnSavePerfil').text('Guardar'); 
+                $('#btnSavePerfil').attr('disabled', false);  
+            }
+            });
+        };           
 
         $('#btnEliminar').click(function(){
             $.ajax({
