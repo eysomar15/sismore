@@ -1123,7 +1123,7 @@ class MatriculaController extends Controller
     public function condicion_filtro($gestion)
     {
         // este valor del filtro se ejecutara en la consulta dentro del repositorio
-        // si se eleige como opcion privados ara un were in con el valor id = 20
+        // si se eleige como opcion privados realizará un where in con el valor id = 20
         $condicion ='';
        
         if($gestion==3)
@@ -1140,7 +1140,7 @@ class MatriculaController extends Controller
     public function condicion_filtro_formato2($gestion)
     {
         // este valor del filtro se ejecutara en la consulta dentro del repositorio
-        // si se eleige como opcion privados ara un were in con el valor id = 20
+        // si se eleige como opcion privados realizará un where in con el valor id = 20
         $condicion ='';
        
         if($gestion==3)
@@ -1178,7 +1178,81 @@ class MatriculaController extends Controller
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
         $anios =  MatriculaRepositorio ::matriculas_anio_ConsolidadoAnual( );
 
-        return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('matricula','anios'));  
+        $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel(0,'not in','I');
+
+        return $this->solo_anios_consolidadoAnual($total_matricula_ComsolidadoAnual);
+        return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('matricula','anios','total_matricula_ComsolidadoAnual'));  
+    }
+
+    public function solo_anios_consolidadoAnual($total_matricula_ComsolidadoAnual)
+    {
+    
+        $dd = $total_matricula_ComsolidadoAnual;
+        //$dd = collect(['ugel'=>'1','ugel'=>'1','ugel'=>'2']); 
+
+        $unique = $dd->unique('ugel');
+        $unique->values()->all();
+        // $puntos[] = null ;
+        // foreach ($total_matricula_ComsolidadoAnual as $key => $item) {                    
+
+        //     foreach ($puntos[] as $key => $item2) {
+                
+        //         if($item2==$item->ugel)
+        //         {
+
+        //         }
+        //     }
+
+        //     $puntos[] = [ 'ugel'=> $item->ugel];
+            
+        // } 
+
+        
+        // $collection = collect([1, 1, 2, 2, 3, 4, 2]); 
+        // $unique = $collection->unique();
+        // $unique->values()->all();
+
+        // $collection = collect(['Jane Doe']);
+        // $collection = $collection->concat(['Jane Doe'])->concat(['name' => 'Johnny Doe']);
+
+        // $dd=$collection->unique();;
+
+        // $dd->all();
+
+        // $collection = collect([
+        //     "name" => "Ram Inden",
+        //     "features" => "2,2,2,2,3,3,3,3,4,4,4,4,5,6"
+        // ]);
+
+        // $unique = join(';', array_unique(explode(';', $collection['features'])));
+
+        // $collection['features'] = $unique;
+
+        // $array = [
+        //     1 => 'manzana',
+        //     2 => 'plátano',
+        //     3 => 'pera',
+        //     10 => 'perad',
+        // ];
+        // print_r(array_unique($array));
+
+
+        $array = [
+            1 => ['nombre' => 'Gorka'],
+            2 => ['nombre' => 'Gorka'],
+            3 => ['nombre' => 'Jon'  ],
+        ];
+
+
+      
+        $arraySinDuplicados = [];
+        foreach($array as $indice => $elemento) {
+            if (!in_array($elemento, $arraySinDuplicados)) {
+                $arraySinDuplicados[$indice] = $elemento;
+            }
+        }
+            
+        return $arraySinDuplicados;
     }
 
 }
