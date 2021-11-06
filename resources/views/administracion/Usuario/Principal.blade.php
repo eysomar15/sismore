@@ -189,6 +189,7 @@
             $('#modal_form').modal('show');
             $('.modal-title').text('Seleccionar Perfil');
             $('#usuario_id').val(id);
+            $("#perfiles li").remove();
         };
 
         function cargarPerfil() {
