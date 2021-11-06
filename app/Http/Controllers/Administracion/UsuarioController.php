@@ -96,8 +96,27 @@ class UsuarioController extends Controller
             ->get();
         return response()->json(compact('perfil', 'usuarioperfil'));
     }
+    private function _validate($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($request->sistema_id == '') {
+            $data['inputerror'][] = 'sistema_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        
+        return $data;
+    }
     public function ajax_add_perfil(Request $request)
     {
+        $val = $this->_validate($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
         $perfiles = Perfil::where('sistema_id', $request->sistema_id)->get();
         foreach ($perfiles as $perfil) {
             if ($request->perfil) {
@@ -118,7 +137,7 @@ class UsuarioController extends Controller
             } else {
                 UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->delete();
             }
-        } 
+        }
         return response()->json(array('status' => true, 'modulos' => $perfiles));
     }
 }
