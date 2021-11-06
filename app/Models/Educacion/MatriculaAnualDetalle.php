@@ -64,7 +64,7 @@ class MatriculaAnualDetalle extends Model
                         'quinto_nivel_aprobados',
                         'quinto_nivel_trasladados',
                         'quinto_nivel_retirados',
-                        'quinto_requieren_recup',
+                        'quinto_nivel_requieren_recup',
                         'quinto_nivel_desaprobados',
                         'sexto_nivel_aprobados',
                         'sexto_nivel_trasladados',

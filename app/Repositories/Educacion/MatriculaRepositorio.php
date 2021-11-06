@@ -579,6 +579,21 @@ class MatriculaRepositorio
         return $data;
     }
 
+    public static function matriculas_anio_ConsolidadoAnual()
+    { 
+        $data = DB::table('par_importacion as imp')           
+                ->join('edu_matricula_anual as mat', 'imp.id', '=', 'mat.importacion_id')
+                ->join('par_anio as vanio', 'mat.anio_id', '=', 'vanio.id')        
+                ->where('imp.estado','=', 'PR')
+                ->where('mat.estado','=', 'PR')      
+                ->orderBy('vanio.anio', 'desc')
+                ->select('vanio.id','vanio.anio')   
+                ->distinct()  
+                ->get();
+
+        return $data;
+    }
+
     /**pruebassssss */
     public static function total_matricula_por_Nivel_Provincia2($matricula_id)
     {

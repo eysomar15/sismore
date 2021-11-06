@@ -16,9 +16,9 @@ class ImportacionController extends Controller
 
     public function inicio()
     {
-        // $data = ImportacionRepositorio::Listar_Importaciones(session('sistema_id'));
+        //  $data = ImportacionRepositorio::Listar_Importaciones(session('sistema_id'));
 
-        // return $data;
+        //  return $data;
         return view('educacion.Importacion.Inicio');
     }
 
