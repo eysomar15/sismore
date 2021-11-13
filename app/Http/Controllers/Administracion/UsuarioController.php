@@ -24,6 +24,7 @@ class UsuarioController extends Controller
     }
     public function principal()
     {
+        //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
         $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
         $sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
         //return session()->get('usuario_id');
@@ -34,9 +35,9 @@ class UsuarioController extends Controller
         $data = UsuarioRepositorio::Listar_Usuarios();
         return  datatables()::of($data)
             ->addColumn('nombrecompleto', '{{$apellidos}}, {{$nombre}}')
-            ->addColumn('estado', function($data){
-                if($data->estado==1)return 'ACTIVO';
-                else return 'DESACTIVO';
+            ->editColumn('estado', function ($data) {
+                if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
+                else return '<span class="badge badge-success">ACTIVO</span>';
             })
             ->addColumn('sistemas', function ($data) {
                 $sis = UsuarioSistemaRepositorio::ListarSistemas($data->id);
@@ -55,7 +56,7 @@ class UsuarioController extends Controller
                 //$acciones .= '&nbsp<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="BORRAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
-            ->rawColumns(['action', 'nombrecompleto', 'sistemas','estado'])
+            ->rawColumns(['action', 'nombrecompleto', 'sistemas', 'estado'])
             ->make(true);
     }
     public function listarSistemasAsignados($usuario_id)
@@ -208,11 +209,11 @@ class UsuarioController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
-        if ($request->celular == '') {
+        /* if ($request->celular == '') {
             $data['inputerror'][] = 'celular';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
-        }
+        } */
         /* if ($request->entidad == '') {
             $data['inputerror'][] = 'entidad';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -232,7 +233,14 @@ class UsuarioController extends Controller
             $data['inputerror'][] = 'email';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
+        } else {
+            if (filter_var($request->email, FILTER_VALIDATE_EMAIL) == '') {
+                $data['inputerror'][] = 'email';
+                $data['error_string'][] = 'Correo electronico incorrecto.';
+                $data['status'] = FALSE;
+            }
         }
+
         if ($request->sistemas == '') {
             $data['inputerror'][] = 'sistemas';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -287,7 +295,7 @@ class UsuarioController extends Controller
             return response()->json($val);
         }
         $usuario = Usuario::find($request->id);
-        $usuario->usuario = $request->nombre;
+        $usuario->usuario = $request->usuario;
         $usuario->email = $request->email;
         $usuario->dni = $request->dni;
         $usuario->nombre = $request->nombre;

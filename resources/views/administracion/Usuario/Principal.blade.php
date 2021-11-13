@@ -3,7 +3,7 @@
 @section('css')
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
 
@@ -28,8 +28,7 @@
                             <div class="card-body">
                                 <div>
                                     {{-- <a href="{{route('Usuario.registrar')}}" class="btn btn-primary"> Nuevo </a> --}}
-                                    <button type="button" class="btn btn-primary" onclick="add()"><i
-                                            class="fa fa-plus"></i> Nuevo</button>
+                                    <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i> Nuevo</button>
                                 </div>
                                 <div class="table-responsive">
                                     <br>
@@ -57,8 +56,7 @@
     </div>
 
     <!-- Bootstrap modal -->
-    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
+    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -83,13 +81,12 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>DNI<span class="required">*</span></label>
-                                                        <input id="dni" name="dni" class="form-control" type="text"
-                                                            maxlength="8">
+                                                        <input id="dni" name="dni" class="form-control" type="text" maxlength="8">
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Nombre<span class="required">*</span></label>
-                                                        <input id="nombre" name="nombre" class="form-control" type="text">
+                                                        <input id="nombre" name="nombre" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
@@ -98,15 +95,14 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Apellido<span class="required">*</span></label>
-                                                        <input id="apellidos" name="apellidos" class="form-control"
-                                                            type="text">
+                                                        <input id="apellidos" name="apellidos" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Sexo<span class="required">*</span></label>
                                                         <select id="sexo" name="sexo" class="form-control">
-                                                            <option value="M">Masculino</option>
-                                                            <option value="F">Femenino</option>
+                                                            <option value="M">MASCULINO</option>
+                                                            <option value="F">FEMENINO</option>
                                                         </select>
                                                         <span class="help-block"></span>
                                                     </div>
@@ -115,15 +111,13 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label>Correo Electronico<span
-                                                                class="required">*</span></label>
-                                                        <input id="email" name="email" class="form-control" type="text">
+                                                        <label>Correo Electronico<span class="required">*</span></label>
+                                                        <input id="email" name="email" class="form-control" type="email" required>
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Celular<span class="required">*</span></label>
-                                                        <input id="celular" name="celular" class="form-control"
-                                                            type="text">
+                                                        <input id="celular" name="celular" class="form-control" type="text">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
@@ -139,8 +133,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Oficina<span class="required">*</span></label>
-                                                        <input type="text" id="oficina" name="oficina"
-                                                            class="form-control">
+                                                        <input type="text" id="oficina" name="oficina" class="form-control">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
@@ -172,32 +165,11 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="form">
-                                            {{-- <div class="form-group" id="form-group-sistemas">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <label>Seleccionar sistema<span
-                                                                class="required">*</span></label>
-                                                        <div class="row">&nbsp;&nbsp;&nbsp;
-                                                            @foreach ($sistemas as $item)
-                                                                <div class="">
-                                                                    <input type="checkbox" id="checkbox{{ $item->id }}"
-                                                                        name="sistemas[]" {{ $item->elegido }}
-                                                                        value="{{ $item->id }}">
-                                                                    {{ $item->nombre }}
-                                                                </div>&nbsp;&nbsp;&nbsp;
-                                                            @endforeach
-                                                        </div>
-                                                        <span class="help-block" id="help-block-sistemas"></span>
-                                                    </div>
-
-                                                </div>
-                                            </div> --}}
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Usuario<span class="required">*</span></label>
-                                                        <input id="usuario" name="usuario" class="form-control"
-                                                            type="text">
+                                                        <input id="usuario" name="usuario" class="form-control" type="text">
                                                         <span class="help-block"></span>
                                                     </div>
 
@@ -207,15 +179,12 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Password<span class="required">*</span></label>
-                                                        <input id="password" name="password" class="form-control"
-                                                            type="password">
+                                                        <input id="password" name="password" class="form-control" type="password">
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Confirmar Password<span
-                                                                class="required">*</span></label>
-                                                        <input id="password2" name="password2" class="form-control"
-                                                            type="password">
+                                                        <label>Confirmar Password<span class="required">*</span></label>
+                                                        <input id="password2" name="password2" class="form-control" type="password">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
@@ -238,9 +207,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="form">
-                                            <div class="form-group" id="form-group-sistemas">
-                                                {{-- <div class="row">
-                                                    <div class="col-md-12"> --}}
+                                            <div class="form-group" id="form-group-sistemas">                                                
                                                 <label>Seleccionar sistema<span class="required">*</span></label>
                                                 <div class="row">
                                                     @foreach ($sistemas as $item)
@@ -253,8 +220,6 @@
                                                     @endforeach
                                                 </div>
                                                 <span class="help-block" id="help-block-sistemas"></span>
-                                                {{-- </div>
-                                                </div> --}}
                                             </div>
 
                                         </div>
@@ -278,52 +243,8 @@
     </div><!-- /.modal -->
     <!-- End Bootstrap modal -->
 
-   {{--  <!-- Bootstrap modal -->
-    <div id="modal_unidadejecutora" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Unidad Ejecutora</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="" id="form_unidadejecutora" class="form-horizontal" autocomplete="off">
-                        @csrf
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-striped mb-0">
-                                        <thead>
-                                            <tr>
-                                                <!--th>#</th-->
-                                                <th>Nombre</th>
-                                                <th>Accion</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnxSave" onclick="save()" class="btn btn-primary">Guardar</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!-- End Bootstrap modal --> --}}
-
-
     <!-- Bootstrap modal -->
-    <div id="modal_perfil" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
+    <div id="modal_perfil" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -339,8 +260,7 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Sistema<span class="required">*</span></label>
-                                <select class="form-control" name="sistema_id" id="sistema_id"
-                                    onchange="cargarPerfil();">
+                                <select class="form-control" name="sistema_id" id="sistema_id" onchange="cargarPerfil();">
                                     <option value="">Seleccionar</option>
                                     @foreach ($sistemas2 as $item)
                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -360,7 +280,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="dtperfil" class="table table-striped table-bordered">{{-- table table-striped mb-0 --}}
+                                <table id="dtperfil" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <!--th>#</th-->
@@ -384,59 +304,48 @@
     </div><!-- /.modal -->
     <!-- End Bootstrap modal -->
 
-<!-- Modal  Eliminar -->
-<div class="modal fade" id="confirmModalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ¿Desea eliminar el registro seleccionado?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnEliminar" name="btnEliminar" class="btn btn-danger">Confirmar</button>
+    <!-- Modal  Eliminar -->
+    <div class="modal fade" id="confirmModalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Desea eliminar el registro seleccionado?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnEliminar" name="btnEliminar" class="btn btn-danger">Confirmar</button>
+                </div>
             </div>
         </div>
-    </div>
-</div>  <!-- Fin Modal  Eliminar -->    
+    </div> <!-- Fin Modal  Eliminar -->
 
 @endsection
 
 @section('js')
-    <!-- Plugins Js -->
-    {{-- <script src="{{ asset('/') }}assets/libs/multiselect/jquery.multi-select.js"></script>
-    <script src="{{ asset('/') }}assets/libs/select2/select2.min.js"></script>
-    <!-- Init js-->
-    <script src="{{ asset('/') }}assets/js/pages/form-advanced.init.js"></script> --}}
-    {{-- DATA TABLE --}}
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
-
-    <!-- Plugins Js -->
-    {{-- <script src="{{ asset('/') }}assets/libs/multiselect/jquery.multi-select.js"></script>
-    <script src="{{ asset('/') }}assets/libs/select2/select2.min.js"></script>
-    <!-- Init js-->
-    <script src="{{ asset('/') }}assets/js/pages/form-advanced.init.js"></script> --}}
-    {{-- DATA TABLE --}}
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script>
-                var id;
-        //.delete nombre con el que se le llamo en el controlador al boton eliminar
-        $(document).on('click','.delete',function(){
-            id = $(this).attr('id');
-            $('#confirmModalEliminar').modal('show');
-        });
+        /*  var id;
+                //.delete nombre con el que se le llamo en el controlador al boton eliminar
+                $(document).on('click', '.delete', function() {
+                    id = $(this).attr('id');
+                    $('#confirmModalEliminar').modal('show');
+                }); */
 
         $(document).ready(function() {
             var save_method = '';
-            var tabla_principal;
             var tabla_perfil;
+            var tabla_principal;
+
             //add();
             $("input").change(function() {
                 $(this).parent().parent().removeClass('has-error');
@@ -450,8 +359,11 @@
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().empty();
             });
-
-            tabla_principal = $('#dtPrincipal').DataTable({                
+            tablaPrincipal();
+            
+        });
+        function tablaPrincipal(){
+            tabla_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ route('Usuario.Lista_DataTable') }}",
                 "columns": [{
                     data: 'dni'
@@ -463,14 +375,14 @@
                     data: 'sistemas'
                 }, {
                     data: 'email'
-                },{
+                }, {
                     data: 'estado'
                 }, {
                     data: 'action',
                     orderable: false
                 }],
                 responsive: true,
-                autoWidth: false,
+                /* autoWidth: false, */
                 order: false,
                 //destroy: true,
                 language: {
@@ -501,11 +413,11 @@
                     }
                 }
             });
-        });
-
+        }
         function reload_table() {
             tabla_principal.ajax.reload(null, false);
-        };
+        }
+
         function listarDTperfiles(usuario_id) {
             tabla_perfil = $('#dtperfil').DataTable({
                 "ajax": "{{ url('/') }}/Usuario/DTSistemasAsignados/" + usuario_id,
@@ -551,7 +463,7 @@
 
         function reload_table_perfil() {
             tabla_perfil.ajax.reload(null, false);
-        };
+        }
 
         function add() {
             save_method = 'add';
@@ -561,12 +473,12 @@
             $('#modal_form').modal('show');
             $('.modal-title').text('Nuevo Usuario');
             $('#id').val('');
-        };
+        }
 
         function addunidadejecutora() {
             $('#form_unidadejecutora')[0].reset();
             $('#modal_unidadejecutora').modal('show');
-        };
+        }
 
 
 
@@ -589,11 +501,11 @@
                 data: $('#form').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data)
-                    if (data.status) {                                               
+                    console.log(data);
+                    if (data.status) {                        
                         $('#modal_form').modal('hide');
-                        toastr.success(msgsuccess, 'Mensaje');
                         reload_table();
+                        toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
                             $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
@@ -603,19 +515,17 @@
                                 $("#help-block-sistemas").text(data.error_string[i]);
                             }
                         }
-                        /* $('#btnSave').text('Guardar');
-                        $('#btnSave').attr('disabled', false); */
                     }
                     $('#btnSave').text('Guardar');
-                    $('#btnSave').attr('disabled', false); 
+                    $('#btnSave').attr('disabled', false);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    toastr.error(msgerror, 'Mensaje');
                     $('#btnSave').text('Guardar');
                     $('#btnSave').attr('disabled', false);
+                    toastr.error(msgerror, 'Mensaje');
                 }
             });
-        };
+        }
 
         function edit(id) {
             save_method = 'update';
@@ -645,7 +555,7 @@
                     toastr.error('Error get data from ajax', 'Mensaje');
                 }
             });
-        };
+        }
 
         function borrar(id) {
             bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
@@ -669,7 +579,7 @@
                     });
                 }
             });
-        };
+        }
 
 
         function perfil(id) {
@@ -681,7 +591,7 @@
             $('#usuario_id').val(id);
             $("#perfiles li").remove();
             listarDTperfiles(id);
-        };
+        }
 
         function cargarPerfil() {
             $.ajax({
@@ -722,7 +632,7 @@
                 success: function(data) {
                     console.log(data)
                     if (data.status) {
-                        reload_table_perfil();                   
+                        reload_table_perfil();
                         toastr.success('El registro fue creado exitosamente.', 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -739,22 +649,25 @@
                     $('#btnSavePerfil').attr('disabled', false);
                 }
             });
-        };
-        $('#btnEliminar').click(function(){
+        }
+        /* $('#btnEliminar').click(function() {
             $.ajax({
                 // url:"Usuario/Eliminar/"+id,
                 url: "{{ url('/') }}/Usuario/Eliminar/" + id,
-                beforeSend:function(){
+                beforeSend: function() {
                     // $('#btnEliminar').text('Eliminando....');
                 },
-                success:function(data){
-                    setTimeout(function(){
+                success: function(data) {
+                    setTimeout(function() {
                         $('#confirmModalEliminar').modal('hide');
-                        toastr.success('El registro fue eliminado correctamente','Mensaje',{timeOut:3000});                       
+                        toastr.success('El registro fue eliminado correctamente', 'Mensaje', {
+                            timeOut: 3000
+                        });
                         $('#dtPrincipal').DataTable().ajax.reload();
-                    },100);//02 segundos                   
+                    }, 100); //02 segundos                   
                 }
             });
-        });
+        }); */
     </script>
+
 @endsection

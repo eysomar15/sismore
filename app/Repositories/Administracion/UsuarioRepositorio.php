@@ -33,11 +33,11 @@ class UsuarioRepositorio
         $data = DB::table(DB::raw('(select DISTINCT v1.id, v1.usuario, v1.email, v1.nombre, v1.apellidos, v1.dni, v1.celular,v1.estado
             from adm_usuario as v1 
             left join adm_usuario_sistema as v2 on v2.usuario_id = v1.id 
-            where /* v1.estado = 1  and  */( 
-                v2.sistema_id in (select sistema_id from adm_usuario_sistema where usuario_id='.session()->get('usuario_id').') 
+            where ( 
+                v2.sistema_id in (select sistema_id from adm_usuario_sistema where usuario_id=' . session()->get('usuario_id') . ') 
                 OR 
                 v2.sistema_id is null )
-            order by v1.id desc) as usuario'))->get();
+            order by v1.id desc) as usuario'))->get();/* v1.estado = 1  and  */
 
         return $data;
     }
