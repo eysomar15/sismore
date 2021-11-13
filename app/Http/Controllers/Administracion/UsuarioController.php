@@ -7,9 +7,13 @@ use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Sistema;
 use App\Models\Administracion\Usuario;
 use App\Models\Administracion\UsuarioPerfil;
+use App\Models\Administracion\UsuarioSistema;
+use App\Repositories\Administracion\SistemaRepositorio;
+use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
-
+use App\Repositories\Administracion\UsuarioSistemaRepositorio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
@@ -18,29 +22,58 @@ class UsuarioController extends Controller
     {
         $this->middleware('auth');
     }
-
     public function principal()
     {
-        $sistemas = Sistema::orderBy('nombre', 'asc')->get();
-        return view('administracion.Usuario.Principal', compact('sistemas'));
+        //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
+        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
+        $sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
+        //return session()->get('usuario_id');
+        return view('administracion.Usuario.Principal', compact('sistemas', 'sistemas2'));
     }
     public function Lista_DataTable()
     {
         $data = UsuarioRepositorio::Listar_Usuarios();
-
         return  datatables()::of($data)
+            ->addColumn('nombrecompleto', '{{$apellidos}}, {{$nombre}}')
+            ->editColumn('estado', function ($data) {
+                if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
+                else return '<span class="badge badge-success">ACTIVO</span>';
+            })
+            ->addColumn('sistemas', function ($data) {
+                $sis = UsuarioSistemaRepositorio::ListarSistemas($data->id);
+                $datos = '';
+                if ($sis)
+                    foreach ($sis as $item) {
+                        $datos .= $item->nombre . ', ';
+                    }
+                return $datos;
+            })
             ->addColumn('action', function ($data) {
-                $acciones = '<a href="Editar/' . $data->id . '"   class="btn btn-info btn-sm" title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                //$acciones = '<a href="Editar/' . $data->id . '"   class="btn btn-info btn-sm" title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
                 $acciones .= '&nbsp<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
                 $acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm" title="ELIMINAR"> <i class="fa fa-trash"></i>  </button>';
+                //$acciones .= '&nbsp<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="BORRAR"> <i class="fa fa-trash"></i> </a>';
+                if ($data->estado == '1') {
+                    $acciones .= '<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="desactivar('.$data->estado.')"><i class="fa fa-power-off"></i></a> ';
+                } else {
+                    $acciones .= '<a class="btn btn-sm btn-default"  title="Activar" onclick="activar('.$data->estado.')"><i class="fa fa-check"></i></a> ';
+                }
                 return $acciones;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'nombrecompleto', 'sistemas', 'estado'])
             ->make(true);
+    }
+    public function listarSistemasAsignados($usuario_id)
+    {
+        $data = UsuarioPerfilRepositorio::ListarPerfilSistema($usuario_id);
+        //return response()->json($usuario_id);
+        return  datatables()::of($data)->make(true);
     }
     public function registrar()
     {
-        return view('administracion.Usuario.Registrar');
+        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
+        return view('administracion.Usuario.Registrar', compact('sistemas'));
     }
     public function guardar(Request $request)
     {
@@ -48,13 +81,18 @@ class UsuarioController extends Controller
             'usuario' => ['required', 'string', 'max:255', 'unique:adm_usuario'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:adm_usuario'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            //'sistemas[]' => ['required'],
         ]);
 
         Usuario::create([
             'usuario' => $request['usuario'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+<<<<<<< HEAD
             'estado'=> 1
+=======
+            'estado' => '1'
+>>>>>>> afcdb7a5b8c14f2ffdd1ca7c43632fc9e1b1e9f9
         ]);
 
 
@@ -63,8 +101,8 @@ class UsuarioController extends Controller
     }
     public function editar(Usuario $usuario)
     {
-
-        return view('administracion.Usuario.Editar', compact('usuario'));
+        $sistemas = SistemaRepositorio::listar_porusuariosistemachecked(session()->get('usuario_id'));
+        return view('administracion.Usuario.Editar', compact('usuario', 'sistemas',));
     }
     public function actualizar(Request $request, $id)
     {
@@ -72,10 +110,33 @@ class UsuarioController extends Controller
 
         $entidad->usuario = $request['usuario'];
         $entidad->email = $request['email'];
-        $entidad->password = Hash::make($request['password']);
+        if ($request['password'] != '')
+            $entidad->password = Hash::make($request['password']);
         $entidad->save();
 
-        return redirect()->route('Usuario.principal')->with('success', 'Registro modificado correctamente');
+        $sistemas = Sistema::all();
+        $dd = '';
+        foreach ($sistemas as $row) {
+            if ($request->sistemas) {
+                $encontrado = FALSE;
+                foreach ($request->sistemas as $sis) {
+                    if ($sis == $row->id) {
+                        $encontrado = TRUE;
+                        $ususis = UsuarioSistema::where('usuario_id', $id)->where('sistema_id', $sis)->get()->first();
+                        if (!$ususis)
+                            UsuarioSistema::Create(['usuario_id' => $id, 'sistema_id' => $sis]);
+                    }
+                }
+                if (!$encontrado) {
+                    UsuarioSistema::where('usuario_id', $id)->where('sistema_id', $row->id)->delete();
+                }
+            } else {
+                UsuarioSistema::where('usuario_id', $id)->where('sistema_id', $row->id)->delete();
+            }
+        }
+
+
+        return redirect()->route('Usuario.principal')->with('success', 'Registro modificado correctamente' . count($request->sistemas));
     }
     public function eliminar($id)
     {
@@ -86,7 +147,6 @@ class UsuarioController extends Controller
 
         return back();
     }
-
     public function cargarPerfil($sistema_id, $usuario_id)
     {
         $perfil = Perfil::where('sistema_id', $sistema_id)->where('estado', '1')->select('id', 'nombre')->get();
@@ -97,7 +157,7 @@ class UsuarioController extends Controller
             ->get();
         return response()->json(compact('perfil', 'usuarioperfil'));
     }
-    private function _validate($request)
+    private function _validateperfil($request)
     {
         $data = array();
         $data['error_string'] = array();
@@ -109,36 +169,187 @@ class UsuarioController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
-        
+
         return $data;
     }
     public function ajax_add_perfil(Request $request)
     {
-        $val = $this->_validate($request);
+        $val = $this->_validateperfil($request);
+        $val['sis'] = $request->sistema_id;
         if ($val['status'] === FALSE) {
             return response()->json($val);
         }
         $perfiles = Perfil::where('sistema_id', $request->sistema_id)->get();
         foreach ($perfiles as $perfil) {
             if ($request->perfil) {
-                $seleccionado = FALSE;
-                foreach ($request->perfil as $li) {
-                    if ($li == $perfil->id) {
-                        $seleccionado = TRUE;
-                        $usuarioperfil = UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->first();
-                        if (!$usuarioperfil) {
-                            UsuarioPerfil::Create(['usuario_id' => $request->usuario_id, 'perfil_id' => $perfil->id]);
-                        }
+                if ($request->perfil == $perfil->id) {
+                    $usuarioperfil = UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->first();
+                    if (!$usuarioperfil) UsuarioPerfil::Create(['usuario_id' => $request->usuario_id, 'perfil_id' => $perfil->id]);
+                    break;
+                } else UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->delete();
+            } else UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->delete();
+        }
+        return response()->json(array('status' => true, 'modulos' => $perfiles));
+    }
+    private function _validate($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($request->dni == '') {
+            $data['inputerror'][] = 'dni';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->nombre == '') {
+            $data['inputerror'][] = 'nombre';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->apellidos == '') {
+            $data['inputerror'][] = 'apellidos';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->sexo == '') {
+            $data['inputerror'][] = 'sexo';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        /* if ($request->celular == '') {
+            $data['inputerror'][] = 'celular';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } */
+        /* if ($request->entidad == '') {
+            $data['inputerror'][] = 'entidad';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->oficina == '') {
+            $data['inputerror'][] = 'oficina';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->cargo == '') {
+            $data['inputerror'][] = 'cargo';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } */
+        if ($request->email == '') {
+            $data['inputerror'][] = 'email';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else {
+            if (filter_var($request->email, FILTER_VALIDATE_EMAIL) == '') {
+                $data['inputerror'][] = 'email';
+                $data['error_string'][] = 'Correo electronico incorrecto.';
+                $data['status'] = FALSE;
+            }
+        }
+
+        if ($request->sistemas == '') {
+            $data['inputerror'][] = 'sistemas';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->usuario == '') {
+            $data['inputerror'][] = 'usuario';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->id == '') {
+            if ($request->password == '') {
+                $data['inputerror'][] = 'password';
+                $data['error_string'][] = 'Este campo es obligatorio.';
+                $data['status'] = FALSE;
+            }
+            if ($request->password2 == '') {
+                $data['inputerror'][] = 'password2';
+                $data['error_string'][] = 'Este campo es obligatorio.';
+                $data['status'] = FALSE;
+            }
+        }
+        return $data;
+    }
+    public function ajax_add(Request $request)
+    {
+        $val = $this->_validate($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+        $usuario = Usuario::Create([
+            'usuario' => $request->usuario,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'dni' => $request->dni,
+            'nombre' => $request->nombre,
+            'apellidos' => $request->apellidos,
+            'sexo' => $request->sexo,
+            'celular' => $request->celular,
+            //'entidad' => $request->entidad,
+            'estado' => '1',
+        ]);
+        foreach ($request->sistemas as $sistema) {
+            UsuarioSistema::Create(['usuario_id' => $usuario->id, 'sistema_id' => $sistema]);
+        }
+        return response()->json(array('status' => true/* , 'usuario' => $usuario, 'sistemas' => $usuariosistema */));
+    }
+    public function ajax_update(Request $request)
+    {
+        $val = $this->_validate($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+        $usuario = Usuario::find($request->id);
+        $usuario->usuario = $request->usuario;
+        $usuario->email = $request->email;
+        $usuario->dni = $request->dni;
+        $usuario->nombre = $request->nombre;
+        $usuario->apellidos = $request->apellidos;
+        $usuario->sexo = $request->sexo;
+        $usuario->celular = $request->celular;
+        //$usuario->entidad = $request->email;
+        if ($request->password != '')
+            $usuario->password = $request->password;
+        $usuario->save();
+
+        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
+        foreach ($sistemas as $item) {
+            if ($request->sistemas) {
+                $buscar = FALSE;
+                foreach ($request->sistemas as $sistema) {
+                    if ($sistema == $item->id) {
+                        $buscar = TRUE;
+                        $aux = UsuarioSistema::where('usuario_id', $usuario->id)->where('sistema_id', $item->id)->first();
+                        if (!$aux) UsuarioSistema::Create(['usuario_id' => $usuario->id, 'sistema_id' => $sistema]);
                         break;
                     }
                 }
-                if ($seleccionado == FALSE) {
-                    UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->delete();
+                if (!$buscar) {
+                    UsuarioSistema::where('usuario_id', $usuario->id)->where('sistema_id', $item->id)->delete();
                 }
             } else {
-                UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->delete();
+                UsuarioSistema::where('usuario_id', $usuario->id)->where('sistema_id', $item->id)->delete();
             }
         }
-        return response()->json(array('status' => true, 'modulos' => $perfiles));
+        return response()->json(array('status' => true/* , 'update' => $request->sistemas */));
+    }
+    public function ajax_edit($usuario_id)
+    {
+        $usuario = Usuario::find($usuario_id);
+        $sistemas = UsuarioSistema::where('usuario_id', $usuario_id)->get();
+
+        return response()->json(compact('usuario', 'sistemas'));
+    }
+    public function ajax_delete($usuario_id) //elimina deverdad *o*
+    {
+        UsuarioPerfil::where('usuario_id', $usuario_id)->delete();
+        UsuarioSistema::where('usuario_id', $usuario_id)->delete();
+        $usuario = Usuario::find($usuario_id);
+        $usuario->delete();
+        return response()->json(array('status' => true, 'usuario' => $usuario));
     }
 }

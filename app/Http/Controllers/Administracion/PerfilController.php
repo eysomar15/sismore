@@ -8,6 +8,7 @@ use App\Models\Administracion\Menuperfil;
 use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Sistema;
 use App\Repositories\Administracion\MenuRepositorio;
+use App\Repositories\Administracion\SistemaRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,7 +21,8 @@ class PerfilController extends Controller
 
     public function principal()
     {
-        $sistemas = Sistema::where('estado', '1')->orderBy('nombre')->get();
+        //$sistemas = Sistema::where('estado', '1')->orderBy('nombre')->get();
+        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
         return view('administracion.Perfil.Principal', compact('sistemas'));
     }
 

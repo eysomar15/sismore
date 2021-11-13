@@ -7,7 +7,7 @@ use App\Models\Administracion\Menu;
 use App\Models\Administracion\Sistema;
 use App\Models\Administracion\Usuario;
 use App\Repositories\Administracion\MenuRepositorio;
-
+use App\Repositories\Administracion\SistemaRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,7 +20,7 @@ class MenuController extends Controller
 
     public function principal()
     {
-        $sistemas = Sistema::where('estado', '1')->orderBy('nombre')->get();
+        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
         return view('administracion.Menu.Principal', compact('sistemas'));
     }
 
@@ -39,7 +39,7 @@ class MenuController extends Controller
                 if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
                 else return '<span class="badge badge-success">ACTIVO</span>';
             })
-            ->rawColumns(['action', 'icono','estado'])
+            ->rawColumns(['action', 'icono', 'estado'])
             ->make(true);
     }
 
@@ -53,7 +53,6 @@ class MenuController extends Controller
     public function ajax_edit($menu_id)
     {
         $menu = Menu::find($menu_id);
-
         return response()->json(compact('menu'));
     }
 
@@ -143,7 +142,7 @@ class MenuController extends Controller
 
 
 
-
+    /*
 
 
     public function registrar()
@@ -196,5 +195,5 @@ class MenuController extends Controller
         $entidad->save();
 
         return back();
-    }
+    }*/
 }

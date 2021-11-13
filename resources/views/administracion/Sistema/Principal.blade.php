@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <style> 
+    </style>
 @endsection
 
 @section('content')
@@ -65,7 +67,8 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Nombre<span class="required">*</span></label>
-                                <input id="nombre" name="nombre" class="form-control" type="text">
+                                <input id="nombre" name="nombre" class="form-control" type="text"
+                                    onkeyup="this.value=this.value.toUpperCase()">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
@@ -120,7 +123,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_form').modal('show');
-            $('.modal-title').text('Crear Nuevo Menu');
+            $('.modal-title').text('Crear Nuevo Sistema');
         };
 
         function save() {
@@ -178,7 +181,7 @@
                     $('[name="nombre"]').val(data.sistema.nombre);
                     $('[name="icono"]').val(data.sistema.icono);
                     $('#modal_form').modal('show');
-                    $('.modal-title').text('Modificar Menu');
+                    $('.modal-title').text('Modificar Sistema');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');
@@ -211,11 +214,19 @@
         function listarDT() {
             $('#dtPrincipal').DataTable({
                 "ajax": "{{ url('/') }}/Sistema/listarDT/",
-                "columns": [
-                    {data: 'nombre'},
-                    {data: 'icono'},
-                    {data: 'estado'},
-                    {data: 'action',orderable: false}
+                "columns": [{
+                        data: 'nombre'
+                    },
+                    {
+                        data: 'icono'
+                    },
+                    {
+                        data: 'estado'
+                    },
+                    {
+                        data: 'action',
+                        orderable: false
+                    }
                 ],
                 responsive: true,
                 autoWidth: false,
@@ -250,6 +261,5 @@
                 }
             });
         }
- 
     </script>
 @endsection
