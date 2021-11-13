@@ -54,6 +54,7 @@ class UsuarioController extends Controller
             'usuario' => $request['usuario'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+            'estado'=> 1
         ]);
 
 

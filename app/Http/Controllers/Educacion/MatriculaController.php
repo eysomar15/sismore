@@ -16,6 +16,7 @@ use App\Repositories\Educacion\MatriculaRepositorio;
 use App\Utilities\Utilitario;
 
 use Exception;
+use PhpParser\Node\Expr\FuncCall;
 
 class MatriculaController extends Controller
 {
@@ -1178,72 +1179,126 @@ class MatriculaController extends Controller
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
         $anios =  MatriculaRepositorio ::matriculas_anio_ConsolidadoAnual( );
 
-        $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel(0,'not in','I');
+        // $nivel = "P";
+        // $gestion = 1;
+        // $condicion = 'in';
+        // if($nivel=="T")
+        //     $condicion = 'not in';
 
-        return $this->solo_anios_consolidadoAnual($total_matricula_ComsolidadoAnual);
-        return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('matricula','anios','total_matricula_ComsolidadoAnual'));  
+        // $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        // $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        // $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+
+        // $descripcion_nivel = $this->descripcion_nivel($nivel);
+
+
+        // /************* GRAFICO A*******************/
+               
+        // $anio2018 = [];
+        // $anio2019 = [];
+        // $anio2020 = [];
+        // $categoria_nombres=[];
+
+
+        // $recorre = 1;
+        // foreach($ugelConsolidadoAnual as $indice => $elemento)  
+        // {                                                          
+        //     for($i=1 ; $i<=$anioConsolidadoAnual->count();$i++)   
+        //     {
+        //        $d = $total_matricula_ComsolidadoAnual->where('posUgel', $recorre)->where('posAnio', $i)->first()->cantidadAlumnos;
+        //        $anio2018 = array_merge($anio2018,[intval($d)]);
+        //     }
+        
+        //     $recorre+=1;
+        // }      
+
+        //return $anioConsolidadoAnual ;
+        $nivel = "T";
+        $condicion = 'in';
+        if($nivel=="T")
+            $condicion = 'not in';
+
+        $gestion = 'P';
+
+        $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+
+        $descripcion_nivel = $this->descripcion_nivel($nivel);
+
+        return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('total_matricula_ComsolidadoAnual','anioConsolidadoAnual','ugelConsolidadoAnual','descripcion_nivel','matricula','anios'));  
+    }    
+
+    public function ReporteUgelConsolidadoAnual($anio_id,$gestion,$nivel)
+    {
+        $condicion = 'in';
+        if($nivel=="T")
+            $condicion = 'not in';
+
+        $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+
+        $descripcion_nivel = $this->descripcion_nivel($nivel);
+
+
+        /************* GRAFICO A*******************/
+               
+        $data = [];
+        $categoria_nombres=[];
+        
+        $recorre = 1;
+
+
+        foreach($ugelConsolidadoAnual as $indice => $elemento)  
+        {    
+            $data = [];                                                      
+            for($i=1 ; $i<=$anioConsolidadoAnual->count();$i++)   
+            {
+               $dato = $total_matricula_ComsolidadoAnual->where('posUgel', $recorre)->where('posAnio', $i)->first()->cantidadAlumnos;
+               $data = array_merge($data,[intval($dato)]);
+            }
+        
+            $recorre+=1;
+            $puntos[] = [ 'name'=> $elemento->ugel ,'data'=>  $data];                       
+        }
+      
+        foreach( $anioConsolidadoAnual as $indice => $elemento)   
+        {
+            $categoria_nombres[] = $elemento->anio; 
+        }
+
+        // $nombreAnio = Anio::find($anio_id)->anio;
+
+        $titulo = 'MATRICULAS ANUALES '.$descripcion_nivel;
+        $subTitulo = 'Fuente SIAGIE - MINEDU';
+        $titulo_y = 'Numero de Matriculados';
+
+        /********* FIN GRAFICO A *************/
+
+
+        return view('educacion.Matricula.ReporteUgelConsolidadoAnual',
+        ["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact('total_matricula_ComsolidadoAnual','anioConsolidadoAnual','ugelConsolidadoAnual','descripcion_nivel',
+        'titulo_y','titulo','subTitulo'));
+    }
+
+    public function GraficoBarrasPrincipal_consolidadoAnual($anio_id)
+    {     
+
+        // return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],compact( 'titulo_y','titulo','subTitulo'));
     }
 
     public function solo_anios_consolidadoAnual($total_matricula_ComsolidadoAnual)
     {
-    
-        $dd = $total_matricula_ComsolidadoAnual;
-        //$dd = collect(['ugel'=>'1','ugel'=>'1','ugel'=>'2']); 
-
-        $unique = $dd->unique('ugel');
-        $unique->values()->all();
-        // $puntos[] = null ;
-        // foreach ($total_matricula_ComsolidadoAnual as $key => $item) {                    
-
-        //     foreach ($puntos[] as $key => $item2) {
-                
-        //         if($item2==$item->ugel)
-        //         {
-
-        //         }
-        //     }
-
-        //     $puntos[] = [ 'ugel'=> $item->ugel];
-            
-        // } 
-
-        
-        // $collection = collect([1, 1, 2, 2, 3, 4, 2]); 
-        // $unique = $collection->unique();
-        // $unique->values()->all();
-
-        // $collection = collect(['Jane Doe']);
-        // $collection = $collection->concat(['Jane Doe'])->concat(['name' => 'Johnny Doe']);
-
-        // $dd=$collection->unique();;
-
-        // $dd->all();
-
-        // $collection = collect([
-        //     "name" => "Ram Inden",
-        //     "features" => "2,2,2,2,3,3,3,3,4,4,4,4,5,6"
-        // ]);
-
-        // $unique = join(';', array_unique(explode(';', $collection['features'])));
-
-        // $collection['features'] = $unique;
-
-        // $array = [
-        //     1 => 'manzana',
-        //     2 => 'plátano',
-        //     3 => 'pera',
-        //     10 => 'perad',
-        // ];
-        // print_r(array_unique($array));
-
-
-        $array = [
-            1 => ['nombre' => 'Gorka'],
-            2 => ['nombre' => 'Gorka'],
-            3 => ['nombre' => 'Jon'  ],
-        ];
-
-
+        $array = [];
+        $i=1;
+        foreach($total_matricula_ComsolidadoAnual as $indice => $item) {
+            $array += [
+                $i=> ['anio' => $item->anio]
+            ];
+            $i++;
+        }
       
         $arraySinDuplicados = [];
         foreach($array as $indice => $elemento) {
@@ -1255,4 +1310,38 @@ class MatriculaController extends Controller
         return $arraySinDuplicados;
     }
 
+    public function filtro_gestion($gestion)
+    {
+        $filtro = "";
+
+        if($gestion==1)
+            $filtro = "NOT( tipo_ie LIKE '%xyz%')";//este filtro hace que la consulta traiga los datos de publicas y privadas
+        else
+        {
+            if($gestion==2)
+                $filtro = "NOT( tipo_ie LIKE '%particular%' or tipo_ie LIKE '%privada%')";
+            else
+                $filtro = "( tipo_ie LIKE '%particular%' or tipo_ie LIKE '%privada%')";
+        }
+
+        return  $filtro;
+    }
+
+    public function descripcion_nivel($nivel)
+    {
+        $descripcion = 'INICIAL, PRIMARIA Y SECUNDARIA';
+
+        if($nivel=="I")
+            $descripcion = 'NIVEL INICIAL';
+        else{
+            if($nivel=="P")
+                $descripcion = 'NIVEL PRIMARIA';
+            else{
+                if($nivel=="S")
+                    $descripcion = 'NIVEL SECUNDARIA';
+            }
+        }
+
+        return  $descripcion;
+    }
 }
