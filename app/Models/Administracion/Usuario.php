@@ -15,6 +15,12 @@ class Usuario extends Model
         'email',
         'password',
         'remember_token',
-        'estado'
+        'estado',
+        'dni',
+        'nombre',
+        'apellidos',
+        'sexo',
+        'celular',
+        'unidadejecutora_id ',
     ];
 }

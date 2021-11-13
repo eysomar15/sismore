@@ -116,7 +116,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Nombre<span class="required">*</span></label>
-                                <input id="nombre" name="nombre" class="form-control" type="text">
+                                <input id="nombre" name="nombre" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_form').modal('show');
-            $('.modal-title').text('Crear Nuevo Menu');
+            $('.modal-title').text('Crear Nuevo Perfil');
         };
 
         function save() {
@@ -252,7 +252,7 @@
                     $('[name="sistema_id"]').val(data.menu.sistema_id);
                     $('[name="nombre"]').val(data.menu.nombre);
                     $('#modal_form').modal('show');
-                    $('.modal-title').text('Modificar Menu');
+                    $('.modal-title').text('Modificar Perfil');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');

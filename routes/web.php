@@ -180,13 +180,23 @@ Route::post('/PEmapacopsa/Distritos/{provincia}', [EmapacopsaController::class, 
 Route::get('/Usuario/Principal', [UsuarioController::class, 'principal'])->name('Usuario.principal');
 Route::get('/Usuario/Usuario_DataTable/', [UsuarioController::class, 'Lista_DataTable'])->name('Usuario.Lista_DataTable');
 
-Route::get('/Usuario/Registrar', [UsuarioController::class, 'registrar'])->name('Usuario.registrar');
+/*Route::get('/Usuario/Registrar', [UsuarioController::class, 'registrar'])->name('Usuario.registrar');
 Route::post('/Usuario/Registrar', [UsuarioController::class, 'guardar'])->name('Usuario.guardar');
 Route::get('/Usuario/Editar/{usuario}', [UsuarioController::class, 'editar'])->name('Usuario.Editar');
-Route::post('/Usuario/Editar/{id}', [UsuarioController::class, 'actualizar'])->name('Usuario.Actualizar');
-Route::get('/Usuario/Eliminar/{id}', [UsuarioController::class, 'eliminar'])->name('Usuario.Eliminar');//*/
+Route::post('/Usuario/Editar/{id}', [UsuarioController::class, 'actualizar'])->name('Usuario.Actualizar');*/
+Route::get('/Usuario/Eliminar/{id}', [UsuarioController::class, 'eliminar'])->name('Usuario.Eliminar');
+
+//Route::get('/Usuario/Principal', [UsuarioController::class, 'principal'])->name('Usuario.principal');
+//Route::get('/Usuario/listarDT', [UsuarioController::class, 'listarDT'])->name('usuario.listarDT');
+Route::get('/Usuario/ajax_edit/{usuario_id}', [UsuarioController::class, 'ajax_edit']);
+Route::post('/Usuario/ajax_add/', [UsuarioController::class, 'ajax_add']);
+Route::post('/Usuario/ajax_update/', [UsuarioController::class, 'ajax_update']);
+Route::get('/Usuario/ajax_delete/{usuario_id}', [UsuarioController::class, 'ajax_delete']);
+Route::get('/Usuario/DTSistemasAsignados/{usuario_id}', [UsuarioController::class, 'listarSistemasAsignados']);
+
 Route::get('/Usuario/CargarPerfil/{sistema_id}/{usuario_id}', [UsuarioController::class, 'cargarPerfil']);
 Route::post('/Usuario/ajax_add_perfil/', [UsuarioController::class, 'ajax_add_perfil']);
+
 
 Route::get('/Sistema/Principal', [SistemaController::class, 'principal'])->name('sistema.principal');
 Route::get('/Sistema/listarDT', [SistemaController::class, 'listarDT'])->name('sistema.listarDT');
