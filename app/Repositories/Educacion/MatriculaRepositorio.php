@@ -594,6 +594,44 @@ class MatriculaRepositorio
         return $data;
     }
 
+    public static function total_matricula_ComsolidadoAnual_porNivel($anio_id,$condicion, $filtro)
+    { 
+        $data = DB::table(
+                    DB::raw("(
+                                select ugel,anio.anio,nivel,
+                                sum(
+                                ifnull(cero_nivel_concluyeron,0) + ifnull(cero_nivel_retirados,0) 
+                                + ifnull(primer_nivel_aprobados,0) + ifnull(primer_nivel_retirados,0) + ifnull(primer_nivel_requieren_recup,0) + ifnull(primer_nivel_desaprobados,0) 
+                                + ifnull(segundo_nivel_aprobados,0) + ifnull(segundo_nivel_retirados,0) + ifnull(segundo_nivel_requieren_recup,0) + ifnull(segundo_nivel_desaprobados,0) 
+                                + ifnull(tercer_nivel_aprobados,0) + ifnull(tercer_nivel_retirados,0) + ifnull(tercer_nivel_requieren_recup,0) + ifnull(tercer_nivel_desaprobados,0) 
+                                + ifnull(cuarto_nivel_aprobados,0) + ifnull(cuarto_nivel_retirados,0) + ifnull(cuarto_nivel_requieren_recup,0) + ifnull(cuarto_nivel_desaprobados,0) 
+                                + ifnull(quinto_nivel_aprobados,0) + ifnull(quinto_nivel_retirados,0) + ifnull(quinto_nivel_requieren_recup,0) + ifnull(quinto_nivel_desaprobados,0) 
+                                + ifnull(sexto_nivel_aprobados,0) + ifnull(sexto_nivel_retirados,0) + ifnull(sexto_nivel_requieren_recup,0) + ifnull(sexto_nivel_desaprobados,0) 
+                                )as cantidadAlumnos
+                                from par_importacion imp
+                                inner join edu_matricula_anual as mat on imp.id = mat.importacion_id
+                                inner join edu_matricula_anual_detalle as matDet on mat.id = matDet.matricula_anual_id
+                                inner join par_anio as anio on mat.anio_id = anio.id
+                                where imp.estado = 'PR'                                                                     
+                                and nivel $condicion ('$filtro') 
+                                group by ugel,anio.anio,nivel    
+                                order by ugel,anio.anio,nivel                          
+                        ) as datos " 
+                    )
+                )
+            ->get([                      
+                DB::raw('ugel'), 
+                DB::raw('anio'),
+                DB::raw('case when nivel = "I" then "INICIAL" 
+                                when nivel = "P" then "PRIMARIA" 
+                                when nivel = "S" then "SECUNDARIA" else "OTROS" end as nivel'),
+                DB::raw('cantidadAlumnos')                  
+            ]);
+
+        return $data;
+    }
+
+
     /**pruebassssss */
     public static function total_matricula_por_Nivel_Provincia2($matricula_id)
     {
