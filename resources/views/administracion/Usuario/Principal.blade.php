@@ -3,7 +3,7 @@
 @section('css')
 
 
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
 
@@ -334,12 +334,12 @@
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script>
-        /*  var id;
+         var id;
                 //.delete nombre con el que se le llamo en el controlador al boton eliminar
                 $(document).on('click', '.delete', function() {
                     id = $(this).attr('id');
                     $('#confirmModalEliminar').modal('show');
-                }); */
+                });
 
         $(document).ready(function() {
             var save_method = '';
@@ -565,13 +565,11 @@
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
-                            alert(data);
-                            console.log(data);
-                            //$('#modal_form').modal('hide');
                             reload_table();
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
+                            alert('No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario')
                             toastr.error(
                                 'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario',
                                 'Mensaje');
@@ -650,7 +648,7 @@
                 }
             });
         }
-        /* $('#btnEliminar').click(function() {
+        $('#btnEliminar').click(function() {
             $.ajax({
                 // url:"Usuario/Eliminar/"+id,
                 url: "{{ url('/') }}/Usuario/Eliminar/" + id,
@@ -667,7 +665,7 @@
                     }, 100); //02 segundos                   
                 }
             });
-        }); */
+        });
     </script>
 
 @endsection

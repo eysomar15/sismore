@@ -54,6 +54,11 @@ class UsuarioController extends Controller
                 $acciones .= '&nbsp<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
                 $acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm" title="ELIMINAR"> <i class="fa fa-trash"></i>  </button>';
                 //$acciones .= '&nbsp<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="BORRAR"> <i class="fa fa-trash"></i> </a>';
+                if ($data->estado == '1') {
+                    $acciones .= '<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="desactivar('.$data->estado.')"><i class="fa fa-power-off"></i></a> ';
+                } else {
+                    $acciones .= '<a class="btn btn-sm btn-default"  title="Activar" onclick="activar('.$data->estado.')"><i class="fa fa-check"></i></a> ';
+                }
                 return $acciones;
             })
             ->rawColumns(['action', 'nombrecompleto', 'sistemas', 'estado'])
@@ -340,7 +345,7 @@ class UsuarioController extends Controller
         UsuarioPerfil::where('usuario_id', $usuario_id)->delete();
         UsuarioSistema::where('usuario_id', $usuario_id)->delete();
         $usuario = Usuario::find($usuario_id);
-        //$usuario->delete();
+        $usuario->delete();
         return response()->json(array('status' => true, 'usuario' => $usuario));
     }
 }
