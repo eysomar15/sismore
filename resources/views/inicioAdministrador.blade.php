@@ -45,12 +45,12 @@
                         </div>
                         <div class="mt-4">
                             <h6 class="text-uppercase">Sistema {{$sis->nombre}} <!--span class="float-right">60%</span--></h6>
-                            <!--div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                            <div class="progress progress-sm m-0">
+                                <div class="progress-bar bg-{{$color[$pos]}}" role="progressbar" aria-valuenow="60"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                                     <span class="sr-only">60% Complete</span>
                                 </div>
-                            </div-->
+                            </div>
                         </div>
                     </div>
                     <!-- end card-box-->
