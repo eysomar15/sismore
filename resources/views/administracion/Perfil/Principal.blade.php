@@ -175,15 +175,15 @@
             var save_method = '';
             listarDT();
             $("input").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
             $("textarea").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
             $("select").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
         });
@@ -223,7 +223,7 @@
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
-                            $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
                             $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                         }
                     }
@@ -338,7 +338,7 @@
             success: function(data) {
                 $('#listarmenu').html(data);
                 $('#menu_form').modal('show'); 
-                $("ul.checktree").checktree();
+                //$("ul.checktree").checktree();
                 $('.modal-title').text('Seleccionar menu');
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -362,7 +362,7 @@
                 toastr.success('El registro fue creado exitosamente.', 'Mensaje');
             } else {
                 for (var i = 0; i < data.inputerror.length; i++) {
-                    $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error'); 
+                    $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error'); 
                     $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); 
                 }
             }
@@ -376,5 +376,27 @@
         }
         });
     };
+    function estado(id,x) {
+        bootbox.confirm("Seguro desea "+(x==1?"desactivar":"activar")+" este registro?", function(result) {
+            if (result === true) {
+                $.ajax({
+                    url: "{{url('/')}}/Perfil/ajax_estado/" + id,
+                    /* type: "POST", */
+                    dataType: "JSON",
+                    success: function(data) {
+                        console.log(data);
+                        listarDT();
+                        if(data.estado)
+                            toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
+                        else
+                            toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        toastr.error('No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.', 'Mensaje');
+                    }
+                });
+            }
+        });
+    };     
     </script>
 @endsection

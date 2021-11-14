@@ -5,8 +5,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <style> 
-    </style>
 @endsection
 
 @section('content')
@@ -67,12 +65,11 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Nombre<span class="required">*</span></label>
-                                <input id="nombre" name="nombre" class="form-control" type="text"
-                                    onkeyup="this.value=this.value.toUpperCase()">
+                                <input id="nombre" name="nombre" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Icono<span class="required">*</span></label>
+                                <label>Icono<!--span class="required">*</span--></label>
                                 <input id="icono" name="icono" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
@@ -152,7 +149,8 @@
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
-                            $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
+                            /* $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error'); */
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
                             $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                         }
                     }
@@ -261,5 +259,27 @@
                 }
             });
         }
+    function estado(id,x) {
+        bootbox.confirm("Seguro desea "+(x==1?"desactivar":"activar")+" este registro?", function(result) {
+            if (result === true) {
+                $.ajax({
+                    url: "{{url('/')}}/Sistema/ajax_estado/" + id,
+                    /* type: "POST", */
+                    dataType: "JSON",
+                    success: function(data) {
+                        console.log(data);
+                        listarDT();
+                        if(data.estado)
+                            toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
+                        else
+                            toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        toastr.error('No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.', 'Mensaje');
+                    }
+                });
+            }
+        });
+    };        
     </script>
 @endsection

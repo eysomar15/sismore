@@ -143,7 +143,7 @@
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Grupo<span class="required">*</span></label>
+                                <label>Grupo<!--span class="required">*</span--></label>
                                 <select class="form-control" name="dependencia" id="dependencia" onchange="">
                                     <option value="">Seleccionar</option>
                                 </select>
@@ -160,18 +160,18 @@
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Icon<span class="required">*</span></label>
+                                <label>Icon<!--span class="required">*</span--></label>
                                 <input id="icon" name="icon" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Parametro<span class="required">*</span></label>
+                                <label>Parametro<!--span class="required">*</span--></label>
                                 <input id="parametro" name="parametro" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label>Posicion<span class="required">*</span></label>
-                                <input id="posicion" name="posicion" class="form-control" type="text">
+                                <input id="posicion" name="posicion" class="form-control" type="number">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -202,15 +202,15 @@
             var save_method = '';
             listarDT();
             $("input").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
             $("textarea").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
             $("select").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
         });
@@ -269,7 +269,7 @@
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
-                            $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
                             $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                         }
                     }
@@ -398,34 +398,27 @@
                 }
             });
         }
-    </script>
-
-    {{-- ELIMINAR --}}
-    <script>
-        var id;
-        //.delete nombre con el que se le llamo en el controlador al boton eliminar
-        $(document).on('click', '.delete', function() {
-            id = $(this).attr('id');
-            $('#confirmModalEliminar').modal('show');
+    function estado(id,x) {
+        bootbox.confirm("Seguro desea "+(x==1?"desactivar":"activar")+" este registro?", function(result) {
+            if (result === true) {
+                $.ajax({
+                    url: "{{url('/')}}/Menu/ajax_estado/" + id,
+                    /* type: "POST", */
+                    dataType: "JSON",
+                    success: function(data) {
+                        console.log(data);
+                        listarDT();
+                        if(data.estado)
+                            toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
+                        else
+                            toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        toastr.error('No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.', 'Mensaje');
+                    }
+                });
+            }
         });
-
-        $('#btnEliminar').click(function() {
-            $.ajax({
-                // url:"Usuario/Eliminar/"+id,
-                url: "{{ url('/') }}/Usuario/Eliminar/" + id,
-                beforeSend: function() {
-                    // $('#btnEliminar').text('Eliminando....');
-                },
-                success: function(data) {
-                    setTimeout(function() {
-                        $('#confirmModalEliminar').modal('hide');
-                        toastr.success('El registro fue eliminado correctamente', 'Mensaje', {
-                            timeOut: 3000
-                        });
-                        $('#dtPrincipal').DataTable().ajax.reload();
-                    }, 100); //02 segundos                   
-                }
-            });
-        });
+    };         
     </script>
 @endsection

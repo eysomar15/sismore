@@ -19,7 +19,10 @@
         <link href="{{ asset('/') }}assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet" />
         <link href="{{ asset('/') }}assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ asset('/') }}assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-stylesheet" />
+
         {{-- {{assets('/')}} --}}
+        <!-- estilos personalizados XD-->
+        <link rel="stylesheet" href="{{ asset('/') }}assets/css/otros/personalizado.css"  type='text/css'>
     </head>
 
     <body>
@@ -99,6 +102,7 @@
 
         <script src="{{ asset('/') }}assets/libs/toastr/toastr.min.js"></script>
         <script src="{{ asset('/') }}assets/js/bootbox.js"></script>
+        
 
         <!-- flot chart -->
         {{-- <script src="assets/libs/flot-charts/jquery.flot.js"></script>

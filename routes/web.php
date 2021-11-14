@@ -191,6 +191,7 @@ Route::get('/Usuario/Eliminar/{id}', [UsuarioController::class, 'eliminar'])->na
 Route::get('/Usuario/ajax_edit/{usuario_id}', [UsuarioController::class, 'ajax_edit']);
 Route::post('/Usuario/ajax_add/', [UsuarioController::class, 'ajax_add']);
 Route::post('/Usuario/ajax_update/', [UsuarioController::class, 'ajax_update']);
+Route::get('/Usuario/ajax_estadousuario/{usuario_id}', [UsuarioController::class, 'ajax_estadoUsuario']);
 Route::get('/Usuario/ajax_delete/{usuario_id}', [UsuarioController::class, 'ajax_delete']);
 Route::get('/Usuario/DTSistemasAsignados/{usuario_id}', [UsuarioController::class, 'listarSistemasAsignados']);
 
@@ -204,6 +205,7 @@ Route::get('/Sistema/ajax_edit/{sistema_id}', [SistemaController::class, 'ajax_e
 Route::post('/Sistema/ajax_add', [SistemaController::class, 'ajax_add']);
 Route::post('/Sistema/ajax_update', [SistemaController::class, 'ajax_update']);
 Route::get('/Sistema/ajax_delete/{sistema_id}', [SistemaController::class, 'ajax_delete']);
+Route::get('/Sistema/ajax_estado/{sistema_id}', [SistemaController::class, 'ajax_estado']);
 
 Route::get('/Menu/Principal', [MenuController::class, 'principal'])->name('menu.principal');
 Route::get('/Menu/listarDT/{sistema_id}', [MenuController::class, 'listarDT'])->name('menu.listarDT');
@@ -212,6 +214,7 @@ Route::get('/Menu/ajax_edit/{menu_id}', [MenuController::class, 'ajax_edit']);
 Route::post('/Menu/ajax_add', [MenuController::class, 'ajax_add']);
 Route::post('/Menu/ajax_update', [MenuController::class, 'ajax_update']);
 Route::get('/Menu/ajax_delete/{menu_id}', [MenuController::class, 'ajax_delete']);
+Route::get('/Menu/ajax_estado/{menu_id}', [MenuController::class, 'ajax_estado']);
 
 Route::get('/Perfil/Principal', [PerfilController::class, 'principal'])->name('perfil.principal');
 Route::get('/Perfil/listarDT/{sistema_id}', [PerfilController::class, 'listarDT'])->name('perfil.listarDT');
@@ -219,6 +222,7 @@ Route::get('/Perfil/ajax_edit/{perfil_id}', [PerfilController::class, 'ajax_edit
 Route::post('/Perfil/ajax_add', [PerfilController::class, 'ajax_add']);
 Route::post('/Perfil/ajax_update', [PerfilController::class, 'ajax_update']);
 Route::get('/Perfil/ajax_delete/{perfil_id}', [PerfilController::class, 'ajax_delete']);
+Route::get('/Perfil/ajax_estado/{perfil_id}', [PerfilController::class, 'ajax_estado']);
 
 Route::get('/Perfil/listarmenu/{perfil_id}/{sistema_id}', [PerfilController::class, 'listarmenu']);
 Route::post('/Perfil/ajax_add_menu', [PerfilController::class, 'ajax_add_menu']);

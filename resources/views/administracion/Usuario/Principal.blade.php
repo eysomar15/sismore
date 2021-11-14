@@ -81,7 +81,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>DNI<span class="required">*</span></label>
-                                                        <input id="dni" name="dni" class="form-control" type="text" maxlength="8">
+                                                        <input id="dni" name="dni" class="form-control" type="text" maxlength="8" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
@@ -116,13 +116,13 @@
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Celular<span class="required">*</span></label>
+                                                        <label>Celular<!--span class="required">*</span--></label>
                                                         <input id="celular" name="celular" class="form-control" type="text">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            {{-- <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Entidad<span class="required">*</span></label>
@@ -147,7 +147,7 @@
                                                     </div>
 
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <!-- .form -->
                                     </div>
@@ -178,12 +178,12 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label>Password<span class="required">*</span></label>
+                                                        <label>Password<span class="required" id="password-required">*</span></label>
                                                         <input id="password" name="password" class="form-control" type="password">
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Confirmar Password<span class="required">*</span></label>
+                                                        <label>Confirmar Password<span class="required" id="password2-required">*</span></label>
                                                         <input id="password2" name="password2" class="form-control" type="password">
                                                         <span class="help-block"></span>
                                                     </div>
@@ -211,10 +211,10 @@
                                                 <label>Seleccionar sistema<span class="required">*</span></label>
                                                 <div class="row">
                                                     @foreach ($sistemas as $item)
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-3" id="checkbox-sistemas">
                                                             <input type="checkbox" id="checkbox{{ $item->id }}"
                                                                 name="sistemas[]" {{ $item->elegido }}
-                                                                value="{{ $item->id }}">
+                                                                value="{{ $item->id }}" class="">
                                                             {{ $item->nombre }}
                                                         </div>
                                                     @endforeach
@@ -333,13 +333,14 @@
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+{{-- <script src="{{ asset('/') }}assets/js/app.min.js"></script> --}}
     <script>
-         var id;
+         /* var id;
                 //.delete nombre con el que se le llamo en el controlador al boton eliminar
                 $(document).on('click', '.delete', function() {
                     id = $(this).attr('id');
                     $('#confirmModalEliminar').modal('show');
-                });
+                }); */
 
         $(document).ready(function() {
             var save_method = '';
@@ -348,17 +349,23 @@
 
             //add();
             $("input").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
+                if($(this).attr('type')=="checkbox"){
+                    $('#form-group-sistemas').removeClass('has-error');
+                    $('#help-block-sistemas').empty();
+                }
+                
             });
             $("textarea").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
             $("select").change(function() {
-                $(this).parent().parent().removeClass('has-error');
+                $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
+            
             tablaPrincipal();
             
         });
@@ -469,6 +476,7 @@
             save_method = 'add';
             $('#form')[0].reset();
             $('.form-group').removeClass('has-error');
+            $('.col-md-6').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_form').modal('show');
             $('.modal-title').text('Nuevo Usuario');
@@ -508,12 +516,15 @@
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
-                            $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error');
-                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                             if (data.inputerror[i] == "sistemas") {
                                 $("#form-group-sistemas").addClass('has-error');
                                 $("#help-block-sistemas").text(data.error_string[i]);
+                            }else{
+                                $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                                $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                             }
+                            
+                            
                         }
                     }
                     $('#btnSave').text('Guardar');
@@ -531,6 +542,7 @@
             save_method = 'update';
             $('#form')[0].reset();
             $('.form-group').removeClass('has-error');
+            $('.col-md-6').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
                 url: "{{ url('/') }}/Usuario/ajax_edit/" + id,
@@ -648,7 +660,29 @@
                 }
             });
         }
-        $('#btnEliminar').click(function() {
+    function estadoUsuario(id,x) {
+        bootbox.confirm("Seguro desea "+(x==1?"desactivar":"activar")+" este registro?", function(result) {
+            if (result === true) {
+                $.ajax({
+                    url: "{{url('/')}}/Usuario/ajax_estadousuario/" + id,
+                    /* type: "POST", */
+                    dataType: "JSON",
+                    success: function(data) {
+                        console.log(data);
+                        reload_table();
+                        if(data.estado)
+                            toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
+                        else
+                            toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        toastr.error('No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.', 'Mensaje');
+                    }
+                });
+            }
+        });
+    };
+        /* $('#btnEliminar').click(function() {
             $.ajax({
                 // url:"Usuario/Eliminar/"+id,
                 url: "{{ url('/') }}/Usuario/Eliminar/" + id,
@@ -665,7 +699,7 @@
                     }, 100); //02 segundos                   
                 }
             });
-        });
+        }); */
     </script>
 
 @endsection

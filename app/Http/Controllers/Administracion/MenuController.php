@@ -31,7 +31,12 @@ class MenuController extends Controller
         return  datatables()::of($data)
             ->addColumn('action', function ($data) {
                 $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+                //$acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+                if ($data->estado == '1') {
+                    $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
+                } else {
+                    $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
+                }
                 return $acciones;
             })
             ->editColumn('icono', '<i class="{{$icono}}"></i>')
@@ -135,7 +140,13 @@ class MenuController extends Controller
         $menu->delete();
         return response()->json(array('status' => true, 'menu' => $menu));
     }
-
+    public function ajax_estado($menu_id)
+    {
+        $menu = Menu::find($menu_id);
+        $menu->estado = $menu->estado == 1 ? 0 : 1;
+        $menu->save();
+        return response()->json(array('status' => true, 'estado' => $menu->estado));
+    }
 
 
 

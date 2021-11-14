@@ -34,7 +34,12 @@ class PerfilController extends Controller
             ->addColumn('action', function ($data) {
                 $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
                 $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="menu(' . $data->id . ')" title="AGREGAR MENU"> <i class="fa fa-list-ul"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+                //$acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+                if ($data->estado == '1') {
+                    $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
+                } else {
+                    $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
+                }
                 return $acciones;
             })
             ->editColumn('estado', function ($data) {
@@ -111,15 +116,15 @@ class PerfilController extends Controller
         $datas = MenuRepositorio::getMenu($sistema_id);
         $ticket = '';
         $ticket .= '<input type="hidden" class="form-control" name="perfil" id="perfil" value="' . $perfil_id . '">';
-        $ticket .= '<ul class="checktree">';
+        $ticket .= '<ul >';//class="checktree"
         foreach ($datas as $value) {
             $perfilmenu = Menuperfil::where('perfil_id', $perfil_id)->where('menu_id', $value->id)->first();
-            $menus = Menu::where('dependencia', $value->id)->get();
             $ticket .= '<li><label>';
             $ticket .= '<input id="menu" name="menu[]" type="checkbox" value="' . $value->id . '" ' . (isset($perfilmenu->id) ? 'checked' : '') . '> ' . $value->nombre;
             $ticket .= '</label><ul>';
+            $menus = Menu::where('dependencia', $value->id)->get();
             foreach ($menus as $menu) {
-                $perfilmenus = Menuperfil::where('perfil_id', $perfil_id)->where('menu_id', $value->id)->first();
+                $perfilmenus = Menuperfil::where('perfil_id', $perfil_id)->where('menu_id', $menu->id)->first();
                 $ticket .= '<li><label>';
                 $ticket .= '<input id="menu" name="menu[]" type="checkbox" value="' . $menu->id . '" ' . (isset($perfilmenus->id) ? 'checked' : '') . '> ' . $menu->nombre;
                 $ticket .= '</label></li>';
@@ -153,5 +158,12 @@ class PerfilController extends Controller
             }
         }
         return response()->json(array('status' => true));
+    }
+    public function ajax_estado($perfil_id)
+    {
+        $perfil = Perfil::find($perfil_id);
+        $perfil->estado = $perfil->estado == 1 ? 0 : 1;
+        $perfil->save();
+        return response()->json(array('status' => true, 'estado' => $perfil->estado));
     }
 }
