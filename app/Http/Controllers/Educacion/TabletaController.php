@@ -190,7 +190,7 @@ class TabletaController extends Controller
 
     public function GraficoBarrasPrincipal($anio_id)
     {     
-        $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio(6); // poner la variable del año
+        $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio($anio_id); // poner la variable del año
         
         $categoria1 = [];
         $categoria2 = [];
