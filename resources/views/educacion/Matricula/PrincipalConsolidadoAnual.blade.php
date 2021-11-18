@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'MATRICULAS CONSOLIDADAS POR AÑO'])
+@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'TOTAL DE ESTUDIANTES Y MATRICULAS CONSOLIDADAS ANUALES'])
 
 @section('css')
     
@@ -140,7 +140,7 @@
                                 </div> 
                             </div> 
                         </div> 
-                    </div>                     
+                    </div>
 
                 </div>               
                 <!-- card-body -->
@@ -153,8 +153,8 @@
 
 
 
-<br><br>
-<H1>HOLAAAA</H1>
+{{-- <br><br>
+
 @foreach($anioConsolidadoAnual as $indice => $anio) 
 <div class="col-md-6">  
     <div class="table-responsive">
@@ -184,7 +184,7 @@
             </thead>
           
             <tbody>
-
+                {{$anioConsolidadoAnual_poranios   }} 
                 @php
                     $recorre=1;
                     $aniow = $anio->anio;
@@ -197,7 +197,7 @@
                 @foreach($ugelConsolidadoAnual as $indice => $elemento)                                      
                     <tr>                                            
                         <td class="fila_tabla"><b>  {{$elemento->ugel}} </b>  </td>
-                                            
+                                 
                         @for($i=1; $i<=$anioConsolidadoAnual_poranios->count();$i++)
                             <td class="columna_derecha fila_tabla">
                                 {{number_format($total_matricula_ComsolidadoAnual->where('anio', 2018 )->where('posUgel', $recorre)->where('posAnio', $i)->first()->cantidadAprobados,0)}} 
@@ -237,9 +237,9 @@
         </table>
         
     </div>
-    {{-- /fin tablas --}}
+  
 </div>
-@endforeach
+@endforeach --}}
 
 @endsection 
 
