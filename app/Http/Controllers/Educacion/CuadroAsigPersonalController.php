@@ -39,13 +39,17 @@ class CuadroAsigPersonalController extends Controller
              foreach ($array as $key => $value) {
                  foreach ($value as $row) {
                     if(++$i > 1) break;
-                    $cadena =  $cadena.$row['region']
-                    .$row['unidad_ejecutora'].$row['organo_intermedio'].$row['provincia'].$row['distrito'].$row['tipo_ie'].$row['gestion']
+                    $cadena =  
+                    // $cadena.$row['region']
+                    // $row['unidad_ejecutora'].
+                    $row['organo_intermedio'].$row['provincia'].$row['distrito'].$row['tipo_ie'].$row['gestion']
                     .$row['zona'].$row['codmod_ie'].$row['codigo_local'].$row['clave8'].$row['nivel_educativo'].$row['institucion_educativa']
                     .$row['codigo_plaza'].$row['tipo_trabajador'].$row['sub_tipo_trabajador'].$row['cargo'].$row['situacion_laboral'].$row['motivo_vacante']
-                    .$row['documento_identidad'].$row['codigo_modular'].$row['apellido_paterno'].$row['apellido_materno'].$row['nombres'].$row['fecha_ingreso']
+                    .$row['documento'].$row['codigo_modular'].$row['apellido_paterno'].$row['apellido_materno'].$row['nombres'].$row['fecha_ingreso']
                     .$row['categoria_remunerativa'].$row['jornada_laboral'].$row['estado'].$row['fecha_nacimiento'].$row['fecha_inicio'].$row['fecha_termino']
-                    .$row['tipo_registro'].$row['ley'].$row['preventiva'].$row['referencia_preventiva'].$row['especialidad'].$row['tipo_estudios']
+                    .$row['tipo_registro'].$row['ley'].$row['preventiva'].
+                    // $row['referencia_preventiva'].
+                    $row['especialidad'].$row['tipo_estudios']
                     .$row['estado_estudios'].$row['grado'].$row['mencion'].$row['especialidad_profesional'].$row['fecha_resolucion']
                     .$row['numero_resolucion'].$row['centro_estudios'].$row['celular'].$row['email'];               
                     }
@@ -70,8 +74,8 @@ class CuadroAsigPersonalController extends Controller
                     // echo $row['cen_edu'].'<br>';
                     $CuadroAsigPersonal = CuadroAsigPersonal::Create([
                         'importacion_id'=>$importacion->id,
-                        'region'=>$row['region'],
-                        'unidad_ejecutora'=>$row['unidad_ejecutora'],
+                        'region'=>'UCAYALI',
+                        // 'unidad_ejecutora'=>$row['unidad_ejecutora'],
                         'organo_intermedio'=>$row['organo_intermedio'],
                         'provincia'=>$row['provincia'],
                         'distrito'=>$row['distrito'],
@@ -89,7 +93,7 @@ class CuadroAsigPersonalController extends Controller
                         'cargo'=>$row['cargo'],
                         'situacion_laboral'=>$row['situacion_laboral'],
                         'motivo_vacante'=>$row['motivo_vacante'],
-                        'documento_identidad'=>$row['documento_identidad'],
+                        'documento_identidad'=>$row['documento'],
                         'codigo_modular'=>$row['codigo_modular'],
                         'apellido_paterno'=>$row['apellido_paterno'],
                         'apellido_materno'=>$row['apellido_materno'],
@@ -104,12 +108,12 @@ class CuadroAsigPersonalController extends Controller
                         'tipo_registro'=>$row['tipo_registro'],
                         'ley'=>$row['ley'],
                         'preventiva'=>$row['preventiva'],
-                        'referencia_preventiva'=>$row['referencia_preventiva'],
+                        // 'referencia_preventiva'=>$row['referencia_preventiva'],
                         'especialidad'=>$row['especialidad'],
                         'tipo_estudios'=>$row['tipo_estudios'],
                         'estado_estudios'=>$row['estado_estudios'],
                         'grado'=>$row['grado'],
-                        'mencion'=>$row['mencion'],
+                        'mencion'=>trim($row['mencion']),
                         'especialidad_profesional'=>$row['especialidad_profesional'],
                         'fecha_resolucion'=>$row['fecha_resolucion'],
                         'numero_resolucion'=>$row['numero_resolucion'],
@@ -173,24 +177,6 @@ class CuadroAsigPersonalController extends Controller
 
         
         return view('educacion.CuadroAsigPersonal.ReporteUgel',compact('lista_principal','lista_ugel_nivel','lista_ugel_tipoTrab'));
-
-        // $puntos = [];        
-        // $total = 0;
-
-        // foreach ($lista_total_matricula_EBR as $key => $lista) {
-        //     $total = $total  + $lista->hombres  + $lista->mujeres;
-        // }
-        // //->sortByDesc('hombres') solo para dar una variacion a los colores del grafico
-        // foreach ($lista_total_matricula_EBR->sortByDesc('hombres') as $key => $lista) {
-        //     $puntos[] = ['name'=>$lista->nombre, 'y'=>floatval(($lista->hombres  + $lista->mujeres)*100/$total)];
-        // }
-
-        // $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico          
-        // $fecha_Matricula_texto = $this->fecha_texto($matricula_id);        
-        // $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
-
-        // return view('educacion.Matricula.ReporteUgel',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
-        //             'lista_total_matricula_Primaria','lista_total_matricula_Inicial','contenedor','titulo_grafico','fecha_Matricula_texto'));
     }
 
     public function reporteDistrito()

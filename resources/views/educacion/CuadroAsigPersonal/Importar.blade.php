@@ -40,7 +40,7 @@
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Fuente de datos</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" readonly="readonly" value="UNIDAD DE GESTION EDUCATIVA LOCAL">
+                                    <input type="text" class="form-control" readonly="readonly" value="NEXUS - MINEDU">
                                 </div>
                             </div>
 
