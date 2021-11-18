@@ -43,4 +43,15 @@ class SistemaRepositorio
       ->orderBy('adm_sistema.nombre')->get();
     return $query;
   }
+  public static function listar_sistemasconusuarios($usuario_id)
+  {
+    $query = DB::table('adm_sistema as v1')
+      ->join('adm_usuario_sistema as v2', 'v2.sistema_id', '=', 'v1.id', 'inner')
+      ->select('v1.id', 'v1.nombre', 'v1.icono', DB::raw('COUNT(v1.id) as nrousuario'))
+      ->where('v1.estado','1')
+      ->groupBy('v1.id')
+      ->groupBy('v1.nombre')->groupBy('v1.icono')->orderBy('v1.nombre')
+      ->get();
+    return $query;
+  }
 }

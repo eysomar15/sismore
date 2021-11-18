@@ -29,54 +29,65 @@ class HomeController extends Controller
     public function index()
     {
         $sistemas = SistemaRepositorio::Listar_porUsuario(auth()->user()->id);
-        session()->put(['usuario_id'=>auth()->user()->id]);
+        session()->put(['usuario_id' => auth()->user()->id]);
+        session()->put(['total_sistema' => $sistemas->count()]);
 
-        if($sistemas->count()==1)
+        if ($sistemas->count() == 1)
             return $this->sistema_acceder($sistemas->first()->sistema_id);
 
-        return view('Access',compact(('sistemas')));
+        return view('Access', compact(('sistemas')));
     }
-    
+
     public function sistema_acceder($sistema_id)
-    { 
+    {
         // session()->forget('sistema_id');
         // session()->forget('sistema_nombre');
         // session()->forget('menuNivel01');
         // session()->forget('menuNivel02');
 
-        session(['sistema_id'=>$sistema_id]);
+        session(['sistema_id' => $sistema_id]);
 
         $sistema = Sistema::find($sistema_id);
-        session(['sistema_nombre'=>$sistema->nombre]);
+        session(['sistema_nombre' => $sistema->nombre]);
 
-        $menuNivel01 = MenuRepositorio::Listar_Nivel01_porUsuario_Sistema(auth()->user()->id,$sistema_id);
-        session(['menuNivel01'=>$menuNivel01]);
+        $menuNivel01 = MenuRepositorio::Listar_Nivel01_porUsuario_Sistema(auth()->user()->id, $sistema_id);
+        session(['menuNivel01' => $menuNivel01]);
 
-        $menuNivel02 = MenuRepositorio::Listar_Nivel02_porUsuario_Sistema(auth()->user()->id,$sistema_id);
-        session(['menuNivel02'=>$menuNivel02]);
+        $menuNivel02 = MenuRepositorio::Listar_Nivel02_porUsuario_Sistema(auth()->user()->id, $sistema_id);
+        session(['menuNivel02' => $menuNivel02]);
 
-        switch ($sistema_id ) {
-            case(1): return $this->educacion($sistema_id);break;
-            case(2): return $this->vivienda($sistema_id);break;
-            case(4): return $this->administracion($sistema_id);break;
-            default: return 'Ruta de sistema no establecida';break;
-        }  
+        switch ($sistema_id) {
+            case (1):
+                return $this->educacion($sistema_id);
+                break;
+            case (2):
+                return $this->vivienda($sistema_id);
+                break;
+            case (4):
+                return $this->administracion($sistema_id);
+                break;
+            default:
+                return 'Ruta de sistema no establecida';
+                break;
+        }
     }
 
     public function administracion($sistema_id)
-    {   
-        return view('home',compact('sistema_id'));
+    {
+        $sistemas=SistemaRepositorio::listar_sistemasconusuarios(1);
+        //return $sistemas;
+        return view('home', compact('sistema_id','sistemas'));
     }
 
     public function vivienda($sistema_id)
-    {   
-        return view('home',compact('sistema_id'));
+    {
+        return view('home', compact('sistema_id'));
     }
     public function educacion($sistema_id)
-    { 
-        $instituciones_activas =0;
-        $instituciones_inactivas =0;
-        $instituciones_total =0;
+    {
+        $instituciones_activas = 0;
+        $instituciones_inactivas = 0;
+        $instituciones_total = 0;
 
         $titulados_inicial = 0;
         $titulados_primaria = 0;
@@ -88,32 +99,30 @@ class HomeController extends Controller
         $localesEducativos = 0;
         $locales_tieneInternet = 0;
         $porcentajeLocales_tieneInternet = 0;
-     
+
         $data = DB::select('call edu_pa_dashboard()');
 
-        foreach ($data as $key => $item)
-        {
+        foreach ($data as $key => $item) {
             $instituciones_activas  = $item->instituciones_activas;
             $instituciones_inactivas  = $item->instituciones_inactivas;
 
             $instituciones_total = $instituciones_activas + $instituciones_inactivas;
-            
+
             $titulados_inicial = $item->titulados_inicial;
             $titulados_primaria = $item->titulados_primaria;
             $titulados_secundaria = $item->titulados_secundaria;
             $titulados_sum = $titulados_inicial + $titulados_primaria + $titulados_secundaria;
             $noTitulados = $item->noTitulados;
 
-            $porcentajeTitulados = round(($titulados_sum*100/($titulados_sum + $noTitulados)),2);
+            $porcentajeTitulados = round(($titulados_sum * 100 / ($titulados_sum + $noTitulados)), 2);
 
-            $porcentajeInstituciones_activas = round(($instituciones_activas*100/($instituciones_activas + $instituciones_inactivas)),2);
+            $porcentajeInstituciones_activas = round(($instituciones_activas * 100 / ($instituciones_activas + $instituciones_inactivas)), 2);
 
             $locales_tieneInternet = $item->locales_tieneInternet;
             $localesEducativos = $item->locales_tieneInternet + $item->locales_no_tieneInternet;
-            $porcentajeLocales_tieneInternet = round(($locales_tieneInternet*100/$localesEducativos),2);
-        
-        }      
-        
+            $porcentajeLocales_tieneInternet = round(($locales_tieneInternet * 100 / $localesEducativos), 2);
+        }
+
         $par_medidor1_max =  $instituciones_total;
 
 
@@ -124,49 +133,58 @@ class HomeController extends Controller
 
         $fechaTableta = $tabletas_ultimaActualizacion->fechaActualizacion;
 
-       //{{number_format($sum_cero_nivel_hombre,0)}} 
+        //{{number_format($sum_cero_nivel_hombre,0)}} 
 
         $par_medidor1_max = 100;
-        $par_medidor1_data =  number_format(( ($tabletas_ultimaActualizacion->total_Recepcionadas * 100) / $tabletas_ultimaActualizacion->total_aDistribuir ),2);
+        $par_medidor1_data =  number_format((($tabletas_ultimaActualizacion->total_Recepcionadas * 100) / $tabletas_ultimaActualizacion->total_aDistribuir), 2);
 
         $par_medidor2_max = 100;
-        $par_medidor2_data =  number_format(( ($tabletas_ultimaActualizacion->total_Asignadas * 100) / $tabletas_ultimaActualizacion->total_aDistribuir ),2);
+        $par_medidor2_data =  number_format((($tabletas_ultimaActualizacion->total_Asignadas * 100) / $tabletas_ultimaActualizacion->total_aDistribuir), 2);
 
 
 
 
 
 
-         
-        return view('home',compact('par_medidor1_max','par_medidor1_data','par_medidor2_max','par_medidor2_data',
-                    'sistema_id','instituciones_activas','titulados_inicial','titulados_primaria',
-                    'titulados_secundaria','titulados_sum','porcentajeTitulados','porcentajeInstituciones_activas',
-                    'localesEducativos','locales_tieneInternet','porcentajeLocales_tieneInternet'));
+
+        return view('home', compact(
+            'par_medidor1_max',
+            'par_medidor1_data',
+            'par_medidor2_max',
+            'par_medidor2_data',
+            'sistema_id',
+            'instituciones_activas',
+            'titulados_inicial',
+            'titulados_primaria',
+            'titulados_secundaria',
+            'titulados_sum',
+            'porcentajeTitulados',
+            'porcentajeInstituciones_activas',
+            'localesEducativos',
+            'locales_tieneInternet',
+            'porcentajeLocales_tieneInternet'
+        ));
     }
 
     public function AEI_tempo()
-    {     
+    {
         $data = DB::select('call edu_pa_indicadorAEI()');
-       
+
         $titulados_inicial = 0;
         $total_inicial = 0;
         $porcentajeTitulados_inicial = 0;
 
         $bilingues = 0;
 
-        foreach ($data as $key => $item)
-        {
+        foreach ($data as $key => $item) {
             $titulados_inicial  = $item->titulados_inicial;
-            $total_inicial =$item->total_inicial;
-            
-             $porcentajeTitulados_inicial =  round($titulados_inicial*100/( $total_inicial),2);
+            $total_inicial = $item->total_inicial;
 
-             $bilingues =$item->bilingues;
-   
-           
+            $porcentajeTitulados_inicial =  round($titulados_inicial * 100 / ($total_inicial), 2);
+
+            $bilingues = $item->bilingues;
         }
-         
-        return view('homeAEI',compact('titulados_inicial','porcentajeTitulados_inicial','bilingues'));  
-    } 
-   
+
+        return view('homeAEI', compact('titulados_inicial', 'porcentajeTitulados_inicial', 'bilingues'));
+    }
 }

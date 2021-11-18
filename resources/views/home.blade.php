@@ -3,13 +3,14 @@
 @section('content')
 
 
-    @if (session('sistema_id')==1)
-        @include('inicioEducacion')   
+    @if (session('sistema_id') == 1)
+        @include('inicioEducacion')
+    @elseif (session('sistema_id')==4)
+        @include('inicioAdministrador')
     @else
         <h5>.....</h5>
     @endif
-        
-   
+
+
 
 @endsection
-

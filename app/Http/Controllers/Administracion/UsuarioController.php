@@ -330,7 +330,7 @@ class UsuarioController extends Controller
         $usuario->celular = $request->celular;
         //$usuario->entidad = $request->email;
         if ($request->password != '')
-            $usuario->password = $request->password;
+            $usuario->password = Hash::make($request->password);
         $usuario->save();
 
         $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));

@@ -27,10 +27,13 @@
 
                  <div class="dropdown-divider"></div>
                  <!-- item-->
+                 @if (session()->get('total_sistema')>1)
                  <a href="{{ route('home') }}" class="dropdown-item notify-item">
-                     <i class="mdi mdi-settings-outline noti-icon"></i>
-                     <span>Mas</span>
-                 </a>
+                    <i class="mdi mdi-settings-outline noti-icon"></i>
+                    <span>Cambiar Sistemas</span>
+                </a>
+                 @endif
+                 
                  <!-- item-->
                  <a href="{{ route('logout') }}" class="dropdown-item notify-item"
                      onclick="event.preventDefault();  document.getElementById('logout-form').submit();">
