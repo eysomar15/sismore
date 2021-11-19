@@ -1,10 +1,65 @@
 @extends('layouts.main_vacio')
-@section('title','SELECCIONAR SISTEMA')
+@section('title', 'SELECCIONAR SISTEMA')
 
 
 @section('content')
 
     <div class="" style="background:linear-gradient(60deg,#165588, #011646)">
+        <div class="container">
+            <div class="row"><br><br><br><br><br></div>
+            <div class="row justify-content-center">
+                <h4 class="text-white">GOBIERNO REGIONAL DE UCAYALI</h4>
+            </div>
+            <div class="row justify-content-center">                
+                <h2 class="text-white">SISTEMA DE MONITOREO REGIONAL</h2>
+            </div>
+            <div class="row justify-content-center">
+                {{-- <div class="col-md-4">
+                    <img style="width:200px;text-align:center" src="{{ asset('img/LogoT02.jpg')}}">
+                </div> --}}
+                <br>
+            </div>
+            <div class="row justify-content-center">
+                @foreach ($sistemas as $sistema)
+                    <div class="col-md-4 col-xl-4">
+                        <div class="card-box">
+                            <a href=" {{ route('sistema_acceder', $sistema->sistema_id) }}">
+                                <div class="media">
+                                    <div class="avatar-md bg-info rounded-circle mr-2">
+                                        <i class="{{$sistema->icono}} avatar-title font-26 text-white"></i>
+                                    </div>
+                                    <div class="media-body align-self-center">
+                                        <div class="text-right">
+                                            {{-- <h4 class="font-20 my-0 font-weight-bold"><span
+                                                    data-plugin="counterup">15852</span></h4> --}}
+                                            <p class="mb-0 mt-1 text-truncate">{{$sistema->nombre}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    {{-- <h6 class="text-uppercase">Target <span class="float-right">60%</span></h6> --}}
+                                    <div class="progress progress-sm m-0">
+                                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60"
+                                            aria-valuemin="0" aria-valuemax="100" style="width:  100%">
+                                            <span class="sr-only">60% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- end card-box-->
+                    </div>
+
+
+                @endforeach
+            </div>
+            <div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="" style="background:linear-gradient(60deg,#165588, #011646)">
         <div class="container">
             <div>
                 <br><br><br><br><br><br><br><br>
@@ -59,9 +114,6 @@
             </div>
             <!-- end row -->
         </div>
-    </div>
+    </div> --}}
 
 @endsection
-
-
-

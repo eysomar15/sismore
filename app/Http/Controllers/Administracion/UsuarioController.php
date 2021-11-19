@@ -8,6 +8,7 @@ use App\Models\Administracion\Sistema;
 use App\Models\Administracion\Usuario;
 use App\Models\Administracion\UsuarioPerfil;
 use App\Models\Administracion\UsuarioSistema;
+use App\Models\Administracion\UsuarioTipo;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
@@ -27,8 +28,9 @@ class UsuarioController extends Controller
         //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
         $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
         $sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
+        $tipos = UsuarioTipo::where('estado', '1')->get();
         //return session()->get('usuario_id');
-        return view('administracion.Usuario.Principal', compact('sistemas', 'sistemas2'));
+        return view('administracion.Usuario.Principal', compact('sistemas', 'sistemas2', 'tipos'));
     }
     public function Lista_DataTable()
     {
@@ -48,17 +50,21 @@ class UsuarioController extends Controller
                     }
                 return $datos;
             })
-            ->addColumn('action', function ($data) {
-                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            ->addColumn('action', function ($data) { // '.auth()->user()->usuario.'
+                $acciones = '';
+                if ($data->usuariotipo_id != 1||auth()->user()->usuariotipo_id==1) {
+                    $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i></a>';
+                    $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
+
+                    if ($data->estado == '1') {
+                        $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
+                    } else {
+                        $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
+                    }
+                }
                 //$acciones = '<a href="Editar/' . $data->id . '"   class="btn btn-info btn-sm" title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-                $acciones .= '&nbsp<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
                 //$acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm" title="ELIMINAR"> <i class="fa fa-trash"></i>  </button>';
                 //$acciones .= '&nbsp<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="BORRAR"> <i class="fa fa-trash"></i> </a>';
-                if ($data->estado == '1') {
-                    $acciones .= '<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
-                } else {
-                    $acciones .= '<a class="btn btn-sm btn-default"  title="Activar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
-                }
                 return $acciones;
             })
             ->rawColumns(['action', 'nombrecompleto', 'sistemas', 'estado'])
@@ -207,6 +213,11 @@ class UsuarioController extends Controller
             $data['error_string'][] = 'DNI ingresado ya existe.';
             $data['status'] = FALSE;
         }
+        if ($request->usuariotipo_id == '') {
+            $data['inputerror'][] = 'usuariotipo_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
         if ($request->nombre == '') {
             $data['inputerror'][] = 'nombre';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -302,6 +313,7 @@ class UsuarioController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'dni' => $request->dni,
+            'usuariotipo_id' => $request->usuariotipo_id,
             'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
             'sexo' => $request->sexo,
@@ -323,6 +335,7 @@ class UsuarioController extends Controller
         $usuario = Usuario::find($request->id);
         $usuario->usuario = $request->usuario;
         $usuario->email = $request->email;
+        $usuario->usuariotipo_id = $request->usuariotipo_id;
         $usuario->dni = $request->dni;
         $usuario->nombre = $request->nombre;
         $usuario->apellidos = $request->apellidos;

@@ -103,6 +103,9 @@ class CentroPobladoRepositotio
                 $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPIndicador($importacion_id, 'sistema_cloracion', $ubicacion)))
                     ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
                     ->get();
+                $query['indicador2'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPIndicador($importacion_id, 'sistema_cloracion', $ubicacion)))
+                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
+                    ->get();
                 $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPProvincia($importacion_id, 'sistema_cloracion')))
                     ->select(
                         DB::raw('provincia'),
@@ -137,6 +140,9 @@ class CentroPobladoRepositotio
                 break;
             case 23: //4
                 $query['indicador'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHIndicador($importacion_id, 'sistema_disposicion_excretas', $ubicacion)))
+                    ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
+                    ->get();
+                $query['indicador2'] = DB::table(DB::raw(CentroPobladoRepositotio::querysCPIndicador($importacion_id, 'sistema_disposicion_excretas', $ubicacion)))
                     ->select(DB::raw('name'), DB::raw('cast(y as SIGNED) y'))
                     ->get();
                 $query['filtro1'] = DB::table(DB::raw(CentroPobladoRepositotio::querysHProvincia($importacion_id, 'sistema_disposicion_excretas')))
@@ -353,6 +359,36 @@ class CentroPobladoRepositotio
         }
         $query = $query->orderBy('v3.nombre')->orderBy('v2.nombre')->orderBy('v1.nombre');
         $query = $query->get();
+        return $query;
+    }
+    public static function listarporprovincias($importacion_id)
+    {
+        $query = DB::table(DB::raw('(SELECT v3.nombre as name, count(v3.id) as conteo, round(count(v3.id)*100/(select count(id) from viv_centropoblado_datass where importacion_id=' . $importacion_id . '),2) as y 
+        FROM viv_centropoblado_datass as v1 
+        INNER JOIN par_ubigeo as v2 ON v2.id=v1.ubigeo_id 
+        INNER JOIN par_ubigeo as v3 ON v3.id=v2.dependencia  
+        where v1.importacion_id=' . $importacion_id . ' 
+        group by v3.nombre 
+        order by v3.nombre) AS xxx'))
+            ->select(DB::raw('name'), DB::raw('conteo'), DB::raw('cast(y as DOUBLE) y'))
+            //->select(DB::raw('name'),DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
+            ->get();
+        return $query;
+    }
+    public static function listarporprovinciasconsistemaagua($importacion_id)
+    {
+        $query = DB::table(DB::raw('(SELECT 
+        v3.nombre AS name,
+        COUNT(v1.id) AS conteo,
+        ROUND(count(v1.id)*100/(SELECT COUNT(id) FROM viv_centropoblado_datass WHERE importacion_id = ' . $importacion_id . ' AND sistema_agua="SI"),2) AS y 
+    FROM viv_centropoblado_datass as v1 
+    INNER JOIN par_ubigeo as v2 ON v2.id = v1.ubigeo_id 
+    INNER JOIN par_ubigeo as v3 ON v3.id = v2.dependencia 
+    WHERE v1.importacion_id = ' . $importacion_id . ' AND v1.sistema_agua="SI" 
+    GROUP BY v3.nombre,v1.sistema_agua) AS xxx'))
+            ->select(DB::raw('name'), DB::raw('conteo'), DB::raw('cast(y as DOUBLE) y'))
+            //->select(DB::raw('name'),DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
+            ->get();
         return $query;
     }
 }

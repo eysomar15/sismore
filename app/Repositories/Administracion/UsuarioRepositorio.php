@@ -30,7 +30,7 @@ class UsuarioRepositorio
             })
             ->groupBy('adm_usuario.id', 'adm_usuario.usuario', 'adm_usuario.email', 'adm_usuario.nombre', 'adm_usuario.apellidos', 'adm_usuario.dni', 'adm_usuario.celular')
             ->get(); */
-        $data = DB::table(DB::raw('(select DISTINCT v1.id, v1.usuario, v1.email, v1.nombre, v1.apellidos, v1.dni, v1.celular,v1.estado
+        $data = DB::table(DB::raw('(select DISTINCT v1.id, v1.usuario, v1.email, v1.nombre, v1.apellidos, v1.dni, v1.celular,v1.estado,v1.usuariotipo_id 
             from adm_usuario as v1 
             left join adm_usuario_sistema as v2 on v2.usuario_id = v1.id 
             where ( 

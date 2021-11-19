@@ -85,19 +85,35 @@
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Nombre<span class="required">*</span></label>
-                                                        <input id="nombre" name="nombre" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
+                                                        <label>Tipo Usuario<span class="required">*</span></label>
+                                                        <select id="usuariotipo_id" name="usuariotipo_id" class="form-control">
+                                                            <option value="">SELECCIONAR</option>
+                                                            @foreach ($tipos as $item)
+                                                            <option value="{{$item->id}}">{{$item->nombre}}</option>    
+                                                            @endforeach
+                                                        </select>
                                                         <span class="help-block"></span>
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
+                                                        <label>Nombre<span class="required">*</span></label>
+                                                        <input id="nombre" name="nombre" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
+                                                        <span class="help-block"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label>Apellido<span class="required">*</span></label>
                                                         <input id="apellidos" name="apellidos" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
                                                         <span class="help-block"></span>
                                                     </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Sexo<span class="required">*</span></label>
                                                         <select id="sexo" name="sexo" class="form-control">
@@ -106,15 +122,16 @@
                                                         </select>
                                                         <span class="help-block"></span>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Correo Electronico<span class="required">*</span></label>
                                                         <input id="email" name="email" class="form-control" type="email" required>
                                                         <span class="help-block"></span>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    
                                                     <div class="col-md-6">
                                                         <label>Celular<!--span class="required">*</span--></label>
                                                         <input id="celular" name="celular" class="form-control" type="text">
@@ -551,6 +568,7 @@
                 success: function(data) {
                     $('[name="id"]').val(data.usuario.id);
                     $('[name="dni"]').val(data.usuario.dni);
+                    $('[name="usuariotipo_id"]').val(data.usuario.usuariotipo_id);
                     $('[name="nombre"]').val(data.usuario.nombre);
                     $('[name="apellidos"]').val(data.usuario.apellidos);
                     $('[name="sexo"]').val(data.usuario.sexo);
