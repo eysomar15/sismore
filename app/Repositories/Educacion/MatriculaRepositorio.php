@@ -661,7 +661,10 @@ class MatriculaRepositorio
                                       + ifnull(cuarto_nivel_requieren_recup,0) + ifnull(quinto_nivel_requieren_recup,0) + ifnull(sexto_nivel_requieren_recup,0) )as cantidadRequieren_Recup,
 
                                 sum( ifnull(primer_nivel_desaprobados,0) + ifnull(segundo_nivel_desaprobados,0) + ifnull(tercer_nivel_desaprobados,0) 
-                                      + ifnull(cuarto_nivel_desaprobados,0) + ifnull(quinto_nivel_desaprobados,0) + ifnull(sexto_nivel_desaprobados,0) )as cantidadDesaprobados
+                                      + ifnull(cuarto_nivel_desaprobados,0) + ifnull(quinto_nivel_desaprobados,0) + ifnull(sexto_nivel_desaprobados,0) )as cantidadDesaprobados,
+
+                                sum( ifnull(cero_nivel_trasladado,0) + ifnull(primer_nivel_trasladados,0) + ifnull(segundo_nivel_trasladados,0) + ifnull(tercer_nivel_trasladados,0) 
+                                      + ifnull(cuarto_nivel_trasladados,0) + ifnull(quinto_nivel_trasladados,0) + ifnull(sexto_nivel_trasladados,0) )as cantidadTrasladados
 
                                 from par_importacion imp
                                 inner join edu_matricula_anual as mat on imp.id = mat.importacion_id
@@ -684,11 +687,72 @@ class MatriculaRepositorio
                 DB::raw('cantidadAprobados'),
                 DB::raw('cantidadRetirados'),
                 DB::raw('cantidadRequieren_Recup'), 
+                DB::raw('cantidadDesaprobados') ,
+                DB::raw('cantidadTrasladados'),
+                DB::raw('cantidadAlumnos + cantidadTrasladados as cantidadTotal')              
+            ]);
+
+        return $data;
+    }
+
+    public static function total_matricula_ComsolidadoAnual_totalAnios ($anio_id,$condicion, $filtro, $filtroTipo_IE)
+    {
+        // la forma de ordenamiento va de la mano con los metodos  
+        //total_matricula_ComsolidadoAnual_porNivel_soloAnios
+        //total_matricula_ComsolidadoAnual_porNivel_soloUgel
+        $data = DB::table(
+                    DB::raw("(
+                                select 
+                                row_number() OVER (partition BY ugel  ORDER BY anio.anio asc) AS posAnio,
+                                anio.anio,
+                                sum(
+                                    ifnull(cero_nivel_concluyeron,0) + ifnull(cero_nivel_retirados,0) 
+                                    + ifnull(primer_nivel_aprobados,0) + ifnull(primer_nivel_retirados,0) + ifnull(primer_nivel_requieren_recup,0) + ifnull(primer_nivel_desaprobados,0) 
+                                    + ifnull(segundo_nivel_aprobados,0) + ifnull(segundo_nivel_retirados,0) + ifnull(segundo_nivel_requieren_recup,0) + ifnull(segundo_nivel_desaprobados,0) 
+                                    + ifnull(tercer_nivel_aprobados,0) + ifnull(tercer_nivel_retirados,0) + ifnull(tercer_nivel_requieren_recup,0) + ifnull(tercer_nivel_desaprobados,0) 
+                                    + ifnull(cuarto_nivel_aprobados,0) + ifnull(cuarto_nivel_retirados,0) + ifnull(cuarto_nivel_requieren_recup,0) + ifnull(cuarto_nivel_desaprobados,0) 
+                                    + ifnull(quinto_nivel_aprobados,0) + ifnull(quinto_nivel_retirados,0) + ifnull(quinto_nivel_requieren_recup,0) + ifnull(quinto_nivel_desaprobados,0) 
+                                    + ifnull(sexto_nivel_aprobados,0) + ifnull(sexto_nivel_retirados,0) + ifnull(sexto_nivel_requieren_recup,0) + ifnull(sexto_nivel_desaprobados,0) 
+                                    )as cantidadAlumnos,
+
+                                sum( ifnull(cero_nivel_concluyeron,0) + ifnull(primer_nivel_aprobados,0) + ifnull(segundo_nivel_aprobados,0) + ifnull(tercer_nivel_aprobados,0) 
+                                    + ifnull(cuarto_nivel_aprobados,0) + ifnull(quinto_nivel_aprobados,0) + ifnull(sexto_nivel_aprobados,0) )as cantidadAprobados,
+
+                                sum( ifnull(cero_nivel_retirados,0) + ifnull(primer_nivel_retirados,0) + ifnull(segundo_nivel_retirados,0) + ifnull(tercer_nivel_retirados,0) 
+                                      + ifnull(cuarto_nivel_retirados,0) + ifnull(quinto_nivel_retirados,0) + ifnull(sexto_nivel_retirados,0) )as cantidadRetirados,
+
+                                sum( ifnull(primer_nivel_requieren_recup,0) + ifnull(segundo_nivel_requieren_recup,0) + ifnull(tercer_nivel_requieren_recup,0) 
+                                      + ifnull(cuarto_nivel_requieren_recup,0) + ifnull(quinto_nivel_requieren_recup,0) + ifnull(sexto_nivel_requieren_recup,0) )as cantidadRequieren_Recup,
+
+                                sum( ifnull(primer_nivel_desaprobados,0) + ifnull(segundo_nivel_desaprobados,0) + ifnull(tercer_nivel_desaprobados,0) 
+                                      + ifnull(cuarto_nivel_desaprobados,0) + ifnull(quinto_nivel_desaprobados,0) + ifnull(sexto_nivel_desaprobados,0) )as cantidadDesaprobados
+
+                                from par_importacion imp
+                                inner join edu_matricula_anual as mat on imp.id = mat.importacion_id
+                                inner join edu_matricula_anual_detalle as matDet on mat.id = matDet.matricula_anual_id
+                                inner join par_anio as anio on mat.anio_id = anio.id
+                                where imp.estado = 'PR'
+                                and nivel $condicion ('$filtro') 
+                                and $filtroTipo_IE
+                                group by anio.anio
+                                order by anio.anio
+                        ) as datos " 
+                    )
+                )
+            ->get([   
+              
+                DB::raw('posAnio'),
+                DB::raw('anio'),
+                DB::raw('cantidadAlumnos'),
+                DB::raw('cantidadAprobados'),
+                DB::raw('cantidadRetirados'),
+                DB::raw('cantidadRequieren_Recup'), 
                 DB::raw('cantidadDesaprobados')                
             ]);
 
         return $data;
     }
+
 
     public static function total_matricula_ComsolidadoAnual_porNivel_soloAnios($anio_id,$condicion, $filtro, $filtroTipo_IE)
     { 
@@ -704,7 +768,10 @@ class MatriculaRepositorio
                                     + ifnull(cuarto_nivel_aprobados,0) + ifnull(cuarto_nivel_retirados,0) + ifnull(cuarto_nivel_requieren_recup,0) + ifnull(cuarto_nivel_desaprobados,0) 
                                     + ifnull(quinto_nivel_aprobados,0) + ifnull(quinto_nivel_retirados,0) + ifnull(quinto_nivel_requieren_recup,0) + ifnull(quinto_nivel_desaprobados,0) 
                                     + ifnull(sexto_nivel_aprobados,0) + ifnull(sexto_nivel_retirados,0) + ifnull(sexto_nivel_requieren_recup,0) + ifnull(sexto_nivel_desaprobados,0) 
-                                    )as cantidadAlumnos                               
+                                    )as cantidadAlumnos   ,
+                                sum( ifnull(cero_nivel_trasladado,0) + ifnull(primer_nivel_trasladados,0) + ifnull(segundo_nivel_trasladados,0) + ifnull(tercer_nivel_trasladados,0) 
+                                    + ifnull(cuarto_nivel_trasladados,0) + ifnull(quinto_nivel_trasladados,0) + ifnull(sexto_nivel_trasladados,0) )as cantidadTrasladados
+                            
                                 from par_importacion imp
                                 inner join edu_matricula_anual as mat on imp.id = mat.importacion_id
                                 inner join edu_matricula_anual_detalle as matDet on mat.id = matDet.matricula_anual_id
@@ -721,7 +788,9 @@ class MatriculaRepositorio
                 DB::raw('posAnio'),                  
                 DB::raw('id'), 
                 DB::raw('anio'),  
-                DB::raw('cantidadAlumnos')                 
+                DB::raw('cantidadAlumnos'),
+                DB::raw('cantidadTrasladados'),
+                DB::raw('cantidadAlumnos + cantidadTrasladados as cantidadTotal')     
             ]);
 
         return $data;

@@ -66,7 +66,12 @@
        
      </div>
      <!-- end row -->
+     
  </div>
  <!-- end Col-12 -->
+ <div  class="col-md-6">
+   <br>
+    Fuente: SIAGIE- MINEDU          
+</div>
 
 

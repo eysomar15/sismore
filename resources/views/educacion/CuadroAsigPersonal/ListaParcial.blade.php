@@ -1,54 +1,54 @@
 
 <div class="table-responsive">
-    <table id="grid" class="table table-striped table-bordered" style="width:10500px">
+    <table id="grid" class="table table-striped table-bordered" style="width:12600px">
         <thead class="text-primary">                              
             
-            <th style="width:80px">region</th>
-            <th style="width:180px">unidad_ejecutora</th>
-            <th style="width:100px">organo_intermedio</th>
-            <th style="width:100px">provincia</th>
-            <th style="width:100px">distrito</th>
-            <th style="width:200px">tipo_ie</th>
-            <th style="width:160px">gestion</th>
-            <th style="width:200px">zona</th>
-            <th style="width:80px">codmod_ie</th>
-            <th style="width:80px">codigo_local</th>
-            <th style="width:80px">clave8</th>
-            <th style="width:80px">nivel_educativo</th>
-            <th style="width:200px">institucion_educativa</th>
-            <th style="width:80px">codigo_plaza</th>
-            <th style="width:80px">tipo_trabajador</th>
-            <th style="width:280px">sub_tipo_trabajador</th>
-            <th style="width:300px">cargo</th>
-            <th style="width:80px">situacion_laboral</th>
-            <th style="width:480px">motivo_vacante</th>
-            <th style="width:80px">documento_identidad</th>
-            <th style="width:80px">codigo_modular</th>
-            <th style="width:80px">apellido_paterno</th>
-            <th style="width:80px">apellido_materno</th>
-            <th style="width:160px">nombres</th>
-            <th style="width:80px">fecha_ingreso</th>
-            <th style="width:80px">categoria_remunerativa</th>
-            <th style="width:80px">jornada_laboral</th>
-            <th style="width:260px">estado</th>
-            <th style="width:80px">fecha_nacimiento</th>
-            <th style="width:80px">fecha_inicio</th>
-            <th style="width:80px">fecha_termino</th>
-            <th style="width:80px">tipo_registro</th>
-            <th style="width:80px">ley</th>
-            <th style="width:80px">preventiva</th>
-            <th style="width:80px">referencia_preventiva</th>
-            <th style="width:80px">especialidad</th>
-            <th style="width:160px">tipo_estudios</th>
-            <th style="width:80px">estado_estudios</th>
-            <th style="width:80px">grado</th>
-            <th style="width:460px">mencion</th>
-            <th style="width:300px">especialidad_profesional</th>
-            <th style="width:80px">fecha_resolucion</th>
-            <th style="width:80px">numero_resolucion</th>
-            <th style="width:300px">centro_estudios</th>
-            <th style="width:80px">celular</th>
-            <th style="width:80px">email</th>
+            {{-- <th style="width:80px">region</th> --}}
+            {{-- <th style="width:180px">unidad_ejecutora</th> --}}
+            <th style="width:100px">Organo_Intermedio</th>
+            <th style="width:200px">Provincia</th>
+            <th style="width:100px">Distrito</th>
+            <th style="width:200px">Tipo_IE</th>
+            <th style="width:160px">Gestion</th>
+            <th style="width:200px">Zona</th>
+            <th style="width:80px">CodMod_IE</th>
+            <th style="width:80px">Codigo_Local</th>
+            <th style="width:80px">Clave8</th>
+            <th style="width:80px">Nivel_Educativo</th>
+            <th style="width:400px">Institucion_Educativa</th>
+            <th style="width:80px">Codigo_Plaza</th>
+            <th style="width:80px">Tipo_Trabajador</th>
+            <th style="width:280px">Sub_Tipo_Trabajador</th>
+            <th style="width:300px">Cargo</th>
+            <th style="width:80px">Situacion_Laboral</th>
+            <th style="width:680px">Motivo_Vacante</th>
+            <th style="width:80px">Documento_Identidad</th>
+            <th style="width:80px">Codigo_Modular</th>
+            <th style="width:80px">Apellido_Paterno</th>
+            <th style="width:80px">Apellido_Materno</th>
+            <th style="width:160px">Nombres</th>
+            <th style="width:80px">Fecha_Ingreso</th>
+            <th style="width:80px">Categoria_Remunerativa</th>
+            <th style="width:80px">Jornada_Laboral</th>
+            <th style="width:460px">Estado</th>
+            <th style="width:80px">Fecha_Nacimiento</th>
+            <th style="width:80px">Fecha_Inicio</th>
+            <th style="width:80px">Fecha_Termino</th>
+            <th style="width:80px">Tipo_Registro</th>
+            <th style="width:80px">Ley</th>
+            <th style="width:80px">Preventiva</th>
+            <th style="width:80px">Referencia_Preventiva</th>
+            <th style="width:680px">Especialidad</th>
+            <th style="width:160px">Tipo_Estudios</th>
+            <th style="width:200px">Estado_Estudios</th>
+            <th style="width:80px">Grado</th>
+            <th style="width:660px">Mencion</th>
+            <th style="width:500px">Especialidad_Profesional</th>
+            <th style="width:80px">Fecha_Resolucion</th>
+            <th style="width:80px">Numero_Resolucion</th>
+            <th style="width:300px">Centro_Estudios</th>
+            <th style="width:80px">Celular</th>
+            <th style="width:80px">Email</th>
         </thead>
       
     </table>
@@ -66,7 +66,8 @@
         $('#grid').DataTable({
             "ajax": "{{route('CuadroAsigPersonal.ListaImportada_DataTable',$importacion_id)}}",
             "columns":[             
-                {data:'region'},{data:'unidad_ejecutora'},{data:'organo_intermedio'},{data:'provincia'},
+                // {data:'region'},{data:'unidad_ejecutora'},
+                {data:'organo_intermedio'},{data:'provincia'},
                 {data:'distrito'},{data:'tipo_ie'},{data:'gestion'},{data:'zona'},{data:'codmod_ie'},
                 {data:'codigo_local'},{data:'clave8'},{data:'nivel_educativo'},{data:'institucion_educativa'},
                 {data:'codigo_plaza'},{data:'tipo_trabajador'},{data:'sub_tipo_trabajador'},{data:'cargo'},
@@ -101,6 +102,7 @@
             "processing":			"Procesando...",
             "search":				"Buscar:",
             "searchPlaceholder":	"Dato para buscar",
+           
             "zeroRecords":			"No se han encontrado coincidencias.",
             
             "paginate":{

@@ -1213,20 +1213,20 @@ class MatriculaController extends Controller
         // }      
 
         //return $anioConsolidadoAnual ;
-        $nivel = "T";
-        $condicion = 'in';
-        if($nivel=="T")
-            $condicion = 'not in';
+        // $nivel = "T";
+        // $condicion = 'in';
+        // if($nivel=="T")
+        //     $condicion = 'not in';
 
-        $gestion = 'P';
+        // $gestion = 'P';
 
-        $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-        $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-        $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        // $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        // $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+        // $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
 
-        $descripcion_nivel = $this->descripcion_nivel($nivel);
+        // $descripcion_nivel = $this->descripcion_nivel($nivel);
 
-        return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('total_matricula_ComsolidadoAnual','anioConsolidadoAnual','ugelConsolidadoAnual','descripcion_nivel','matricula','anios'));  
+        return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('matricula','anios'));  
     }    
 
     public function ReporteUgelConsolidadoAnual($anio_id,$gestion,$nivel)
@@ -1238,6 +1238,8 @@ class MatriculaController extends Controller
         $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
         $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
         $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
+
+        $total_matricula_ComsolidadoAnual_totalAnios = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_totalAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
 
         $descripcion_nivel = $this->descripcion_nivel($nivel);
 
@@ -1255,7 +1257,7 @@ class MatriculaController extends Controller
             $data = [];                                                      
             for($i=1 ; $i<=$anioConsolidadoAnual->count();$i++)   
             {
-               $dato = $total_matricula_ComsolidadoAnual->where('posUgel', $recorre)->where('posAnio', $i)->first()->cantidadAlumnos;
+               $dato = $total_matricula_ComsolidadoAnual->where('posUgel', $recorre)->where('posAnio', $i)->first()->cantidadTotal;
                $data = array_merge($data,[intval($dato)]);
             }
         
@@ -1270,7 +1272,7 @@ class MatriculaController extends Controller
 
         // $nombreAnio = Anio::find($anio_id)->anio;
 
-        $titulo = 'MATRICULAS ANUALES '.$descripcion_nivel;
+        $titulo = 'TOTAL ESTUDIANTES '.$descripcion_nivel;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de Matriculados';
 
@@ -1279,7 +1281,7 @@ class MatriculaController extends Controller
 
         return view('educacion.Matricula.ReporteUgelConsolidadoAnual',
         ["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
-        compact('total_matricula_ComsolidadoAnual','anioConsolidadoAnual','ugelConsolidadoAnual','descripcion_nivel',
+        compact('total_matricula_ComsolidadoAnual','total_matricula_ComsolidadoAnual_totalAnios','anioConsolidadoAnual','ugelConsolidadoAnual','descripcion_nivel',
         'titulo_y','titulo','subTitulo'));
     }
 
