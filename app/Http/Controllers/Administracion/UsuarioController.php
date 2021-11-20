@@ -29,6 +29,7 @@ class UsuarioController extends Controller
         $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
         $sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
         $tipos = UsuarioTipo::where('estado', '1')->get();
+        return $sistemas;
         //return session()->get('usuario_id');
         return view('administracion.Usuario.Principal', compact('sistemas', 'sistemas2', 'tipos'));
     }
@@ -52,7 +53,7 @@ class UsuarioController extends Controller
             })
             ->addColumn('action', function ($data) { // '.auth()->user()->usuario.'
                 $acciones = '';
-                if ($data->usuariotipo_id != 1||auth()->user()->usuariotipo_id==1) {
+                if ($data->usuariotipo_id != 1 || auth()->user()->usuariotipo_id == 1) {
                     $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i></a>';
                     $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
 

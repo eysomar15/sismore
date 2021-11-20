@@ -370,14 +370,34 @@ class CentroPobladoRepositotio
         where v1.importacion_id=' . $importacion_id . ' 
         group by v3.nombre 
         order by v3.nombre) AS xxx'))
-            ->select(DB::raw('name'), DB::raw('conteo'), DB::raw('cast(y as DOUBLE) y'))
-            //->select(DB::raw('name'),DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
+            //->select(DB::raw('name'), DB::raw('conteo'), DB::raw('cast(y as DOUBLE) y'))
+            ->select(DB::raw('name'),DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
             ->get();
         return $query;
     }
     public static function listarporprovinciasconsistemaagua($importacion_id)
     {
-        $query = DB::table(DB::raw('(SELECT 
+        $query = DB::table(DB::raw('(
+            SELECT name, sum(SI) as SI,sum(NO) as NO,ROUND(sum(SI)*100/(sum(SI)+sum(NO)),2) as PorSI,ROUND(sum(NO)*100/(sum(SI)+sum(NO)),2) as PorNO FROM (
+            SELECT v3.nombre AS name, COUNT(v1.id) AS SI, 0 as NO  FROM viv_centropoblado_datass as v1
+            INNER JOIN par_ubigeo as v2 ON v2.id = v1.ubigeo_id 
+            INNER JOIN par_ubigeo as v3 ON v3.id = v2.dependencia 
+            WHERE v1.importacion_id = ' . $importacion_id . ' AND v1.sistema_agua="SI" 
+            GROUP BY v3.nombre,v1.sistema_agua 
+            union all 
+            SELECT v3.nombre AS name, 0 as SI, COUNT(v1.id) AS NO FROM viv_centropoblado_datass as v1 
+            INNER JOIN par_ubigeo as v2 ON v2.id = v1.ubigeo_id 
+            INNER JOIN par_ubigeo as v3 ON v3.id = v2.dependencia 
+            WHERE v1.importacion_id = ' . $importacion_id . ' AND v1.sistema_agua!="SI" 
+            GROUP BY v3.nombre,v1.sistema_agua) AS XXX 
+        GROUP BY name
+        ) AS xxx'))
+            ->select(DB::raw('name'), DB::raw('SI as conteo'), DB::raw('cast(PorSi as DOUBLE) y'))
+            //->select(DB::raw('name'),DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
+            ->get();
+        return $query;
+    }
+    /* SELECT 
         v3.nombre AS name,
         COUNT(v1.id) AS conteo,
         ROUND(count(v1.id)*100/(SELECT COUNT(id) FROM viv_centropoblado_datass WHERE importacion_id = ' . $importacion_id . ' AND sistema_agua="SI"),2) AS y 
@@ -385,10 +405,5 @@ class CentroPobladoRepositotio
     INNER JOIN par_ubigeo as v2 ON v2.id = v1.ubigeo_id 
     INNER JOIN par_ubigeo as v3 ON v3.id = v2.dependencia 
     WHERE v1.importacion_id = ' . $importacion_id . ' AND v1.sistema_agua="SI" 
-    GROUP BY v3.nombre,v1.sistema_agua) AS xxx'))
-            ->select(DB::raw('name'), DB::raw('conteo'), DB::raw('cast(y as DOUBLE) y'))
-            //->select(DB::raw('name'),DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
-            ->get();
-        return $query;
-    }
+    GROUP BY v3.nombre,v1.sistema_agua */
 }

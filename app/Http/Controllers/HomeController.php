@@ -101,8 +101,11 @@ class HomeController extends Controller
 
         $grafica[] = CentroPobladoRepositotio::listarporprovincias($imp->maximo);/* total de centro poblado por provincia */  
         $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($imp->maximo);/* total de centro poblado con servicio de agua(sistema_agua) */
-        /* return $grafica; */
-        return view('home', compact('sistema_id', 'data', 'data2', 'grafica'));
+
+        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'];   
+        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'];   
+        /* return $grafica2; */
+        return view('home', compact('sistema_id', 'data', 'data2', 'grafica', 'grafica2'));
     }
     public function educacion($sistema_id)
     {
