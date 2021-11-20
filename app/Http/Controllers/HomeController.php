@@ -94,10 +94,15 @@ class HomeController extends Controller
         $data[] = ['name' => 'con disposición de excretas', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'][0]->y];
         $data[] = ['name' => 'con sistema de cloración', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 21, $imp->maximo)['indicador2'][0]->y];
 
-        $data2[] = ['name' => 'población', 'y' => CentroPobladoDatass::where('importacion_id', $imp->maximo)->select(DB::raw('sum(total_poblacion) as conteo'))->first()->conteo];/* total_poblacion */
-        $data2[] = ['name' => 'poblacion con cobertura', 'y' => 0];/* poblacion_con_servicio_agua */
-        $data2[] = ['name' => 'viviendas', 'y' => CentroPobladoDatass::where('importacion_id', $imp->maximo)->select(DB::raw('sum(total_viviendas) as conteo'))->first()->conteo];/* total_viviendas */
-        $data2[] = ['name' => 'viviendas con conexion', 'y' => 0];/* viviendas_con_conexion */
+        $query=CentroPobladoDatass::where('importacion_id', $imp->maximo)->select(
+            DB::raw('sum(total_poblacion) as poblacion'),
+            DB::raw('sum(poblacion_servicio_agua) as con_agua'),
+            DB::raw('sum(total_viviendas) as viviendas'),
+            DB::raw('sum(viviendas_conexion) as con_conexion'))->first();
+        $data2[] = ['name' => 'población', 'y' => $query->poblacion];/* total_poblacion */
+        $data2[] = ['name' => 'poblacion con cobertura', 'y' => $query->con_agua];/* poblacion_con_servicio_agua */
+        $data2[] = ['name' => 'viviendas', 'y' => $query->con_conexion];/* total_viviendas */
+        $data2[] = ['name' => 'viviendas con conexion', 'y' => $query->con_conexion];/* viviendas_con_conexion */
 
         $grafica[] = CentroPobladoRepositotio::listarporprovincias($imp->maximo);/* total de centro poblado por provincia */  
         $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($imp->maximo);/* total de centro poblado con servicio de agua(sistema_agua) */
