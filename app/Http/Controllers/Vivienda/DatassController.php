@@ -36,24 +36,60 @@ class DatassController extends Controller
         $cadena ='';
 
         try{
-             foreach ($array as $key => $value) {
-                 foreach ($value as $row) {
-                    if(++$i > 1) break;
-                    $cadena =  $cadena.$row['departamento'].$row['provincia'].$row['distrito'].$row['ubigeo_cp']
-                    .$row['centro_poblado'].$row['total_viviendas'].$row['viviendas_habitadas'].$row['total_poblacion']
-                    .$row['predomina_primera_lengua'].$row['tiene_energia_electrica'].$row['tiene_internet']
-                    .$row['tiene_establecimiento_salud'].$row['pronoei'].$row['primaria'].$row['secundaria']
-                    .$row['sistema_agua'].$row['sistema_disposicion_excretas'].$row['prestador_codigo']
-                    .$row['prestador_de_servicio_agua'].$row['tipo_organizacion_comunal'].$row['cuota_familiar']
-                    .$row['servicio_agua_continuo'].$row['sistema_cloracion'].$row['realiza_cloracion_agua']
-                    .$row['tipo_sistema_agua'];                   
-                               
-                    }
-             }
-        }catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
-            return view('Vivienda.Datass.Importar',compact('mensaje'));            
-        }
+            foreach ($array as $key => $value) {
+                foreach ($value as $row) {
+                   if(++$i > 1) break;
+                   $cadena =  $cadena.$row['departamento'].$row['provincia'].$row['distrito'].$row['ubigeo_cp'].$row['centro_poblado']
+
+                   .$row['zona_utm_wgs84']
+                   .$row['coordenadas_este']
+                   .$row['coordenadas_norte']
+                   .$row['altitud']                   
+                   
+                   .$row['total_viviendas'].$row['viviendas_habitadas'].$row['total_poblacion']
+                   .$row['lengua_predominante'].$row['energia_electrica'].$row['internet']
+                   .$row['establecimiento_salud'].$row['pronoei'].$row['primaria'].$row['secundaria']
+
+                   .$row['establecimiento_salud_agua']
+                   .$row['pronoei_agua']
+                   .$row['primaria_agua']
+                   .$row['secundaria_agua']
+                   .$row['funciona_establecimiento_salud']
+                   .$row['funciona_pronoei']
+                   .$row['funciona_primaria']
+                   .$row['funciona_secundaria']
+                   .$row['establecimiento_salud_banios']
+                   .$row['pronoei_banios']
+                   .$row['primaria_banios']
+                   .$row['secundaria_banios']
+
+                   .$row['sistema_agua']/***** */
+                   
+                   .$row['viviendas_conexion']
+                   .$row['poblacion_servicio_agua']                   
+                   
+                   .$row['sistema_disposicion_excretas'].$row['codigo_ps'].$row['prestador_servicio'].$row['tipo_organizacion_comunal']
+                                      
+                   .$row['total_asociados']
+
+                   .$row['cuota_familiar']/** */
+
+                   .$row['tipo_cobro']
+                   .$row['codigo_fuente']
+                   .$row['fuente_principal']
+                   .$row['tipo_fuente']
+
+                   .$row['servicio_agua_continuo'].$row['sistema_cloracion'].$row['realiza_cloracion'].$row['tipo_sistema_agua']
+                                      
+                   .$row['tipo_sistema_cloracion']
+                   ;                   
+                              
+                   }
+            }
+       }catch (Exception $e) {
+           $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
+           return view('Vivienda.Datass.Importar',compact('mensaje'));            
+       }
            
         try{
             $importacion = Importacion::Create([
@@ -75,26 +111,58 @@ class DatassController extends Controller
                         'distrito'=>$row['distrito'],
                         'ubigeo_cp'=>$row['ubigeo_cp'],
                         'centro_poblado'=>$row['centro_poblado'],
+
+                        'zona_utm_wgs84'=> $row['zona_utm_wgs84'],
+                        'coordenadas_este' =>$row['coordenadas_este'],
+                        'coordenadas_norte'=>$row['coordenadas_norte'],
+                        'altitud'=>$row['altitud'],
+
                         'total_viviendas'=>$row['total_viviendas'],
                         'viviendas_habitadas'=>$row['viviendas_habitadas'],
                         'total_poblacion'=>$row['total_poblacion'],
-                        'predomina_primera_lengua'=>$row['predomina_primera_lengua'],
-                        'tiene_energia_electrica'=>$row['tiene_energia_electrica'],
-                        'tiene_internet'=>$row['tiene_internet'],
-                        'tiene_establecimiento_salud'=>$row['tiene_establecimiento_salud'],
+                        'predomina_primera_lengua'=>$row['lengua_predominante'],
+                        'tiene_energia_electrica'=>$row['energia_electrica'],
+                        'tiene_internet'=>$row['internet'],
+                        'tiene_establecimiento_salud'=>$row['establecimiento_salud'],
                         'pronoei'=>$row['pronoei'],
                         'primaria'=>$row['primaria'],
                         'secundaria'=>$row['secundaria'],
+
+                        'establecimiento_salud_agua'=>$row['establecimiento_salud_agua'],
+                        'pronoei_agua'=>$row['pronoei_agua'],
+                        'primaria_agua'=>$row['primaria_agua'],
+                        'secundaria_agua'=>$row['secundaria_agua'],
+                        'funciona_establecimiento_salud'=>$row['funciona_establecimiento_salud'],
+                        'funciona_pronoei'=>$row['funciona_pronoei'],
+                        'funciona_primaria'=>$row['funciona_primaria'],
+                        'funciona_secundaria'=>$row['funciona_secundaria'],
+                        'establecimiento_salud_banios'=>$row['establecimiento_salud_banios'],
+                        'pronoei_banios'=>$row['pronoei_banios'],
+                        'primaria_banios'=>$row['primaria_banios'],
+                        'secundaria_banios'=>$row['secundaria_banios'],
+
                         'sistema_agua'=>$row['sistema_agua'],
+
+                        'viviendas_conexion'=>$row['viviendas_conexion'],
+                        'poblacion_servicio_agua'=>$row['poblacion_servicio_agua'],
+
                         'sistema_disposicion_excretas'=>$row['sistema_disposicion_excretas'],
-                        'prestador_codigo'=>$row['prestador_codigo'],
-                        'prestador_de_servicio_agua'=>$row['prestador_de_servicio_agua'],
+                        'prestador_codigo'=>$row['codigo_ps'],
+                        'prestador_de_servicio_agua'=>$row['prestador_servicio'],
                         'tipo_organizacion_comunal'=>$row['tipo_organizacion_comunal'],
+                        'total_asociados'=>$row['total_asociados'],
                         'cuota_familiar'=>$row['cuota_familiar'],
+
+                        'tipo_cobro'=>$row['tipo_cobro'],
+                        'codigo_fuente'=>$row['codigo_fuente'],
+                        'fuente_principal'=>$row['fuente_principal'],
+                        'tipo_fuente'=>$row['tipo_fuente'],
+
                         'servicio_agua_continuo'=>$row['servicio_agua_continuo'],
                         'sistema_cloracion'=>$row['sistema_cloracion'],
-                        'realiza_cloracion_agua'=>$row['realiza_cloracion_agua'],
+                        'realiza_cloracion_agua'=>$row['realiza_cloracion'],
                         'tipo_sistema_agua'=>$row['tipo_sistema_agua'],
+                        'tipo_sistema_cloracion' =>$row['tipo_sistema_cloracion'],
                         
                     ]);
                 }
@@ -130,8 +198,9 @@ class DatassController extends Controller
 
     public function procesar($importacion_id)
     {
-        $procesar = DB::select('call viv_pa_procesarDatass(?)', [$importacion_id]);
+        $procesar = DB::select('call viv_pa_procesarDatass(?,?)', [$importacion_id,auth()->user()->id]);
         return view('correcto');
+
     }
     
 }
