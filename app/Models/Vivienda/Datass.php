@@ -24,6 +24,12 @@ class Datass extends Model
                 'distrito',
                 'ubigeo_cp',
                 'centro_poblado',
+
+                'zona_utm_wgs84',
+                'coordenadas_este',
+                'coordenadas_norte',
+                'altitud',
+
                 'total_viviendas',
                 'viviendas_habitadas',
                 'total_poblacion',
@@ -34,16 +40,45 @@ class Datass extends Model
                 'pronoei',
                 'primaria',
                 'secundaria',
-                'sistema_agua',
+
+                'establecimiento_salud_agua',
+                'pronoei_agua',
+                'primaria_agua',
+                'secundaria_agua',
+                'funciona_establecimiento_salud',
+                'funciona_pronoei',
+                'funciona_primaria',
+                'funciona_secundaria',
+                'establecimiento_salud_banios',
+                'pronoei_banios',
+                'primaria_banios',
+                'secundaria_banios',
+
+                'sistema_agua',/**/
+
+                'viviendas_conexion',
+                'poblacion_servicio_agua',
+
                 'sistema_disposicion_excretas',
                 'prestador_codigo',
                 'prestador_de_servicio_agua',
                 'tipo_organizacion_comunal',
-                'cuota_familiar',
+
+                'total_asociados',
+
+                'cuota_familiar',/** */
+
+                'tipo_cobro',
+                'codigo_fuente',
+                'fuente_principal',
+                'tipo_fuente',
+
+
                 'servicio_agua_continuo',
                 'sistema_cloracion',
                 'realiza_cloracion_agua',
-                'tipo_sistema_agua',              
+                'tipo_sistema_agua',  
+                'tipo_sistema_cloracion'        
 
-                            ];
+            ];
 }
