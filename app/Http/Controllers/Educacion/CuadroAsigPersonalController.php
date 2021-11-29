@@ -9,6 +9,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Indicador;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+
 use App\Utilities\Utilitario;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -207,7 +208,7 @@ class CuadroAsigPersonalController extends Controller
         $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico     
         $titulo_grafico = 'Docentes Título Pedagógico - Nivel Primaria';  
 
-        return  view('educacion.CuadroAsigPersonal.ReportePedagogico',["data"=> json_encode($puntos)],compact('Lista','title','contenedor','titulo_grafico'));
+        return  view('educacion.CuadroAsigPersonal.ReportePedagogico',["dataCircular"=> json_encode($puntos)],compact('Lista','title','contenedor','titulo_grafico'));
     }
 
     public function reporteBilingues()
@@ -216,10 +217,17 @@ class CuadroAsigPersonalController extends Controller
         $title = $indicador->nombre;
 
         $lista = CuadroAsigPersonalRepositorio:: docentes_bilingues_ugel();
-        //$dataCabecera = $data->unique('ugel');
+        $ultima_Plaza = CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza();
+        $docentes_bilingues_nivel = CuadroAsigPersonalRepositorio:: docentes_bilingues_nivel();
 
+        if($ultima_Plaza->first()!=null)
+            $fecha_texto = Utilitario::fecha_formato_texto_completo($ultima_Plaza->first()->fechaActualizacion );
+
+        $fecha_version = 'Ultima actualización: '.$fecha_texto;
+      
         $dataCabecera = CuadroAsigPersonalRepositorio:: docentes_bilingues();
-
+        
+        /************* GRAFICO TORTA*******************/
         $sumaBilingue= 0; 
         $sumaTotal= 0;
         $puntos = [];   
@@ -236,7 +244,50 @@ class CuadroAsigPersonalController extends Controller
         $contenedor = 'resumen_bilingue';//nombre del contenedor para el grafico     
         $titulo_grafico = 'Docentes Bilingues';  
 
-        return  view('educacion.CuadroAsigPersonal.ReporteBilingues',["data"=> json_encode($puntos)],compact('lista','dataCabecera','title','contenedor','titulo_grafico'));
+        /************* GRAFICO BARRAS*******************/
+               
+     
+        $categoria_nombres=[];        
+        $recorre = 1;            
+        $data = [];                                                      
+
+        foreach ($docentes_bilingues_nivel as $key => $lista2) {
+            
+            $data = array_merge($data,[intval($lista2->Bilingue)]);
+
+            $puntos2[] = [ 'name'=> $lista2->nivel_educativo ,'data'=>  $data]; 
+            $categoria_nombres[] = $lista2->nivel_educativo;        
+        }
+
+        $titulo = 'TOTAL ESTUDIANTES ';
+        $subTitulo = 'Fuente SIAGIE - MINEDU';
+        $titulo_y = 'Numero de Matriculados';
+
+        /********* FIN GRAFICO A *************/
+
+
+
+        return  view('educacion.CuadroAsigPersonal.ReporteBilingues',
+                ["dataCircular"=> json_encode($puntos),"data"=> json_encode($puntos2),"categoria_nombres"=> json_encode($categoria_nombres)],          
+                compact('lista','dataCabecera','title','contenedor','titulo_grafico','fecha_version','titulo','subTitulo','titulo_y'));
     }
+
+    public function filtro_gestion($gestion)
+    {
+        $filtro = "";
+
+        if($gestion==1)
+            $filtro = "NOT( tipo_ie LIKE '%xyz%')";//este filtro hace que la consulta traiga los datos de publicas y privadas
+        else
+        {
+            if($gestion==2)
+                $filtro = "NOT( tipo_ie LIKE '%particular%' or tipo_ie LIKE '%privada%')";
+            else
+                $filtro = "( tipo_ie LIKE '%particular%' or tipo_ie LIKE '%privada%')";
+        }
+
+        return  $filtro;
+    }
+
     
 }

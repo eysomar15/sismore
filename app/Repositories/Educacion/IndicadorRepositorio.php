@@ -17,6 +17,8 @@ class IndicadorRepositorio
             ->where('v1.indicador_id', $id)->get();
         return $query;
     }
+
+    
     
 
     /*public static function ListarSINO_porIndicador($provincia, $distrito, $indicador_id, $importacion_id)

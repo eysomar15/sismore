@@ -34,7 +34,7 @@
         series: [{
             name: 'Porcentaje',
             colorByPoint: true,
-            data: <?=$data?>
+            data: <?=$dataCircular?>
         }]
     });
     
