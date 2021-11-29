@@ -26,10 +26,17 @@
                         </div> --}}
 
                             <div class="card-body">
-                                <div>
-                                    {{-- <a href="{{route('Usuario.registrar')}}" class="btn btn-primary"> Nuevo </a> --}}
-                                    <button type="button" class="btn btn-primary" onclick="add()"><i class="fa fa-plus"></i> Nuevo</button>
+                                <div class="row justify-content-between">
+                                    <div class="col-4"></div>
+                                    <div class="col-4">
+                                        <div class="row justify-content-end">
+                                            {{-- <a href="{{route('Usuario.registrar')}}" class="btn btn-primary"> Nuevo </a> --}}
+                                            <button type="button" class="btn btn-primary" onclick="add()"><i
+                                                    class="fa fa-plus"></i> Nuevo</button>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <div class="table-responsive">
                                     <br>
                                     <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%">
@@ -38,7 +45,7 @@
                                             <th>DNI</th>
                                             <th>Usuario</th>
                                             <th>Nombre</th>
-                                            <th>Sistema Asignado</th>
+                                            <th>Perfiles</th>
                                             <th>Email</th>
                                             <th>Estado</th>
                                             <th>Aciones</th>
@@ -56,7 +63,8 @@
     </div>
 
     <!-- Bootstrap modal -->
-    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -81,39 +89,28 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>DNI<span class="required">*</span></label>
-                                                        <input id="dni" name="dni" class="form-control" type="text" maxlength="8" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
+                                                        <input id="dni" name="dni" class="form-control" type="text"
+                                                            maxlength="8"
+                                                            onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
                                                         <span class="help-block"></span>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label>Tipo Usuario<span class="required">*</span></label>
-                                                        <select id="usuariotipo_id" name="usuariotipo_id" class="form-control">
-                                                            <option value="">SELECCIONAR</option>
-                                                            @foreach ($tipos as $item)
-                                                            <option value="{{$item->id}}">{{$item->nombre}}</option>    
-                                                            @endforeach
-                                                        </select>
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Nombre<span class="required">*</span></label>
-                                                        <input id="nombre" name="nombre" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
+                                                        <input id="nombre" name="nombre" class="form-control" type="text"
+                                                            onkeyup="this.value=this.value.toUpperCase()">
                                                         <span class="help-block"></span>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label>Apellido<span class="required">*</span></label>
-                                                        <input id="apellidos" name="apellidos" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                    
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
+
+                                                    <div class="col-md-6">
+                                                        <label>Apellido<span class="required">*</span></label>
+                                                        <input id="apellidos" name="apellidos" class="form-control"
+                                                            type="text" onkeyup="this.value=this.value.toUpperCase()">
+                                                        <span class="help-block"></span>
+                                                    </div>
                                                     <div class="col-md-6">
                                                         <label>Sexo<span class="required">*</span></label>
                                                         <select id="sexo" name="sexo" class="form-control">
@@ -122,21 +119,32 @@
                                                         </select>
                                                         <span class="help-block"></span>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+
                                                     <div class="col-md-6">
-                                                        <label>Correo Electronico<span class="required">*</span></label>
-                                                        <input id="email" name="email" class="form-control" type="email" required>
+                                                        <label>Correo Electronico<span
+                                                                class="required">*</span></label>
+                                                        <input id="email" name="email" class="form-control" type="email"
+                                                            required>
+                                                        <span class="help-block"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Celular
+                                                            <!--span class="required">*</span-->
+                                                        </label>
+                                                        <input id="celular" name="celular" class="form-control"
+                                                            type="text">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
-                                                    
-                                                    <div class="col-md-6">
-                                                        <label>Celular<!--span class="required">*</span--></label>
-                                                        <input id="celular" name="celular" class="form-control" type="text">
-                                                        <span class="help-block"></span>
-                                                    </div>
+
+
                                                 </div>
                                             </div>
                                             {{-- <div class="form-group">
@@ -186,7 +194,8 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Usuario<span class="required">*</span></label>
-                                                        <input id="usuario" name="usuario" class="form-control" type="text">
+                                                        <input id="usuario" name="usuario" class="form-control"
+                                                            type="text">
                                                         <span class="help-block"></span>
                                                     </div>
 
@@ -195,13 +204,17 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label>Password<span class="required" id="password-required">*</span></label>
-                                                        <input id="password" name="password" class="form-control" type="password">
+                                                        <label>Password<span class="required"
+                                                                id="password-required">*</span></label>
+                                                        <input id="password" name="password" class="form-control"
+                                                            type="password">
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Confirmar Password<span class="required" id="password2-required">*</span></label>
-                                                        <input id="password2" name="password2" class="form-control" type="password">
+                                                        <label>Confirmar Password<span class="required"
+                                                                id="password2-required">*</span></label>
+                                                        <input id="password2" name="password2" class="form-control"
+                                                            type="password">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
@@ -216,7 +229,7 @@
                             <!-- col -->
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -247,13 +260,13 @@
                                 <!-- card -->
                             </div>
                             <!-- col -->
-                        </div>
+                        </div> --}}
 
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -261,7 +274,8 @@
     <!-- End Bootstrap modal -->
 
     <!-- Bootstrap modal -->
-    <div id="modal_perfil" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div id="modal_perfil" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -277,7 +291,8 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Sistema<span class="required">*</span></label>
-                                <select class="form-control" name="sistema_id" id="sistema_id" onchange="cargarPerfil();">
+                                <select class="form-control" name="sistema_id" id="sistema_id"
+                                    onchange="cargarPerfil();">
                                     <option value="">Seleccionar</option>
                                     @foreach ($sistemas2 as $item)
                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -313,8 +328,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSavePerfil" onclick="savePerfil()" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSavePerfil" onclick="savePerfil()"
+                        class="btn btn-primary">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -346,18 +362,18 @@
 @endsection
 
 @section('js')
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
-{{-- <script src="{{ asset('/') }}assets/js/app.min.js"></script> --}}
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+    {{-- <script src="{{ asset('/') }}assets/js/app.min.js"></script> --}}
     <script>
-         /* var id;
-                //.delete nombre con el que se le llamo en el controlador al boton eliminar
-                $(document).on('click', '.delete', function() {
-                    id = $(this).attr('id');
-                    $('#confirmModalEliminar').modal('show');
-                }); */
+        /* var id;
+                    //.delete nombre con el que se le llamo en el controlador al boton eliminar
+                    $(document).on('click', '.delete', function() {
+                        id = $(this).attr('id');
+                        $('#confirmModalEliminar').modal('show');
+                    }); */
 
         $(document).ready(function() {
             var save_method = '';
@@ -368,11 +384,11 @@
             $("input").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
-                if($(this).attr('type')=="checkbox"){
+                /* if($(this).attr('type')=="checkbox"){
                     $('#form-group-sistemas').removeClass('has-error');
                     $('#help-block-sistemas').empty();
-                }
-                
+                } */
+
             });
             $("textarea").change(function() {
                 $(this).parent().removeClass('has-error');
@@ -382,11 +398,12 @@
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
-            
+
             tablaPrincipal();
-            
+
         });
-        function tablaPrincipal(){
+
+        function tablaPrincipal() {
             tabla_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ route('Usuario.Lista_DataTable') }}",
                 "columns": [{
@@ -396,7 +413,7 @@
                 }, {
                     data: 'nombrecompleto'
                 }, {
-                    data: 'sistemas'
+                    data: 'perfiles'
                 }, {
                     data: 'email'
                 }, {
@@ -438,6 +455,7 @@
                 }
             });
         }
+
         function reload_table() {
             tabla_principal.ajax.reload(null, false);
         }
@@ -527,21 +545,21 @@
                 dataType: "JSON",
                 success: function(data) {
                     console.log(data);
-                    if (data.status) {                        
+                    if (data.status) {
                         $('#modal_form').modal('hide');
                         reload_table();
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
                             if (data.inputerror[i] == "sistemas") {
-                                $("#form-group-sistemas").addClass('has-error');
-                                $("#help-block-sistemas").text(data.error_string[i]);
-                            }else{
+                                /* $("#form-group-sistemas").addClass('has-error');
+                                $("#help-block-sistemas").text(data.error_string[i]); */
+                            } else {
                                 $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
                                 $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                             }
-                            
-                            
+
+
                         }
                     }
                     $('#btnSave').text('Guardar');
@@ -568,16 +586,15 @@
                 success: function(data) {
                     $('[name="id"]').val(data.usuario.id);
                     $('[name="dni"]').val(data.usuario.dni);
-                    $('[name="usuariotipo_id"]').val(data.usuario.usuariotipo_id);
                     $('[name="nombre"]').val(data.usuario.nombre);
                     $('[name="apellidos"]').val(data.usuario.apellidos);
                     $('[name="sexo"]').val(data.usuario.sexo);
                     $('[name="email"]').val(data.usuario.email);
                     $('[name="celular"]').val(data.usuario.celular);
                     $('[name="usuario"]').val(data.usuario.usuario);
-                    data.sistemas.forEach(item => {
+                    /* data.sistemas.forEach(item => {
                         $('#checkbox' + item.sistema_id).prop("checked", true);
-                    });
+                    }); */
                     $('#modal_form').modal('show');
                     $('.modal-title').text('Modificar Usuario');
                 },
@@ -599,7 +616,8 @@
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            alert('No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario')
+                            alert(
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario')
                             toastr.error(
                                 'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario',
                                 'Mensaje');
@@ -661,6 +679,7 @@
                     console.log(data)
                     if (data.status) {
                         reload_table_perfil();
+                        reload_table();
                         toastr.success('El registro fue creado exitosamente.', 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -678,28 +697,31 @@
                 }
             });
         }
-    function estadoUsuario(id,x) {
-        bootbox.confirm("Seguro desea "+(x==1?"desactivar":"activar")+" este registro?", function(result) {
-            if (result === true) {
-                $.ajax({
-                    url: "{{url('/')}}/Usuario/ajax_estadousuario/" + id,
-                    /* type: "POST", */
-                    dataType: "JSON",
-                    success: function(data) {
-                        console.log(data);
-                        reload_table();
-                        if(data.estado)
-                            toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
-                        else
-                            toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        toastr.error('No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.', 'Mensaje');
-                    }
-                });
-            }
-        });
-    };
+
+        function estadoUsuario(id, x) {
+            bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(result) {
+                if (result === true) {
+                    $.ajax({
+                        url: "{{ url('/') }}/Usuario/ajax_estadousuario/" + id,
+                        /* type: "POST", */
+                        dataType: "JSON",
+                        success: function(data) {
+                            console.log(data);
+                            reload_table();
+                            if (data.estado)
+                                toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
+                            else
+                                toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            toastr.error(
+                                'No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.',
+                                'Mensaje');
+                        }
+                    });
+                }
+            });
+        };
         /* $('#btnEliminar').click(function() {
             $.ajax({
                 // url:"Usuario/Eliminar/"+id,

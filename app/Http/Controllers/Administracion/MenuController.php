@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Administracion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Administracion\Menu;
-use App\Models\Administracion\Sistema;
-use App\Models\Administracion\Usuario;
 use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use Illuminate\Http\Request;
@@ -20,7 +18,7 @@ class MenuController extends Controller
 
     public function principal()
     {
-        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
+        $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_id'));
         return view('administracion.Menu.Principal', compact('sistemas'));
     }
 
@@ -147,64 +145,4 @@ class MenuController extends Controller
         $menu->save();
         return response()->json(array('status' => true, 'estado' => $menu->estado));
     }
-
-
-
-
-
-
-    /*
-
-
-    public function registrar()
-    {
-        return view('administracion.Usuario.Registrar');
-    }
-
-    public function guardar(Request $request)
-    {
-        $request->validate([
-            'usuario' => ['required', 'string', 'max:255', 'unique:adm_usuario'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:adm_usuario'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-        Usuario::create([
-            'usuario' => $request['usuario'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-        ]);
-
-
-
-        return redirect()->route('Usuario.principal')->with('success', 'Registro creado correctamente');
-    }
-
-    public function editar(Usuario $usuario)
-    {
-
-        return view('administracion.Usuario.Editar', compact('usuario'));
-    }
-
-    public function actualizar(Request $request, $id)
-    {
-        $entidad = Usuario::find($id);
-
-        $entidad->usuario = $request['usuario'];
-        $entidad->email = $request['email'];
-        $entidad->password = Hash::make($request['password']);
-        $entidad->save();
-
-        return redirect()->route('Usuario.principal')->with('success', 'Registro modificado correctamente');
-    }
-
-    public function eliminar($id)
-    {
-        $entidad = Usuario::find($id);
-
-        $entidad->estado = 0;
-        $entidad->save();
-
-        return back();
-    }*/
 }

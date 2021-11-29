@@ -7,12 +7,10 @@ use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Sistema;
 use App\Models\Administracion\Usuario;
 use App\Models\Administracion\UsuarioPerfil;
-use App\Models\Administracion\UsuarioSistema;
 use App\Models\Administracion\UsuarioTipo;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
-use App\Repositories\Administracion\UsuarioSistemaRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -26,16 +24,13 @@ class UsuarioController extends Controller
     public function principal()
     {
         //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
-        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
         $sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
-        $tipos = UsuarioTipo::where('estado', '1')->get();
-        return $sistemas;
-        //return session()->get('usuario_id');
-        return view('administracion.Usuario.Principal', compact('sistemas', 'sistemas2', 'tipos'));
+        return view('administracion.Usuario.Principal', compact('sistemas2'));
     }
     public function Lista_DataTable()
     {
-        $data = UsuarioRepositorio::Listar_Usuarios();
+        //$data = UsuarioRepositorio::Listar_porperfil(session('perfil_id'));
+        $data = UsuarioRepositorio::Listar_pordependencia(session('usuario_id'));
         return  datatables()::of($data)
             ->addColumn('nombrecompleto', '{{$apellidos}}, {{$nombre}}')
             ->editColumn('estado', function ($data) {
@@ -43,32 +38,36 @@ class UsuarioController extends Controller
                 else return '<span class="badge badge-success">ACTIVO</span>';
             })
             ->addColumn('sistemas', function ($data) {
-                $sis = UsuarioSistemaRepositorio::ListarSistemas($data->id);
+                return '';
+            })
+            ->addColumn('perfiles', function ($data) {
+                $perfiles = UsuarioPerfilRepositorio::ListarPerfilSistema($data->id);
                 $datos = '';
-                if ($sis)
-                    foreach ($sis as $item) {
-                        $datos .= $item->nombre . ', ';
+                if ($perfiles)
+                    foreach ($perfiles as $item) {
+                        $datos .= '<span class="badge badge-dark"><i class="' . $item->icono . '"></i> SISTEMA ' . $item->sistema . '</span> 
+                        <span class="badge badge-secondary"> ' . $item->perfil . '</span><br/>';
                     }
                 return $datos;
             })
             ->addColumn('action', function ($data) { // '.auth()->user()->usuario.'
                 $acciones = '';
-                if ($data->usuariotipo_id != 1 || auth()->user()->usuariotipo_id == 1) {
-                    $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i></a>';
-                    $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
 
-                    if ($data->estado == '1') {
-                        $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
-                    } else {
-                        $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
-                    }
+                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i></a>';
+                $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
+
+                if ($data->estado == '1') {
+                    $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
+                } else {
+                    $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
                 }
+
                 //$acciones = '<a href="Editar/' . $data->id . '"   class="btn btn-info btn-sm" title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
                 //$acciones .= '&nbsp<button type="button" name="delete" id = "' . $data->id . '" class="delete btn btn-danger btn-sm" title="ELIMINAR"> <i class="fa fa-trash"></i>  </button>';
                 //$acciones .= '&nbsp<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="BORRAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
-            ->rawColumns(['action', 'nombrecompleto', 'sistemas', 'estado'])
+            ->rawColumns(['action', 'nombrecompleto', 'sistemas', 'perfiles', 'estado'])
             ->make(true);
     }
     public function listarSistemasAsignados($usuario_id)
@@ -79,8 +78,7 @@ class UsuarioController extends Controller
     }
     public function registrar()
     {
-        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
-        return view('administracion.Usuario.Registrar', compact('sistemas'));
+        return view('administracion.Usuario.Registrar');
     }
     public function guardar(Request $request)
     {
@@ -104,8 +102,7 @@ class UsuarioController extends Controller
     }
     public function editar(Usuario $usuario)
     {
-        $sistemas = SistemaRepositorio::listar_porusuariosistemachecked(session()->get('usuario_id'));
-        return view('administracion.Usuario.Editar', compact('usuario', 'sistemas',));
+        return view('administracion.Usuario.Editar', compact('usuario'));
     }
     public function actualizar(Request $request, $id)
     {
@@ -116,29 +113,6 @@ class UsuarioController extends Controller
         if ($request['password'] != '')
             $entidad->password = Hash::make($request['password']);
         $entidad->save();
-
-        $sistemas = Sistema::all();
-        $dd = '';
-        foreach ($sistemas as $row) {
-            if ($request->sistemas) {
-                $encontrado = FALSE;
-                foreach ($request->sistemas as $sis) {
-                    if ($sis == $row->id) {
-                        $encontrado = TRUE;
-                        $ususis = UsuarioSistema::where('usuario_id', $id)->where('sistema_id', $sis)->get()->first();
-                        if (!$ususis)
-                            UsuarioSistema::Create(['usuario_id' => $id, 'sistema_id' => $sis]);
-                    }
-                }
-                if (!$encontrado) {
-                    UsuarioSistema::where('usuario_id', $id)->where('sistema_id', $row->id)->delete();
-                }
-            } else {
-                UsuarioSistema::where('usuario_id', $id)->where('sistema_id', $row->id)->delete();
-            }
-        }
-
-
         return redirect()->route('Usuario.principal')->with('success', 'Registro modificado correctamente' . count($request->sistemas));
     }
     public function eliminar($id)
@@ -178,7 +152,7 @@ class UsuarioController extends Controller
     public function ajax_add_perfil(Request $request)
     {
         $val = $this->_validateperfil($request);
-        $val['sis'] = $request->sistema_id;
+        /* $val['sis'] = $request->sistema_id; */
         if ($val['status'] === FALSE) {
             return response()->json($val);
         }
@@ -188,7 +162,6 @@ class UsuarioController extends Controller
                 if ($request->perfil == $perfil->id) {
                     $usuarioperfil = UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->first();
                     if (!$usuarioperfil) UsuarioPerfil::Create(['usuario_id' => $request->usuario_id, 'perfil_id' => $perfil->id]);
-                    break;
                 } else UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->delete();
             } else UsuarioPerfil::where('usuario_id', $request->usuario_id)->where('perfil_id', $perfil->id)->delete();
         }
@@ -201,6 +174,7 @@ class UsuarioController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
         $usuarioxx = Usuario::where('dni', $request->dni)->first();
+        
         if ($request->dni == '') {
             $data['inputerror'][] = 'dni';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -214,11 +188,7 @@ class UsuarioController extends Controller
             $data['error_string'][] = 'DNI ingresado ya existe.';
             $data['status'] = FALSE;
         }
-        if ($request->usuariotipo_id == '') {
-            $data['inputerror'][] = 'usuariotipo_id';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
+
         if ($request->nombre == '') {
             $data['inputerror'][] = 'nombre';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -264,16 +234,26 @@ class UsuarioController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->sistemas == '') {
+        /* if ($request->sistemas == '') {
             $data['inputerror'][] = 'sistemas';
             $data['error_string'][] = 'Es necesario seleccionar 1 sistema como minimo.';
             $data['status'] = FALSE;
-        }
+        } */
+        $usuarioyy = Usuario::where('usuario', $request->usuario)->first();
         if ($request->usuario == '') {
             $data['inputerror'][] = 'usuario';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
+        }else if ($usuarioyy && $request->id == '') {
+            $data['inputerror'][] = 'usuario';
+            $data['error_string'][] = 'USUARIO ingresado ya existe.';
+            $data['status'] = FALSE;
+        }else if ($usuarioyy && $request->id != $usuarioyy->id) {
+            $data['inputerror'][] = 'usuario';
+            $data['error_string'][] = 'USUARIO ingresado ya existe.';
+            $data['status'] = FALSE;
         }
+
         if ($request->id == '') {
             if ($request->password == '') {
                 $data['inputerror'][] = 'password';
@@ -314,18 +294,15 @@ class UsuarioController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'dni' => $request->dni,
-            'usuariotipo_id' => $request->usuariotipo_id,
             'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
             'sexo' => $request->sexo,
             'celular' => $request->celular,
+            'dependencia' => auth()->user()->id,
             //'entidad' => $request->entidad,
             'estado' => '1',
         ]);
-        foreach ($request->sistemas as $sistema) {
-            UsuarioSistema::Create(['usuario_id' => $usuario->id, 'sistema_id' => $sistema]);
-        }
-        return response()->json(array('status' => true/* , 'usuario' => $usuario, 'sistemas' => $usuariosistema */));
+        return response()->json(array('status' => true,'uuu'=>$usuario));
     }
     public function ajax_update(Request $request)
     {
@@ -336,49 +313,27 @@ class UsuarioController extends Controller
         $usuario = Usuario::find($request->id);
         $usuario->usuario = $request->usuario;
         $usuario->email = $request->email;
-        $usuario->usuariotipo_id = $request->usuariotipo_id;
         $usuario->dni = $request->dni;
         $usuario->nombre = $request->nombre;
         $usuario->apellidos = $request->apellidos;
         $usuario->sexo = $request->sexo;
         $usuario->celular = $request->celular;
+        //$usuario->dependencia=auth()->user()->id;
         //$usuario->entidad = $request->email;
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);
         $usuario->save();
 
-        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
-        foreach ($sistemas as $item) {
-            if ($request->sistemas) {
-                $buscar = FALSE;
-                foreach ($request->sistemas as $sistema) {
-                    if ($sistema == $item->id) {
-                        $buscar = TRUE;
-                        $aux = UsuarioSistema::where('usuario_id', $usuario->id)->where('sistema_id', $item->id)->first();
-                        if (!$aux) UsuarioSistema::Create(['usuario_id' => $usuario->id, 'sistema_id' => $sistema]);
-                        break;
-                    }
-                }
-                if (!$buscar) {
-                    UsuarioSistema::where('usuario_id', $usuario->id)->where('sistema_id', $item->id)->delete();
-                }
-            } else {
-                UsuarioSistema::where('usuario_id', $usuario->id)->where('sistema_id', $item->id)->delete();
-            }
-        }
         return response()->json(array('status' => true/* , 'update' => $request->sistemas */));
     }
     public function ajax_edit($usuario_id)
     {
         $usuario = Usuario::find($usuario_id);
-        $sistemas = UsuarioSistema::where('usuario_id', $usuario_id)->get();
-
-        return response()->json(compact('usuario', 'sistemas'));
+        return response()->json(compact('usuario'));
     }
     public function ajax_delete($usuario_id) //elimina deverdad *o*
     {
         UsuarioPerfil::where('usuario_id', $usuario_id)->delete();
-        UsuarioSistema::where('usuario_id', $usuario_id)->delete();
         $usuario = Usuario::find($usuario_id);
         $usuario->delete();
         return response()->json(array('status' => true, 'usuario' => $usuario));

@@ -20,18 +20,18 @@ class SistemaRepositorio
     return $data;
   }
 
-  public static function listar_porusuariosistema($usuario_id)
+  public static function listar_porperfil($perfil_id)
   {
-    $query = Sistema::select('adm_sistema.id', 'adm_sistema.nombre')
-      ->join('adm_usuario_sistema as v2', 'v2.sistema_id', '=', 'adm_sistema.id')
-      ->where('v2.usuario_id', $usuario_id) //session()->get('usuario_id')
+    $query = Sistema::select('adm_sistema.*')
+      ->join('adm_perfil_admin_sistema as v2', 'v2.sistema_id', '=', 'adm_sistema.id')
+      ->where('v2.perfil_id', $perfil_id)
       ->where('adm_sistema.estado', '1')
       ->orderBy('adm_sistema.nombre')
       ->get();
     return $query;
   }
 
-  public static function listar_porusuariosistemachecked($usuario_id)
+  /* public static function listar_porusuariosistemachecked($usuario_id)
   {
     $query = Sistema::select(
       'adm_sistema.id',
@@ -42,16 +42,25 @@ class SistemaRepositorio
       ->where('v2.usuario_id', session()->get('usuario_id'))
       ->orderBy('adm_sistema.nombre')->get();
     return $query;
-  }
+  } */
   public static function listar_sistemasconusuarios($usuario_id)
   {
-    $query = DB::table('adm_sistema as v1')
-      ->join('adm_usuario_sistema as v2', 'v2.sistema_id', '=', 'v1.id', 'inner')
-      ->select('v1.id', 'v1.nombre', 'v1.icono', DB::raw('COUNT(v1.id) as nrousuario'))
+      $query = DB::table('adm_sistema as v1')
+      ->select('v1.id', 'v1.nombre', 'v1.icono', DB::raw('(select count(v2.id) from `adm_perfil` as `v2` 
+      inner join `adm_usuario_perfil` as `v3` on `v3`.`perfil_id` = `v2`.`id` 
+                                where v2.sistema_id=v1.id) as nrousuario'))
       ->where('v1.estado','1')
-      ->groupBy('v1.id')
-      ->groupBy('v1.nombre')->groupBy('v1.icono')->orderBy('v1.nombre')
+      ->orderBy('v1.nombre')
       ->get();
     return $query;
+  }
+
+  public static function listarSistemaPerfil($perfil_id, $sistema_id)
+  {
+      $query = Sistema::where('estado','1')
+          ->select('id','nombre','icono',DB::raw('(ifnull((SELECT id FROM adm_perfil_admin_sistema WHERE perfil_id='.$perfil_id.' AND sistema_id=adm_sistema.id),0)) as status'))
+          ->orderBy('nombre')
+          ->get();
+      return $query;
   }
 }

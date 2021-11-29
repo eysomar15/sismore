@@ -41,6 +41,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-12">
+                                    @if ($titlePage!='')
                                     <div class="page-title-box">
                                         <h4 class="page-title">{{ $titlePage }}</h4>  
                                         <div class="page-title-right">
@@ -57,7 +58,11 @@
                                             </ol>
                                         </div>                                       
                                         <div class="clearfix"></div>
-                                    </div>
+                                    </div>                                        
+                                    @else
+                                        <br>
+                                    @endif
+
                                 </div>
                             </div>
 

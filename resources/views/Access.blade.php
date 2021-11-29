@@ -4,14 +4,15 @@
 
 @section('content')
 
-    <div class="" style="background:linear-gradient(60deg,#165588, #011646)">
+    {{-- <div class="" style="background:linear-gradient(60deg,#165588, #011646)"> --}}
+    <div class="" style="background-image: url('{{asset('/')}}/img/fondo001.jpg');background-size: 100% 100%;">
         <div class="container">
             <div class="row"><br><br><br><br><br></div>
             <div class="row justify-content-center">
-                <h4 class="text-white">GOBIERNO REGIONAL DE UCAYALI</h4>
+                <h4 class="text-primary">GOBIERNO REGIONAL DE UCAYALI</h4>{{-- text-white --}}
             </div>
             <div class="row justify-content-center">                
-                <h2 class="text-white">SISTEMA DE MONITOREO REGIONAL</h2>
+                <h2 class="text-primary">SISTEMA DE MONITOREO REGIONAL</h2>{{-- text-white --}}
             </div>
             <div class="row justify-content-center">
                 {{-- <div class="col-md-4">
@@ -54,7 +55,7 @@
                 @endforeach
             </div>
             <div>
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>{{-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> --}}
             </div>
         </div>
     </div>

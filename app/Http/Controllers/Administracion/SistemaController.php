@@ -19,14 +19,13 @@ class SistemaController extends Controller
     }
     public function listarDT()
     {
-        $data = Sistema::orderBy('id', 'desc')->get();
+        $data = Sistema::orderBy('nombre')->get();
         return  datatables()::of($data)
             ->editColumn('icono', '<i class="{{$icono}}"></i>')
             ->editColumn('estado', function ($data) {
                 if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
                 else return '<span class="badge badge-success">ACTIVO</span>';
             })
-
             ->addColumn('action', function ($data) {
                 $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
                 //$acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
