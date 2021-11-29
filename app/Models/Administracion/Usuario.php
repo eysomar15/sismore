@@ -17,7 +17,7 @@ class Usuario extends Model
         'remember_token',
         'estado',
         'dni',
-        'usuariotipo_id',
+        'dependencia',
         'nombre',
         'apellidos',
         'sexo',

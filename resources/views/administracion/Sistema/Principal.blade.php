@@ -22,8 +22,16 @@
                             <div class="card-body">
                                 <div>
                                     {{-- <a href="{{route('Usuario.registrar')}}" class="btn btn-primary"> Nuevo </a> --}}
-                                    <button type="button" class="btn btn-primary" onclick="add()"><i
-                                            class="fa fa-plus"></i> Nuevo</button>
+                                    <div class="row justify-content-between">
+                                        <div class="col-4"></div>
+                                        <div class="col-4">
+                                            <div class="row justify-content-end">
+                                                <button type="button" class="btn btn-primary" onclick="add()"><i
+                                                        class="fa fa-plus"></i> Nuevo</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="table-responsive">
                                     <br>
@@ -65,11 +73,14 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Nombre<span class="required">*</span></label>
-                                <input id="nombre" name="nombre" class="form-control" type="text" onkeyup="this.value=this.value.toUpperCase()">
+                                <input id="nombre" name="nombre" class="form-control" type="text"
+                                    onkeyup="this.value=this.value.toUpperCase()">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Icono<!--span class="required">*</span--></label>
+                                <label>Icono
+                                    <!--span class="required">*</span-->
+                                </label>
                                 <input id="icono" name="icono" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
@@ -77,8 +88,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -99,7 +110,8 @@
     <script>
         $(document).ready(function() {
             var save_method = '';
-            listarDT();
+            var table_principal;
+            
             $("input").change(function() {
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().empty();
@@ -112,6 +124,7 @@
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().empty();
             });
+            listarDT();
         });
 
         function add() {
@@ -145,7 +158,7 @@
                     console.log(data)
                     if (data.status) {
                         $('#modal_form').modal('hide');
-                        listarDT();
+                        reload_table_principal();//listarDT();
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -196,7 +209,7 @@
                         dataType: "JSON",
                         success: function(data) {
                             $('#modal_form').modal('hide');
-                            listarDT();
+                            reload_table_principal();//listarDT();
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
@@ -210,7 +223,7 @@
         };
 
         function listarDT() {
-            $('#dtPrincipal').DataTable({
+            table_principal=$('#dtPrincipal').DataTable({
                 "ajax": "{{ url('/') }}/Sistema/listarDT/",
                 "columns": [{
                         data: 'nombre'
@@ -259,27 +272,34 @@
                 }
             });
         }
-    function estado(id,x) {
-        bootbox.confirm("Seguro desea "+(x==1?"desactivar":"activar")+" este registro?", function(result) {
-            if (result === true) {
-                $.ajax({
-                    url: "{{url('/')}}/Sistema/ajax_estado/" + id,
-                    /* type: "POST", */
-                    dataType: "JSON",
-                    success: function(data) {
-                        console.log(data);
-                        listarDT();
-                        if(data.estado)
-                            toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
-                        else
-                            toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        toastr.error('No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.', 'Mensaje');
-                    }
-                });
-            }
-        });
-    };        
+
+        function reload_table_principal() {
+            table_principal.ajax.reload(null, false);
+        }
+
+        function estado(id, x) {
+            bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(result) {
+                if (result === true) {
+                    $.ajax({
+                        url: "{{ url('/') }}/Sistema/ajax_estado/" + id,
+                        /* type: "POST", */
+                        dataType: "JSON",
+                        success: function(data) {
+                            console.log(data);
+                            reload_table_principal();//listarDT();
+                            if (data.estado)
+                                toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
+                            else
+                                toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            toastr.error(
+                                'No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.',
+                                'Mensaje');
+                        }
+                    });
+                }
+            });
+        };
     </script>
 @endsection

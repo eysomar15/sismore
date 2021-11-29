@@ -10,7 +10,7 @@
 @section('content')
     <div class="content">
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
@@ -32,13 +32,6 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <!--label class="col-md-2 col-form-label">Alumno EIB</label>
-                                        <div class="col-md-4">
-                                            <select class="form-control" name="tipo" id="tipo" required>
-                                                <option value="0">NO</option>
-                                                <option value="1">SI</option>
-                                            </select>
-                                        </div-->
                                     </div>
 
                                 </div>
@@ -51,7 +44,7 @@
                 <!-- card -->
             </div>
             <!-- col -->
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-md-12">
@@ -63,10 +56,27 @@
                         </div> --}}
 
                             <div class="card-body">
-                                <div>
-                                    {{-- <a href="{{route('Usuario.registrar')}}" class="btn btn-primary"> Nuevo </a> --}}
-                                    <button type="button" class="btn btn-primary" onclick="add()"><i
-                                            class="fa fa-plus"></i> Nuevo</button>
+                                <div class="row justify-content-between">
+                                    <div class="col-4">
+                                        <div class="row form-group">
+                                            <label class="col-md-4 col-form-label">SISTEMAS</label>
+                                            <div class="col-md-8">
+                                                <select class="form-control" name="sistema" id="sistema"
+                                                    onchange="listarDT();">
+                                                    @foreach ($sistemas as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row justify-content-end">
+                                            <button type="button" class="btn btn-primary" onclick="add()"><i
+                                                    class="fa fa-plus"></i> Nuevo</button>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="table-responsive">
                                     <br>
@@ -75,7 +85,7 @@
                                             <!--th>Nº</th-->
                                             <th>Menu</th>
                                             <th>Url</th>
-                                            <th>Icon</th>
+                                            <th>Icono</th>
                                             <th>Parametro</th>
                                             <th>Posicion</th>
                                             <th>Grupo</th>
@@ -143,7 +153,9 @@
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Grupo<!--span class="required">*</span--></label>
+                                <label>Grupo
+                                    <!--span class="required">*</span-->
+                                </label>
                                 <select class="form-control" name="dependencia" id="dependencia" onchange="">
                                     <option value="">Seleccionar</option>
                                 </select>
@@ -160,12 +172,16 @@
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Icon<!--span class="required">*</span--></label>
-                                <input id="icon" name="icon" class="form-control" type="text">
+                                <label>Icono
+                                    <!--span class="required">*</span-->
+                                </label>
+                                <input id="icono" name="icono" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
-                                <label>Parametro<!--span class="required">*</span--></label>
+                                <label>Parametro
+                                    <!--span class="required">*</span-->
+                                </label>
                                 <input id="parametro" name="parametro" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
@@ -178,8 +194,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -200,7 +216,8 @@
     <script>
         $(document).ready(function() {
             var save_method = '';
-            listarDT();
+            var table_principal;
+
             $("input").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
@@ -213,6 +230,7 @@
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
+            listarDT();
         });
 
         function add() {
@@ -265,7 +283,7 @@
                     console.log(data)
                     if (data.status) {
                         $('#modal_form').modal('hide');
-                        listarDT();
+                        reload_table_principal();//listarDT();
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -298,7 +316,7 @@
                     $('[name="sistema_id"]').val(data.menu.sistema_id);
                     $('[name="nombre"]').val(data.menu.nombre);
                     $('[name="url"]').val(data.menu.url);
-                    $('[name="icon"]').val(data.menu.icono);
+                    $('[name="icono"]').val(data.menu.icono);
                     $('[name="parametro"]').val(data.menu.parametro);
                     $('[name="posicion"]').val(data.menu.posicion);
                     $.ajax({
@@ -338,7 +356,7 @@
                         dataType: "JSON",
                         success: function(data) {
                             $('#modal_form').modal('hide');
-                            listarDT();
+                            reload_table_principal();//listarDT();
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
@@ -353,17 +371,33 @@
 
 
         function listarDT() {
-            $('#dtPrincipal').DataTable({
+            table_principal=$('#dtPrincipal').DataTable({
                 "ajax": "{{ url('/') }}/Menu/listarDT/" + $('#sistema').val(),
-                "columns": [
-                    {data: 'nombre'},
-                    {data: 'url'},
-                    {data: 'icono'},
-                    {data: 'parametro'},
-                    {data: 'posicion'},
-                    {data: 'grupo'},
-                    {data: 'estado'},
-                    {data: 'action',orderable: false}
+                "columns": [{
+                        data: 'nombre'
+                    },
+                    {
+                        data: 'url'
+                    },
+                    {
+                        data: 'icono'
+                    },
+                    {
+                        data: 'parametro'
+                    },
+                    {
+                        data: 'posicion'
+                    },
+                    {
+                        data: 'grupo'
+                    },
+                    {
+                        data: 'estado'
+                    },
+                    {
+                        data: 'action',
+                        orderable: false
+                    }
                 ],
                 responsive: true,
                 autoWidth: false,
@@ -398,27 +432,34 @@
                 }
             });
         }
-    function estado(id,x) {
-        bootbox.confirm("Seguro desea "+(x==1?"desactivar":"activar")+" este registro?", function(result) {
-            if (result === true) {
-                $.ajax({
-                    url: "{{url('/')}}/Menu/ajax_estado/" + id,
-                    /* type: "POST", */
-                    dataType: "JSON",
-                    success: function(data) {
-                        console.log(data);
-                        listarDT();
-                        if(data.estado)
-                            toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
-                        else
-                            toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        toastr.error('No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.', 'Mensaje');
-                    }
-                });
-            }
-        });
-    };         
+
+        function reload_table_principal() {
+            table_principal.ajax.reload(null, false);
+        }
+
+        function estado(id, x) {
+            bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(result) {
+                if (result === true) {
+                    $.ajax({
+                        url: "{{ url('/') }}/Menu/ajax_estado/" + id,
+                        /* type: "POST", */
+                        dataType: "JSON",
+                        success: function(data) {
+                            console.log(data);
+                            reload_table_principal();//listarDT();
+                            if (data.estado)
+                                toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
+                            else
+                                toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            toastr.error(
+                                'No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.',
+                                'Mensaje');
+                        }
+                    });
+                }
+            });
+        };
     </script>
 @endsection

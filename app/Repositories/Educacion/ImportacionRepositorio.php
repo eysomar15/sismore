@@ -126,6 +126,18 @@ class ImportacionRepositorio
         return $query;
     }
 
+    public static function Listar_deCentroPobladoDatass()
+    {
+        $query = DB::table('par_importacion as v1')
+            ->join('viv_Centropoblado_datass as v2', 'v2.importacion_id', '=', 'v1.id')
+            ->where('estado','PR')
+            ->distinct()
+            ->select('v1.*')
+            ->orderBy('v1.id','desc')
+            ->get();
+        return $query;
+    }
+
     public static function listar_ImportacionSinAprobarEce($grado, $tipo)
     {
         $query = DB::table('par_importacion as v1')

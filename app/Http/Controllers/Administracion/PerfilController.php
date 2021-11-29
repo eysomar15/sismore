@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Administracion\Menu;
 use App\Models\Administracion\Menuperfil;
 use App\Models\Administracion\Perfil;
+use App\Models\Administracion\PerfilAdminSistema;
 use App\Models\Administracion\Sistema;
 use App\Repositories\Administracion\MenuRepositorio;
+use App\Repositories\Administracion\PerfilAdminSistemaRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class PerfilController extends Controller
@@ -21,8 +24,7 @@ class PerfilController extends Controller
 
     public function principal()
     {
-        //$sistemas = Sistema::where('estado', '1')->orderBy('nombre')->get();
-        $sistemas = SistemaRepositorio::listar_porusuariosistema(session()->get('usuario_id'));
+        $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_id'));
         return view('administracion.Perfil.Principal', compact('sistemas'));
     }
 
@@ -31,8 +33,23 @@ class PerfilController extends Controller
         $data = Perfil::where('sistema_id', $sistema_id)->get();
 
         return  datatables()::of($data)
+            ->editColumn('estado', function ($data) {
+                if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
+                else return '<span class="badge badge-success">ACTIVO</span>';
+            })
+            ->addColumn('sistemas', function ($data) {
+                $sistemas = PerfilAdminSistemaRepositorio::listarSistemas_perfil($data->id);
+                $html = '';
+                foreach ($sistemas as $key => $item) {
+                    $html .= '<span class="badge badge-dark"><i class="' . $item->icono . '"></i> </span> <span class="badge badge-secondary"> SISTEMA ' . $item->nombre . '</span><br/>';
+                }
+                return $html;
+            })
             ->addColumn('action', function ($data) {
-                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                $acciones = '';
+                $acciones .= '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                if ($data->sistema_id == 4)
+                    $acciones .= '&nbsp;<a href="#" class="btn btn-purple btn-sm" onclick="sistema(' . $data->id . ')" title="AGREGAR SISTEMAS"> <i class="ion ion-md-cube"></i> </a>';
                 $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="menu(' . $data->id . ')" title="AGREGAR MENU"> <i class="fa fa-list-ul"></i> </a>';
                 //$acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
                 if ($data->estado == '1') {
@@ -42,11 +59,8 @@ class PerfilController extends Controller
                 }
                 return $acciones;
             })
-            ->editColumn('estado', function ($data) {
-                if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
-                else return '<span class="badge badge-success">ACTIVO</span>';
-            })
-            ->rawColumns(['action', 'estado'])
+
+            ->rawColumns(['sistemas', 'action', 'estado'])
             ->make(true);
     }
 
@@ -89,7 +103,10 @@ class PerfilController extends Controller
             'estado' => '1',
         ]);
 
-        return response()->json(array('status' => true, 'add' => $val/*, 'menu' => $menu*/));
+        $menu = Menu::where('sistema_id', $request->sistema_id)->where('dependencia')->where('posicion', '1')->where('estado', '1')->first();
+        if ($menu)
+            Menuperfil::Create(['perfil_id' => $perfil->id, 'menu_id' => $menu->id]);
+        return response()->json(array('status' => true));
     }
     public function ajax_update(Request $request)
     {
@@ -116,7 +133,7 @@ class PerfilController extends Controller
         $datas = MenuRepositorio::getMenu($sistema_id);
         $ticket = '';
         $ticket .= '<input type="hidden" class="form-control" name="perfil" id="perfil" value="' . $perfil_id . '">';
-        $ticket .= '<ul >';//class="checktree"
+        $ticket .= '<ul >'; //class="checktree"
         foreach ($datas as $value) {
             $perfilmenu = Menuperfil::where('perfil_id', $perfil_id)->where('menu_id', $value->id)->first();
             $ticket .= '<li><label>';
@@ -165,5 +182,37 @@ class PerfilController extends Controller
         $perfil->estado = $perfil->estado == 1 ? 0 : 1;
         $perfil->save();
         return response()->json(array('status' => true, 'estado' => $perfil->estado));
+    }
+    public function listarsistema($perfil_id, $sistema_id)
+    {
+        $data = SistemaRepositorio::listarSistemaPerfil($perfil_id, $sistema_id);
+        return response()->json(array('status' => true, 'sistemas' => $data));
+    }
+    public function ajax_add_sistema(Request $request)
+    {
+        $sistemas = Sistema::where('estado', '1')->get();
+        foreach ($sistemas as $sistema) {
+            if ($request->csistemas) {
+                $encontrado = false;
+                foreach ($request->csistemas as $csistema) {
+                    if ($csistema == $sistema->id) {
+                        $encontrado = true;
+                        $pas = PerfilAdminSistema::where('perfil_id', $request->cperfil_id)->where('sistema_id', $csistema)->first();
+                        if (!$pas) {
+                            PerfilAdminSistema::Create(['perfil_id' => $request->cperfil_id, 'sistema_id' => $csistema]);
+                        }
+                        break;
+                    }
+                }
+                if ($encontrado == false) {
+                    PerfilAdminSistema::where('perfil_id', $request->cperfil_id)->where('sistema_id', $sistema->id)->delete();
+                }
+            } else {
+                PerfilAdminSistema::where('perfil_id', $request->cperfil_id)->where('sistema_id', $sistema->id)->delete();
+            }
+        }
+        return response()->json(array(
+            'status' => true, 'csistemas' => $request->csistemas, 'sistemas' => $sistemas, 'csistema_id' => $request->csistema_id, 'cperfil_id' => $request->cperfil_id
+        ));
     }
 }
