@@ -39,6 +39,27 @@ class CuadroAsigPersonalRepositorio
         return $data;
     }
 
+    public static function ultima_importacion_dePlaza()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                    select distinct imp.id as importacion_id,fechaActualizacion  from edu_plaza pla 
+                                    inner join par_importacion imp on pla.importacion_id = imp.id
+                                    where imp.estado = 'PR'
+                                    order by  fechaActualizacion desc  
+                                    limit 1                                                  
+                                ) as datos"
+                            )
+                        )                
+                    ->get([
+                        DB::raw('importacion_id'),
+                        DB::raw('fechaActualizacion') 
+                    ]);
+
+        return $data;
+
+    }
+
     public static function cuadro_ugel_nivel()
     {         
         $data = DB::table("edu_plaza as pla")     
@@ -167,29 +188,30 @@ class CuadroAsigPersonalRepositorio
                         DB::raw("(
                                     select 
                                     row_number() OVER (partition BY ugel.nombre ORDER BY imp.fechaActualizacion DESC) AS item,
-                                    imp.fechaActualizacion,ugel.nombre as ugel,
+                                    imp.fechaActualizacion,ugel.id as ugel_id,ugel.nombre as ugel,
                                     sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
-                                    sum(1) as total
+                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 0 else 1 end) as total
                                     from edu_institucioneducativa inst
                                     inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join edu_ugel ugel on pla.ugel_id = ugel.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
-                                    where tipTra.id = 1
-                                    group by imp.fechaActualizacion,ugel.nombre
+                                    where tipTra.id = 1 and imp.estado= 'PR'
+                                    group by imp.fechaActualizacion,ugel.id ,ugel.nombre
                                     having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
                                     order by ugel.codigo                        
                                 ) as datos"
                         )
                     )
-     
+                ->where("item", "=", 1)
                 ->get([
-                    DB::raw('item'),    
+                    DB::raw('item'), 
+                    DB::raw('ugel_id'),     
                     DB::raw('ugel'),   
                     DB::raw('fechaActualizacion'),
                     DB::raw('Bilingue'),
-                    DB::raw('total'),
+                    DB::raw('Bilingue + total as total'),
                     DB::raw('Bilingue*100/total as porcentaje'),
                 ]);
 
@@ -203,35 +225,64 @@ class CuadroAsigPersonalRepositorio
                         DB::raw("(
                                     select 
                                     row_number() OVER (partition BY ugel.nombre,nivel_educativo_dato_adic ORDER BY imp.fechaActualizacion DESC) AS item,
-                                    imp.fechaActualizacion,ugel.nombre as ugel,nivel_educativo_dato_adic as nivel_educativo,
+                                    imp.fechaActualizacion,ugel.id as ugel_id,ugel.nombre as ugel,nivel_educativo_dato_adic as nivel_educativo,
                                     sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
-                                    sum(1) as total
+                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 0 else 1 end) as total
                                     from edu_institucioneducativa inst
                                     inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join edu_ugel ugel on pla.ugel_id = ugel.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
-                                    where tipTra.id = 1
-                                    group by imp.fechaActualizacion,ugel.nombre,nivel_educativo_dato_adic
+                                    where tipTra.id = 1 and imp.estado= 'PR'
+                                    group by imp.fechaActualizacion,ugel.id,ugel.nombre,nivel_educativo_dato_adic
                                     having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
                                     order by ugel.codigo,nivel_educativo_dato_adic                        
                                 ) as datos"
                             )
                         )
-        
+                    ->where("item", "=", 1)
                     ->get([
-                        DB::raw('item'),    
+                        DB::raw('item'),   
+                        DB::raw('ugel_id'),   
                         DB::raw('ugel'),   
                         DB::raw('fechaActualizacion'),    
                         DB::raw('nivel_educativo'),    
                         DB::raw('Bilingue'),
-                        DB::raw('total'),
+                        DB::raw('total + Bilingue as total'),
                         DB::raw('Bilingue*100/total as porcentaje'),
                     ]);
 
         return $data;
+    }
 
+    public static function docentes_bilingues_nivel()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                    select                                    
+                                    nivel_educativo_dato_adic as nivel_educativo,
+                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
+                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 0 else 1 end) as noBilingue
+                                    from edu_institucioneducativa inst
+                                    inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
+                                    inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
+                                    inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
+                                    inner join par_importacion imp on pla.importacion_id = imp.id
+                                    where tipTra.id = 1 and imp.estado= 'PR' and imp.id = 334
+                                    group by nivel_educativo_dato_adic
+                                    having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
+                                    order by nivel_educativo_dato_adic                        
+                                ) as datos"
+                            )
+                        )
+                    ->get([
+                        DB::raw('nivel_educativo'),    
+                        DB::raw('Bilingue'),
+                        DB::raw('noBilingue + Bilingue as total')
+                    ]);
+
+        return $data;
     }
    
 }

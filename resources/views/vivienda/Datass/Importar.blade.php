@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - CUADRO DE ASIGNACION DE PERSONAL'])
+@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - DATASS'])
 
 @section('content')
 

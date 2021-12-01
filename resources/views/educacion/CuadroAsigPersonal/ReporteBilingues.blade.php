@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DIRECCIÓN REGIONAL DE EDUCACIÓN DE UCAYALI'])
+@extends('layouts.main',['activePage'=>'importacion','titlePage'=>''])
 
 
 @section('css')
@@ -16,82 +16,348 @@
 <div class="content">
     <div class="card">
         <div class="card-body">
-        <div class="row">
 
-            <div class="col-md-6">
-                <div>
-                    <h5  style="color: #427bf5;"> {{$title}} </h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="titulo_Indicadores  mb-0">{{$title}}  </p>   
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
-                        <thead>
-                            <tr>                                                 
-                                <th class="titulo_tabla">NIVEL EDUCATIVO</th>
-                                <th class="titulo_tabla">DOCENTES BILINGUES</th>
-                                <th class="titulo_tabla">TOTAL DOCENTES</th>
-                                <th class="titulo_tabla">PORCENTAJE</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $sumaColA=0;$sumaColB=0;
-                            @endphp
-                        
-                            @foreach ($dataCabecera as $itemCab)
+                <div class="col-md-6 text-right">
+                    <p class="texto_dfuente  mb-0">  Fuente: Sistema de Administración y Control de Plazas – NEXUS  </p>  
+                    <p class="texto_dfuente  mb-0"> {{$fecha_version}} </p>      
+                </div>
+               
+            </div>
 
-                            <tr>                                            
-                                        <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
-                                        <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
-                                        <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->total,0) }} </td>
-                                        <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->porcentaje,2) }} </td>
-                            </tr>
+            {{-- <div class="progress progress-sm m-0">
+                <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div> --}}
 
-                                @foreach ($lista as $item)
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="subtitulo_Indicadores mb-1"> DOCENTES POR UGELES </h5>   
+                    
+                </div>     
 
-                                    @if ($itemCab->ugel==$item->ugel)
-                                    @php
-                                        $sumaColA+= $item->Bilingue; 
-                                        $sumaColB+= $item->total; 
-                                    @endphp
+                
+                <div class="col-md-12">
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                </div>   
 
-                                    <tr>                                            
-                                        <td class="fila_tabla">{{$item->nivel_educativo}}</td>
-                                        <td class="columna_derecha fila_tabla">{{ number_format($item->Bilingue,0) }} </td>
-                                        <td class="columna_derecha fila_tabla">{{ number_format($item->total,0) }} </td>
-                                        <td class="columna_derecha fila_tabla">{{ number_format($item->porcentaje,2) }} </td>
-                                    </tr>
+            </div>
+        
+            <div class="row">
 
-                                    @endif
-
-                                @endforeach
-                            @endforeach
-
-                            <tr> 
-                                <td class="columna_derecha_total fila_tabla"> <b> TOTAL </b></td>
-                                <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA,0)}} </td>
-                                <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColB,0)}} </td>
-                                <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA*100/$sumaColB,2)}} </td>
-                            </tr>                                              
+                <div class="col-md-6">                 
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>                                                 
+                                    <th class="titulo_tabla">UGEL</th>
+                                    <th class="titulo_tabla">DOCENTES BILINGUES</th>
+                                    <th class="titulo_tabla">TOTAL DOCENTES</th>
+                                    <th class="titulo_tabla">PORCENTAJE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $sumaColA=0;$sumaColB=0;
+                                @endphp
                             
-                        </tbody>
-                    </table>
-                </div>
+                                @foreach ($dataCabecera as $itemCab)
 
-                <div >
-                    <div  class="col-md-12">
-                        Fuente: Sistema de Administración y Control de Plazas – NEXUS        
+                                <tr>                                            
+                                            <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
+                                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
+                                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->total,0) }} </td>
+                                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->porcentaje,2) }} </td>
+                                </tr>
+
+                                    @foreach ($lista as $item)
+
+                                        @if ($itemCab->ugel==$item->ugel)
+                                        @php
+                                            $sumaColA+= $item->Bilingue; 
+                                            $sumaColB+= $item->total; 
+                                        @endphp
+
+                                      
+                                        @endif
+
+                                    @endforeach
+                                @endforeach
+
+                                <tr> 
+                                    <td class="columna_derecha_total fila_tabla"> <b> TOTAL </b></td>
+                                    <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA,0)}} </td>
+                                    <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColB,0)}} </td>
+                                    <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA*100/$sumaColB,2)}} </td>
+                                </tr>                                              
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>               
+
+
+                <div class="col-md-6">
+                    <div id="{{$contenedor}}">       
+                        @include('graficos.Circular')
                     </div>
                 </div>
+            </div>
+
+
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="subtitulo_Indicadores mb-0"> DOCENTES POR UGELES Y NIVELES EDUCATIVOS</h5>   
+                </div>               
+            </div>
+       
+            {{-- detallessssssssssssssssssssssssssssssssssssssssssssss --}}
+            {{-- fila 1 --}}
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>                                                 
+                                    <th class="titulo_tabla">NIVEL EDUCATIVO</th>
+                                    <th class="titulo_tabla">DOCENTES BILINGUES</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                @foreach ($dataCabecera as $itemCab)
+                                    @if ($itemCab->ugel_id==10)     
+                                        <tr>                                            
+                                                    <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
+                                                    <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
+
+                                        </tr>
+
+                                        @foreach ($lista as $item)
+
+                                            {{-- @if ($itemCab->ugel==$item->ugel)                                        --}}
+                                            @if ($item->ugel_id==10)     
+                                                <tr>                                            
+                                                    <td class="fila_tabla">{{$item->nivel_educativo}}</td>
+                                                    <td class="columna_derecha fila_tabla">{{ number_format($item->Bilingue,0) }} </td>
+
+                                                </tr>
+
+                                            @endif
+
+                                        @endforeach
+                                    @endif
+                                @endforeach                                       
+                                
+                            </tbody>
+                        </table>
+                    </div>                   
+
+                </div>
+            
+                <div class="col-md-6">
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>                                                 
+                                    <th class="titulo_tabla">NIVEL EDUCATIVO</th>
+                                    <th class="titulo_tabla">DOCENTES BILINGUES</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                @foreach ($dataCabecera as $itemCab)
+                                    @if ($itemCab->ugel_id==11)     
+                                        <tr>                                            
+                                                    <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
+                                                    <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
+
+                                        </tr>
+
+                                        @foreach ($lista as $item)
+
+                                            {{-- @if ($itemCab->ugel==$item->ugel)                                        --}}
+                                            @if ($item->ugel_id==11)     
+                                                <tr>                                            
+                                                    <td class="fila_tabla">{{$item->nivel_educativo}}</td>
+                                                    <td class="columna_derecha fila_tabla">{{ number_format($item->Bilingue,0) }} </td>
+
+                                                </tr>
+
+                                            @endif
+
+                                        @endforeach
+                                    @endif
+                                @endforeach                                       
+                                
+                            </tbody>
+                        </table>
+                    </div>                   
+
+                </div>
 
             </div>
-            <div class="col-md-6">
-                <div id="{{$contenedor}}">       
-                    @include('graficos.Circular')
+
+            {{-- fila 2 --}}
+            <br>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>                                                 
+                                    <th class="titulo_tabla">NIVEL EDUCATIVO</th>
+                                    <th class="titulo_tabla">DOCENTES BILINGUES</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                @foreach ($dataCabecera as $itemCab)
+                                    @if ($itemCab->ugel_id==12)     
+                                        <tr>                                            
+                                                    <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
+                                                    <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
+
+                                        </tr>
+
+                                        @foreach ($lista as $item)
+
+                                            {{-- @if ($itemCab->ugel==$item->ugel)                                        --}}
+                                            @if ($item->ugel_id==12)     
+                                                <tr>                                            
+                                                    <td class="fila_tabla">{{$item->nivel_educativo}}</td>
+                                                    <td class="columna_derecha fila_tabla">{{ number_format($item->Bilingue,0) }} </td>
+
+                                                </tr>
+
+                                            @endif
+
+                                        @endforeach
+                                    @endif
+                                @endforeach                                       
+                                
+                            </tbody>
+                        </table>
+                    </div>                   
+
                 </div>
+            
+                <div class="col-md-6">
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>                                                 
+                                    <th class="titulo_tabla">NIVEL EDUCATIVO</th>
+                                    <th class="titulo_tabla">DOCENTES BILINGUES</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                @foreach ($dataCabecera as $itemCab)
+                                    @if ($itemCab->ugel_id==13)     
+                                        <tr>                                            
+                                                    <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
+                                                    <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
+
+                                        </tr>
+
+                                        @foreach ($lista as $item)
+
+                                            {{-- @if ($itemCab->ugel==$item->ugel)                                        --}}
+                                            @if ($item->ugel_id==13)     
+                                                <tr>                                            
+                                                    <td class="fila_tabla">{{$item->nivel_educativo}}</td>
+                                                    <td class="columna_derecha fila_tabla">{{ number_format($item->Bilingue,0) }} </td>
+
+                                                </tr>
+
+                                            @endif
+
+                                        @endforeach
+                                    @endif
+                                @endforeach                                       
+                                
+                            </tbody>
+                        </table>
+                    </div>                   
+
+                </div>
+
             </div>
+
+
         </div>
     </div>
 </div>
-</div>
+
+<div class="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">      
+                    <div id="barra1">       
+                        {{-- se carga con el scrip lineas abajo --}}
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+</div> 
 
 @endsection 
+
+
+
+@section('js')
+
+    <script type="text/javascript"> 
+        
+        $(document).ready(function() {          
+            cargar_Grafico();          
+        });
+
+        function cargar_Grafico() {            
+            $.ajax({  
+                headers: {
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },                           
+                url: "{{ url('/') }}/Tableta/GraficoBarrasPrincipal/"+ 6,
+                type: 'post',
+            }).done(function (data) {               
+                $('#barra1').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
+        }
+       
+    </script>
+    
+@endsection
+
+

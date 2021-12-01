@@ -1020,7 +1020,7 @@ class MatriculaController extends Controller
         $fecha_Matricula_texto = $this->fecha_texto($matricula_id);        
         $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
 
-        return view('educacion.Matricula.ReporteUgel',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
+        return view('educacion.Matricula.ReporteUgel',["dataCircular"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
                     'lista_total_matricula_Primaria','lista_total_matricula_Inicial','lista_total_matricula_EBE','contenedor','titulo_grafico','fecha_Matricula_texto'));
     }
 
@@ -1053,7 +1053,7 @@ class MatriculaController extends Controller
         $contenedor = 'resumen_por_distrito';
         $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
 
-        return view('educacion.Matricula.ReporteDistrito',["data"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Inicial','lista_total_matricula_Primaria',
+        return view('educacion.Matricula.ReporteDistrito',["dataCircular"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Inicial','lista_total_matricula_Primaria',
         'lista_total_matricula_Secundaria','fecha_Matricula_texto','lista_matricula_Inicial_cabecera','lista_matricula_Primaria_cabecera',
         'lista_matricula_Secundaria_cabecera','contenedor','titulo_grafico'));
     }
