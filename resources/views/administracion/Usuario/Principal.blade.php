@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'usuarios','titlePage'=>'GESTION DE MENU'])
+@extends('layouts.main',['activePage'=>'usuarios','titlePage'=>'GESTION DE USUARIOS'])
 
 @section('css')
 
@@ -308,30 +308,32 @@
                             </div>
 
                         </div>
-                    </form>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <table id="dtperfil" class="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <!--th>#</th-->
-                                            <th>Sistema</th>
-                                            <th>Perfil Asignado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    </form>                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                     <button type="button" id="btnSavePerfil" onclick="savePerfil()"
                         class="btn btn-primary">Guardar</button>
                 </div>
+                <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table id="dtperfil" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <!--th>#</th-->
+                                        <th>Sistema</th>
+                                        <th>Perfil Asignado</th>
+                                        <th>Accion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div></div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -467,6 +469,8 @@
                     data: 'sistema'
                 }, {
                     data: 'perfil'
+                }, {
+                    data: 'accion'
                 }, ],
                 responsive: true,
                 searching: false,
@@ -697,7 +701,31 @@
                 }
             });
         }
-
+        function borrarperfil(id1,id2) {
+            bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
+                if (result === true) {
+                    $.ajax({
+                        url: "{{ url('/') }}/Usuario/ajax_delete_perfil/" + id1+"/"+id2,
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function(data) {
+                            reload_table_perfil();
+                            reload_table();
+                            $('#sistema_id').val('');
+                            $("#perfiles").html('');
+                            toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario')
+                            toastr.error(
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario',
+                                'Mensaje');
+                        }
+                    });
+                }
+            });
+        }
         function estadoUsuario(id, x) {
             bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(result) {
                 if (result === true) {

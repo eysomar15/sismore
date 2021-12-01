@@ -32,13 +32,5 @@ class UsuarioRepositorio
         order by v1.id desc) as usuario'))->get();
         return $data;
     }
-    public static function Listar_pordependencia($usuario_id)
-    {
-        $data = DB::table(DB::raw('(select * from adm_usuario where id='.($usuario_id==1?$usuario_id:0).' 
-        union all
-        select v2.* from adm_usuario as v1 
-        inner join adm_usuario as v2 on v2.dependencia=v1.id 
-        where v1.id='.$usuario_id.') as usuario order by id desc'))->get();
-        return $data;
-    }
+
 }

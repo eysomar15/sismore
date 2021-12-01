@@ -30,7 +30,7 @@ class UsuarioController extends Controller
     public function Lista_DataTable()
     {
         //$data = UsuarioRepositorio::Listar_porperfil(session('perfil_id'));
-        $data = UsuarioRepositorio::Listar_pordependencia(session('usuario_id'));
+        $data = UsuarioRepositorio::Listar_porperfil(session('perfil_id'));
         return  datatables()::of($data)
             ->addColumn('nombrecompleto', '{{$apellidos}}, {{$nombre}}')
             ->editColumn('estado', function ($data) {
@@ -74,7 +74,13 @@ class UsuarioController extends Controller
     {
         $data = UsuarioPerfilRepositorio::ListarPerfilSistema($usuario_id);
         //return response()->json($usuario_id);
-        return  datatables()::of($data)->make(true);
+        return  datatables()::of($data)
+            ->addColumn('accion', function ($data) {
+                $acciones = '<a href="#" class="btn btn-danger btn-sm" onclick="borrarperfil(' . $data->usuario_id . ',' . $data->perfil_id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i></a>';
+                return $acciones;
+            })
+            ->rawColumns(['accion'])
+            ->make(true);
     }
     public function registrar()
     {
@@ -167,6 +173,11 @@ class UsuarioController extends Controller
         }
         return response()->json(array('status' => true, 'modulos' => $perfiles));
     }
+    public function ajax_delete_perfil($usuario_id,$perfil_id) //elimina deverdad *o*
+    {
+        UsuarioPerfil::where('usuario_id', $usuario_id)->where('perfil_id', $perfil_id)->delete();
+        return response()->json(array('status' => true));
+    }
     private function _validate($request)
     {
         $data = array();
@@ -174,7 +185,7 @@ class UsuarioController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
         $usuarioxx = Usuario::where('dni', $request->dni)->first();
-        
+
         if ($request->dni == '') {
             $data['inputerror'][] = 'dni';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -244,11 +255,11 @@ class UsuarioController extends Controller
             $data['inputerror'][] = 'usuario';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
-        }else if ($usuarioyy && $request->id == '') {
+        } else if ($usuarioyy && $request->id == '') {
             $data['inputerror'][] = 'usuario';
             $data['error_string'][] = 'USUARIO ingresado ya existe.';
             $data['status'] = FALSE;
-        }else if ($usuarioyy && $request->id != $usuarioyy->id) {
+        } else if ($usuarioyy && $request->id != $usuarioyy->id) {
             $data['inputerror'][] = 'usuario';
             $data['error_string'][] = 'USUARIO ingresado ya existe.';
             $data['status'] = FALSE;
@@ -298,11 +309,11 @@ class UsuarioController extends Controller
             'apellidos' => $request->apellidos,
             'sexo' => $request->sexo,
             'celular' => $request->celular,
-            'dependencia' => auth()->user()->id,
+            'tipo' => '0',
             //'entidad' => $request->entidad,
             'estado' => '1',
         ]);
-        return response()->json(array('status' => true,'uuu'=>$usuario));
+        return response()->json(array('status' => true));
     }
     public function ajax_update(Request $request)
     {
@@ -318,7 +329,7 @@ class UsuarioController extends Controller
         $usuario->apellidos = $request->apellidos;
         $usuario->sexo = $request->sexo;
         $usuario->celular = $request->celular;
-        //$usuario->dependencia=auth()->user()->id;
+        $usuario->tipo='0';
         //$usuario->entidad = $request->email;
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);
