@@ -28,8 +28,8 @@ class UsuarioRepositorio
         $data = DB::table(DB::raw('(select distinct v1.* from adm_usuario as v1 
         left join adm_usuario_perfil as v2 on v2.usuario_id=v1.id 
         left join adm_perfil as v3 on v3.id=v2.perfil_id 
-        where v1.estado=1 and v3.sistema_id in (select sistema_id from adm_perfil_admin_sistema where perfil_id='.$perfil_id.') or v3.sistema_id is null 
-        order by v1.id desc) as usuario'))->get();
+        where v3.sistema_id in (select sistema_id from adm_perfil_admin_sistema where perfil_id='.$perfil_id.') or v3.sistema_id is null 
+        order by v1.id desc) as usuario'))->get();// v1.estado=1 and
         return $data;
     }
 
