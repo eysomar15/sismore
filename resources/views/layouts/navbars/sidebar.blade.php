@@ -9,22 +9,22 @@
 
             <div class="user-box">
     
-                {{-- <div class="float-left">
+                <div class="float-left">
                     <img src="{{ asset('/') }}assets/images/users/avatar-1.jpg" alt="" class="avatar-md rounded-circle">
-                </div> --}}
+                </div>
                 
                 <div class="user-info">
                     <div class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{Auth::user()->usuario}} <i class="mdi mdi-chevron-down"></i> </a>
-                        <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            {{Auth::user()->usuario}} {{-- <i class="mdi mdi-chevron-down"></i> --}} </a>
+                        {{-- <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
                             <li><a href="javascript:void(0)" class="dropdown-item"><i class="mdi mdi-face-profile mr-2"></i> Perfil<div class="ripple-wrapper"></div></a></li>
                             <li><a href="{{ route('logout') }}" class="dropdown-item"  onclick="event.preventDefault(); 
                                  document.getElementById('logout-form').submit();">
                                 <i class="mdi mdi-power-settings mr-2"></i> Cerrar Sesión
                                 </a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </div>
                     <p class="font-15  m-0"> {{session('sistema_nombre')}} </p>
                 </div>

@@ -161,9 +161,7 @@ Route::post('/INDICADOR/ece5/{provincia}/{distrito}/{indicador_id}/{anio_id}', [
 Route::post('/INDICADOR/ece6/{provincia}/{distrito}/{indicador_id}/{anio_id}', [IndicadorController::class, 'ajaxEdu6v1'])->name('ind.ajax.edu6.1');
 
 
-Route::get('/INDICADOR/SINRUTA', function () {
-    return 'Ruta no definida';
-})->name('indicador.sinruta');
+Route::get('/INDICADOR/SINRUTA', function () {return 'Ruta no definida';})->name('sinruta');
 /**************************************** FIN EDUCACION ************************************************/
 
 /**************************************** VIVIENDA ************************************************/
@@ -185,6 +183,16 @@ Route::post('/PEmapacopsa/Distritos/{provincia}', [EmapacopsaController::class, 
 Route::get('/CentroPobladoDatass/Saneamiento', [CentroPobladoDatassController::class, 'saneamiento'])->name('centropobladodatass.saneamiento');
 Route::get('/CentroPobladoDatass/Distritos/{provincia}', [CentroPobladoDatassController::class, 'cargardistrito'])->name('centropobladodatass.cargardistritos');
 Route::post('/CentroPobladoDatass/Saneamiento/datos', [CentroPobladoDatassController::class, 'datosSaneamiento'])->name('centropobladodatass.saneamiento.info');
+Route::get('/CentroPobladoDatass/Saneamiento/DT/{provincia}/{distrito}/{importacion_id}', [CentroPobladoDatassController::class, 'DTsaneamiento']);
+
+Route::get('/CentroPobladoDatass/infraestructurasanitaria', [CentroPobladoDatassController::class, 'infraestructurasanitaria'])->name('centropobladodatass.infraestructurasanitaria');
+Route::post('/CentroPobladoDatass/infraestructurasanitaria/datos', [CentroPobladoDatassController::class, 'datoInfraestructuraSanitaria'])->name('centropobladodatass.infraestructurasanitaria.info');
+
+Route::get('/CentroPobladoDatass/prestadorservicio', [CentroPobladoDatassController::class, 'prestadorservicio'])->name('centropobladodatass.prestadorservicio');
+
+
+Route::get('/CentroPobladoDatass/calidadservicio', [CentroPobladoDatassController::class, 'calidadservicio'])->name('centropobladodatass.calidadservicio');
+
 /**************************************** FIN VIVIENDA ************************************************/
 
 /**************************************** ADMINISTRADOR ************************************************/
@@ -208,6 +216,7 @@ Route::get('/Usuario/DTSistemasAsignados/{usuario_id}', [UsuarioController::clas
 
 Route::get('/Usuario/CargarPerfil/{sistema_id}/{usuario_id}', [UsuarioController::class, 'cargarPerfil']);
 Route::post('/Usuario/ajax_add_perfil/', [UsuarioController::class, 'ajax_add_perfil']);
+Route::get('/Usuario/ajax_delete_perfil/{usuario_id}/{perfil_id}', [UsuarioController::class, 'ajax_delete_perfil']);
 
 
 Route::get('/Sistema/Principal', [SistemaController::class, 'principal'])->name('sistema.principal');

@@ -81,7 +81,7 @@ class MenuController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
-        if ($request->url == '') {
+        if ($request->url == '' && $request->dependencia != '') {
             $data['inputerror'][] = 'url';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
