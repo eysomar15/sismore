@@ -146,7 +146,7 @@ class CuadroAsigPersonalRepositorio
         return $data;
     }
 
-    public static function docentes_pedagogico($nivel_educativo)
+    public static function docentes_pedagogico($nivel_educativo, $importacion_id)
     { 
         $data = DB::table(
                         DB::raw("(
@@ -162,6 +162,7 @@ class CuadroAsigPersonalRepositorio
                                     inner join edu_ugel ugel on pla.ugel_id = ugel.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
                                     where  tipTra.id = 1 and nivel_educativo_dato_adic = '$nivel_educativo'
+                                    and imp.id ='$importacion_id'
                                     group by imp.fechaActualizacion,ugel.nombre                            
                                 ) as datos"
                         )
@@ -281,6 +282,115 @@ class CuadroAsigPersonalRepositorio
                         DB::raw('Bilingue'),
                         DB::raw('noBilingue + Bilingue as total')
                     ]);
+
+        return $data;
+    }
+
+
+    /** docentes */
+
+    public static function plazas_anio()
+    { 
+        $data = DB::table(
+            DB::raw("(
+                        select distinct YEAR(fechaActualizacion) as anio from par_importacion as imp
+                        inner join edu_plaza as pla on imp.id = pla.importacion_id
+                        where imp.estado='PR'
+                        order by anio desc                        
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('anio')
+            ]);
+
+        return $data;
+    }
+
+    public static function plazas_fechas($anio)
+    { 
+        $data = DB::table(
+            DB::raw("(
+                            select distinct imp.id as importacion_id,fechaActualizacion from par_importacion as imp
+                            inner join edu_plaza as pla on imp.id = pla.importacion_id
+                            where imp.estado='PR'
+                            and YEAR(fechaActualizacion) = $anio
+                            order by fechaActualizacion desc                   
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('fechaActualizacion'),
+                DB::raw('importacion_id')
+            ]);
+
+        return $data;
+    }
+
+    public static function plazas_porTipoTrab($tipoTrab_id,$importacion_id)
+    { 
+        $data = DB::table(
+            DB::raw("(
+                            select ugel.codigo,ugel.nombre as ugel,count(*) as cantidad from edu_plaza as pla
+                            inner join edu_tipotrabajador as tipoTrab on pla.tipoTrabajador_id = tipoTrab.id
+                            inner join edu_tipotrabajador as tipoTrabCab on tipoTrab.dependencia = tipoTrabCab.id
+                            inner join edu_ugel as ugel on pla.ugel_id = ugel.id
+                            where tipoTrabCab.id = $tipoTrab_id and pla.importacion_id = $importacion_id
+                            group by ugel.codigo,ugel.nombre
+                            order by ugel.codigo             
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('ugel'),
+                DB::raw('cantidad')
+            ]);
+
+        return $data;
+    }
+
+    public static function plazas_Titulados($tipoTrab_id,$importacion_id)
+    { 
+        $data = DB::table(
+            DB::raw("(
+                            select ugel.codigo,ugel.nombre as ugel,
+                            sum(case when pla.esTitulado = 1 then 1 else 0 end) as Titulados,
+                            sum(case when pla.esTitulado = 0 then 1 else 0 end) as noTitulados
+                            from edu_plaza as pla
+                            inner join edu_tipotrabajador as tipoTrab on pla.tipoTrabajador_id = tipoTrab.id
+                            inner join edu_tipotrabajador as tipoTrabCab on tipoTrab.dependencia = tipoTrabCab.id
+                            inner join edu_ugel as ugel on pla.ugel_id = ugel.id
+                            where tipoTrabCab.id = $tipoTrab_id and pla.importacion_id = $importacion_id
+                            group by ugel.codigo,ugel.nombre
+                            order by ugel.codigo        
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('ugel'),
+                DB::raw('Titulados'),
+                DB::raw('noTitulados')
+            ]);
+
+        return $data;
+    }
+   
+    public static function plazas_nivelEducativo($tipoTrab_id,$importacion_id)
+    { 
+        $data = DB::table(
+            DB::raw("(
+                            select nivel_educativo_dato_adic as nivel_educativo,count(*) as cantidad from edu_plaza as pla
+                            inner join edu_tipotrabajador as tipoTrab on pla.tipoTrabajador_id = tipoTrab.id
+                            inner join edu_tipotrabajador as tipoTrabCab on tipoTrab.dependencia = tipoTrabCab.id
+                            where tipoTrabCab.id = $tipoTrab_id and pla.importacion_id = $importacion_id
+                            group by nivel_educativo_dato_adic       
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('nivel_educativo'),
+                DB::raw('cantidad')
+            ]);
 
         return $data;
     }

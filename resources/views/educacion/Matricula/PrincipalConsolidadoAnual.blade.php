@@ -54,7 +54,7 @@
                     </div>                    
                            
                     <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                     <br>
                     {{-- <div class="col-md-12">                       

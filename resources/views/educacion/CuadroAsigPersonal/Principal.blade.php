@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'ASIGNACION DE PRESONAL'])
+@extends('layouts.main',['activePage'=>'importacion','titlePage'=>''])
 
 
 @section('content') 
@@ -12,15 +12,19 @@
                 <div class="card-body">
                            
                     
-                    {{-- <div class="col-md-12">                       
-                        <div class="portfolioFilter">
-                            <a href="#" onClick="cargar_resumen_porUgel();"  class="current waves-effect waves-light">UGELES</a>
-                            <a href="#" onClick="cargar_resumen_porDistrito();" class="waves-effect waves-light" > DISTRITOS </a>                  
-                        </div>                        
-                    </div> --}}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="titulo_Indicadores  mb-0">$title </p>   
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <p class="texto_dfuente  mb-0">  Fuente: Sistema de Administración y Control de Plazas – NEXUS  </p>  
+                            <p class="texto_dfuente  mb-0"> $fecha_version </p>      
+                        </div>
+                       
+                    </div>
 
                     <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                     
                     <br>

@@ -1100,8 +1100,10 @@ class MatriculaController extends Controller
         $titulo = 'Matriculas EBR según UGEL -  '.$nombreAnio;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de matriculados';
+        $nombreGraficoBarra = 'barra1';// este nombre va de la mano con el nombre del DIV en la vista
 
-        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],compact( 'titulo_y','titulo','subTitulo'));
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
     }
 
     public function fecha_texto($matricula_id)
@@ -1275,6 +1277,7 @@ class MatriculaController extends Controller
         $titulo = 'TOTAL ESTUDIANTES '.$descripcion_nivel;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de Matriculados';
+        $nombreGraficoBarra = 'barra1';// este nombre va de la mano con el nombre del DIV en la vista
 
         /********* FIN GRAFICO A *************/
 
@@ -1282,7 +1285,7 @@ class MatriculaController extends Controller
         return view('educacion.Matricula.ReporteUgelConsolidadoAnual',
         ["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
         compact('total_matricula_ComsolidadoAnual','total_matricula_ComsolidadoAnual_totalAnios','anioConsolidadoAnual','ugelConsolidadoAnual','descripcion_nivel',
-        'titulo_y','titulo','subTitulo'));
+        'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
     }
 
     public function GraficoBarrasPrincipal_consolidadoAnual($anio_id)
