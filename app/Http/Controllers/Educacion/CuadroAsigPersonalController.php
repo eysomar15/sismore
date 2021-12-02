@@ -9,7 +9,6 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Indicador;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-
 use App\Utilities\Utilitario;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -188,9 +187,19 @@ class CuadroAsigPersonalController extends Controller
     {    
         $indicador = Indicador::find(35);
         $title = $indicador->nombre;
+        $importacion_id = 0;
+        $ultima_Plaza = CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza();
 
-        $Lista = CuadroAsigPersonalRepositorio:: docentes_pedagogico('Primaria');
+        if($ultima_Plaza->first()!=null)
+        {
+            $fecha_texto = Utilitario::fecha_formato_texto_completo($ultima_Plaza->first()->fechaActualizacion );
+            $importacion_id = $ultima_Plaza->first()->importacion_id;
+        }
+            
 
+        $fecha_version = 'Ultima actualización: '.$fecha_texto;
+
+        $Lista = CuadroAsigPersonalRepositorio:: docentes_pedagogico('Primaria',$importacion_id);  
         
         $sumaPedagogico= 0; 
         $sumaTotal= 0;
@@ -208,7 +217,8 @@ class CuadroAsigPersonalController extends Controller
         $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico     
         $titulo_grafico = 'Docentes Título Pedagógico - Nivel Primaria';  
 
-        return  view('educacion.CuadroAsigPersonal.ReportePedagogico',["dataCircular"=> json_encode($puntos)],compact('Lista','title','contenedor','titulo_grafico'));
+        return  view('educacion.CuadroAsigPersonal.ReportePedagogico',["dataCircular"=> json_encode($puntos)],
+        compact('Lista','title','contenedor','titulo_grafico','fecha_version'));
     }
 
     public function reporteBilingues()
@@ -218,7 +228,7 @@ class CuadroAsigPersonalController extends Controller
 
         $lista = CuadroAsigPersonalRepositorio:: docentes_bilingues_ugel();
         $ultima_Plaza = CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza();
-        $docentes_bilingues_nivel = CuadroAsigPersonalRepositorio:: docentes_bilingues_nivel();
+        
 
         if($ultima_Plaza->first()!=null)
             $fecha_texto = Utilitario::fecha_formato_texto_completo($ultima_Plaza->first()->fechaActualizacion );
@@ -244,33 +254,40 @@ class CuadroAsigPersonalController extends Controller
         $contenedor = 'resumen_bilingue';//nombre del contenedor para el grafico     
         $titulo_grafico = 'Docentes Bilingues';  
 
-        /************* GRAFICO BARRAS*******************/
-               
-     
-        $categoria_nombres=[];        
-        $recorre = 1;            
-        $data = [];                                                      
-
-        foreach ($docentes_bilingues_nivel as $key => $lista2) {
-            
-            $data = array_merge($data,[intval($lista2->Bilingue)]);
-
-            $puntos2[] = [ 'name'=> $lista2->nivel_educativo ,'data'=>  $data]; 
-            $categoria_nombres[] = $lista2->nivel_educativo;        
-        }
-
-        $titulo = 'TOTAL ESTUDIANTES ';
-        $subTitulo = 'Fuente SIAGIE - MINEDU';
-        $titulo_y = 'Numero de Matriculados';
-
-        /********* FIN GRAFICO A *************/
-
-
 
         return  view('educacion.CuadroAsigPersonal.ReporteBilingues',
-                ["dataCircular"=> json_encode($puntos),"data"=> json_encode($puntos2),"categoria_nombres"=> json_encode($categoria_nombres)],          
-                compact('lista','dataCabecera','title','contenedor','titulo_grafico','fecha_version','titulo','subTitulo','titulo_y'));
+                ["dataCircular"=> json_encode($puntos)],          
+                compact('lista','dataCabecera','title','contenedor','titulo_grafico','fecha_version'));
     }
+
+    public function GraficoBarrasPrincipal($anio_id)
+    {     
+        $docentes_bilingues_nivel = CuadroAsigPersonalRepositorio:: docentes_bilingues_nivel();
+
+        /************* GRAFICO BARRAS*******************/
+         $categoria_nombres=[];        
+         $recorre = 1; 
+
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($docentes_bilingues_nivel as $key => $lista) {
+
+            $data = [];    
+            $data = array_merge($data,[intval($lista->Bilingue)]); 
+            $puntos[] = [ 'name'=> $lista->nivel_educativo ,'data'=>  $data];
+        } 
+
+        $categoria_nombres[] = 'Niveles';  
+
+        $titulo = 'Total Docentes Bilingues por Niveles Educativos';
+        $subTitulo = 'Fuente - NEXUS';
+        $titulo_y = 'Numero de Docentes Bilingues';
+
+        $nombreGraficoBarra = 'barra1'; // este nombre va de la mano con el nombre del DIV en la vista
+
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
+    }
+
 
     public function filtro_gestion($gestion)
     {
@@ -289,5 +306,90 @@ class CuadroAsigPersonalController extends Controller
         return  $filtro;
     }
 
-    
+    /******************************************************* */
+    public function DocentesPrincipal()
+    {
+        $fechas = null;
+        $anios =  CuadroAsigPersonalRepositorio ::plazas_anio( );
+        
+        if($anios->first()!=null)
+        {
+            $fechas =  CuadroAsigPersonalRepositorio ::plazas_fechas($anios->first()->anio);
+        }
+
+        // $plazas_nivelEducativo = CuadroAsigPersonalRepositorio:: plazas_nivelEducativo(1,334);
+        // return $plazas_nivelEducativo;
+
+        return view('educacion.CuadroAsigPersonal.DocentesPrincipal',compact('anios','fechas'));
+    }
+
+    public function DocentesReportePrincipal()
+    {
+        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::plazas_porTipoTrab(1,334);
+        $plazas_Titulados = CuadroAsigPersonalRepositorio::plazas_Titulados(1,334);          
+
+        // $nombreGraficoBarra = 'barraPrincipal';
+        return view('educacion.CuadroAsigPersonal.DocentesReportePrincipal',compact('plazas_porTipoTrab'));
+    }
+
+    public function GraficoBarras_DocentesPrincipal($tipoTrab_id,$importacion_id)
+    {     
+        $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_Titulados(1,334);
+
+        /************* GRAFICO BARRAS*******************/
+         $categoria_nombres=[];        
+         $recorre = 1; 
+
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($plazas_Titulados as $key => $lista) {
+
+            $data = [];    
+            $data = array_merge($data,[intval($lista->Titulados)]);  
+            $data = array_merge($data,[intval($lista->noTitulados)]); 
+
+            $puntos[] = [ 'name'=> $lista->ugel ,'data'=>  $data];
+        } 
+
+        $categoria_nombres[] = 'TITULADOS';  
+        $categoria_nombres[] = 'NO TITULADOS';  
+
+        $nombreGraficoBarra = 'barra1';// este nombre va de la mano con el nombre del DIV en la vista
+        $titulo = 'Total Docentes Titulados vs No Titulados';
+        $subTitulo = 'Fuente - NEXUS';
+        $titulo_y = 'Numero de Docentes';
+
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
+    }
+
+    public function GraficoBarras_DocentesNivelEducativo($tipoTrab_id,$importacion_id)
+    {     
+        // $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_Titulados(1,334);
+        $plazas_nivelEducativo = CuadroAsigPersonalRepositorio:: plazas_nivelEducativo(1,334);
+        /************* GRAFICO BARRAS*******************/
+         $categoria_nombres=[];        
+         $recorre = 1; 
+
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($plazas_nivelEducativo as $key => $lista) {
+
+            $data = [];    
+            $data = array_merge($data,[intval($lista->cantidad)]);  
+            // $data = array_merge($data,[intval($lista->noTitulados)]); 
+
+            $puntos[] = [ 'name'=> $lista->nivel_educativo ,'data'=>  $data];
+        } 
+
+        $categoria_nombres[] = 'NIVELES';  
+
+        $nombreGraficoBarra = 'barra2';// este nombre va de la mano con el nombre del DIV en la vista
+        $titulo = 'Total Docentes por Niveles Educativos';
+        $subTitulo = 'Fuente - NEXUS';
+        $titulo_y = 'Numero de Docentes';
+
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
+    }
+
+        
 }

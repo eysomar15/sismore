@@ -217,8 +217,11 @@ class TabletaController extends Controller
         $titulo = 'Distribución de Tabletas '.$nombreAnio;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de tabletas';
+  
+        $nombreGraficoBarra = 'barra1';// este nombre va de la mano con el nombre del DIV en la vista
 
-        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],compact( 'titulo_y','titulo','subTitulo'));
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
     }
 
     public function reporteUgel($anio_id,$tableta_id)

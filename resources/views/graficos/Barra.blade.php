@@ -1,7 +1,7 @@
 <script>
 
         
-Highcharts.chart('barra1', {
+Highcharts.chart('{{$nombreGraficoBarra}}', {
             chart: {
                 type: 'column'
             },

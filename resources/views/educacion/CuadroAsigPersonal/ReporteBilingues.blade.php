@@ -112,13 +112,33 @@
             </div>
 
 
+       
+             {{-- <div class="content">
+                <div class="card">
+                    <div class="card-body"> --}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                                </div>
+                            </div>   
+                            <div class="col-md-12">      
+                                <div id="barra1">       
+                                    {{-- se carga con el scrip lineas abajo --}}
+                                </div> 
+                            </div> 
+                        </div> 
+                    {{-- </div> 
+                </div> 
+            </div>  --}}
+
+
             <br>
             <div class="row">
                 <div class="col-md-6">
                     <h5 class="subtitulo_Indicadores mb-0"> DOCENTES POR UGELES Y NIVELES EDUCATIVOS</h5>   
                 </div>               
             </div>
-       
             {{-- detallessssssssssssssssssssssssssssssssssssssssssssss --}}
             {{-- fila 1 --}}
             <div class="row">
@@ -316,19 +336,10 @@
     </div>
 </div>
 
-<div class="content">
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">      
-                    <div id="barra1">       
-                        {{-- se carga con el scrip lineas abajo --}}
-                    </div> 
-                </div> 
-            </div> 
-        </div> 
-    </div> 
-</div> 
+
+
+
+
 
 @endsection 
 
@@ -338,16 +349,17 @@
 
     <script type="text/javascript"> 
         
-        $(document).ready(function() {          
-            cargar_Grafico();          
+        $(document).ready(function() {
+            cargar_GraficoBarra();        
         });
 
-        function cargar_Grafico() {            
+       
+        function cargar_GraficoBarra() {            
             $.ajax({  
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Tableta/GraficoBarrasPrincipal/"+ 6,
+                url: "{{ url('/') }}/CuadroAsigPersonal/ReporteBilingues/GraficoBarrasPrincipal/"+ 6,
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
