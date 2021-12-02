@@ -354,7 +354,7 @@ class CuadroAsigPersonalController extends Controller
         $categoria_nombres[] = 'NO TITULADOS';  
 
         $nombreGraficoBarra = 'barra1';// este nombre va de la mano con el nombre del DIV en la vista
-        $titulo = 'Total Docentes Titulados vs No Titulados';
+        $titulo = 'Docentes Titulados vs No Titulados';
         $subTitulo = 'Fuente - NEXUS';
         $titulo_y = 'Numero de Docentes';
 
@@ -383,7 +383,7 @@ class CuadroAsigPersonalController extends Controller
         $categoria_nombres[] = 'NIVELES';  
 
         $nombreGraficoBarra = 'barra2';// este nombre va de la mano con el nombre del DIV en la vista
-        $titulo = 'Total Docentes por Niveles Educativos';
+        $titulo = 'Docentes por Niveles Educativos';
         $subTitulo = 'Fuente - NEXUS';
         $titulo_y = 'Numero de Docentes';
 
