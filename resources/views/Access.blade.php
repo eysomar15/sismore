@@ -45,6 +45,9 @@
             </div>
             <br>
         </div> --}}
+        <div class="row justify-content-center"> 
+            <h5 class="text-white text-center">SELECCIONAR MODULO</h5>{{-- text-white --}}
+        </div>
         <div class="row justify-content-center">
             @foreach ($sistemas as $sistema)
                 <div class="col-md-3 col-xl-3">
