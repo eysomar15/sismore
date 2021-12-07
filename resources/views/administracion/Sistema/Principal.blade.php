@@ -84,6 +84,7 @@
                                 <input id="icono" name="icono" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
+                            
                         </div>
                     </form>
                 </div>
@@ -125,6 +126,7 @@
                 $(this).next().empty();
             });
             listarDT();
+            /* se eliminara */
         });
 
         function add() {

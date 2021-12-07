@@ -123,4 +123,125 @@ class CentroPobladoDatassRepositorio
         $query = $query->get();
         return $query;
     }
+
+    public static function centropoplado_porServicioAgua($importacion_id, $provincia, $distrito)
+    {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and x2.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and x2.dependencia=' . $provincia;
+        $query = DB::table(DB::raw('(select  count(sistema_agua) as conteo,"SI" as servicio from (
+            select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_agua from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.sistema_agua="SI" and x1.importacion_id='.$importacion_id.$ubicacion.' 
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_agua) as datass        
+            union all      
+            select count(sistema_agua) as conteo,"NO" as servicio from (
+             select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_agua from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.sistema_agua!="SI" and x1.importacion_id='.$importacion_id.$ubicacion.' 
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_agua) as datass) as v1'))
+            ->select(DB::raw('cast(v1.conteo as SIGNED) as y'), DB::raw('v1.servicio as name'))
+            ->get();
+        return $query;
+    }
+
+    public static function centropoplado_porDisposicionExcretas($importacion_id, $provincia, $distrito)
+    {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and x2.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and x2.dependencia=' . $provincia;
+        $query = DB::table(DB::raw('(select  count(sistema_disposicion_excretas) as conteo,"SI" as servicio from (
+            select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_disposicion_excretas from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.sistema_disposicion_excretas="SI" and x1.importacion_id='.$importacion_id.$ubicacion.' 
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_disposicion_excretas) as datass        
+            union all      
+            select count(sistema_disposicion_excretas) as conteo,"NO" as servicio from (
+             select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_disposicion_excretas from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.sistema_disposicion_excretas!="SI" and x1.importacion_id='.$importacion_id.$ubicacion.' 
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.sistema_disposicion_excretas) as datass) as ggg'))
+            ->select(DB::raw('cast(conteo as SIGNED) as y'), DB::raw('servicio as name'))
+            ->get();
+        return $query;
+    }
+
+    public static function centropoplado_porTipoServicioAgua($importacion_id, $provincia, $distrito)
+    {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and v3.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and v3.dependencia=' . $provincia;
+        $query = DB::table(DB::raw('(select  v1.nombre as servicio,count(v1.id) as conteo from viv_tipo_sistema_agua as v1 
+        inner join viv_centropoblado_datass as v2 on v2.tipo_sistema_agua_id=v1.id 
+        inner join par_ubigeo as v3 on v3.id=v2.ubigeo_id  
+        where v1.id in (4,5,1,2)  and v2.importacion_id='.$importacion_id.$ubicacion.' 
+        group by v1.id,v1.nombre 
+        order by v1.id ) as xxx'))
+            ->select(DB::raw('cast(conteo as SIGNED) as y'), DB::raw('servicio as name'))
+            ->get();
+        return $query;
+    }
+
+    public static function centropoplado_porCuotaFamiliar($importacion_id, $provincia, $distrito)
+    {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and x2.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and x2.dependencia=' . $provincia;
+        $query = DB::table(DB::raw('(select  count(cuota_familiar) as conteo,"SI" as servicio from (
+            select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.cuota_familiar from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.cuota_familiar="SI" and x1.importacion_id='.$importacion_id.$ubicacion.'
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.cuota_familiar) as datass        
+            union all      
+            select count(cuota_familiar) as conteo,"NO" as servicio from (
+             select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.cuota_familiar from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.cuota_familiar!="SI" and x1.importacion_id='.$importacion_id.$ubicacion.'
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.cuota_familiar) as datass) as ggg'))
+            ->select(DB::raw('cast(conteo as SIGNED) as y'), DB::raw('servicio as name'))
+            ->get();
+        return $query;
+    }
+
+    public static function centropoplado_porServicioAguaContinuo($importacion_id, $provincia, $distrito)
+    {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and x2.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and x2.dependencia=' . $provincia;
+        $query = DB::table(DB::raw('(select  count(servicio_agua_continuo) as conteo,"SI" as servicio from (
+            select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.servicio_agua_continuo from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.servicio_agua_continuo="SI" and x1.importacion_id='.$importacion_id.$ubicacion.'
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.servicio_agua_continuo) as datass        
+            union all      
+            select count(servicio_agua_continuo) as conteo,"NO" as servicio from (
+             select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.servicio_agua_continuo from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.servicio_agua_continuo!="SI" and x1.importacion_id='.$importacion_id.$ubicacion.'
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.servicio_agua_continuo) as datass) as ggg'))
+            ->select(DB::raw('cast(conteo as SIGNED) as y'), DB::raw('servicio as name'))
+            ->get();
+        return $query;
+    }
+
+    public static function centropoplado_porRealizaCloracionAgua($importacion_id, $provincia, $distrito)
+    {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and x2.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and x2.dependencia=' . $provincia;
+        $query = DB::table(DB::raw('(select  count(realiza_cloracion_agua) as conteo,"SI" as servicio from (
+            select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.realiza_cloracion_agua from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.realiza_cloracion_agua="SI" and x1.importacion_id='.$importacion_id.$ubicacion.'
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.realiza_cloracion_agua) as datass        
+            union all      
+            select count(realiza_cloracion_agua) as conteo,"NO" as servicio from (
+             select x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.realiza_cloracion_agua from viv_centropoblado_datass as x1
+            inner join par_ubigeo as x2 on x2.id=x1.ubigeo_id  
+            where x1.realiza_cloracion_agua!="SI" and x1.importacion_id='.$importacion_id.$ubicacion.'
+            group by x1.importacion_id,x1.ubigeo_id,x1.nombre,x1.realiza_cloracion_agua) as datass) as ggg'))
+            ->select(DB::raw('cast(conteo as SIGNED) as y'), DB::raw('servicio as name'))
+            ->get();
+        return $query;
+    }
 }

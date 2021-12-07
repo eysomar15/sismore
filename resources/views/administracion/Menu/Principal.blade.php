@@ -129,7 +129,7 @@
     <!-- Bootstrap modal -->
     <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
@@ -141,56 +141,72 @@
                     <form action="" id="form" class="form-horizontal" autocomplete="off">
                         @csrf
                         <input type="hidden" class="form-control" id="id" name="id">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label>Sistema<span class="required">*</span></label>
-                                <select class="form-control" name="sistema_id" id="sistema_id" onchange="cargarGrupo();">
-                                    <option value="">Seleccionar</option>
-                                    @foreach ($sistemas as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                                <span class="help-block"></span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Sistema<span class="required">*</span></label>
+                                    <select class="form-control" name="sistema_id" id="sistema_id"
+                                        onchange="cargarGrupo();">
+                                        <option value="">Seleccionar</option>
+                                        @foreach ($sistemas as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Grupo
-                                    <!--span class="required">*</span-->
-                                </label>
-                                <select class="form-control" name="dependencia" id="dependencia" onchange="">
-                                    <option value="">Seleccionar</option>
-                                </select>
-                                <span class="help-block"></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Grupo
+                                        <!--span class="required">*</span-->
+                                    </label>
+                                    <select class="form-control" name="dependencia" id="dependencia" onchange="">
+                                        <option value="">Seleccionar</option>
+                                    </select>
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Menu<span class="required">*</span></label>
-                                <input id="nombre" name="nombre" class="form-control" type="text">
-                                <span class="help-block"></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Menu<span class="required">*</span></label>
+                                    <input id="nombre" name="nombre" class="form-control" type="text">
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Url<span class="required">*</span></label>
-                                <input id="url" name="url" class="form-control" type="text">
-                                <span class="help-block"></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Url<span class="required">*</span></label>
+                                    <input id="url" name="url" class="form-control" type="text">
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Icono
-                                    <!--span class="required">*</span-->
-                                </label>
-                                <input id="icono" name="icono" class="form-control" type="text">
-                                <span class="help-block"></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Icono
+                                        <!--span class="required">*</span-->
+                                    </label>
+                                    <input id="icono" name="icono" class="form-control" type="text">
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Parametro
-                                    <!--span class="required">*</span-->
-                                </label>
-                                <input id="parametro" name="parametro" class="form-control" type="text">
-                                <span class="help-block"></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Parametro
+                                        <!--span class="required">*</span-->
+                                    </label>
+                                    <input id="parametro" name="parametro" class="form-control" type="text">
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Posicion<span class="required">*</span></label>
-                                <input id="posicion" name="posicion" class="form-control" type="number">
-                                <span class="help-block"></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Posicion<span class="required">*</span></label>
+                                    <input id="posicion" name="posicion" class="form-control" type="number">
+                                    <span class="help-block"></span>
+                                </div>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -283,7 +299,7 @@
                     console.log(data)
                     if (data.status) {
                         $('#modal_form').modal('hide');
-                        reload_table_principal();//listarDT();
+                        reload_table_principal(); //listarDT();
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -356,7 +372,7 @@
                         dataType: "JSON",
                         success: function(data) {
                             $('#modal_form').modal('hide');
-                            reload_table_principal();//listarDT();
+                            reload_table_principal(); //listarDT();
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
@@ -371,7 +387,7 @@
 
 
         function listarDT() {
-            table_principal=$('#dtPrincipal').DataTable({
+            table_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ url('/') }}/Menu/listarDT/" + $('#sistema').val(),
                 "columns": [{
                         data: 'nombre'
@@ -446,7 +462,7 @@
                         dataType: "JSON",
                         success: function(data) {
                             console.log(data);
-                            reload_table_principal();//listarDT();
+                            reload_table_principal(); //listarDT();
                             if (data.estado)
                                 toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
                             else
