@@ -32,6 +32,8 @@
                        
                     </div>
 
+                  
+
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
@@ -64,8 +66,12 @@
                     </div> <!-- End row --> 
                                         
                     <br>
-                    <div id="datos01" class="form-group row">                        
-                            Cargando datos.....                        
+                    <div class="row">
+                        <div class="col-md-12"> 
+                            <div id="datos01" class="form-group row">                        
+                                    Cargando datos.....                        
+                            </div>
+                        </div>
                     </div>
 
                 </div>               
