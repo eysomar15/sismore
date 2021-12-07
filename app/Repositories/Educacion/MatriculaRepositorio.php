@@ -167,10 +167,47 @@ class MatriculaRepositorio
             ->orderBy('codigo', 'asc')
             ->get(
             );
-
-
         return $data;
+    }
+    
+    public static function total_matricula_EBR_porNivelEducativo($matricula_id)
+    { 
+        $data = DB::table(
+                    DB::raw("(
+                                    select  
+                                    id,
+                                    sum(case when nivel = 'I' then cantidad else 0 end) as inicial,
+                                    sum(case when nivel = 'P' then cantidad else 0 end) as primaria,
+                                    sum(case when nivel = 'S' then cantidad else 0 end) as secundaria
+                                    from (
+                                    
+                                                                select mat.id,matDet.nivel ,
+                                                                        sum(           
+                                                                            ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
+                                                                            ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
+                                                                            ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
+                                                                            ifnull(cinco_anios_hombre_ebe,0)+	      
+                                                                            ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
+                                                                            ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
+                                                                            ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
+                                                                            ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
+                                                                        ) as cantidad
+                                                                        from edu_matricula mat
+                                                                        inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
+                                                                        inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
+                                                                        inner join edu_ugel ugel on inst.Ugel_id = ugel.id
+                                                                        where mat.id = $matricula_id                              
+                                                                        group by mat.id,matDet.nivel
+                                        ) as data
+                                        group by id   
+                        ) as datos"
+                    )
+                )           
 
+          
+            ->get(
+            );
+        return $data;
     }
     
     public static function total_matricula_por_Nivel($matricula_id)

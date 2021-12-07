@@ -981,7 +981,7 @@ class MatriculaController extends Controller
         {
             $totalMatriculados+= ($item->hombres + $item->mujeres);
         }
-
+   
         return view('educacion.Matricula.inicio',compact('lista_total_matricula_EBR','lista_total_matricula_EBR_porUgeles','fecha_Matricula_texto','totalMatriculados'));
     }
 

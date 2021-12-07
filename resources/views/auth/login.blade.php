@@ -26,9 +26,10 @@
         {{-- <div class="row justify-content-center">
             <h4 class="text-white">GOBIERNO REGIONAL DE UCAYALI</h4> 
         </div> --}}
-        <div class="row justify-content-center">
-            <h5 class="text-white text-center">INICIAR SESION</h5>{{-- text-white --}}
-        </div>
+        {{-- <div class="row justify-content-center">
+            <h5 class="text-white text-center">INICIAR SESION</h5> 
+        </div> --}}
+        <br><br>
         <div class="row justify-content-center">
             <h2 class="text-white text-center">SISTEMA DE MONITOREO REGIONAL</h2>{{-- text-white --}}
         </div>
@@ -74,7 +75,7 @@
                                     <div class="form-group mb-3">   
                                         <label for="exampleInputPassword1">Contraseña</label>                                
                                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
-                                        name="password" required autocomplete="current-password" placeholder="Password">
+                                        name="password" required autocomplete="current-password" placeholder="Contraseña">
                                         @error('password')
                                         <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

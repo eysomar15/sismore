@@ -189,8 +189,14 @@ class TabletaController extends Controller
     }
 
     public function GraficoBarrasPrincipal($anio_id)
-    {     
-        $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio($anio_id); // poner la variable del año
+    {   
+        // $resumen_tabletas_anio = null;
+  
+        if($anio_id==0)
+            $resumen_tabletas_anio = TabletaRepositorio ::tabletas_ultimaActualizacion();
+        else
+            $resumen_tabletas_anio = TabletaRepositorio ::resumen_tabletas_anio($anio_id);
+
         
         $categoria1 = [];
         $categoria2 = [];
@@ -212,7 +218,11 @@ class TabletaController extends Controller
         $puntos[] = [ 'name'=>'Recepcionadas' ,'data'=>  $categoria3];
         $puntos[] = [ 'name'=>'Asignadas', 'data'=> $categoria4];
 
-        $nombreAnio = Anio::find($anio_id)->anio;
+        if($anio_id==0)
+            $nombreAnio =Utilitario::anio_deFecha(TabletaRepositorio ::tableta_mas_actual()->first()->fechaActualizacion);
+        else
+            $nombreAnio = Anio::find($anio_id)->anio;
+
 
         $titulo = 'Distribución de Tabletas '.$nombreAnio;
         $subTitulo = 'Fuente SIAGIE - MINEDU';

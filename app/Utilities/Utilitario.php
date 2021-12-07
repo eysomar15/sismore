@@ -54,4 +54,17 @@ class Utilitario
         $nombre = Carbon::parse($fecha)->format("d").' de '.$mes;     
         return  $nombre;       
     } 
+
+    public static function anio_deFecha($fecha)
+    {         
+        $anio = '';
+
+        $fecha = Carbon::parse($fecha );
+       
+        
+        $nombre = '20'.Carbon::parse($fecha)->format("y");     
+        return  $nombre;       
+    } 
+
 }
+
