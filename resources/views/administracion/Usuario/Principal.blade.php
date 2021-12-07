@@ -123,7 +123,6 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
-
                                                     <div class="col-md-6">
                                                         <label>Correo Electronico<span
                                                                 class="required">*</span></label>
@@ -143,8 +142,15 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
-
-
+                                                    <div class="col-md-6">
+                                                        <label>Tipo<span class="required">*</span></label>
+                                                        <select name="tipo" id="tipo" class="form-control">
+                                                            <option value="">SELECCIONAR</option>
+                                                            <option value="0">ADMINISTRADOR GENERAL</option>
+                                                            <option value="1">ADMINISTRADOR LOCAL</option>
+                                                        </select>
+                                                        <span class="help-block"></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             {{-- <div class="form-group">
@@ -596,6 +602,7 @@
                     $('[name="email"]').val(data.usuario.email);
                     $('[name="celular"]').val(data.usuario.celular);
                     $('[name="usuario"]').val(data.usuario.usuario);
+                    $('[name="tipo"]').val(data.usuario.tipo);
                     /* data.sistemas.forEach(item => {
                         $('#checkbox' + item.sistema_id).prop("checked", true);
                     }); */

@@ -1,3 +1,6 @@
+{{-- @extends('layouts.main',['activePage'=>'usuarios','titlePage'=>'']) --}}
+
+    
 @section('css')
 
 
@@ -14,7 +17,6 @@
     {{-- <script src="https://code.highcharts.com/modules/solid-gauge.js"></script> --}}
 
 @endsection
-
 <div>
 
     <div id="container-speed" class="chart-container"></div>
@@ -23,6 +25,16 @@
 
 <div class="content">
     <div class="container-fluid">
+{{--         <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-fill bg-primary">
+                    <div class="card-header bg-transparent">
+                        <h3 class="card-title text-white">Información General</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row --> --}}
         <div class="row">
             @php
                 $color = ['info', 'purple', 'success', 'primary', 'pink', 'dark', 'warning', 'secondary'];
@@ -408,7 +420,8 @@
                             y: 7.05
                         }
                     ]*/
-                }] 
+                }] ,
+                credits: false,
             });
         }
     </script>

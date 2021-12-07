@@ -173,7 +173,7 @@ class UsuarioController extends Controller
         }
         return response()->json(array('status' => true, 'modulos' => $perfiles));
     }
-    public function ajax_delete_perfil($usuario_id,$perfil_id) //elimina deverdad *o*
+    public function ajax_delete_perfil($usuario_id, $perfil_id) //elimina deverdad *o*
     {
         UsuarioPerfil::where('usuario_id', $usuario_id)->where('perfil_id', $perfil_id)->delete();
         return response()->json(array('status' => true));
@@ -245,11 +245,11 @@ class UsuarioController extends Controller
             $data['status'] = FALSE;
         }
 
-        /* if ($request->sistemas == '') {
-            $data['inputerror'][] = 'sistemas';
-            $data['error_string'][] = 'Es necesario seleccionar 1 sistema como minimo.';
+        if ($request->tipo == '') {
+            $data['inputerror'][] = 'tipo';
+            $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
-        } */
+        }
         $usuarioyy = Usuario::where('usuario', $request->usuario)->first();
         if ($request->usuario == '') {
             $data['inputerror'][] = 'usuario';
@@ -309,7 +309,7 @@ class UsuarioController extends Controller
             'apellidos' => $request->apellidos,
             'sexo' => $request->sexo,
             'celular' => $request->celular,
-            'tipo' => '0',
+            'tipo' => $request->tipo,
             //'entidad' => $request->entidad,
             'estado' => '1',
         ]);
@@ -329,7 +329,7 @@ class UsuarioController extends Controller
         $usuario->apellidos = $request->apellidos;
         $usuario->sexo = $request->sexo;
         $usuario->celular = $request->celular;
-        $usuario->tipo='0';
+        $usuario->tipo = $request->tipo;
         //$usuario->entidad = $request->email;
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);

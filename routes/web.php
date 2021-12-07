@@ -189,9 +189,10 @@ Route::get('/CentroPobladoDatass/infraestructurasanitaria', [CentroPobladoDatass
 Route::post('/CentroPobladoDatass/infraestructurasanitaria/datos', [CentroPobladoDatassController::class, 'datoInfraestructuraSanitaria'])->name('centropobladodatass.infraestructurasanitaria.info');
 
 Route::get('/CentroPobladoDatass/prestadorservicio', [CentroPobladoDatassController::class, 'prestadorservicio'])->name('centropobladodatass.prestadorservicio');
-
+Route::post('/CentroPobladoDatass/prestadorservicio/datos', [CentroPobladoDatassController::class, 'datoPrestadorServicio'])->name('centropobladodatass.prestadorservicio.info');
 
 Route::get('/CentroPobladoDatass/calidadservicio', [CentroPobladoDatassController::class, 'calidadservicio'])->name('centropobladodatass.calidadservicio');
+Route::post('/CentroPobladoDatass/calidadservicio/datos', [CentroPobladoDatassController::class, 'datoCalidadServicio'])->name('centropobladodatass.calidadservicio.info');
 
 /**************************************** FIN VIVIENDA ************************************************/
 

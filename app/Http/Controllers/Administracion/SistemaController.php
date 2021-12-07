@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Administracion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Parametro\Icono;
 use App\Models\Administracion\Sistema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
