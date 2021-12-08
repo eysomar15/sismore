@@ -48,7 +48,7 @@ class SistemaRepositorio
       $query = DB::table('adm_sistema as v1')
       ->select('v1.id', 'v1.nombre', 'v1.icono', DB::raw('(select count(v2.id) from `adm_perfil` as `v2` 
       inner join `adm_usuario_perfil` as `v3` on `v3`.`perfil_id` = `v2`.`id` 
-                                where v2.sistema_id=v1.id) as nrousuario'))
+      where v2.sistema_id=v1.id) as nrousuario'))
       ->where('v1.estado','1')
       ->orderBy('v1.nombre')
       ->get();

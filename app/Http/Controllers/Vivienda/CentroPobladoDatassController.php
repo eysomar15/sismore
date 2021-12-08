@@ -49,6 +49,7 @@ class CentroPobladoDatassController extends Controller
 
     public function infraestructurasanitaria()
     {
+        //$ingresos = ImportacionRepositorio::Listar_soloYear();
         $ingresos = ImportacionRepositorio::Listar_deCentroPobladoDatass();
         $provincias = CentroPobladoDatassRepositorio::listar_provincia();
         //$provincias=CentroPobladoDatassRepositorio::listar_distrito(35);
@@ -59,7 +60,7 @@ class CentroPobladoDatassController extends Controller
         $dato['csa'] = CentroPobladoDatassRepositorio::centropoplado_porServicioAgua($request->fecha, $request->provincia, $request->distrito);
         $dato['cde'] = CentroPobladoDatassRepositorio::centropoplado_porDisposicionExcretas($request->fecha, $request->provincia, $request->distrito);
         $dato['cts'] = CentroPobladoDatassRepositorio::centropoplado_porTipoServicioAgua($request->fecha, $request->provincia, $request->distrito);
-        $dato['cad'] = CentroPobladoDatassRepositorio::centropoplado_porTipoServicioAgua($request->fecha, $request->provincia, $request->distrito);
+        $dato['cad'] = CentroPobladoDatassRepositorio::centropoplado_porServicioAguaSINO($request->fecha, $request->provincia, $request->distrito);
         return response()->json(compact('dato'));
     }
     public function prestadorservicio()
@@ -71,8 +72,8 @@ class CentroPobladoDatassController extends Controller
     }
     public function datoPrestadorServicio(Request $request)
     {
-        $dato['oc'] = CentroPobladoDatassRepositorio::centropoplado_porServicioAgua($request->fecha, $request->provincia, $request->distrito);
-        $dato['ta'] = CentroPobladoDatassRepositorio::centropoplado_porDisposicionExcretas($request->fecha, $request->provincia, $request->distrito);
+        $dato['oc'] = CentroPobladoDatassRepositorio::centropoplado_porOrganizacionesComunales($request->fecha, $request->provincia, $request->distrito);
+        $dato['ta'] = CentroPobladoDatassRepositorio::centropoplado_porTotalAsociados($request->fecha, $request->provincia, $request->distrito);
         $dato['cf'] = CentroPobladoDatassRepositorio::centropoplado_porCuotaFamiliar($request->fecha, $request->provincia, $request->distrito);
         return response()->json(compact('dato'));
     }

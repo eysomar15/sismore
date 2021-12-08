@@ -12,8 +12,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <!--div class="card-header">
-                                        <h3 class="card-title">Default Buttons</h3>
-                                    </div-->
+                                                            <h3 class="card-title">Default Buttons</h3>
+                                                        </div-->
                     <div class="card-body">
                         <form id="form_opciones" name="form_opciones" action="POST">
                             @csrf
@@ -157,6 +157,13 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="card card-border card-primary">
+                    <div class="card-body">
+                        <div id="barani1" style="min-width:400px;height:300px;margin:0 auto;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         {{-- end row --}}
 
@@ -241,32 +248,52 @@
                 dataType: 'JSON',
                 success: function(data) {
                     console.log(data);
+                    /* GRAFICAS DIVERSAS */
                     pie01('pie1', data.dato.csa, '', '', ''); //Centro Poblado con Servicio de Agua Rural
-                    pie01('pie2', data.dato.cde, '', '', '');//Centro Poblado con Disposicion de Excretas Rural
+                    pie01('pie2', data.dato.cde, '', '', ''); //Centro Poblado con Disposicion de Excretas Rural
                     barra01('bar1', data.dato.cts, '', 'TIPO DE SISTEMA DE AGUA', '');
+                    cat = [];
+                    se1 = [];
+                    se2 = [];
+                    data.dato.cad.forEach(element => {
+                        cat.push(element.categoria);
+                        se1.push(element.si);
+                        se2.push(element.no);
+                    });
+                    barAni01('barani1', cat, se1, se2, '', 'CENTROS POBLADOS RURALES CON SISTEMA DE AGUA');
+
+                    /* TABLAS DIVERSAS */
                     /* ---> */
                     piet = '';
                     conteo = 0;
-                    total=0;
-                    data.dato.csa.forEach(element => {total+=element.y});
+                    total = 0;
+                    data.dato.csa.forEach(element => {
+                        total += element.y
+                    });
                     data.dato.csa.forEach((val, index) => {
-                        por=val.y*100/total;
-                        piet += '<tr><td align=center>' + val.name + '</td><td align=center>' + val.y + '</td><td align=center>'+por.toFixed(1)+'%</td></tr>';
+                        por = val.y * 100 / total;
+                        piet += '<tr><td align=center>' + val.name + '</td><td align=center>' + val.y +
+                            '</td><td align=center>' + por.toFixed(1) + '%</td></tr>';
                         conteo += val.y;
                     });
-                    piet += '<tr><td align=center><b>TOTAL</b></td><td align=center><b>' + conteo + '</b></td><td align=center><b>100%</b></td></tr>';
+                    piet += '<tr><td align=center><b>TOTAL</b></td><td align=center><b>' + conteo +
+                        '</b></td><td align=center><b>100%</b></td></tr>';
                     $('#pie1t').html(piet);
                     /* --> */
                     piet = '';
                     conteo = 0;
-                    total=0;
-                    data.dato.cde.forEach(element => {total+=element.y});
+                    total = 0;
+                    data.dato.cde.forEach(element => {
+                        total += element.y
+                    });
                     data.dato.cde.forEach((val, index) => {
-                        por=val.y*100/total;
-                        piet += '<tr><td align=center>' + val.name + '</td><td align=center>' + val.y + '</td><td align=center>'+por.toFixed(1)+'%</td></tr>';
+                        por = val.y * 100 / total;
+                        piet += '<tr><td align=center>' + val.name + '</td><td align=center>' + val.y +
+                            '</td><td align=center>' + por.toFixed(1) + '%</td></tr>';
                         conteo += val.y;
                     });
-                    piet += '<tr><td align=center><b>TOTAL</b></td><td align=center><b>' + conteo + '</b></td><td align=center><b>100%</b></td></tr>';
+                    piet += '<tr><td align=center><b>TOTAL</b></td><td align=center><b>' + conteo +
+                        '</b></td><td align=center><b>100%</b></td></tr>';
                     $('#pie2t').html(piet);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -351,6 +378,60 @@
                     pointFormat: '{series.name} tiene: <b>{point.y}</b> centros poblados',
                 },
                 plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}',
+                        },
+                    }
+                },
+                credits: false,
+            });
+        }
+
+        function barAni01(div, d1, d2, d3, titulo, subtitulo) { //BARRA ANIDADA
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column',
+                },
+                title: {
+                    text: titulo,
+                },
+                subtitle: {
+                    text: subtitulo,
+                },
+                xAxis: {
+                    categories: d1,
+                },
+                yAxis: {
+                    title: {
+                        enabled: false,
+                        text: 'Porcentaje',
+                    },
+                    //allowDecimals:false,
+                    //min:0,
+                },
+                series: [{
+                    name: "SI", //'Distritos con servicio de agua potable',
+                    //colorByPoint: true,
+                    //color:'#7C7D7D',
+                    data: d2,
+                    //showInLegend: tituloserie != ''
+                }, {
+                    name: "NO", //'Distritos con servicio de agua potable',
+                    //colorByPoint: true,
+                    //color:'#7C7D7D',
+                    data: d3,
+                    //showInLegend: tituloserie != ''
+                }],
+                tooltip: {
+                    pointFormat: '{series.name} tiene: <b>{point.y}</b> centros poblados',
+                },
+                plotOptions: {
+                    columns: {
+                        stacking: 'normal'
+                    },
                     series: {
                         borderWidth: 0,
                         dataLabels: {

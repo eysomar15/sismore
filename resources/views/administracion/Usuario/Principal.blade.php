@@ -148,6 +148,7 @@
                                                             <option value="">SELECCIONAR</option>
                                                             <option value="0">ADMINISTRADOR GENERAL</option>
                                                             <option value="1">ADMINISTRADOR LOCAL</option>
+                                                            {{-- <option value="2">ENTIDAD</option> --}}
                                                         </select>
                                                         <span class="help-block"></span>
                                                     </div>
