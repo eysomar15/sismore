@@ -286,6 +286,37 @@ class CuadroAsigPersonalRepositorio
         return $data;
     }
 
+    public static function docentes_EBR()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                    select row_number() OVER (partition BY imp.id ORDER BY imp.fechaActualizacion DESC) AS item,
+                                    imp.id,fechaActualizacion,
+                                        sum(case when nivMod.codigo in( 'A2','A3','A5')   then 1 else 0 end) as inicial ,
+                                        sum(case when nivMod.codigo = 'B0'   then 1 else 0 end) as primaria ,
+                                        sum(case when nivMod.codigo = 'F0'  then 1 else 0 end) as Secundaria
+                                    from par_importacion imp
+                                    inner join edu_plaza pla on imp.id = pla.importacion_id
+                                    inner join edu_nivelmodalidad nivMod on pla.nivelModalidad_id = nivMod.id
+                                    inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
+                                    inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
+                                    where tipTra.id = 1 and imp.estado= 'PR'                                    
+                                    group by imp.id,fechaActualizacion                       
+                                ) as datos"
+                            )
+                        )
+                    ->where("item", "=", 1)
+                    ->get([
+                        DB::raw('fechaActualizacion'),  
+                        DB::raw('inicial'),    
+                        DB::raw('primaria'),
+                        DB::raw('Secundaria')
+                    ]);
+
+        return $data;
+    }
+
+
 
     /** docentes */
 

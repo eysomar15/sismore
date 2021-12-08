@@ -88,7 +88,6 @@ class TabletaRepositorio
          return $data;
     }
 
-
     public static function resumen_tabletas_anio($anio_id)
     { 
               $data = DB::table('par_importacion as imp')    

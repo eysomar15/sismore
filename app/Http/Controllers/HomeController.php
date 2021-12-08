@@ -10,6 +10,9 @@ use App\Models\Vivienda\CentroPobladoDatass;
 use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
+use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
+use App\Repositories\Educacion\InstEducativaRepositorio;
+use App\Repositories\Educacion\MatriculaRepositorio;
 use App\Repositories\Educacion\TabletaRepositorio;
 use App\Repositories\Vivienda\CentroPobladoDatassRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
@@ -116,7 +119,42 @@ class HomeController extends Controller
         /* return $grafica2; */
         return view('home', compact('sistema_id', 'data', 'data2', 'grafica', 'grafica2'));
     }
+
     public function educacion($sistema_id)
+    {
+        $instituciones_activas = InstEducativaRepositorio::cantidad_activas_inactivas()->first()->activas;
+
+        $docentes_inicial = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->inicial;
+        $docentes_primaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->primaria;
+        $docentes_Secundaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->Secundaria;
+
+
+        $matricula_id=0;
+        $matricula_mas_actual = MatriculaRepositorio::matricula_mas_actual();
+
+        if($matricula_mas_actual!=null)
+        {
+            $matricula_id =$matricula_mas_actual->first()->id;
+        }
+
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,'whereNotIn',0);
+        $lista_total_matricula_EBR_nivelEducativo = MatriculaRepositorio::total_matricula_EBR_porNivelEducativo($matricula_id);
+      
+        $totalMatriculados = 0;
+        foreach($lista_total_matricula_EBR as $item)
+        {
+            $totalMatriculados+= ($item->hombres + $item->mujeres);
+        }
+
+        $matriculadosInicial= $lista_total_matricula_EBR_nivelEducativo->first()->inicial;
+        $matriculadosPrimaria=$lista_total_matricula_EBR_nivelEducativo->first()->primaria;;
+        $matriculadosSecundaria=$lista_total_matricula_EBR_nivelEducativo->first()->secundaria;;
+
+        
+        return  view('home', compact('instituciones_activas','docentes_inicial','docentes_primaria','docentes_Secundaria',
+        'totalMatriculados', 'matriculadosInicial','matriculadosPrimaria','matriculadosSecundaria'));
+    }
+    public function educacionx($sistema_id)
     {
         $instituciones_activas = 0;
         $instituciones_inactivas = 0;
@@ -158,10 +196,6 @@ class HomeController extends Controller
 
         $par_medidor1_max =  $instituciones_total;
 
-
-
-
-
         $tabletas_ultimaActualizacion = TabletaRepositorio::tabletas_ultimaActualizacion()->first();
 
         $fechaTableta = $tabletas_ultimaActualizacion->fechaActualizacion;
@@ -173,11 +207,6 @@ class HomeController extends Controller
 
         $par_medidor2_max = 100;
         $par_medidor2_data =  number_format((($tabletas_ultimaActualizacion->total_Asignadas * 100) / $tabletas_ultimaActualizacion->total_aDistribuir), 2);
-
-
-
-
-
 
 
         return view('home', compact(
