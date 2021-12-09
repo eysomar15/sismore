@@ -15,6 +15,7 @@ use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Repositories\Educacion\InstEducativaRepositorio;
 use App\Repositories\Educacion\MatriculaRepositorio;
 use App\Repositories\Educacion\TabletaRepositorio;
+use App\Repositories\Vivienda\CentroPobladoDatassRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +44,7 @@ class HomeController extends Controller
         session()->put(['usuario_id' => auth()->user()->id]);
         session()->put(['total_sistema' => $sistemas->count()]);
         session()->put(['perfil_id' => $usuper ? $usuper->perfil_id : 0]);
+<<<<<<< HEAD
 
         $usuario = UsuarioRepositorio::Usuario(auth()->user()->id);
         
@@ -53,6 +55,8 @@ class HomeController extends Controller
 
         // return session('dnisismore$');
 
+=======
+>>>>>>> 34e906c76a898e85efbec6dccba14158399ad08a
         if ($sistemas->count() == 1)
             return $this->sistema_acceder($sistemas->first()->sistema_id);
 
@@ -104,9 +108,9 @@ class HomeController extends Controller
 
     public function vivienda($sistema_id)
     {
-        $sistemas = SistemaRepositorio::listar_sistemasconusuarios(1);
+        //$sistemas = SistemaRepositorio::listar_sistemasconusuarios(1);return $sistemas;
         $imp = Importacion::where('fuenteimportacion_id', '7')->select(DB::raw('max(id) as maximo'))->first();
-        $data[] = ['name' => 'Centro Poblado', 'y' => CentroPobladoDatass::where('importacion_id', $imp->maximo)->count()];
+        $data[] = ['name' => 'Centro Poblado', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($imp->maximo)->conteo];
         $data[] = ['name' => 'con sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'][0]->y];
         $data[] = ['name' => 'con disposición de excretas', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'][0]->y];
         $data[] = ['name' => 'con sistema de cloración', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 21, $imp->maximo)['indicador2'][0]->y];

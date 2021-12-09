@@ -219,6 +219,12 @@ Route::get('/Usuario/CargarPerfil/{sistema_id}/{usuario_id}', [UsuarioController
 Route::post('/Usuario/ajax_add_perfil/', [UsuarioController::class, 'ajax_add_perfil']);
 Route::get('/Usuario/ajax_delete_perfil/{usuario_id}/{perfil_id}', [UsuarioController::class, 'ajax_delete_perfil']);
 
+Route::get('/Usuario/CargarGerencia/{entidad_id}', [UsuarioController::class, 'cargarGerencia']);
+Route::post('/Usuario/ajax_add_gerencia/', [UsuarioController::class, 'ajax_add_gerencia'])->name('usuario.ajax.addgerencia');
+
+Route::get('/Usuario/CargarOficina/{entidad_id}', [UsuarioController::class, 'cargarOficina']);
+Route::post('/Usuario/ajax_add_oficina/', [UsuarioController::class, 'ajax_add_oficina'])->name('usuario.ajax.addoficina');
+
 
 Route::get('/Sistema/Principal', [SistemaController::class, 'principal'])->name('sistema.principal');
 Route::get('/Sistema/listarDT', [SistemaController::class, 'listarDT'])->name('sistema.listarDT');

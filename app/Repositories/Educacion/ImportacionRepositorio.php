@@ -138,6 +138,18 @@ class ImportacionRepositorio
         return $query;
     }
 
+    public static function Listar_soloYear()
+    {
+        $query = DB::table('par_importacion as v1')
+            ->join('viv_Centropoblado_datass as v2', 'v2.importacion_id', '=', 'v1.id')
+            ->where('v1.estado','PR')
+            ->distinct()
+            ->select(DB::raw('YEAR(v1.fechaActualizacion) as anio'))
+            ->orderBy('v1.fechaActualizacion','desc')
+            ->get();
+        return $query;
+    }
+
     public static function listar_ImportacionSinAprobarEce($grado, $tipo)
     {
         $query = DB::table('par_importacion as v1')

@@ -63,7 +63,7 @@
     </div>
 
     <!-- Bootstrap modal -->
-    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <div id="modal_form" class="modal fade" tabindex="-1" {{-- role="dialog" --}} aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -140,6 +140,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -148,11 +149,54 @@
                                                             <option value="">SELECCIONAR</option>
                                                             <option value="0">ADMINISTRADOR GENERAL</option>
                                                             <option value="1">ADMINISTRADOR LOCAL</option>
+                                                            {{-- <option value="2">ENTIDAD</option> --}}
+                                                        </select>
+                                                        <span class="help-block"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Entidad<span class="required">*</span></label>
+                                                        <select name="unidadejecutora" id="unidadejecutora"
+                                                            class="form-control" onchange="cargar_gerencia('');">
+                                                            <option value="">SELECCIONAR</option>
+                                                            @foreach ($entidad as $item)
+                                                                <option value="{{ $item->id }}">
+                                                                    {{ $item->unidad_ejecutora }}</option>
+                                                            @endforeach
                                                         </select>
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Gerencia<span class="required">*</span>
+                                                            <button type="button" class="btn btn-primary btn-xs"
+                                                                onclick="add_gerencia()"><i
+                                                                    class=" fas fa-plus-circle"></i></button>
+                                                        </label>
+                                                        <select name="entidadgerencia" id="entidadgerencia"
+                                                            class="form-control" onchange="cargar_oficina('')">
+                                                            <option value="">SELECCIONAR</option>
+                                                        </select>
+                                                        <span class="help-block"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Oficinas<span class="required">*</span>
+                                                            <button type="button" class="btn btn-primary btn-xs"
+                                                                onclick="add_oficina()"><i
+                                                                    class=" fas fa-plus-circle"></i></button></label>
+                                                        <select name="entidadoficina" id="entidadoficina"
+                                                            class="form-control">
+                                                            <option value="">SELECCIONAR</option>
+
+                                                            {{-- <option value="2">ENTIDAD</option> --}}
+                                                        </select>
+                                                        <span class="help-block"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             {{-- <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -300,7 +344,7 @@
                                 <select class="form-control" name="sistema_id" id="sistema_id"
                                     onchange="cargarPerfil();">
                                     <option value="">Seleccionar</option>
-                                    @foreach ($sistemas2 as $item)
+                                    @foreach ($sistemas as $item)
                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                     @endforeach
                                 </select>
@@ -314,7 +358,7 @@
                             </div>
 
                         </div>
-                    </form>                    
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -322,24 +366,25 @@
                         class="btn btn-primary">Guardar</button>
                 </div>
                 <div class="modal-body">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table id="dtperfil" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <!--th>#</th-->
-                                        <th>Sistema</th>
-                                        <th>Perfil Asignado</th>
-                                        <th>Accion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="dtperfil" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <!--th>#</th-->
+                                            <th>Sistema</th>
+                                            <th>Perfil Asignado</th>
+                                            <th>Accion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div></div>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -365,7 +410,108 @@
                 </div>
             </div>
         </div>
-    </div> <!-- Fin Modal  Eliminar -->
+    </div><!-- Fin Modal  Eliminar -->
+    <!-- End Bootstrap modal -->
+
+    <div id="modal_form_gerencia" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="form_gerencia" class="form-horizontal" autocomplete="off">
+                        @csrf
+                        <input type="hidden" id="unidadejecutadora_id" name="unidadejecutadora_id">
+                        <div class="form">
+                            <div class="form-group">
+                                <label>Entidad<span class="required">*</span></label>
+                                <input id="unidadejecutora_nombre" name="unidadejecutora_nombre" class="form-control"
+                                    type="text" readonly>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form">
+                            <div class="form-group">
+                                <label>Gerencia<span class="required">*</span></label>
+                                <input id="gerencia" name="gerencia" class="form-control" type="text"
+                                    onkeyup="this.value=this.value.toUpperCase()">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form">
+                            <div class="form-group">
+                                <label>Abreviado<span class="required">*</span></label>
+                                <input id="abreviado" name="abreviado" class="form-control" type="text"
+                                    onkeyup="this.value=this.value.toUpperCase()">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSaveGerencia" onclick="savegerencia()"
+                        class="btn btn-primary">Guardar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- End Bootstrap modal -->
+
+    <div id="modal_form_oficina" class="modal fade" tabindex="-1" {{-- role="dialog" --}} aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="form_oficina" class="form-horizontal" autocomplete="off">
+                        @csrf
+                        <input type="hidden" id="entidadgerencia_id" name="entidadgerencia_id">
+                        <div class="form">
+                            <div class="form">
+                                <div class="form-group">
+                                    <label>Gerencia<span class="required">*</span></label>
+                                    <input id="entidadgerencia_nombre" name="entidadgerencia_nombre" class="form-control"
+                                        type="text" readonly>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Oficina<span class="required">*</span></label>
+                                <input id="oficina" name="oficina" class="form-control" type="text"
+                                    onkeyup="this.value=this.value.toUpperCase()">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form">
+                                <div class="form-group">
+                                    <label>Abreviado<span class="required">*</span></label>
+                                    <input id="abreviado" name="abreviado" class="form-control" type="text"
+                                        onkeyup="this.value=this.value.toUpperCase()">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSaveOficina" onclick="saveoficina()"
+                        class="btn btn-primary">Guardar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- End Bootstrap modal -->
 
 @endsection
 
@@ -377,18 +523,17 @@
     {{-- <script src="{{ asset('/') }}assets/js/app.min.js"></script> --}}
     <script>
         /* var id;
-                    //.delete nombre con el que se le llamo en el controlador al boton eliminar
-                    $(document).on('click', '.delete', function() {
-                        id = $(this).attr('id');
-                        $('#confirmModalEliminar').modal('show');
-                    }); */
+                                                    //.delete nombre con el que se le llamo en el controlador al boton eliminar
+                                                    $(document).on('click', '.delete', function() {
+                                                        id = $(this).attr('id');
+                                                        $('#confirmModalEliminar').modal('show');
+                                                    }); */
 
         $(document).ready(function() {
             var save_method = '';
             var tabla_perfil;
             var tabla_principal;
 
-            //add();
             $("input").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
@@ -406,9 +551,7 @@
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
-
             tablaPrincipal();
-
         });
 
         function tablaPrincipal() {
@@ -528,13 +671,6 @@
             $('#id').val('');
         }
 
-        function addunidadejecutora() {
-            $('#form_unidadejecutora')[0].reset();
-            $('#modal_unidadejecutora').modal('show');
-        }
-
-
-
         function save() {
             $('#btnSave').text('guardando...');
             $('#btnSave').attr('disabled', true);
@@ -603,9 +739,55 @@
                     $('[name="celular"]').val(data.usuario.celular);
                     $('[name="usuario"]').val(data.usuario.usuario);
                     $('[name="tipo"]').val(data.usuario.tipo);
-                    /* data.sistemas.forEach(item => {
-                        $('#checkbox' + item.sistema_id).prop("checked", true);
-                    }); */
+                    if (data.entidad) {
+                        $('[name="unidadejecutora"]').val(data.entidad.entidad_id);
+                        $.ajax({
+                            url: "{{ url('/') }}/Usuario/CargarGerencia/" + data.entidad
+                                .entidad_id,
+                            type: 'get',
+                            success: function(data2) {
+                                $("#entidadgerencia option").remove();
+                                var options = '<option value="">SELECCIONAR</option>';
+                                $.each(data2.gerencias, function(index, value) {
+                                    ss = (data.entidad.gerencia_id == value.id ?
+                                        "selected" :
+                                        "");
+                                    options += "<option value='" + value.id + "' " + ss +
+                                        ">" +
+                                        value.entidad +
+                                        "</option>"
+                                });
+                                $("#entidadgerencia").append(options);
+
+                                $.ajax({
+                                    url: "{{ url('/') }}/Usuario/CargarOficina/" +
+                                        data
+                                        .entidad.gerencia_id,
+                                    type: 'get',
+                                    success: function(data3) {
+                                        $("#entidadoficina option").remove();
+                                        var options =
+                                            '<option value="">SELECCIONAR</option>';
+                                        $.each(data3.oficinas, function(index, value) {
+                                            ss = (data.entidad.oficina_id ==
+                                                value
+                                                .id ? "selected" : "");
+                                            options += "<option value='" + value
+                                                .id + "' " + ss + ">" + value
+                                                .entidad + "</option>"
+                                        });
+                                        $("#entidadoficina").append(options);
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        console.log(jqXHR);
+                                    },
+                                });
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.log(jqXHR);
+                            },
+                        });
+                    }
                     $('#modal_form').modal('show');
                     $('.modal-title').text('Modificar Usuario');
                 },
@@ -628,7 +810,8 @@
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             alert(
-                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario')
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario'
+                            )
                             toastr.error(
                                 'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario',
                                 'Mensaje');
@@ -637,7 +820,6 @@
                 }
             });
         }
-
 
         function perfil(id) {
             $('#form_perfil')[0].reset();
@@ -708,11 +890,12 @@
                 }
             });
         }
-        function borrarperfil(id1,id2) {
+
+        function borrarperfil(id1, id2) {
             bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Usuario/ajax_delete_perfil/" + id1+"/"+id2,
+                        url: "{{ url('/') }}/Usuario/ajax_delete_perfil/" + id1 + "/" + id2,
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
@@ -724,7 +907,8 @@
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             alert(
-                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario')
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario'
+                            )
                             toastr.error(
                                 'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Usuario',
                                 'Mensaje');
@@ -733,6 +917,7 @@
                 }
             });
         }
+
         function estadoUsuario(id, x) {
             bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(result) {
                 if (result === true) {
@@ -775,6 +960,148 @@
                 }
             });
         }); */
+        function cargar_gerencia(id) {
+            $.ajax({
+                url: "{{ url('/') }}/Usuario/CargarGerencia/" + $('#unidadejecutora').val(),
+                type: 'get',
+                success: function(data) {
+                    console.log(data);
+                    $("#entidadgerencia option").remove();
+                    var options = '<option value="">SELECCIONAR</option>';
+                    $.each(data.gerencias, function(index, value) {
+                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
+                        options += "<option value='" + value.id + "' " + ss + ">" + value.entidad +
+                            "</option>"
+                    });
+                    $("#entidadgerencia").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function add_gerencia() {
+            entidadid = $('#unidadejecutora').val();
+            if (entidadid == 0) {
+                alert('ERROR: seleccionar una Entidad');
+                return false;
+            }
+            entidadnombre = $('#unidadejecutora option:selected').text();
+
+            $('#form_gerencia')[0].reset();
+            $('#form_gerencia .form-group').removeClass('has-error');
+            $('#form_gerencia .help-block').empty();
+            $('#unidadejecutadora_id').val(entidadid);
+            $('#unidadejecutora_nombre').val(entidadnombre.trim());
+            $('#modal_form_gerencia .modal-title').text('Nueva Gerencia');
+            $('#modal_form_gerencia').modal('show');
+        }
+
+        function savegerencia() {
+            $('#btnSaveGerencia').text('guardando...');
+            $('#btnSaveGerencia').attr('disabled', true);
+            $.ajax({
+                /* url: "{{ url('/') }}/Usuario/ajax_add_gerencia", */
+                url: "{{ route('usuario.ajax.addgerencia') }}",
+                type: "POST",
+                data: $('#form_gerencia').serialize(),
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+                    if (data.status) {
+                        $('#modal_form_gerencia').modal('hide');
+                        cargar_gerencia(data.codigo);
+                        toastr.success("El registro fue creado exitosamente.", 'Mensaje');
+                    } else {
+                        for (var i = 0; i < data.inputerror.length; i++) {
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
+                        }
+                    }
+                    $('#btnSaveGerencia').text('Guardar');
+                    $('#btnSaveGerencia').attr('disabled', false);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('#btnSaveGerencia').text('Guardar');
+                    $('#btnSaveGerencia').attr('disabled', false);
+                    toastr.error("El registro no se pudo crear verifique las validaciones.", 'Mensaje');
+                }
+            });
+        }
+
+        function cargar_oficina(id) {
+            $.ajax({
+                url: "{{ url('/') }}/Usuario/CargarOficina/" + $('#entidadgerencia').val(),
+                type: 'get',
+                success: function(data) {
+                    console.log(data);
+                    $("#entidadoficina option").remove();
+                    var options = '<option value="">SELECCIONAR</option>';
+                    $.each(data.oficinas, function(index, value) {
+                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
+                        options += "<option value='" + value.id + "' " + ss + ">" + value.entidad +
+                            "</option>"
+                    });
+                    $("#entidadoficina").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function add_oficina() {
+            /* $('#form_oficina')[0].reset();
+            $('#modal_form_oficina .modal-title').text('Nueva Oficina');
+            $('#modal_form_oficina').modal('show'); */
+
+            entidadid = $('#entidadgerencia').val();
+            if (entidadid == 0) {
+                alert('ERROR: seleccionar una Gerencia');
+                return false;
+            }
+            entidadnombre = $('#entidadgerencia option:selected').text();
+
+            $('#form_oficina')[0].reset();
+            $('#form_oficina .form-group').removeClass('has-error');
+            $('#form_oficina .help-block').empty();
+            $('#entidadgerencia_id').val(entidadid);
+            $('#entidadgerencia_nombre').val(entidadnombre.trim());
+            $('#modal_form_oficina .modal-title').text('Nueva Oficina');
+            $('#modal_form_oficina').modal('show');
+        }
+
+        function saveoficina() {
+            $('#btnSaveOficina').text('guardando...');
+            $('#btnSaveOficina').attr('disabled', true);
+            $.ajax({
+                url: "{{ route('usuario.ajax.addoficina') }}",
+                type: "POST",
+                data: $('#form_oficina').serialize(),
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+                    if (data.status) {
+                        $('#modal_form_oficina').modal('hide');
+                        cargar_oficina(data.codigo);
+                        toastr.success("El registro fue creado exitosamente.", 'Mensaje');
+                    } else {
+                        for (var i = 0; i < data.inputerror.length; i++) {
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
+                        }
+                    }
+                    $('#btnSaveOficina').text('Guardar');
+                    $('#btnSaveOficina').attr('disabled', false);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $('#btnSaveOficina').text('Guardar');
+                    $('#btnSaveOficina').attr('disabled', false);
+                    toastr.error("El registro no se pudo crear verifique las validaciones.", 'Mensaje');
+                }
+            });
+        }
     </script>
 
 @endsection
