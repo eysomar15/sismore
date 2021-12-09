@@ -57,6 +57,7 @@
                                 <div class="card" style="background:linear-gradient(60deg, #2053c0, #01143f)">            
                                     <h1 class="text-white text-center">SISMORE</h1>                    
                                 </div>
+                                
                             <div class="card-body p-4 mt-2">
                                 {{-- <form action="#" class="p-3"> --}}
                                 <form class="form p-3" method="POST" action="{{ route('login') }}">

@@ -23,6 +23,15 @@ class UsuarioRepositorio
         return $data;
     }
 
+    public static function Usuario($id)
+    {
+        $data = Usuario::select('adm_usuario.id', 'adm_usuario.usuario', 'adm_usuario.dni', 'adm_usuario.password')
+                ->where("adm_usuario.id", "=", $id)
+         
+            ->get();
+        return $data;
+    }
+
     public static function Listar_porperfil($perfil_id)
     {
         $data = DB::table(DB::raw('(select distinct v1.* from adm_usuario as v1 

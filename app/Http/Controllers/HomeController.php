@@ -10,6 +10,7 @@ use App\Models\Vivienda\CentroPobladoDatass;
 use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
+use App\Repositories\Administracion\UsuarioRepositorio;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Repositories\Educacion\InstEducativaRepositorio;
 use App\Repositories\Educacion\MatriculaRepositorio;
@@ -43,9 +44,20 @@ class HomeController extends Controller
         session()->put(['total_sistema' => $sistemas->count()]);
         session()->put(['perfil_id' => $usuper ? $usuper->perfil_id : 0]);
 
+        $usuario = UsuarioRepositorio::Usuario(auth()->user()->id);
+        
+        if( $usuario->first() != null){
+            session(['dnisismore$' => $usuario->first()->dni]);
+            session(['passwordsismore$' => $usuario->first()->password]);
+        }
+
+        // return session('dnisismore$');
+
         if ($sistemas->count() == 1)
             return $this->sistema_acceder($sistemas->first()->sistema_id);
 
+        
+        // return session('usuario_id');
         return view('Access', compact(('sistemas')));
     }
 
@@ -55,7 +67,7 @@ class HomeController extends Controller
         // session()->forget('sistema_nombre');
         // session()->forget('menuNivel01');
         // session()->forget('menuNivel02');
-
+       
         session(['sistema_id' => $sistema_id]);
 
         $sistema = Sistema::find($sistema_id);
