@@ -8,6 +8,8 @@ use App\Models\Administracion\Sistema;
 use App\Models\Administracion\Usuario;
 use App\Models\Administracion\UsuarioPerfil;
 use App\Models\Administracion\UsuarioTipo;
+use App\Models\Presupuesto\Entidad;
+use App\Models\Presupuesto\UnidadEjecutora;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
@@ -24,8 +26,10 @@ class UsuarioController extends Controller
     public function principal()
     {
         //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
-        $sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
-        return view('administracion.Usuario.Principal', compact('sistemas2'));
+        //$sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
+        $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_id'));
+        $entidad = UnidadEjecutora::all();
+        return view('administracion.Usuario.Principal', compact('sistemas', 'entidad'));
     }
     public function Lista_DataTable()
     {
@@ -215,16 +219,17 @@ class UsuarioController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
+        if ($request->entidadoficina == '') {
+            $data['inputerror'][] = 'entidadoficina';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
         /* if ($request->celular == '') {
             $data['inputerror'][] = 'celular';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         } */
-        /* if ($request->entidad == '') {
-            $data['inputerror'][] = 'entidad';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
+        /* 
         if ($request->oficina == '') {
             $data['inputerror'][] = 'oficina';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -310,7 +315,7 @@ class UsuarioController extends Controller
             'sexo' => $request->sexo,
             'celular' => $request->celular,
             'tipo' => $request->tipo,
-            //'entidad' => $request->entidad,
+            'entidad' => $request->entidadoficina,
             'estado' => '1',
         ]);
         return response()->json(array('status' => true));
@@ -330,7 +335,7 @@ class UsuarioController extends Controller
         $usuario->sexo = $request->sexo;
         $usuario->celular = $request->celular;
         $usuario->tipo = $request->tipo;
-        //$usuario->entidad = $request->email;
+        $usuario->entidad = $request->entidadoficina;
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);
         $usuario->save();
@@ -340,7 +345,19 @@ class UsuarioController extends Controller
     public function ajax_edit($usuario_id)
     {
         $usuario = Usuario::find($usuario_id);
-        return response()->json(compact('usuario'));
+        $entidad = Entidad::select(
+            'v2.id as entidad_id',
+            'v2.unidad_ejecutora as entidad',
+            'pres_entidad.id as gerencia_id',
+            'pres_entidad.entidad as gerencia',
+            'v3.id as oficina_id',
+            'v3.entidad as oficina'
+        )
+            ->join('pres_unidadejecutora as v2', 'v2.id', '=', 'pres_entidad.unidadejecutadora_id')
+            ->join('pres_entidad as v3', 'v3.dependencia', '=', 'pres_entidad.id')
+            ->where('v3.id', $usuario->entidad)
+            ->first();
+        return response()->json(compact('usuario', 'entidad'));
     }
     public function ajax_delete($usuario_id) //elimina deverdad *o*
     {
@@ -355,5 +372,47 @@ class UsuarioController extends Controller
         $usuario->estado = $usuario->estado == 1 ? 0 : 1;
         $usuario->save();
         return response()->json(array('status' => true, 'estado' => $usuario->estado));
+    }
+    public function cargarGerencia($entidad_id)
+    {
+        $gerencias = Entidad::where('unidadejecutadora_id', $entidad_id)->get();
+        return response()->json(compact('gerencias'));
+    }
+    public function ajax_add_gerencia(Request $request)
+    {
+        /* $val = $this->_validateperfil($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        } */
+
+        $entidad = Entidad::Create([
+            'entidad' => $request->gerencia,
+            'unidadejecutadora_id' => $request->unidadejecutadora_id,
+            'abreviado' => $request->abreviado,
+            'estado' => 1,
+        ]);
+
+        return response()->json(array('status' => true, 'codigo' => $entidad->id));
+    }
+    public function cargarOficina($entidad_id)
+    {
+        $oficinas = Entidad::where('dependencia', $entidad_id)->get();
+        return response()->json(compact('oficinas'));
+    }
+    public function ajax_add_oficina(Request $request)
+    {
+        /* $val = $this->_validateperfil($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        } */
+
+        $entidad = Entidad::Create([
+            'entidad' => $request->oficina,
+            'abreviado' => $request->abreviado,
+            'dependencia' => $request->entidadgerencia_id,
+            'estado' => 1,
+        ]);
+
+        return response()->json(array('status' => true, 'codigo' => $entidad->id));
     }
 }

@@ -19,7 +19,6 @@ class SistemaRepositorio
 
     return $data;
   }
-
   public static function listar_porperfil($perfil_id)
   {
     $query = Sistema::select('adm_sistema.*')
@@ -30,6 +29,7 @@ class SistemaRepositorio
       ->get();
     return $query;
   }
+
 
   /* public static function listar_porusuariosistemachecked($usuario_id)
   {

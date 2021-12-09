@@ -43,7 +43,6 @@ class HomeController extends Controller
         session()->put(['usuario_id' => auth()->user()->id]);
         session()->put(['total_sistema' => $sistemas->count()]);
         session()->put(['perfil_id' => $usuper ? $usuper->perfil_id : 0]);
-
         if ($sistemas->count() == 1)
             return $this->sistema_acceder($sistemas->first()->sistema_id);
 
