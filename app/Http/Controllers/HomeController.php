@@ -44,7 +44,6 @@ class HomeController extends Controller
         session()->put(['usuario_id' => auth()->user()->id]);
         session()->put(['total_sistema' => $sistemas->count()]);
         session()->put(['perfil_id' => $usuper ? $usuper->perfil_id : 0]);
-<<<<<<< HEAD
 
         $usuario = UsuarioRepositorio::Usuario(auth()->user()->id);
         
@@ -55,8 +54,6 @@ class HomeController extends Controller
 
         // return session('dnisismore$');
 
-=======
->>>>>>> 34e906c76a898e85efbec6dccba14158399ad08a
         if ($sistemas->count() == 1)
             return $this->sistema_acceder($sistemas->first()->sistema_id);
 
