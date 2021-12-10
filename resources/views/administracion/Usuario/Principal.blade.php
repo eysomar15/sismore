@@ -10,7 +10,14 @@
     <!-- Plugins css -->
     {{-- <link href="{{ asset('/') }}assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" /> --}}
 
-
+<style>
+    .centrarmodal{
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        background:#000000c9 !important;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -63,8 +70,8 @@
     </div>
 
     <!-- Bootstrap modal -->
-    <div id="modal_form" class="modal fade" tabindex="-1" {{-- role="dialog" --}} aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
+    {{-- <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;"> --}}
+    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="overflow:auto">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -413,8 +420,8 @@
     </div><!-- Fin Modal  Eliminar -->
     <!-- End Bootstrap modal -->
 
-    <div id="modal_form_gerencia" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
+    {{-- <div id="modal_form_gerencia" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;"> --}}
+    <div id="modal_form_gerencia" class="modal fade centrarmodal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -463,8 +470,8 @@
     </div><!-- /.modal -->
     <!-- End Bootstrap modal -->
 
-    <div id="modal_form_oficina" class="modal fade" tabindex="-1" {{-- role="dialog" --}} aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
+    {{-- <div id="modal_form_oficina" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;"> --}}
+    <div id="modal_form_oficina" class="modal fade centrarmodal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -996,6 +1003,7 @@
             $('#unidadejecutora_nombre').val(entidadnombre.trim());
             $('#modal_form_gerencia .modal-title').text('Nueva Gerencia');
             $('#modal_form_gerencia').modal('show');
+
         }
 
         function savegerencia() {
