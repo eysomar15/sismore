@@ -240,6 +240,7 @@ class UsuarioController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         } */
+        $usuarioemail = Usuario::where('email', $request->email)->first();
         if ($request->email == '') {
             $data['inputerror'][] = 'email';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -275,6 +276,10 @@ class UsuarioController extends Controller
                 $data['inputerror'][] = 'password';
                 $data['error_string'][] = 'Este campo es obligatorio.';
                 $data['status'] = FALSE;
+            } else if (strlen($request->password) < 8) {
+                $data['inputerror'][] = 'password';
+                $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
+                $data['status'] = FALSE;
             }
             if ($request->password2 == '') {
                 $data['inputerror'][] = 'password2';
@@ -284,12 +289,17 @@ class UsuarioController extends Controller
             if ($request->password != '' && $request->password2 != '') {
                 if ($request->password != $request->password2) {
                     $data['inputerror'][] = 'password2';
-                    $data['error_string'][] = 'Confirmar Password distinto.';
+                    $data['error_string'][] = 'Confirmar Password es distinto.';
                     $data['status'] = FALSE;
                 }
             }
         } else {
             if ($request->password != '' || $request->password2 != '') {
+                if (strlen($request->password) < 8) {
+                    $data['inputerror'][] = 'password';
+                    $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
+                    $data['status'] = FALSE;
+                }
                 if ($request->password != $request->password2) {
                     $data['inputerror'][] = 'password2';
                     $data['error_string'][] = 'Confirmar Password distinto.';
@@ -378,12 +388,27 @@ class UsuarioController extends Controller
         $gerencias = Entidad::where('unidadejecutadora_id', $entidad_id)->get();
         return response()->json(compact('gerencias'));
     }
+    private function _validategerencia($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($request->gerencia == '') {
+            $data['inputerror'][] = 'gerencia';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        return $data;
+    }
     public function ajax_add_gerencia(Request $request)
     {
-        /* $val = $this->_validateperfil($request);
+        $val = $this->_validategerencia($request);
         if ($val['status'] === FALSE) {
             return response()->json($val);
-        } */
+        }
 
         $entidad = Entidad::Create([
             'entidad' => $request->gerencia,
@@ -399,12 +424,27 @@ class UsuarioController extends Controller
         $oficinas = Entidad::where('dependencia', $entidad_id)->get();
         return response()->json(compact('oficinas'));
     }
+    private function _validateoficina($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($request->oficina == '') {
+            $data['inputerror'][] = 'oficina';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        return $data;
+    }
     public function ajax_add_oficina(Request $request)
     {
-        /* $val = $this->_validateperfil($request);
+        $val = $this->_validateoficina($request);
         if ($val['status'] === FALSE) {
             return response()->json($val);
-        } */
+        }
 
         $entidad = Entidad::Create([
             'entidad' => $request->oficina,
