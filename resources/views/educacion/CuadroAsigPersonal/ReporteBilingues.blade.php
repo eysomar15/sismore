@@ -350,6 +350,7 @@
     <script type="text/javascript"> 
         
         $(document).ready(function() {
+         
             cargar_GraficoBarra();        
         });
 
@@ -359,7 +360,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/CuadroAsigPersonal/ReporteBilingues/GraficoBarrasPrincipal/"+ 6,
+                url: "{{ url('/') }}/CuadroAsigPersonal/ReporteBilingues/GraficoBarrasPrincipal/"+ {{$importacion_id}},
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);

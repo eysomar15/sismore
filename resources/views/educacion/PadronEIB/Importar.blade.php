@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - TABLETAS'])
+@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - PADRON EIB'])
 
 @section('content')
 
@@ -33,14 +33,14 @@
                 <div class="card-body">
                     <div class="form">
 
-                        <form action="{{route('Tableta.guardar')}}" method="post" enctype='multipart/form-data'
+                        <form action="{{route('PadronEIB.guardar')}}" method="post" enctype='multipart/form-data'
                             class="cmxform form-horizontal tasi-form"  >                            
                             @csrf
 
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Fuente de datos</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" readonly="readonly" value="SIAGIE - TABLETAS">
+                                    <input type="text" class="form-control" readonly="readonly" value="REGISTRO NACIONAL EIB - PADRON EIB">
                                 </div>
                             </div>
 

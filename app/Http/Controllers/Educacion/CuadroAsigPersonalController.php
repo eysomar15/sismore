@@ -235,20 +235,25 @@ class CuadroAsigPersonalController extends Controller
 
     public function reporteBilingues()
     {    
+        
         $indicador = Indicador::find(37);
         $title = $indicador->nombre;
-
-        $lista = CuadroAsigPersonalRepositorio:: docentes_bilingues_ugel();
         $ultima_Plaza = CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza();
+
+        $importacion_id=0;
+        if($ultima_Plaza->first()!=null)
+        {
+            $fecha_texto = Utilitario::fecha_formato_texto_completo($ultima_Plaza->first()->fechaActualizacion );
+            $importacion_id = $ultima_Plaza->first()->importacion_id;
+        }
         
 
-        if($ultima_Plaza->first()!=null)
-            $fecha_texto = Utilitario::fecha_formato_texto_completo($ultima_Plaza->first()->fechaActualizacion );
+        $dataCabecera = CuadroAsigPersonalRepositorio:: docentes_bilingues($importacion_id);
+        $lista = CuadroAsigPersonalRepositorio:: docentes_bilingues_ugel($importacion_id);
+
 
         $fecha_version = 'Ultima actualización: '.$fecha_texto;
       
-        $dataCabecera = CuadroAsigPersonalRepositorio:: docentes_bilingues();
-        
         /************* GRAFICO TORTA*******************/
         $sumaBilingue= 0; 
         $sumaTotal= 0;
@@ -269,12 +274,12 @@ class CuadroAsigPersonalController extends Controller
 
         return  view('educacion.CuadroAsigPersonal.ReporteBilingues',
                 ["dataCircular"=> json_encode($puntos)],          
-                compact('lista','dataCabecera','title','contenedor','titulo_grafico','fecha_version'));
+                compact('lista','dataCabecera','title','contenedor','titulo_grafico','fecha_version','importacion_id'));
     }
 
-    public function GraficoBarrasPrincipal($anio_id)
+    public function GraficoBarrasPrincipal($importacion_id)
     {     
-        $docentes_bilingues_nivel = CuadroAsigPersonalRepositorio:: docentes_bilingues_nivel();
+        $docentes_bilingues_nivel = CuadroAsigPersonalRepositorio:: docentes_bilingues_nivel($importacion_id);
 
         /************* GRAFICO BARRAS*******************/
          $categoria_nombres=[];        
