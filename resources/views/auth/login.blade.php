@@ -29,7 +29,7 @@
         {{-- <div class="row justify-content-center">
             <h5 class="text-white text-center">INICIAR SESION</h5> 
         </div> --}}
-        <br><br>
+        {{-- <br><br> --}}
         <div class="row justify-content-center">
             <h2 class="text-white text-center">SISTEMA DE MONITOREO REGIONAL</h2>{{-- text-white --}}
         </div>
@@ -58,9 +58,9 @@
                                     <h1 class="text-white text-center">SISMORE</h1>                    
                                 </div>
                                 
-                            <div class="card-body p-4 mt-2">
+                            <div class="card-body p-4 mt-0">
                                 {{-- <form action="#" class="p-3"> --}}
-                                <form class="form p-3" method="POST" action="{{ route('login') }}">
+                                <form class="form p-0" method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group mb-3">
                                         <label for="exampleInputEmail1">Email</label>

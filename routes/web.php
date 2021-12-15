@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Administracion\EntidadController;
 use App\Http\Controllers\Administracion\MenuController;
 use App\Http\Controllers\Administracion\PerfilController;
 use App\Http\Controllers\Administracion\SistemaController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\Educacion\TabletaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
+use App\Http\Controllers\Presupuesto\ImporGastosController;
 use App\Http\Controllers\Vivienda\CentroPobladoController;
 use App\Http\Controllers\Vivienda\CentroPobladoDatassController;
 use App\Http\Controllers\Vivienda\DatassController;
@@ -267,4 +269,24 @@ Route::post('/Perfil/ajax_add_menu', [PerfilController::class, 'ajax_add_menu'])
 Route::get('/Perfil/listarsistema/{perfil_id}/{sistema_id}', [PerfilController::class, 'listarsistema']);
 Route::post('/Perfil/ajax_add_sistema', [PerfilController::class, 'ajax_add_sistema']);
 
+Route::get('/Entidad/Principal', [EntidadController::class, 'principal'])->name('entidad.principal');
+Route::get('/Entidad/listar/{unidadejecutora_id}/{dependencia}', [EntidadController::class, 'listarDT']);
+
+Route::get('/Entidad/CargarGerencia/{entidad_id}', [EntidadController::class, 'cargarGerencia']);
+Route::post('/Entidad/ajax_add_gerencia/', [EntidadController::class, 'ajax_add_gerencia'])->name('entidad.ajax.addgerencia');
+
+Route::get('/Entidad/CargarOficina/{gerencia_id}', [EntidadController::class, 'cargarOficina']);
+Route::post('/Entidad/ajax_add_oficina/', [EntidadController::class, 'ajax_add_oficina'])->name('entidad.ajax.addoficina');
 /**************************************** FIN ADMINISTRADOR ************************************************/
+
+/**************************************** PRESUPUESTO ************************************************/
+Route::get('/PRES/Gastos/Importar', [ImporGastosController::class, 'importar'])->name('pres.gastos.importar');
+Route::post('/PRES/Gastos/Importar', [ImporGastosController::class, 'importarGuardar'])->name('pres.gastos.guardar');
+
+Route::get('/PRES/Covid/Importar', [ImporGastosController::class, 'importar'])->name('pres.covid.importar');
+Route::get('/PRES/ingresos/Importar', [ImporGastosController::class, 'importar'])->name('pres.ingresos.importar');
+Route::get('/PRES/Regiones/Importar', [ImporGastosController::class, 'importar'])->name('pres.regiones.importar');
+
+/**************************************** FIN PRESUPUESTO ************************************************/
+
+

@@ -49,7 +49,6 @@ class MenuController extends Controller
     public function cargarGrupo($sistema_id)
     {
         $grupo = MenuRepositorio::listarGrupo($sistema_id);
-
         return response()->json(compact('grupo'));
     }
 

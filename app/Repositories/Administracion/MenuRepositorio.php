@@ -69,12 +69,12 @@ class MenuRepositorio
   }
 
   public static function listarGrupo($sistema_id)
-  {
+  { //tiene un problema con el url cuando es NULO
     $query = DB::table('adm_menu as v1')
       ->select('v1.*')
       ->where('v1.sistema_id', $sistema_id)
       ->where('v1.url', '')
-      ->whereNull('v1.dependencia')
+      ->where('v1.dependencia')
       ->orderBy('v1.id', 'desc')
       ->get();
     return $query;
@@ -82,7 +82,7 @@ class MenuRepositorio
 
   public static function getMenu($sistema_id)
   {
-    $query = Menu::where('sistema_id',$sistema_id)->whereNull('dependencia')->orderBy('posicion')->get();
+    $query = Menu::where('sistema_id', $sistema_id)->whereNull('dependencia')->orderBy('posicion')->get();
     return $query;
   }
 }
