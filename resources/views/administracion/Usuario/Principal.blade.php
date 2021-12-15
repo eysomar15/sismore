@@ -544,11 +544,6 @@
             $("input").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
-                /* if($(this).attr('type')=="checkbox"){
-                    $('#form-group-sistemas').removeClass('has-error');
-                    $('#help-block-sistemas').empty();
-                } */
-
             });
             $("textarea").change(function() {
                 $(this).parent().removeClass('has-error');
@@ -697,7 +692,6 @@
                 data: $('#form').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
                     if (data.status) {
                         $('#modal_form').modal('hide');
                         reload_table();
@@ -876,7 +870,6 @@
                 data: $('#form_perfil').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data)
                     if (data.status) {
                         reload_table_perfil();
                         reload_table();
@@ -933,7 +926,6 @@
                         /* type: "POST", */
                         dataType: "JSON",
                         success: function(data) {
-                            console.log(data);
                             reload_table();
                             if (data.estado)
                                 toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
@@ -968,11 +960,11 @@
             });
         }); */
         function cargar_gerencia(id) {
+            $("#entidadoficina option").remove();
             $.ajax({
                 url: "{{ url('/') }}/Usuario/CargarGerencia/" + $('#unidadejecutora').val(),
                 type: 'get',
                 success: function(data) {
-                    console.log(data);
                     $("#entidadgerencia option").remove();
                     var options = '<option value="">SELECCIONAR</option>';
                     $.each(data.gerencias, function(index, value) {
@@ -1016,7 +1008,6 @@
                 data: $('#form_gerencia').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
                     if (data.status) {
                         $('#modal_form_gerencia').modal('hide');
                         cargar_gerencia(data.codigo);
@@ -1043,7 +1034,6 @@
                 url: "{{ url('/') }}/Usuario/CargarOficina/" + $('#entidadgerencia').val(),
                 type: 'get',
                 success: function(data) {
-                    console.log(data);
                     $("#entidadoficina option").remove();
                     var options = '<option value="">SELECCIONAR</option>';
                     $.each(data.oficinas, function(index, value) {
@@ -1089,7 +1079,6 @@
                 data: $('#form_oficina').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
                     if (data.status) {
                         $('#modal_form_oficina').modal('hide');
                         cargar_oficina(data.codigo);

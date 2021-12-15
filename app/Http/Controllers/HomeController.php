@@ -46,8 +46,8 @@ class HomeController extends Controller
         session()->put(['perfil_id' => $usuper ? $usuper->perfil_id : 0]);
 
         $usuario = UsuarioRepositorio::Usuario(auth()->user()->id);
-        
-        if( $usuario->first() != null){
+
+        if ($usuario->first() != null) {
             session(['dnisismore$' => $usuario->first()->dni]);
             session(['passwordsismore$' => $usuario->first()->password]);
         }
@@ -57,7 +57,7 @@ class HomeController extends Controller
         if ($sistemas->count() == 1)
             return $this->sistema_acceder($sistemas->first()->sistema_id);
 
-        
+
         // return session('usuario_id');
         return view('Access', compact(('sistemas')));
     }
@@ -68,7 +68,7 @@ class HomeController extends Controller
         // session()->forget('sistema_nombre');
         // session()->forget('menuNivel01');
         // session()->forget('menuNivel02');
-       
+
         session(['sistema_id' => $sistema_id]);
 
         $sistema = Sistema::find($sistema_id);
@@ -90,6 +90,9 @@ class HomeController extends Controller
             case (4):
                 return $this->administracion($sistema_id);
                 break;
+            case (5):
+                return $this->presupuesto($sistema_id);
+                break;
             default:
                 return 'Ruta de sistema no establecida';
                 break;
@@ -101,6 +104,35 @@ class HomeController extends Controller
         $sistemas = SistemaRepositorio::listar_sistemasconusuarios(1);
         //return $sistemas;
         return view('home', compact('sistema_id', 'sistemas'));
+    }
+
+    public function presupuesto($sistema_id)
+    {
+        //$sistemas = SistemaRepositorio::listar_sistemasconusuarios(1);return $sistemas;
+        $imp = Importacion::where('fuenteimportacion_id', '7')->select(DB::raw('max(id) as maximo'))->first();
+        $data[] = ['name' => 'Centro Poblado', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($imp->maximo)->conteo];
+        $data[] = ['name' => 'con sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'][0]->y];
+        $data[] = ['name' => 'con disposición de excretas', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'][0]->y];
+        $data[] = ['name' => 'con sistema de cloración', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 21, $imp->maximo)['indicador2'][0]->y];
+
+        $query = CentroPobladoDatass::where('importacion_id', $imp->maximo)->select(
+            DB::raw('sum(total_poblacion) as poblacion'),
+            DB::raw('sum(poblacion_servicio_agua) as con_agua'),
+            DB::raw('sum(total_viviendas) as viviendas'),
+            DB::raw('sum(viviendas_conexion) as con_conexion')
+        )->first();
+        $data2[] = ['name' => 'población', 'y' => $query->poblacion];/* total_poblacion */
+        $data2[] = ['name' => 'poblacion con cobertura', 'y' => $query->con_agua];/* poblacion_con_servicio_agua */
+        $data2[] = ['name' => 'viviendas', 'y' => $query->con_conexion];/* total_viviendas */
+        $data2[] = ['name' => 'viviendas con conexion', 'y' => $query->con_conexion];/* viviendas_con_conexion */
+
+        $grafica[] = CentroPobladoRepositotio::listarporprovincias($imp->maximo);/* total de centro poblado por provincia */
+        $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($imp->maximo);/* total de centro poblado con servicio de agua(sistema_agua) */
+
+        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'];
+        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'];
+        /* return $grafica2; */
+        return view('home', compact('sistema_id', 'data', 'data2', 'grafica', 'grafica2'));
     }
 
     public function vivienda($sistema_id)
@@ -141,30 +173,36 @@ class HomeController extends Controller
         $docentes_Secundaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->Secundaria;
 
 
-        $matricula_id=0;
+        $matricula_id = 0;
         $matricula_mas_actual = MatriculaRepositorio::matricula_mas_actual();
 
-        if($matricula_mas_actual!=null)
-        {
-            $matricula_id =$matricula_mas_actual->first()->id;
+        if ($matricula_mas_actual != null) {
+            $matricula_id = $matricula_mas_actual->first()->id;
         }
 
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,'whereNotIn',0);
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id, 'whereNotIn', 0);
         $lista_total_matricula_EBR_nivelEducativo = MatriculaRepositorio::total_matricula_EBR_porNivelEducativo($matricula_id);
-      
+
         $totalMatriculados = 0;
-        foreach($lista_total_matricula_EBR as $item)
-        {
-            $totalMatriculados+= ($item->hombres + $item->mujeres);
+        foreach ($lista_total_matricula_EBR as $item) {
+            $totalMatriculados += ($item->hombres + $item->mujeres);
         }
 
-        $matriculadosInicial= $lista_total_matricula_EBR_nivelEducativo->first()->inicial;
-        $matriculadosPrimaria=$lista_total_matricula_EBR_nivelEducativo->first()->primaria;;
-        $matriculadosSecundaria=$lista_total_matricula_EBR_nivelEducativo->first()->secundaria;;
+        $matriculadosInicial = $lista_total_matricula_EBR_nivelEducativo->first()->inicial;
+        $matriculadosPrimaria = $lista_total_matricula_EBR_nivelEducativo->first()->primaria;;
+        $matriculadosSecundaria = $lista_total_matricula_EBR_nivelEducativo->first()->secundaria;;
 
-        
-        return  view('home', compact('instituciones_activas','docentes_inicial','docentes_primaria','docentes_Secundaria',
-        'totalMatriculados', 'matriculadosInicial','matriculadosPrimaria','matriculadosSecundaria'));
+
+        return  view('home', compact(
+            'instituciones_activas',
+            'docentes_inicial',
+            'docentes_primaria',
+            'docentes_Secundaria',
+            'totalMatriculados',
+            'matriculadosInicial',
+            'matriculadosPrimaria',
+            'matriculadosSecundaria'
+        ));
     }
     public function educacionx($sistema_id)
     {

@@ -385,7 +385,7 @@ class UsuarioController extends Controller
     }
     public function cargarGerencia($entidad_id)
     {
-        $gerencias = Entidad::where('unidadejecutadora_id', $entidad_id)->get();
+        $gerencias = Entidad::where('unidadejecutadora_id', $entidad_id)->where('dependencia')->get();
         return response()->json(compact('gerencias'));
     }
     private function _validategerencia($request)
@@ -445,10 +445,11 @@ class UsuarioController extends Controller
         if ($val['status'] === FALSE) {
             return response()->json($val);
         }
-
+        $gerencia = Entidad::where('id', $request->entidadgerencia_id)->first();
         $entidad = Entidad::Create([
             'entidad' => $request->oficina,
             'abreviado' => $request->abreviado,
+            'unidadejecutadora_id' => $gerencia->unidadejecutadora_id,
             'dependencia' => $request->entidadgerencia_id,
             'estado' => 1,
         ]);
