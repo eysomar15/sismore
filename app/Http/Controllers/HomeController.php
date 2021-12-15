@@ -132,14 +132,26 @@ class HomeController extends Controller
         return view('home', compact('sistema_id', 'data', 'data2', 'grafica', 'grafica2'));
     }
 
+    
     public function educacion($sistema_id)
     {
         $instituciones_activas = InstEducativaRepositorio::cantidad_activas_inactivas()->first()->activas;
 
-        $docentes_inicial = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->inicial;
-        $docentes_primaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->primaria;
-        $docentes_Secundaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->Secundaria;
+        // $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR(11,'whereNotIn',0);
 
+        // return $lista_total_matricula_EBR;
+        // $docentes_inicial = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->inicial;
+        // $docentes_primaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->primaria;
+        // $docentes_Secundaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->Secundaria;
+
+        $docentes = CuadroAsigPersonalRepositorio::docentes_EBR();
+
+        $nroDocentes = 0;
+
+        if($docentes->first()!=null)
+        {
+            $nroDocentes = $docentes->first()->inicial + $docentes->first()->primaria + $docentes->first()->Secundaria ;
+        }
 
         $matricula_id=0;
         $matricula_mas_actual = MatriculaRepositorio::matricula_mas_actual();
@@ -163,8 +175,8 @@ class HomeController extends Controller
         $matriculadosSecundaria=$lista_total_matricula_EBR_nivelEducativo->first()->secundaria;;
 
         
-        return  view('home', compact('instituciones_activas','docentes_inicial','docentes_primaria','docentes_Secundaria',
-        'totalMatriculados', 'matriculadosInicial','matriculadosPrimaria','matriculadosSecundaria'));
+        return  view('home', compact('instituciones_activas','nroDocentes',
+        'totalMatriculados', 'matriculadosInicial','matriculadosPrimaria','matriculadosSecundaria','matricula_id'));
     }
     public function educacionx($sistema_id)
     {

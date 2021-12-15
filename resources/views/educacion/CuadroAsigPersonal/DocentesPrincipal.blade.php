@@ -54,7 +54,7 @@
                                 
                                 <label class="col-md-1 col-form-label">Fecha:</label>
                                 <div class="col-md-2">
-                                    <select id="matricula_fechas" name="matricula_fechas" class="form-control"  onchange="cambia_fecha();">
+                                    <select id="fechas" name="fechas" class="form-control"  onchange="cambia_fecha();">
                                         @foreach ($fechas as $item)
                                             <option value="{{ $item->importacion_id }}"> {{ $item->fechaActualizacion }} </option>
                                         @endforeach
@@ -104,7 +104,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/CuadroAsigPersonal/Docentes/ReportePrincipal",
+                url: "{{ url('/') }}/CuadroAsigPersonal/Docentes/ReportePrincipal/"+ 1 + "/" + $('#fechas').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#datos01').html(data);
