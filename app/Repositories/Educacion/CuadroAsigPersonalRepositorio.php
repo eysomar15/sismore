@@ -183,96 +183,101 @@ class CuadroAsigPersonalRepositorio
 
     }
 
-    public static function docentes_bilingues()
+    public static function docentes_bilingues($importacion_id)
     { 
         $data = DB::table(
                         DB::raw("(
                                     select 
-                                    row_number() OVER (partition BY ugel.nombre ORDER BY imp.fechaActualizacion DESC) AS item,
+                                    
                                     imp.fechaActualizacion,ugel.id as ugel_id,ugel.nombre as ugel,
-                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
-                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 0 else 1 end) as total
+                                    sum( case when eib.id is null then 0 else 1 end) as Bilingue,
+                                    sum( case when eib.id is null then 1 else 0 end) as resto
                                     from edu_institucioneducativa inst
                                     inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join edu_ugel ugel on pla.ugel_id = ugel.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
+                                    left outer join edu_padron_eib eib on inst.codmodular = eib.codmodular
                                     where tipTra.id = 1 and imp.estado= 'PR'
+                                    and imp.id = $importacion_id
                                     group by imp.fechaActualizacion,ugel.id ,ugel.nombre
-                                    having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
+                                    having sum( case when eib.id is null then 0 else 1 end)  >0
                                     order by ugel.codigo                        
                                 ) as datos"
                         )
                     )
-                ->where("item", "=", 1)
+                
                 ->get([
-                    DB::raw('item'), 
+                  
                     DB::raw('ugel_id'),     
                     DB::raw('ugel'),   
                     DB::raw('fechaActualizacion'),
                     DB::raw('Bilingue'),
-                    DB::raw('Bilingue + total as total'),
-                    DB::raw('Bilingue*100/total as porcentaje'),
+                    DB::raw('Bilingue + resto as total'),
+                    DB::raw('(Bilingue*100)/ (Bilingue + resto)     as porcentaje'),
                 ]);
 
         return $data;
 
     }
 
-    public static function docentes_bilingues_ugel()
+    public static function docentes_bilingues_ugel($importacion_id)
     { 
         $data = DB::table(
                         DB::raw("(
                                     select 
-                                    row_number() OVER (partition BY ugel.nombre,nivel_educativo_dato_adic ORDER BY imp.fechaActualizacion DESC) AS item,
+                                  
                                     imp.fechaActualizacion,ugel.id as ugel_id,ugel.nombre as ugel,nivel_educativo_dato_adic as nivel_educativo,
-                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
-                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 0 else 1 end) as total
+                                    sum( case when eib.id is null then 0 else 1 end) as Bilingue,
+                                    sum( case when eib.id is null then 1 else 0 end) as resto
                                     from edu_institucioneducativa inst
                                     inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join edu_ugel ugel on pla.ugel_id = ugel.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
+                                    left outer join edu_padron_eib eib on inst.codmodular = eib.codmodular
                                     where tipTra.id = 1 and imp.estado= 'PR'
+                                    and imp.id = $importacion_id
                                     group by imp.fechaActualizacion,ugel.id,ugel.nombre,nivel_educativo_dato_adic
-                                    having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
+                                    having sum( case when eib.id is null then 0 else 1 end)  >0
                                     order by ugel.codigo,nivel_educativo_dato_adic                        
                                 ) as datos"
                             )
                         )
-                    ->where("item", "=", 1)
+                    
                     ->get([
-                        DB::raw('item'),   
+                        
                         DB::raw('ugel_id'),   
                         DB::raw('ugel'),   
                         DB::raw('fechaActualizacion'),    
                         DB::raw('nivel_educativo'),    
                         DB::raw('Bilingue'),
-                        DB::raw('total + Bilingue as total'),
-                        DB::raw('Bilingue*100/total as porcentaje'),
+                        DB::raw('resto + Bilingue as total'),
+                        DB::raw('Bilingue*100/(resto + Bilingue) as porcentaje'),
                     ]);
 
         return $data;
     }
 
-    public static function docentes_bilingues_nivel()
+    public static function docentes_bilingues_nivel($importacion_id)
     { 
         $data = DB::table(
                         DB::raw("(
                                     select                                    
                                     nivel_educativo_dato_adic as nivel_educativo,
-                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) as Bilingue,
-                                    sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 0 else 1 end) as noBilingue
+                                    sum( case when eib.id is null then 0 else 1 end) as Bilingue,
+                                    sum( case when eib.id is null then 1 else 0 end) as noBilingue
                                     from edu_institucioneducativa inst
                                     inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
-                                    where tipTra.id = 1 and imp.estado= 'PR' and imp.id = 334
+                                    left outer join edu_padron_eib eib on inst.codmodular = eib.codmodular
+                                    where tipTra.id = 1 and imp.estado= 'PR' and imp.id = $importacion_id
                                     group by nivel_educativo_dato_adic
-                                    having sum( case when right(ltrim(rtrim(nombreInstEduc)),2) = '-B' then 1 else 0 end) > 0
+                                    having sum( case when eib.id is null then 0 else 1 end)  >0
                                     order by nivel_educativo_dato_adic                        
                                 ) as datos"
                             )
