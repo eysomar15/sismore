@@ -113,7 +113,17 @@ class ImportacionRepositorio
 
         return $entidad;
     }
-
+    public static function Listar_dePLaza()
+    {
+        $query = DB::table('par_importacion as v1')
+            ->join('edu_plaza as v2', 'v2.importacion_id', '=', 'v1.id')
+            ->where('estado','PR')
+            ->distinct()
+            ->select('v1.*')
+            ->orderBy('v1.id','desc')
+            ->get();
+        return $query;
+    }
     public static function Listar_deDatass()
     {
         $query = DB::table('par_importacion as v1')
