@@ -17,6 +17,7 @@ use App\Repositories\Educacion\IndicadorRepositorio;
 use App\Repositories\Educacion\MateriaRepositorio;
 use App\Repositories\Educacion\PlazaRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Repositories\Vivienda\CentroPobladoDatassRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
 use App\Repositories\Vivienda\EmapacopsaRepositorio;
 use Illuminate\Http\Request;
@@ -239,13 +240,12 @@ class IndicadorController extends Controller
     public function vistaEducacionCat4($title, $nivel_id)
     {
         $nivel = NivelModalidad::find($nivel_id);
-        $inds = PlazaRepositorio::listar_profesorestitulados($nivel_id);
-        $indu = PlazaRepositorio::listar_profesorestituladougel($nivel_id, '1');
-        $datas['titulados'] = $inds;
-        $datas['ugel'] = $indu;
-        //return $datas;
+
+        $ingresos = ImportacionRepositorio::Listar_dePLaza();
+        $provincias = PlazaRepositorio::listar_provincia();
+
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
-        return view('parametro.indicador.educat4', compact('title', 'nivel', 'datas', 'breadcrumb'));
+        return view('parametro.indicador.educat4', compact('title', 'nivel', 'ingresos', 'provincias', 'breadcrumb'));
     }
     public function vistaEducacionCat5($title, $nivel_id)
     {
@@ -268,7 +268,7 @@ class IndicadorController extends Controller
             case 23: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL4
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $provincias =  Ubigeo::whereRaw('LENGTH(codigo)=4')->get();                
+                $provincias =  Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $ingresos = ImportacionRepositorio::Listar_deDatass();
                 $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '02')], ['titulo' => 'Indicadores', 'url' => '']];
                 return view('parametro.indicador.vivcat1', compact('title', 'breadcrumb', 'provincias', 'indicador_id', 'ingresos'));
@@ -277,7 +277,7 @@ class IndicadorController extends Controller
             case 25: //PROGRAMA NACIONAL DE SANEAMIENTO RURAL6
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $provincias = EmapacopsaRepositorio::listarProvincias();//Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
+                $provincias = EmapacopsaRepositorio::listarProvincias(); //Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $econexion = EstadoConexion::all();
                 //return EmapacopsaRepositorio::listarDistrito(35);
                 $ingresos = ImportacionRepositorio::Listar_deEmapacopsa();

@@ -28,7 +28,7 @@ class ImporGastosController extends Controller
 
     public function importarGuardar(Request $request)
     {
-        ini_set('memory_limit', '1');
+        ini_set('memory_limit', '-1');
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
         $archivo = $request->file('file');
         $array = (new tablaXImport)->toArray($archivo);
@@ -132,9 +132,12 @@ class ImporGastosController extends Controller
             return view('presupuesto.ImporGastos.Importar', compact('mensaje'));
         }
 
+         $procesar = DB::select('call pres_pa_procesarImporGastos(?)', [$importacion->id]);// que sera esto :o :o :o  XDXDXD
+        return view('correcto');
+
         //return 'todo OK'; //redirect()->route('pemapacopsa.listado', $importacion->id);
-        $mensaje = "Proceso terminado...";
-        return view('presupuesto.ImporGastos.Importar', compact('mensaje'));
+        /* $mensaje = "Proceso terminado...";
+        return view('presupuesto.ImporGastos.Importar', compact('mensaje')); */
     }
     /* 
     

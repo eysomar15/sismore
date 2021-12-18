@@ -2,13 +2,46 @@
 
 namespace App\Repositories\Educacion;
 
+use App\Models\Educacion\Plaza;
 use Illuminate\Support\Facades\DB;
 
 class PlazaRepositorio
-{ 
-    public static function listar_profesorestitulados($nivel)
+{
+    public static function listar_provincia()
     {
-        $query =  DB::table('edu_plaza')
+        $query = Plaza::select('v3.id', 'v3.nombre')
+            ->join('par_ubigeo as v2', 'v2.id', '=', 'edu_plaza.ubigeo_id')
+            ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.dependencia')
+            ->groupBy('v3.id')->groupBy('v3.nombre')
+            ->get();
+        return $query;
+    }
+    public static function listar_distrito($provincia)
+    {
+        $query = Plaza::select('v2.id', 'v2.nombre')
+            ->join('par_ubigeo as v2', 'v2.id', '=', 'edu_plaza.ubigeo_id')
+            /*->join('par_ubigeo as v3', 'v3.id', '=', 'v2.dependencia')*/
+            ->where('v2.dependencia', $provincia)
+            ->groupBy('v2.id')->groupBy('v2.nombre')
+            ->get();
+        return $query;
+    }
+
+    public static function listar_profesorestitulados($importacion_id, $nivel, $provincia, $distrito)
+    {
+        $ubicacion = '';
+        if ($provincia > 0 && $distrito > 0) $ubicacion = ' and v4.id=' . $distrito;
+        else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and v4.dependencia=' . $provincia;
+        $query =  DB::table(DB::raw('(select if(v1.situacion="AC","SI","NO") as titulado,count(v1.situacion) as conteo from edu_plaza as v1
+        inner join par_importacion as v2 on v2.id=v1.importacion_id 
+        inner join edu_tipotrabajador as v3 on v3.id=v1.tipoTrabajador_id 
+        inner join par_ubigeo as v4 on v4.id=v1.ubigeo_id 
+        where tipoTrabajador_id in (13,6) and v1.importacion_id=' . $importacion_id . ' and v1.nivelModalidad_id=' . $nivel . $ubicacion . ' 
+        group by v1.situacion) as tb'))
+            ->select('titulado as name', 'conteo as y')
+            ->get();
+
+        /* $query =  DB::table('edu_plaza')
             ->where('nivelModalidad_id', $nivel)
             ->where('tipoTrabajador_id', 13)
             ->groupBy('esTitulado')
@@ -20,12 +53,21 @@ class PlazaRepositorio
             ]);
         foreach ($query as $key => $item) {
             $item->name = ($item->name == '0' ? 'NO' : 'SI');
-        }
+        } */
         return $query;
     }
     public static function listar_profesorestituladougel($nivel, $titulado = null)
     {
-        if ($titulado) {
+        $query = DB::table(DB::raw('(select v5.nombre as ugel,count(v5.nombre) as conteo from edu_plaza as v1
+        inner join par_importacion as v2 on v2.id=v1.importacion_id 
+        inner join edu_tipotrabajador as v3 on v3.id=v1.tipoTrabajador_id 
+        inner join par_ubigeo as v4 on v4.id=v1.ubigeo_id 
+        inner join edu_ugel as v5 on v5.id=v1.ugel_id 
+        where tipoTrabajador_id in (13,6) and v1.situacion="'.$titulado.'" and v1.importacion_id=337 and v1.nivelModalidad_id='.$nivel.'
+        group by v5.nombre) as tb'))
+        ->select('ugel as name','conteo as y')
+        ->get();
+        /*if ($titulado) {
             $query = DB::table('edu_plaza as v1')
                 ->join('edu_ugel as v2', 'v2.id', '=', 'v1.ugel_id')
                 ->where('v1.nivelModalidad_id', $nivel)
@@ -53,7 +95,7 @@ class PlazaRepositorio
                 ->where('v1.tipoTrabajador_id', 13)
                 ->groupBy('v2.nombre')
                 ->get(['v2.nombre as name', DB::raw('count(esTitulado) as y')]);
-        }
+        }*/
         return $query;
     }
     public static function listar_profesorestituladougel2($nivel, $ugel)
