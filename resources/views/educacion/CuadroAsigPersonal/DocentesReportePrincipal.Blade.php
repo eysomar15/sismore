@@ -84,7 +84,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesPrincipal/"+ 1 + "/" + 334,
+                url: "{{ url('/') }}/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesPrincipal/"+ 1 + "/" + $('#fechas').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -99,7 +99,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesNivelEducativo/"+ 1 + "/" + 334,
+                url: "{{ url('/') }}/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesNivelEducativo/"+ 1 + "/" + $('#fechas').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#barra2').html(data);

@@ -998,7 +998,7 @@ class MatriculaController extends Controller
     public function reporteUgel($anio_id,$matricula_id,$gestion)
     {
         $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
-
+      
         $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id);               
         $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
         $lista_total_matricula_Primaria = $lista_matricula->where('nivel', 'P')->all();  
@@ -1022,6 +1022,69 @@ class MatriculaController extends Controller
 
         return view('educacion.Matricula.ReporteUgel',["dataCircular"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
                     'lista_total_matricula_Primaria','lista_total_matricula_Inicial','lista_total_matricula_EBE','contenedor','titulo_grafico','fecha_Matricula_texto'));
+    }
+
+    public function GraficoBarras_MatriculaUgel($matricula_id)
+    {
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,'whereNotIn',0);
+      
+
+        /************* GRAFICO BARRAS*******************/
+         $categoria_nombres=[];        
+         $recorre = 1; 
+
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($lista_total_matricula_EBR as $key => $lista) {
+
+            $data = [];    
+            $data = array_merge($data,[intval ($lista->hombres  + $lista->mujeres) ]);  
+            // $data = array_merge($data,[intval($lista->noTitulados)]); 
+
+            $puntos[] = [ 'name'=> $lista->nombre ,'data'=>  $data];
+        } 
+
+        $categoria_nombres[] = 'UGEL';  
+
+        
+        $titulo = 'MATRICULADOS EBR POR UGELES';
+        $subTitulo = 'Fuente: SIAGIE - MINEDU';
+        $titulo_y = 'Numero de Matriculados';
+
+        $nombreGraficoBarra = 'barraMatriculaUgel';// este nombre va de la mano con el nombre del DIV en la vista
+
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
+    }
+
+    public function GraficoBarras_MatriculaTipoGestion($matricula_id)
+    {
+        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR_porTipoGestion($matricula_id);      
+
+        /************* GRAFICO BARRAS*******************/
+         $categoria_nombres=[];        
+         $recorre = 1; 
+
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($lista_total_matricula_EBR as $key => $lista) {
+
+            $data = [];    
+            $data = array_merge($data,[intval ($lista->cantidad) ]);  
+            // $data = array_merge($data,[intval($lista->noTitulados)]); 
+
+            $puntos[] = [ 'name'=> $lista->tipGes ,'data'=>  $data];
+        } 
+
+        $categoria_nombres[] = 'TIPO DE GESTION';  
+
+        
+        $titulo = 'MATRICULADOS EBR POR TIPO DE GESTION';
+        $subTitulo = 'Fuente: SIAGIE - MINEDU';
+        $titulo_y = 'Numero de Matriculados';
+
+        $nombreGraficoBarra = 'barraMatriculaTipoGestion';// este nombre va de la mano con el nombre del DIV en la vista
+
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
     }
 
     public function reporteDistrito($anio_id,$matricula_id,$gestion)

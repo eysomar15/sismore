@@ -340,10 +340,19 @@ class CuadroAsigPersonalController extends Controller
         return view('educacion.CuadroAsigPersonal.DocentesPrincipal',compact('anios','fechas'));
     }
 
-    public function DocentesReportePrincipal()
+    public function DocentesReportePrincipal($tipoTrab_id,$importacion_id)
     {
-        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::plazas_porTipoTrab(1,334);
-        $plazas_Titulados = CuadroAsigPersonalRepositorio::plazas_Titulados(1,334);          
+        // $ultima_Plaza = CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza();
+
+        // $importacion_id=0;
+        // if($ultima_Plaza->first()!=null)
+        // {
+        //     $fecha_texto = Utilitario::fecha_formato_texto_completo($ultima_Plaza->first()->fechaActualizacion );
+        //     $importacion_id = $ultima_Plaza->first()->importacion_id;
+        // }
+
+        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::plazas_porTipoTrab($tipoTrab_id,$importacion_id);
+        $plazas_Titulados = CuadroAsigPersonalRepositorio::plazas_Titulados($tipoTrab_id,$importacion_id);          
 
         // $nombreGraficoBarra = 'barraPrincipal';
         return view('educacion.CuadroAsigPersonal.DocentesReportePrincipal',compact('plazas_porTipoTrab'));
@@ -351,7 +360,7 @@ class CuadroAsigPersonalController extends Controller
 
     public function GraficoBarras_DocentesPrincipal($tipoTrab_id,$importacion_id)
     {     
-        $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_Titulados(1,334);
+        $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_Titulados($tipoTrab_id,$importacion_id);
 
         /************* GRAFICO BARRAS*******************/
          $categoria_nombres=[];        
@@ -382,11 +391,11 @@ class CuadroAsigPersonalController extends Controller
     public function GraficoBarras_DocentesNivelEducativo($tipoTrab_id,$importacion_id)
     {     
         // $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_Titulados(1,334);
-        $plazas_nivelEducativo = CuadroAsigPersonalRepositorio:: plazas_nivelEducativo(1,334);
+        $plazas_nivelEducativo = CuadroAsigPersonalRepositorio:: plazas_nivelEducativo($tipoTrab_id,$importacion_id);
         /************* GRAFICO BARRAS*******************/
          $categoria_nombres=[];        
          $recorre = 1; 
-
+       
         // array_merge concatena los valores del arreglo, mientras recorre el foreach
         foreach ($plazas_nivelEducativo as $key => $lista) {
 
@@ -401,7 +410,7 @@ class CuadroAsigPersonalController extends Controller
 
         $nombreGraficoBarra = 'barra2';// este nombre va de la mano con el nombre del DIV en la vista
         $titulo = 'Docentes por Niveles Educativos';
-        $subTitulo = 'Fuente - NEXUS';
+        $subTitulo = 'Fuente: NEXUS';
         $titulo_y = 'Numero de Docentes';
 
         return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],

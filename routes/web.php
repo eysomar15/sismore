@@ -59,6 +59,9 @@ Route::get('/PadronWeb/ListaImportada_DataTable/{importacion_id}', [PadronWebCon
 Route::get('/PadronWeb/Aprobar/{importacion_id}', [PadronWebController::class, 'aprobar'])->name('PadronWeb.aprobar');
 Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}', [PadronWebController::class, 'procesar'])->name('PadronWeb.procesar');
 
+Route::get('/PadronEIB/Importar', [PadronEIBController::class, 'importar'])->name('PadronEIB.importar');
+Route::post('/PadronEIB/Importar', [PadronEIBController::class, 'guardar'])->name('PadronEIB.guardar');
+
 Route::get('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
 Route::post('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
 Route::get('/CuadroAsigPersonal/ListaImportada/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada'])->name('CuadroAsigPersonal.CuadroAsigPersonal_Lista');
@@ -74,7 +77,7 @@ Route::get('/CuadroAsigPersonal/ReporteBilingues', [CuadroAsigPersonalController
 Route::post('/CuadroAsigPersonal/ReporteBilingues/GraficoBarrasPrincipal/{anio_id}', [CuadroAsigPersonalController::class, 'GraficoBarrasPrincipal'])->name('CuadroAsigPersonal.BilinguesGraficoBarrasPrincipal');
 
 Route::get('/CuadroAsigPersonal/Docentes/Principal', [CuadroAsigPersonalController::class, 'DocentesPrincipal'])->name('Docentes.principal');
-Route::post('/CuadroAsigPersonal/Docentes/ReportePrincipal', [CuadroAsigPersonalController::class, 'DocentesReportePrincipal'])->name('Docentes.ReportePrincipal');
+Route::post('/CuadroAsigPersonal/Docentes/ReportePrincipal/{tipoTrab_id}/{importacion_id}', [CuadroAsigPersonalController::class, 'DocentesReportePrincipal'])->name('Docentes.ReportePrincipal');
 Route::post('/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesPrincipal/{tipoTrab_id}/{importacion_id}', [CuadroAsigPersonalController::class, 'GraficoBarras_DocentesPrincipal'])->name('Docentes.GraficoBarras_DocentesPrincipal');
 Route::post('/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesNivelEducativo/{tipoTrab_id}/{importacion_id}', [CuadroAsigPersonalController::class, 'GraficoBarras_DocentesNivelEducativo'])->name('Docentes.GraficoBarras_DocentesNivelEducativo');
 
@@ -98,6 +101,13 @@ Route::post('/Matricula/Detalle', [MatriculaController::class, 'Detalle'])->name
 Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'ReporteUgel'])->name('Matricula.ReporteUgel');
 Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
 Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');
+
+
+
+Route::post('/Matricula/GraficoBarras_MatriculaUgel/{importacion_id}', [MatriculaController::class, 'GraficoBarras_MatriculaUgel'])->name('Matricula.GraficoBarras_MatriculaUgel');
+Route::post('/Matricula/GraficoBarras_MatriculaTipoGestion/{importacion_id}', [MatriculaController::class, 'GraficoBarras_MatriculaTipoGestion'])->name('Matricula.GraficoBarras_MatriculaTipoGestion');
+
+
 
 Route::get('/Matricula/Institucion_DataTable/{matricula_id}/{nivel}/{gestion}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
 

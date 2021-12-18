@@ -224,8 +224,8 @@ class TabletaController extends Controller
             $nombreAnio = Anio::find($anio_id)->anio;
 
 
-        $titulo = 'Distribución de Tabletas '.$nombreAnio;
-        $subTitulo = 'Fuente SIAGIE - MINEDU';
+        $titulo = 'DISTRIBUCION DE TABLETAS '.$nombreAnio;
+        $subTitulo = 'Fuente: SIAGIE - MINEDU';
         $titulo_y = 'Numero de tabletas';
   
         $nombreGraficoBarra = 'barra1';// este nombre va de la mano con el nombre del DIV en la vista

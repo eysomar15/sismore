@@ -170,6 +170,41 @@ class MatriculaRepositorio
         return $data;
     }
     
+    public static function total_matricula_EBR_porTipoGestion($matricula_id)
+    { 
+        $data = DB::table(
+                    DB::raw("(
+                                select  tipGes,sum(hombres + mujeres) as cantidad
+                                from (
+                                        select case when tipGesCab.id in (15,17) then 'PUBLICA' else 'PRIVADA' end as tipGes,sum(           
+                                                                ifnull(cero_nivel_hombre,0) + ifnull(primer_nivel_hombre,0) + ifnull(segundo_nivel_hombre,0) + 
+                                                                ifnull(tercero_nivel_hombre,0) + ifnull(cuarto_nivel_hombre,0) + ifnull(quinto_nivel_hombre,0) +
+                                                                ifnull(sexto_nivel_hombre,0) + ifnull(tres_anios_hombre_ebe,0) + ifnull(cuatro_anios_hombre_ebe,0) +
+                                                                ifnull(cinco_anios_hombre_ebe,0)
+                                                                ) as hombres,                                
+                                                sum(           
+                                                    ifnull(cero_nivel_mujer,0) + ifnull(primer_nivel_mujer,0) + ifnull(segundo_nivel_mujer,0) + 
+                                                    ifnull(tercero_nivel_mujer,0) + ifnull(cuarto_nivel_mujer,0) + ifnull(quinto_nivel_mujer,0) + 
+                                                    ifnull(sexto_nivel_mujer,0) + ifnull(tres_anios_mujer_ebe,0) + 
+                                                    ifnull(cuatro_anios_mujer_ebe,0) + ifnull(cinco_anios_mujer_ebe,0)
+                                                    ) as mujeres
+                                        from edu_matricula mat
+                                        inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
+                                        inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
+                                        inner join edu_tipogestion tipGes on inst.TipoGestion_id = tipGes.id
+                                        inner join edu_tipogestion tipGesCab on tipGes.dependencia = tipGesCab.id
+                                        where mat.id = $matricula_id and matDet.nivel !='E'
+                                        group by tipGesCab.id,tipGesCab.nombre
+                                ) as datos
+                                group by tipGes     
+                        ) as datos"
+                    )
+                )           
+            ->get(
+            );
+        return $data;
+    }
+    
     public static function total_matricula_EBR_porNivelEducativo($matricula_id)
     { 
         $data = DB::table(
