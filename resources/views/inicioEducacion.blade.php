@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="text-uppercase">Servicios Educativos <span class="float-right"> </span></h6>
+                        <h6 class="text-uppercase">Instituciones Educativas <span class="float-right"> </span></h6>
                         {{-- <div class="progress progress-sm m-0">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                              
@@ -83,7 +83,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="text-uppercase">Docentes Educ. Básica Regular<span class="float-right"> </span></h6>
+                        <h6 class="text-uppercase">Docentes <span class="float-right"> </span></h6>
                         
                     </div>
                 </div>
