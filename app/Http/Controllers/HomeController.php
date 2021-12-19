@@ -176,13 +176,13 @@ class HomeController extends Controller
         // $docentes_primaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->primaria;
         // $docentes_Secundaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->Secundaria;
 
-        $docentes = CuadroAsigPersonalRepositorio::docentes_EBR();
+        $docentes = CuadroAsigPersonalRepositorio::docentes_total();
 
         $nroDocentes = 0;
 
         if($docentes->first()!=null)
         {
-            $nroDocentes = $docentes->first()->inicial + $docentes->first()->primaria + $docentes->first()->Secundaria ;
+            $nroDocentes = $docentes->first()->total ;
         }
 
         $matricula_id = 0;
@@ -201,8 +201,8 @@ class HomeController extends Controller
         }
 
         $matriculadosInicial = $lista_total_matricula_EBR_nivelEducativo->first()->inicial;
-        $matriculadosPrimaria = $lista_total_matricula_EBR_nivelEducativo->first()->primaria;;
-        $matriculadosSecundaria = $lista_total_matricula_EBR_nivelEducativo->first()->secundaria;;
+        $matriculadosPrimaria = $lista_total_matricula_EBR_nivelEducativo->first()->primaria;
+        $matriculadosSecundaria = $lista_total_matricula_EBR_nivelEducativo->first()->secundaria;
 
 
         

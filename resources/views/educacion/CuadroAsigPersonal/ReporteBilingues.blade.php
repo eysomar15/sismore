@@ -67,35 +67,34 @@
                                     $sumaColA=0;$sumaColB=0;
                                 @endphp
                             
-                                @foreach ($dataCabecera as $itemCab)
-
-                                <tr>                                            
-                                            <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
-                                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
-                                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->total,0) }} </td>
-                                            <td class="columna_derecha_total fila_tabla">{{ number_format($itemCab->porcentaje,2) }} </td>
-                                </tr>
-
-                                    @foreach ($lista as $item)
-
-                                        @if ($itemCab->ugel==$item->ugel)
+                                @foreach ($dataCabecera as $item)                                       
                                         @php
                                             $sumaColA+= $item->Bilingue; 
                                             $sumaColB+= $item->total; 
                                         @endphp
-
-                                      
-                                        @endif
-
-                                    @endforeach
                                 @endforeach
 
                                 <tr> 
-                                    <td class="columna_derecha_total fila_tabla"> <b> TOTAL </b></td>
+                                    <td class="fila_tabla"> <b> TOTAL </b></td>
                                     <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA,0)}} </td>
                                     <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColB,0)}} </td>
                                     <td class="columna_derecha_total fila_tabla"> {{number_format($sumaColA*100/$sumaColB,2)}} </td>
-                                </tr>                                              
+                                </tr>
+
+                                @foreach ($dataCabecera as $itemCab)
+
+                                <tr>                                            
+                                            <td class="fila_tabla"><b>{{$itemCab->ugel}}</b></td>
+                                            <td class="columna_derecha fila_tabla">{{ number_format($itemCab->Bilingue,0) }} </td>
+                                            <td class="columna_derecha fila_tabla">{{ number_format($itemCab->total,0) }} </td>
+                                            <td class="columna_derecha fila_tabla">{{ number_format($itemCab->porcentaje,2) }} </td>
+                                </tr>
+
+                                    
+                                @endforeach
+
+
+                                                                              
                                 
                             </tbody>
                         </table>

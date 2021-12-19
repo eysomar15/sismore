@@ -323,7 +323,7 @@ class CuadroAsigPersonalController extends Controller
         return  $filtro;
     }
 
-    /******************************************************* */
+    /*********************** DOCENTES ******************************** */
     public function DocentesPrincipal()
     {
         $fechas = null;
@@ -334,33 +334,20 @@ class CuadroAsigPersonalController extends Controller
             $fechas =  CuadroAsigPersonalRepositorio ::plazas_fechas($anios->first()->anio);
         }
 
-        // $plazas_nivelEducativo = CuadroAsigPersonalRepositorio:: plazas_nivelEducativo(1,334);
-        // return $plazas_nivelEducativo;
-
         return view('educacion.CuadroAsigPersonal.DocentesPrincipal',compact('anios','fechas'));
     }
 
     public function DocentesReportePrincipal($tipoTrab_id,$importacion_id)
-    {
-        // $ultima_Plaza = CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza();
+    {        
+        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::docentes($importacion_id);
+        // $plazas_Titulados = CuadroAsigPersonalRepositorio::plazas_docentes_Titulados($importacion_id);          
 
-        // $importacion_id=0;
-        // if($ultima_Plaza->first()!=null)
-        // {
-        //     $fecha_texto = Utilitario::fecha_formato_texto_completo($ultima_Plaza->first()->fechaActualizacion );
-        //     $importacion_id = $ultima_Plaza->first()->importacion_id;
-        // }
-
-        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::plazas_porTipoTrab($tipoTrab_id,$importacion_id);
-        $plazas_Titulados = CuadroAsigPersonalRepositorio::plazas_Titulados($tipoTrab_id,$importacion_id);          
-
-        // $nombreGraficoBarra = 'barraPrincipal';
         return view('educacion.CuadroAsigPersonal.DocentesReportePrincipal',compact('plazas_porTipoTrab'));
     }
 
     public function GraficoBarras_DocentesPrincipal($tipoTrab_id,$importacion_id)
     {     
-        $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_Titulados($tipoTrab_id,$importacion_id);
+        $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_docentes_Titulados($importacion_id);
 
         /************* GRAFICO BARRAS*******************/
          $categoria_nombres=[];        
@@ -390,8 +377,7 @@ class CuadroAsigPersonalController extends Controller
 
     public function GraficoBarras_DocentesNivelEducativo($tipoTrab_id,$importacion_id)
     {     
-        // $plazas_Titulados = CuadroAsigPersonalRepositorio:: plazas_Titulados(1,334);
-        $plazas_nivelEducativo = CuadroAsigPersonalRepositorio:: plazas_nivelEducativo($tipoTrab_id,$importacion_id);
+        $plazas_nivelEducativo = CuadroAsigPersonalRepositorio:: plazas_docentes_nivelEducativo($importacion_id);
         /************* GRAFICO BARRAS*******************/
          $categoria_nombres=[];        
          $recorre = 1; 
@@ -401,8 +387,6 @@ class CuadroAsigPersonalController extends Controller
 
             $data = [];    
             $data = array_merge($data,[intval($lista->cantidad)]);  
-            // $data = array_merge($data,[intval($lista->noTitulados)]); 
-
             $puntos[] = [ 'name'=> $lista->nivel_educativo ,'data'=>  $data];
         } 
 

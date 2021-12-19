@@ -187,29 +187,25 @@ class CuadroAsigPersonalRepositorio
     { 
         $data = DB::table(
                         DB::raw("(
-                                    select 
-                                    
-                                    imp.fechaActualizacion,ugel.id as ugel_id,ugel.nombre as ugel,
+                                    select imp.fechaActualizacion,ugel.id as ugel_id,ugel.nombre as ugel,
                                     sum( case when eib.id is null then 0 else 1 end) as Bilingue,
                                     sum( case when eib.id is null then 1 else 0 end) as resto
-                                    from edu_institucioneducativa inst
-                                    inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
+                                    from  edu_plaza pla 
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join edu_ugel ugel on pla.ugel_id = ugel.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
-                                    left outer join edu_padron_eib eib on inst.codmodular = eib.codmodular
-                                    where tipTra.id = 1 and imp.estado= 'PR'
-                                    and imp.id = $importacion_id
+                                    left outer join edu_padron_eib eib on pla.codmodular = eib.codmodular
+                                    where tipTra.id = 1 
+                                    and subTipTra.id in (6,13) and imp.estado= 'PR'
+                                    and imp.id = $importacion_id and situacion='AC'
                                     group by imp.fechaActualizacion,ugel.id ,ugel.nombre
                                     having sum( case when eib.id is null then 0 else 1 end)  >0
-                                    order by ugel.codigo                        
+                                    order by ugel.codigo                    
                                 ) as datos"
                         )
-                    )
-                
-                ->get([
-                  
+                    )                
+                ->get([                  
                     DB::raw('ugel_id'),     
                     DB::raw('ugel'),   
                     DB::raw('fechaActualizacion'),
@@ -217,29 +213,25 @@ class CuadroAsigPersonalRepositorio
                     DB::raw('Bilingue + resto as total'),
                     DB::raw('(Bilingue*100)/ (Bilingue + resto)     as porcentaje'),
                 ]);
-
         return $data;
-
     }
 
     public static function docentes_bilingues_ugel($importacion_id)
     { 
         $data = DB::table(
                         DB::raw("(
-                                    select 
-                                  
+                                    select                                   
                                     imp.fechaActualizacion,ugel.id as ugel_id,ugel.nombre as ugel,nivel_educativo_dato_adic as nivel_educativo,
                                     sum( case when eib.id is null then 0 else 1 end) as Bilingue,
                                     sum( case when eib.id is null then 1 else 0 end) as resto
-                                    from edu_institucioneducativa inst
-                                    inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
+                                    from  edu_plaza pla 
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join edu_ugel ugel on pla.ugel_id = ugel.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
-                                    left outer join edu_padron_eib eib on inst.codmodular = eib.codmodular
-                                    where tipTra.id = 1 and imp.estado= 'PR'
-                                    and imp.id = $importacion_id
+                                    left outer join edu_padron_eib eib on pla.codmodular = eib.codmodular
+                                    where tipTra.id = 1 and subTipTra.id in (6,13) and imp.estado= 'PR' 
+                                    and imp.id = $importacion_id and situacion='AC'
                                     group by imp.fechaActualizacion,ugel.id,ugel.nombre,nivel_educativo_dato_adic
                                     having sum( case when eib.id is null then 0 else 1 end)  >0
                                     order by ugel.codigo,nivel_educativo_dato_adic                        
@@ -269,13 +261,13 @@ class CuadroAsigPersonalRepositorio
                                     nivel_educativo_dato_adic as nivel_educativo,
                                     sum( case when eib.id is null then 0 else 1 end) as Bilingue,
                                     sum( case when eib.id is null then 1 else 0 end) as noBilingue
-                                    from edu_institucioneducativa inst
-                                    inner join  edu_plaza pla on inst.id = pla.institucionEducativa_id
+                                    from edu_plaza pla 
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
                                     inner join par_importacion imp on pla.importacion_id = imp.id
-                                    left outer join edu_padron_eib eib on inst.codmodular = eib.codmodular
-                                    where tipTra.id = 1 and imp.estado= 'PR' and imp.id = $importacion_id
+                                    left outer join edu_padron_eib eib on pla.codmodular = eib.codmodular
+                                    where tipTra.id = 1 and subTipTra.id in (6,13) and imp.estado= 'PR' 
+                                    and imp.id = $importacion_id and situacion='AC'
                                     group by nivel_educativo_dato_adic
                                     having sum( case when eib.id is null then 0 else 1 end)  >0
                                     order by nivel_educativo_dato_adic                        
@@ -305,7 +297,8 @@ class CuadroAsigPersonalRepositorio
                                     inner join edu_nivelmodalidad nivMod on pla.nivelModalidad_id = nivMod.id
                                     inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
                                     inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
-                                    where tipTra.id = 1 and imp.estado= 'PR'                                    
+                                    where tipTra.id = 1 and imp.estado= 'PR' 
+                                    and subTipTra.id in (6,13) and situacion='AC'                                   
                                     group by imp.id,fechaActualizacion                       
                                 ) as datos"
                             )
@@ -316,6 +309,31 @@ class CuadroAsigPersonalRepositorio
                         DB::raw('inicial'),    
                         DB::raw('primaria'),
                         DB::raw('Secundaria')
+                    ]);
+
+        return $data;
+    }
+
+    public static function docentes_total()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                    select row_number() OVER (partition BY imp.id ORDER BY imp.fechaActualizacion DESC) AS item,
+                                    imp.id,fechaActualizacion,count(*) as total
+                                    from par_importacion imp
+                                    inner join edu_plaza pla on imp.id = pla.importacion_id
+                                    inner join edu_tipotrabajador subTipTra on pla.tipoTrabajador_id = subTipTra.id
+                                    inner join edu_tipotrabajador tipTra on subTipTra.dependencia = tipTra.id
+                                    where tipTra.id = 1 and imp.estado= 'PR' 
+                                    and subTipTra.id in (6,13) and situacion='AC'                                   
+                                    group by imp.id,fechaActualizacion                      
+                                ) as datos"
+                            )
+                        )
+                    ->where("item", "=", 1)
+                    ->get([
+                        DB::raw('fechaActualizacion'),  
+                        DB::raw('total')
                     ]);
 
         return $data;
@@ -379,6 +397,77 @@ class CuadroAsigPersonalRepositorio
                 )
             ->get([
                 DB::raw('ugel'),
+                DB::raw('cantidad')
+            ]);
+
+        return $data;
+    }
+
+    public static function docentes($importacion_id)
+    { 
+        $data = DB::table(
+            DB::raw("(
+                            select ugel.codigo,ugel.nombre as ugel,count(*) as cantidad from edu_plaza as pla
+                            inner join edu_tipotrabajador as tipoTrab on pla.tipoTrabajador_id = tipoTrab.id
+                            inner join edu_tipotrabajador as tipoTrabCab on tipoTrab.dependencia = tipoTrabCab.id
+                            inner join edu_ugel as ugel on pla.ugel_id = ugel.id
+                            where  pla.importacion_id = $importacion_id
+                            and tipoTrabCab.id = 1 and tipoTrab.id in (6,13) and situacion='AC'
+                            group by ugel.codigo,ugel.nombre
+                            order by ugel.codigo             
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('ugel'),
+                DB::raw('cantidad')
+            ]);
+
+        return $data;
+    }
+
+    public static function plazas_docentes_Titulados($importacion_id)
+    { 
+        $data = DB::table(
+            DB::raw("(
+                            select ugel.codigo,ugel.nombre as ugel,
+                            sum(case when pla.esTitulado = 1 then 1 else 0 end) as Titulados,
+                            sum(case when pla.esTitulado = 0 then 1 else 0 end) as noTitulados
+                            from edu_plaza as pla
+                            inner join edu_tipotrabajador as tipoTrab on pla.tipoTrabajador_id = tipoTrab.id
+                            inner join edu_tipotrabajador as tipoTrabCab on tipoTrab.dependencia = tipoTrabCab.id
+                            inner join edu_ugel as ugel on pla.ugel_id = ugel.id
+                            where   pla.importacion_id = $importacion_id
+                            and tipoTrabCab.id = 1 and tipoTrab.id in (6,13) and situacion='AC'
+                            group by ugel.codigo,ugel.nombre
+                            order by ugel.codigo        
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('ugel'),
+                DB::raw('Titulados'),
+                DB::raw('noTitulados')
+            ]);
+
+        return $data;
+    }
+
+    public static function plazas_docentes_nivelEducativo($importacion_id)
+    { 
+        $data = DB::table(
+            DB::raw("(
+                            select nivel_educativo_dato_adic as nivel_educativo,count(*) as cantidad from edu_plaza as pla
+                            inner join edu_tipotrabajador as tipoTrab on pla.tipoTrabajador_id = tipoTrab.id
+                            inner join edu_tipotrabajador as tipoTrabCab on tipoTrab.dependencia = tipoTrabCab.id
+                            where pla.importacion_id = $importacion_id
+                            and tipoTrabCab.id = 1 and tipoTrab.id in (6,13) and situacion='AC'
+                            group by nivel_educativo_dato_adic       
+                        ) as datos"
+                    )
+                )
+            ->get([
+                DB::raw('nivel_educativo'),
                 DB::raw('cantidad')
             ]);
 
