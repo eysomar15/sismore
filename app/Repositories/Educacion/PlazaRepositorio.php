@@ -29,16 +29,18 @@ class PlazaRepositorio
 
     public static function listar_profesorestitulados($importacion_id, $nivel, $provincia, $distrito)
     {
+        $nivelxx = $nivel == 31 ? '1,31,30' : '' . $nivel;
         $ubicacion = '';
         if ($provincia > 0 && $distrito > 0) $ubicacion = ' and v4.id=' . $distrito;
         else if ($provincia > 0 && $distrito == 0) $ubicacion = ' and v4.dependencia=' . $provincia;
-        $query =  DB::table(DB::raw('(select if(v1.situacion="AC","SI","NO") as titulado,count(v1.situacion) as conteo from edu_plaza as v1
+        $query =  DB::table(DB::raw('(select if(v1.esTitulado=1,"SI","NO") as titulado,count(v1.esTitulado) as conteo from edu_plaza as v1
         inner join par_importacion as v2 on v2.id=v1.importacion_id 
         inner join edu_tipotrabajador as v3 on v3.id=v1.tipoTrabajador_id 
         inner join par_ubigeo as v4 on v4.id=v1.ubigeo_id 
-        where tipoTrabajador_id in (13,6) and v1.importacion_id=' . $importacion_id . ' and v1.nivelModalidad_id=' . $nivel . $ubicacion . ' 
-        group by v1.situacion) as tb'))
+        where tipoTrabajador_id in (13,6) and v1.situacion="AC" and v1.importacion_id=' . $importacion_id . ' and v1.nivelModalidad_id in (' . $nivelxx . ')' . $ubicacion . ' 
+        group by v1.esTitulado) as tb'))
             ->select('titulado as name', 'conteo as y')
+            ->orderBy('titulado','desc')
             ->get();
 
         /* $query =  DB::table('edu_plaza')
@@ -58,15 +60,17 @@ class PlazaRepositorio
     }
     public static function listar_profesorestituladougel($nivel, $titulado = null)
     {
+        $nivelxx = $nivel == 31 ? '1,31,30' : '' . $nivel;
         $query = DB::table(DB::raw('(select v5.nombre as ugel,count(v5.nombre) as conteo from edu_plaza as v1
         inner join par_importacion as v2 on v2.id=v1.importacion_id 
         inner join edu_tipotrabajador as v3 on v3.id=v1.tipoTrabajador_id 
         inner join par_ubigeo as v4 on v4.id=v1.ubigeo_id 
         inner join edu_ugel as v5 on v5.id=v1.ugel_id 
-        where tipoTrabajador_id in (13,6) and v1.situacion="'.$titulado.'" and v1.importacion_id=337 and v1.nivelModalidad_id='.$nivel.'
+        where tipoTrabajador_id in (13,6) and v1.situacion="AC" and v1.esTitulado=' . $titulado . ' and 
+              v1.importacion_id=337 and v1.nivelModalidad_id in (' . $nivelxx . ')
         group by v5.nombre) as tb'))
-        ->select('ugel as name','conteo as y')
-        ->get();
+            ->select('ugel as name', 'conteo as y')
+            ->get();
         /*if ($titulado) {
             $query = DB::table('edu_plaza as v1')
                 ->join('edu_ugel as v2', 'v2.id', '=', 'v1.ugel_id')
@@ -98,7 +102,7 @@ class PlazaRepositorio
         }*/
         return $query;
     }
-    public static function listar_profesorestituladougel2($nivel, $ugel)
+    /* public static function listar_profesorestituladougel2($nivel, $ugel)
     {
         $query = DB::table('edu_plaza as v1')
             ->join('edu_ugel as v2', 'v2.id', '=', 'v1.ugel_id')
@@ -114,5 +118,5 @@ class PlazaRepositorio
             ]);
 
         return $query;
-    }
+    } */
 }

@@ -23,7 +23,7 @@ class PLazaController extends Controller
     public function datoIndicadorPLaza(Request $request)
     {
         $dato['tt'] = PlazaRepositorio::listar_profesorestitulados($request->fecha,$request->nivel,$request->provincia,$request->distrito);
-        $dato['tu'] = PlazaRepositorio::listar_profesorestituladougel($request->nivel,'AC');
+        $dato['tu'] = PlazaRepositorio::listar_profesorestituladougel($request->nivel,1);
         /*$dato['cde'] = CentroPobladoDatassRepositorio::centropoplado_porDisposicionExcretas($request->fecha, $request->provincia, $request->distrito);
         $dato['cts'] = CentroPobladoDatassRepositorio::centropoplado_porTipoServicioAgua($request->fecha, $request->provincia, $request->distrito);
         $dato['cad'] = CentroPobladoDatassRepositorio::centropoplado_porServicioAguaSINO($request->fecha, $request->provincia, $request->distrito);*/

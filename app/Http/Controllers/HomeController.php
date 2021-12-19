@@ -205,22 +205,9 @@ class HomeController extends Controller
         $matriculadosSecundaria = $lista_total_matricula_EBR_nivelEducativo->first()->secundaria;;
 
 
-<<<<<<< HEAD
         
         return  view('home', compact('instituciones_activas','nroDocentes',
         'totalMatriculados', 'matriculadosInicial','matriculadosPrimaria','matriculadosSecundaria','matricula_id'));
-=======
-        return  view('home', compact(
-            'instituciones_activas',
-            'docentes_inicial',
-            'docentes_primaria',
-            'docentes_Secundaria',
-            'totalMatriculados',
-            'matriculadosInicial',
-            'matriculadosPrimaria',
-            'matriculadosSecundaria'
-        ));
->>>>>>> 10f84c70c2e33ef7149ae1e52592de126b4db6bc
     }
     public function educacionx($sistema_id)
     {
