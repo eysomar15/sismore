@@ -339,7 +339,7 @@ class CuadroAsigPersonalController extends Controller
 
     public function DocentesReportePrincipal($tipoTrab_id,$importacion_id)
     {        
-        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::docentes($importacion_id);
+        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::docentes_porUgel($importacion_id);
         // $plazas_Titulados = CuadroAsigPersonalRepositorio::plazas_docentes_Titulados($importacion_id);          
 
         return view('educacion.CuadroAsigPersonal.DocentesReportePrincipal',compact('plazas_porTipoTrab'));
@@ -394,6 +394,32 @@ class CuadroAsigPersonalController extends Controller
 
         $nombreGraficoBarra = 'barra2';// este nombre va de la mano con el nombre del DIV en la vista
         $titulo = 'Docentes por Niveles Educativos';
+        $subTitulo = 'Fuente: NEXUS';
+        $titulo_y = 'Numero de Docentes';
+
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
+    }
+
+    public function GraficoBarras_Docentes_Ugeles($importacion_id)
+    {    
+        $plazas_porTipoTrab = CuadroAsigPersonalRepositorio::docentes_porUgel($importacion_id); 
+        /************* GRAFICO BARRAS*******************/
+         $categoria_nombres=[];        
+         $recorre = 1; 
+       
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($plazas_porTipoTrab as $key => $lista) {
+
+            $data = [];    
+            $data = array_merge($data,[intval($lista->cantidad)]);  
+            $puntos[] = [ 'name'=> $lista->ugel ,'data'=>  $data];
+        } 
+
+        $categoria_nombres[] = 'UGEL';  
+
+        $nombreGraficoBarra = 'GraficoBarras_Docentes_Ugeles';// este nombre va de la mano con el nombre del DIV en la vista
+        $titulo = 'DOCENTES POR UGEL';
         $subTitulo = 'Fuente: NEXUS';
         $titulo_y = 'Numero de Docentes';
 

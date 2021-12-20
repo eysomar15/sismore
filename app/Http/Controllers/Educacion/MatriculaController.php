@@ -958,22 +958,59 @@ class MatriculaController extends Controller
         return $creacionExitosa;
     }
 
-    //**********************************MATRICULA FECHAS****************************************************** */
+    //**********************************MATRICULA FECHAS EBR ****************************************************** */
     public function principal()
     {
+        // EBR tipo = 1
+        return $this->presentacion(1);
+    }
+
+    public function principal_EIB()
+    {        
+        // EIB tipo = 2
+        return $this->presentacion(2);
+    }
+
+    public function principal_EBE()
+    {        
+        // EIB tipo = 2
+        return $this->presentacion(3);
+    }
+
+    public function presentacion($tipo)
+    {       
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
         $anios =  MatriculaRepositorio ::matriculas_anio( );
 
         $fechas_matriculas = MatriculaRepositorio ::fechas_matriculas_anio($anios->first()->id);
 
-        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas'));  
+        return view('educacion.Matricula.Principal',compact('matricula','anios','fechas_matriculas','tipo'));  
     }
     
-    public function inicio($matricula_id,$gestion)
+    public function inicio($matricula_id,$gestion,$tipo)
     {
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
-        $lista_total_matricula_EBR_porUgeles = MatriculaRepositorio::total_matricula_EBR_porUgeles($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+        $tipoDescrip = '';
+        if($tipo == 1){
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
+            $lista_total_matricula_EBR_porUgeles = MatriculaRepositorio::total_matricula_EBR_porUgeles($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+            $tipoDescrip = 'EBR';
+        }
+        else{
+            if($tipo == 2){
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EIB($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
+                $lista_total_matricula_EBR_porUgeles = MatriculaRepositorio::total_matricula_EIB_porUgeles($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+                $tipoDescrip = 'EIB';
+            }
+            else
+            {
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBE($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
+                $lista_total_matricula_EBR_porUgeles = MatriculaRepositorio::total_matricula_EBE_porUgeles($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+                $tipoDescrip = 'EBE';
 
+            }
+        }
+
+        
         $fecha_Matricula_texto = $this->fecha_texto($matricula_id); 
 
         $totalMatriculados = 0;
@@ -982,7 +1019,7 @@ class MatriculaController extends Controller
             $totalMatriculados+= ($item->hombres + $item->mujeres);
         }
    
-        return view('educacion.Matricula.inicio',compact('lista_total_matricula_EBR','lista_total_matricula_EBR_porUgeles','fecha_Matricula_texto','totalMatriculados'));
+        return view('educacion.Matricula.inicio',compact('tipoDescrip','lista_total_matricula_EBR','lista_total_matricula_EBR_porUgeles','fecha_Matricula_texto','totalMatriculados'));
     }
 
     public function detalle()
@@ -995,11 +1032,29 @@ class MatriculaController extends Controller
         return view('educacion.Matricula.detalle',compact('matricula','anios','fechas_matriculas'));
     }
     
-    public function reporteUgel($anio_id,$matricula_id,$gestion)
-    {
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));
-      
-        $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id);               
+    public function reporteUgel($anio_id,$matricula_id,$gestion,$tipo)
+    { 
+        $tipoDescrip = '';
+        if($tipo == 1){
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));      
+            $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id);
+            $tipoDescrip = 'EBR';
+        }
+        else{
+            if($tipo == 2){
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EIB($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));      
+                $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_EIB($matricula_id);
+                $tipoDescrip = 'EIB';
+        }
+            else
+            {
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBE($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));      
+                $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel($matricula_id);
+                $tipoDescrip = 'EBE';
+            }
+        }
+
+
         $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
         $lista_total_matricula_Primaria = $lista_matricula->where('nivel', 'P')->all();  
         $lista_total_matricula_Secundaria = $lista_matricula->where('nivel', 'S')->all();
@@ -1018,9 +1073,9 @@ class MatriculaController extends Controller
 
         $contenedor = 'resumen_por_ugel';//nombre del contenedor para el grafico          
         $fecha_Matricula_texto = $this->fecha_texto($matricula_id);        
-        $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
+        $titulo_grafico = 'Total Matricula '.$tipoDescrip .' al '.$fecha_Matricula_texto;  
 
-        return view('educacion.Matricula.ReporteUgel',["dataCircular"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Secundaria',
+        return view('educacion.Matricula.ReporteUgel',["dataCircular"=> json_encode($puntos)],compact('tipoDescrip','lista_total_matricula_EBR','lista_total_matricula_Secundaria',
                     'lista_total_matricula_Primaria','lista_total_matricula_Inicial','lista_total_matricula_EBE','contenedor','titulo_grafico','fecha_Matricula_texto'));
     }
 
@@ -1087,17 +1142,42 @@ class MatriculaController extends Controller
         compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
     }
 
-    public function reporteDistrito($anio_id,$matricula_id,$gestion)
-    {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+    public function reporteDistrito($anio_id,$matricula_id,$gestion,$tipo)
+    {  
+        $tipoDescrip = '';
+        if($tipo == 1){
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+            $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));   
+            $lista_total_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+            
+            $tipoDescrip = 'EBR';
+        }
+        else{
+            if($tipo == 2){
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EIB_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+                $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Distrito_EIB($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));   
+                $lista_total_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Provincia_EIB($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+                
+                $tipoDescrip = 'EIB';
+            }
+            else{
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBE_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+                $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));   
+                $lista_total_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+                
+                $tipoDescrip = 'EBE';
 
-        $lista_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Distrito($matricula_id,$this->condicion_filtro($gestion),$this->valor_filtro($gestion));   
+            }
+
+        }
+
+       
         $lista_total_matricula_Inicial = $lista_matricula->where('nivel', 'I')->all();    
         $lista_total_matricula_Primaria = $lista_matricula->where('nivel', 'P')->all();  
         $lista_total_matricula_Secundaria = $lista_matricula->where('nivel', 'S')->all();       
 
         // cabeceras y/o totales en las tablas
-        $lista_total_matricula = MatriculaRepositorio::total_matricula_por_Nivel_Provincia($matricula_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+        
         $lista_matricula_Inicial_cabecera =  $lista_total_matricula->where('nivel', 'I')->all();  
         $lista_matricula_Primaria_cabecera =  $lista_total_matricula->where('nivel', 'P')->all();
         $lista_matricula_Secundaria_cabecera =  $lista_total_matricula->where('nivel', 'S')->all();
@@ -1114,29 +1194,68 @@ class MatriculaController extends Controller
 
         $fecha_Matricula_texto = $this->fecha_texto($matricula_id);
         $contenedor = 'resumen_por_distrito';
-        $titulo_grafico = 'Total Matricula EBR al '.$fecha_Matricula_texto;  
+        $titulo_grafico = 'Total Matricula '.$tipoDescrip.' al '.$fecha_Matricula_texto;  
 
-        return view('educacion.Matricula.ReporteDistrito',["dataCircular"=> json_encode($puntos)],compact('lista_total_matricula_EBR','lista_total_matricula_Inicial','lista_total_matricula_Primaria',
+        return view('educacion.Matricula.ReporteDistrito',["dataCircular"=> json_encode($puntos)],compact('tipoDescrip','lista_total_matricula_EBR','lista_total_matricula_Inicial','lista_total_matricula_Primaria',
         'lista_total_matricula_Secundaria','fecha_Matricula_texto','lista_matricula_Inicial_cabecera','lista_matricula_Primaria_cabecera',
         'lista_matricula_Secundaria_cabecera','contenedor','titulo_grafico'));
     }
 
-    public function reporteInstitucion($anio_id,$matricula_id,$gestion)
+    public function reporteInstitucion($anio_id,$matricula_id,$gestion,$tipo)
     {  
+        $tipoDescrip = '';
+        if($tipo == 1){
+            $tipoDescrip = 'EBR';
+        }
+        else{      
+            if($tipo == 1)           
+                $tipoDescrip = 'EIB';
+            else
+                $tipoDescrip = 'EBE';
+        }
+
         $fecha_Matricula_texto = $this->fecha_texto($matricula_id);
-        return view('educacion.Matricula.ReporteInstitucion',compact('fecha_Matricula_texto','matricula_id','gestion'));
+        return view('educacion.Matricula.ReporteInstitucion',compact('tipoDescrip','tipo','fecha_Matricula_texto','matricula_id','gestion'));
     }
 
-    public function Institucion_DataTable($matricula_id,$nivel,$gestion)
+    public function Institucion_DataTable($matricula_id,$nivel,$gestion,$tipo)
     {     
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,$nivel,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+        if($tipo == 1){
+            $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,$nivel,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+        }
+        else{   
+            if($tipo == 2)          
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion_EIB($matricula_id,$nivel,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+            else
+                $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_por_Nivel_Institucion($matricula_id,'E',$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+        }
 
+        
         return  datatables()->of($lista_total_matricula_EBR)->toJson();
     }
 
-    public function GraficoBarrasPrincipal($anio_id,$gestion)
-    {     
-        $total_matricula_anual = MatriculaRepositorio:: total_matricula_anual($anio_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+    public function GraficoBarrasPrincipal($anio_id,$gestion,$tipo)
+    {  
+        $tipoDescrip = '';
+        if($tipo == 1){
+            $tipoDescrip = 'EBR';
+            $total_matricula_anual = MatriculaRepositorio:: total_matricula_anual($anio_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+        }
+        else{   
+            if($tipo == 2)     
+            {     
+                $tipoDescrip = 'EIB';               
+                $total_matricula_anual = MatriculaRepositorio:: total_matricula_anual_EIB($anio_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+            }
+            else
+            {
+                $tipoDescrip = 'EBE';               
+                $total_matricula_anual = MatriculaRepositorio:: total_matricula_anual_EBE($anio_id,$this->condicion_filtro_formato2($gestion),$this->valor_filtro($gestion));
+       
+            }
+        
+        }
+        
         
         $categoria1 = [];
         $categoria2 = [];
@@ -1160,7 +1279,7 @@ class MatriculaController extends Controller
 
         $nombreAnio = Anio::find($anio_id)->anio;
 
-        $titulo = 'Matriculas EBR según UGEL -  '.$nombreAnio;
+        $titulo = 'Matriculas '.$tipoDescrip.' según UGEL -  '.$nombreAnio;
         $subTitulo = 'Fuente SIAGIE - MINEDU';
         $titulo_y = 'Numero de matriculados';
         $nombreGraficoBarra = 'barra1';// este nombre va de la mano con el nombre del DIV en la vista
@@ -1243,53 +1362,6 @@ class MatriculaController extends Controller
     {
         $matricula = MatriculaRepositorio :: matricula_mas_actual()->first();
         $anios =  MatriculaRepositorio ::matriculas_anio_ConsolidadoAnual( );
-
-        // $nivel = "P";
-        // $gestion = 1;
-        // $condicion = 'in';
-        // if($nivel=="T")
-        //     $condicion = 'not in';
-
-        // $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-        // $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-        // $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-
-        // $descripcion_nivel = $this->descripcion_nivel($nivel);
-
-
-        // /************* GRAFICO A*******************/
-               
-        // $anio2018 = [];
-        // $anio2019 = [];
-        // $anio2020 = [];
-        // $categoria_nombres=[];
-
-
-        // $recorre = 1;
-        // foreach($ugelConsolidadoAnual as $indice => $elemento)  
-        // {                                                          
-        //     for($i=1 ; $i<=$anioConsolidadoAnual->count();$i++)   
-        //     {
-        //        $d = $total_matricula_ComsolidadoAnual->where('posUgel', $recorre)->where('posAnio', $i)->first()->cantidadAlumnos;
-        //        $anio2018 = array_merge($anio2018,[intval($d)]);
-        //     }
-        
-        //     $recorre+=1;
-        // }      
-
-        //return $anioConsolidadoAnual ;
-        // $nivel = "T";
-        // $condicion = 'in';
-        // if($nivel=="T")
-        //     $condicion = 'not in';
-
-        // $gestion = 'P';
-
-        // $total_matricula_ComsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-        // $anioConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloAnios(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-        // $ugelConsolidadoAnual = MatriculaRepositorio :: total_matricula_ComsolidadoAnual_porNivel_soloUgel(0,$condicion,$nivel,$this->filtro_gestion($gestion));
-
-        // $descripcion_nivel = $this->descripcion_nivel($nivel);
 
         return view('educacion.Matricula.PrincipalConsolidadoAnual',compact('matricula','anios'));  
     }    

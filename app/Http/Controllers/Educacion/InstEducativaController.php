@@ -54,4 +54,32 @@ class InstEducativaController extends Controller
 
         return $sumatoria_Provincia ;
     }
+
+    public function GraficoBarras_Instituciones_Distrito()
+    {  
+        $lista_resumen_porProvincia = InstEducativaRepositorio::resumen_porProvincia();  
+      
+        /************* GRAFICO BARRAS*******************/
+         $categoria_nombres=[];        
+         $recorre = 1; 
+       
+        // array_merge concatena los valores del arreglo, mientras recorre el foreach
+        foreach ($lista_resumen_porProvincia as $key => $lista) {
+
+            $data = [];    
+            $data = array_merge($data,[intval($lista->activas)]);  
+            $puntos[] = [ 'name'=> $lista->provincia ,'data'=>  $data];
+        } 
+
+        $categoria_nombres[] = 'UGEL';  
+
+        $nombreGraficoBarra = 'GraficoBarras_Instituciones_Distrito';// este nombre va de la mano con el nombre del DIV en la vista
+        $titulo = 'INSTITUCIONES EDUCATIVAS POR DISTRITOS';
+        $subTitulo = 'Fuente: PADRON WEB - ESCALE';
+        $titulo_y = 'Numero de Instituciones Educativas';
+
+        return view('graficos.Barra',["data"=> json_encode($puntos),"categoria_nombres"=> json_encode($categoria_nombres)],
+        compact( 'titulo_y','titulo','subTitulo','nombreGraficoBarra'));
+    }
+
 }

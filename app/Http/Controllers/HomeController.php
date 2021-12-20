@@ -168,6 +168,7 @@ class HomeController extends Controller
     public function educacion($sistema_id)
     {
         $instituciones_activas = InstEducativaRepositorio::cantidad_activas_inactivas()->first()->activas;
+        $locales_educativos = InstEducativaRepositorio ::cantidad_locales()->first()->cantidad;
 
         // $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR(11,'whereNotIn',0);
 
@@ -177,6 +178,9 @@ class HomeController extends Controller
         // $docentes_Secundaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->Secundaria;
 
         $docentes = CuadroAsigPersonalRepositorio::docentes_total();
+        $ultimo_Importacion_id_dePlaza =  CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza()->first()->importacion_id;
+
+
 
         $nroDocentes = 0;
 
@@ -204,9 +208,8 @@ class HomeController extends Controller
         $matriculadosPrimaria = $lista_total_matricula_EBR_nivelEducativo->first()->primaria;
         $matriculadosSecundaria = $lista_total_matricula_EBR_nivelEducativo->first()->secundaria;
 
-
         
-        return  view('home', compact('instituciones_activas','nroDocentes',
+        return  view('home', compact('instituciones_activas','locales_educativos','nroDocentes','ultimo_Importacion_id_dePlaza',
         'totalMatriculados', 'matriculadosInicial','matriculadosPrimaria','matriculadosSecundaria','matricula_id'));
     }
     public function educacionx($sistema_id)

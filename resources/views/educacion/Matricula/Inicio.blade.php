@@ -5,7 +5,12 @@
             <div class="media-body align-self-center">
                 <div class="text-right">
                     <h4 class="font-26 my-0 font-weight-bold"><span data-plugin="counterup">{{number_format($totalMatriculados,0)}}</span></h4>
-                    <p class="card-title mb-0 mt-1 text-truncate">MATRICULADOS al {{$fecha_Matricula_texto}}(Inicial, Primaria y Secundaria)</p>
+                    @if($tipoDescrip !='EBE')
+                        <p class="card-title mb-0 mt-1 text-truncate">MATRICULADOS {{$tipoDescrip}} al {{$fecha_Matricula_texto}}(Inicial, Primaria y Secundaria)</p>                          
+                    @else
+                        <p class="card-title mb-0 mt-1 text-truncate">MATRICULADOS {{$tipoDescrip}} al {{$fecha_Matricula_texto}})</p>                  
+                    @endif
+                    
                 </div>
             </div>
     <!-- end card-box-->
@@ -30,17 +35,22 @@
 
                  <div>
 
-                    @foreach ($lista_total_matricula_EBR_porUgeles as $item2)
-                    @if ($item->id == $item2->id)
-                            <ul class="list-unstyled mb-0">                         
-                                <li class="mt-2 pt-1">Inicial {{number_format($item2->inicial,0)}}</li>
-                                <li class="mt-2 pt-1">Primaria {{number_format($item2->primaria,0)}} </li>
-                                <li class="mt-2 pt-1">Secundaria {{number_format($item2->secundaria,0)}} </li>                                  
-                            </ul>
-                            <br>
+                  
+                    @if($tipoDescrip !='EBE')
+                   
+                        @foreach ($lista_total_matricula_EBR_porUgeles as $item2)
+                        @if ($item->id == $item2->id)
+                                <ul class="list-unstyled mb-0">                         
+                                    <li class="mt-2 pt-1">Inicial {{number_format($item2->inicial,0)}}</li>
+                                    <li class="mt-2 pt-1">Primaria {{number_format($item2->primaria,0)}} </li>
+                                    <li class="mt-2 pt-1">Secundaria {{number_format($item2->secundaria,0)}} </li>                                  
+                                </ul>
+                                <br>
+                        @endif
+                        
+                        @endforeach
                     @endif
                     
-                    @endforeach
 
                      {{-- <div class="col-md-12 col-xl-12">
                           

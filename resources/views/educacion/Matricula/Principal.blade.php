@@ -127,7 +127,7 @@
                 headers: {
                         'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/inicio/" + $('#matricula_fechas').val() + "/" + $('#gestion').val(),
+                url: "{{ url('/') }}/Matricula/inicio/" + $('#matricula_fechas').val() + "/" + $('#gestion').val()+ "/" + {{$tipo}},
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -199,7 +199,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/ReporteUgel/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val(),
+                url: "{{ url('/') }}/Matricula/ReporteUgel/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val()+ "/" + {{$tipo}},
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -214,7 +214,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/ReporteDistrito/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val(),
+                url: "{{ url('/') }}/Matricula/ReporteDistrito/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val()+ "/" + {{$tipo}},
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -229,7 +229,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/ReporteInstitucion/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val(),
+                url: "{{ url('/') }}/Matricula/ReporteInstitucion/" + $('#anio').val() + "/" + $('#matricula_fechas').val()+ "/" + $('#gestion').val()+ "/" + {{$tipo}},
                 type: 'post',
             }).done(function (data) {               
                 $('#barra1').html(data);
@@ -244,7 +244,7 @@
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Matricula/GraficoBarrasPrincipal/"+ $('#anio').val()+ "/" + $('#gestion').val(),
+                url: "{{ url('/') }}/Matricula/GraficoBarrasPrincipal/"+ $('#anio').val()+ "/" + $('#gestion').val()+ "/" + {{$tipo}},
                 type: 'post',
             }).done(function (data) {  
                 // $('#datos01').html();             

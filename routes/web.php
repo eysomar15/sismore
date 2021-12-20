@@ -81,6 +81,9 @@ Route::post('/CuadroAsigPersonal/Docentes/ReportePrincipal/{tipoTrab_id}/{import
 Route::post('/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesPrincipal/{tipoTrab_id}/{importacion_id}', [CuadroAsigPersonalController::class, 'GraficoBarras_DocentesPrincipal'])->name('Docentes.GraficoBarras_DocentesPrincipal');
 Route::post('/CuadroAsigPersonal/Docentes/GraficoBarras_DocentesNivelEducativo/{tipoTrab_id}/{importacion_id}', [CuadroAsigPersonalController::class, 'GraficoBarras_DocentesNivelEducativo'])->name('Docentes.GraficoBarras_DocentesNivelEducativo');
 
+Route::post('/CuadroAsigPersonal/Docentes/GraficoBarras_Docentes_Ugeles/{importacion_id}', [CuadroAsigPersonalController::class, 'GraficoBarras_Docentes_Ugeles'])->name('Docentes.GraficoBarras_Docentes_Ugeles');
+
+
 
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');
@@ -96,23 +99,24 @@ Route::get('/Matricula/Aprobar/{importacion_id}', [MatriculaController::class, '
 Route::post('/Matricula/Aprobar/procesar/{importacion_id}', [MatriculaController::class, 'procesar'])->name('Matricula.procesar');
 
 Route::get('/Matricula/Principal', [MatriculaController::class, 'principal'])->name('Matricula.principal');
-Route::post('/Matricula/inicio/{matricula_id}/{gestion}', [MatriculaController::class, 'inicio'])->name('Matricula.inicio');
+Route::post('/Matricula/inicio/{matricula_id}/{gestion}/{tipo}', [MatriculaController::class, 'inicio'])->name('Matricula.inicio');
 Route::post('/Matricula/Detalle', [MatriculaController::class, 'Detalle'])->name('Matricula.Detalle');
-Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'ReporteUgel'])->name('Matricula.ReporteUgel');
-Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
-Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}/{gestion}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');
+Route::post('/Matricula/ReporteUgel/{anio_id}/{matricula_id}/{gestion}/{tipo}', [MatriculaController::class, 'ReporteUgel'])->name('Matricula.ReporteUgel');
+Route::post('/Matricula/ReporteDistrito/{anio_id}/{matricula_id}/{gestion}/{tipo}', [MatriculaController::class, 'ReporteDistrito'])->name('Matricula.ReporteDistrito');
+Route::post('/Matricula/ReporteInstitucion/{anio_id}/{matricula_id}/{gestion}/{tipo}', [MatriculaController::class, 'reporteInstitucion'])->name('Matricula.ReporteInstitucion');
 
-
+Route::get('/Matricula/EIB', [MatriculaController::class, 'principal_EIB'])->name('Matricula.principal_EIB');
 
 Route::post('/Matricula/GraficoBarras_MatriculaUgel/{importacion_id}', [MatriculaController::class, 'GraficoBarras_MatriculaUgel'])->name('Matricula.GraficoBarras_MatriculaUgel');
 Route::post('/Matricula/GraficoBarras_MatriculaTipoGestion/{importacion_id}', [MatriculaController::class, 'GraficoBarras_MatriculaTipoGestion'])->name('Matricula.GraficoBarras_MatriculaTipoGestion');
 
+Route::get('/Matricula/EBE', [MatriculaController::class, 'principal_EBE'])->name('Matricula.principal_EBE');
 
 
-Route::get('/Matricula/Institucion_DataTable/{matricula_id}/{nivel}/{gestion}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
+Route::get('/Matricula/Institucion_DataTable/{matricula_id}/{nivel}/{gestion}/{tipo}', [MatriculaController::class, 'Institucion_DataTable'])->name('Matricula.Institucion_DataTable');
 
 Route::post('/Matricula/Fechas/{anio_id}', [MatriculaController::class, 'Fechas'])->name('Matricula.Fechas');
-Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}/{gestion}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
+Route::post('/Matricula/GraficoBarrasPrincipal/{anio_id}/{gestion}/{tipo}', [MatriculaController::class, 'GraficoBarrasPrincipal'])->name('Matricula.GraficoBarrasPrincipal');
 
 Route::get('/Matricula/importarconsolidadoAnual', [MatriculaController::class, 'importarConsolidadoAnual'])->name('Matricula.importarConsolidadoAnual');
 Route::post('/Matricula/importarconsolidadoAnual', [MatriculaController::class, 'guardarConsolidadoAnual'])->name('Matricula.guardarConsolidadoAnual');
@@ -126,6 +130,9 @@ Route::post('/Matricula/ReporteUgelConsolidadoAnual/{anio_id}/{gestion}/{nivel}'
 
 Route::get('/InstEducativa/Principal', [InstEducativaController::class, 'principal'])->name('InstEducativa.principal');
 Route::post('/InstEducativa/ReporteDistrito', [InstEducativaController::class, 'ReporteDistrito'])->name('InstEducativa.ReporteDistrito');
+Route::post('/InstEducativa/GraficoBarras_Instituciones_Distrito', [InstEducativaController::class, 'GraficoBarras_Instituciones_Distrito'])->name('InstEducativa.GraficoBarras_Instituciones_Distrito');
+
+
 
 Route::get('/Tableta/Importar', [TabletaController::class, 'importar'])->name('Tableta.importar');
 Route::post('/Tableta/Importar', [TabletaController::class, 'guardar'])->name('Tableta.guardar');

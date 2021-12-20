@@ -10,7 +10,8 @@ class InstEducativaRepositorio
     { 
                   $data = DB::table('edu_institucioneducativa as inst')           
                   ->join('edu_estadoinsedu as est', 'inst.EstadoInsEdu_id', '=', 'est.id')
-                  ->where('inst.estado','=', 'ac')            
+                  ->where('inst.estado','=', 'ac')  
+                  ->where('anexo','=', 0)            
                   ->get([  
                           
                           DB::raw('sum( case when est.codigo = 1 then 1 else 0 end ) as activas'), 
@@ -20,6 +21,26 @@ class InstEducativaRepositorio
 
              return $data;
      }
+
+     public static function cantidad_locales()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                        select  count(distinct codLocal ) as cantidad from 
+                                        edu_institucioneducativa as inst
+                                        inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
+                                        where(inst.estado='ac') and est.codigo = 1 and anexo = 0                   
+                                ) as datos"
+                            )
+                        )
+                
+                    ->get([
+                        DB::raw('cantidad')                     
+                    ]);
+
+        return $data;
+    }
+
 
      public static function resumen_porDistrito()
     { 

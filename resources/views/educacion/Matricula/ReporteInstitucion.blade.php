@@ -1,260 +1,264 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
 
-            <div class="card">
-                <div class="card-header bg-primary py-3 text-white">
-                    <div class="card-widgets">
-                    
-                        <a data-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase2">
-                            <i class="mdi mdi-minus"></i>
-                        </a>
-                    
-                    </div>
-                    <h5 class="card-title mb-0 text-white"> Reporte de Matrícula de Estudiantes - Nivel Inicial al {{$fecha_Matricula_texto}}  </h5>
-                </div>
-                <div id="cardCollpase1" class="collapse show">
-                    <div class="card-body">
+
+@if($tipoDescrip !='EBE')
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header bg-primary py-3 text-white">
+                        <div class="card-widgets">
                         
-                        <div class="table-responsive">
-                            <table id="grid" class="table table-striped table-bordered" style="width:3100px">
-                                <thead > 
-                    
-                                    <tr >
-                                        <th rowspan="4" class="titulo_tabla" style="width:300px">UGEL </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">PROVINCIA </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">DISTRITO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:300px">CENTRO POBLADO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:100px">COD-MODULAR </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:100">ANEXO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:500px">NOMBRE INSTITUCION </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:500px">TIPO GESTION </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">TOTAL ESTUDIANTES MATRICULADOS </th> 
-                                    </tr>
-
-                                    <tr >
-                                        <th colspan="14" class="titulo_tabla" > ESTUDIANTES POR EDAD </th>
-                                    </tr>
-
-                                    <tr >
-                                        <th colspan="2" class="titulo_tabla" > 0 AÑOS </th>
-                                        <th colspan="2" class="titulo_tabla" > 1 AÑO </th>
-                                        <th colspan="2" class="titulo_tabla" > 2 AÑOS </th>
-                                        <th colspan="2" class="titulo_tabla" > 3 AÑOS </th>
-                                        <th colspan="2" class="titulo_tabla" > 4 AÑOS </th>
-                                        <th colspan="2" class="titulo_tabla" > 5 AÑOS </th>
-                                        <th colspan="2" class="titulo_tabla" > MAS DE 5 AÑOS </th>
+                            <a data-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase2">
+                                <i class="mdi mdi-minus"></i>
+                            </a>
                         
-                                    </tr>
-
-                                    <tr >
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                    </tr>
-
-                    
-                                </thead>
-                            </table>
                         </div>
-                    
-                        <div class="form-group row">
-                            <div  class="col-md-6">
-                                Fuente: SIAGIE- MINEDU          
+                        <h5 class="card-title mb-0 text-white"> Reporte de Matrícula {{$tipoDescrip}} - Nivel Inicial al {{$fecha_Matricula_texto}}  </h5>
+                    </div>
+                    <div id="cardCollpase1" class="collapse show">
+                        <div class="card-body">
+                            
+                            <div class="table-responsive">
+                                <table id="grid" class="table table-striped table-bordered" style="width:3100px">
+                                    <thead > 
+                        
+                                        <tr >
+                                            <th rowspan="4" class="titulo_tabla" style="width:300px">UGEL </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">PROVINCIA </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">DISTRITO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:300px">CENTRO POBLADO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:100px">COD-MODULAR </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:100">ANEXO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:500px">NOMBRE INSTITUCION </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:500px">TIPO GESTION </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">TOTAL ESTUDIANTES MATRICULADOS </th> 
+                                        </tr>
+
+                                        <tr >
+                                            <th colspan="14" class="titulo_tabla" > ESTUDIANTES POR EDAD </th>
+                                        </tr>
+
+                                        <tr >
+                                            <th colspan="2" class="titulo_tabla" > 0 AÑOS </th>
+                                            <th colspan="2" class="titulo_tabla" > 1 AÑO </th>
+                                            <th colspan="2" class="titulo_tabla" > 2 AÑOS </th>
+                                            <th colspan="2" class="titulo_tabla" > 3 AÑOS </th>
+                                            <th colspan="2" class="titulo_tabla" > 4 AÑOS </th>
+                                            <th colspan="2" class="titulo_tabla" > 5 AÑOS </th>
+                                            <th colspan="2" class="titulo_tabla" > MAS DE 5 AÑOS </th>
+                            
+                                        </tr>
+
+                                        <tr >
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                        </tr>
+
+                        
+                                    </thead>
+                                </table>
                             </div>
-                    
-                            <div  class="col-md-6" style="text-align: right">
-                                H: Hombre / M: Mujer   
-                            </div>
-                        </div> 
-                    
+                        
+                            <div class="form-group row">
+                                <div  class="col-md-6">
+                                    Fuente: SIAGIE- MINEDU          
+                                </div>
+                        
+                                <div  class="col-md-6" style="text-align: right">
+                                    H: Hombre / M: Mujer   
+                                </div>
+                            </div> 
+                        
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
 
-            <div class="card">
-                <div class="card-header bg-primary py-3 text-white">
-                    <div class="card-widgets">
-                    
-                        <a data-toggle="collapse" href="#cardCollpase2" role="button" aria-expanded="false" aria-controls="cardCollpase2">
-                            <i class="mdi mdi-minus"></i>
-                        </a>
-                    
-                    </div>
-                    <h5 class="card-title mb-0 text-white"> Reporte de Matrícula de Estudiantes - Nivel Primaria al {{$fecha_Matricula_texto}}  </h5>
-                </div>
-                <div id="cardCollpase2" class="collapse show">
-                    <div class="card-body">
+                <div class="card">
+                    <div class="card-header bg-primary py-3 text-white">
+                        <div class="card-widgets">
                         
-                        <div class="table-responsive">
-                            <table id="grid2" class="table table-striped table-bordered" style="width:3100px">
-                                <thead > 
-                    
-                                    <tr >
-                                        <th rowspan="4" class="titulo_tabla" style="width:300px">UGEL </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">PROVINCIA </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">DISTRITO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:300px">CENTRO POBLADO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:100px">COD-MODULAR </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:100">ANEXO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:500px">NOMBRE INSTITUCION </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:500px">TIPO GESTION </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">TOTAL ESTUDIANTES MATRICULADOS </th> 
-                                    </tr>
-
-                                    <tr >
-                                        <th colspan="12" class="titulo_tabla" > ESTUDIANTES POR GRADO </th>
-                                    </tr>
-
-                                    <tr >
-                                        <th colspan="2" class="titulo_tabla" > PRIMERO </th>
-                                        <th colspan="2" class="titulo_tabla" > SEGUNDO </th>
-                                        <th colspan="2" class="titulo_tabla" > TERCERO </th>
-                                        <th colspan="2" class="titulo_tabla" > CUARTO </th>
-                                        <th colspan="2" class="titulo_tabla" > QUINTO </th>
-                                        <th colspan="2" class="titulo_tabla" > SEXTO </th>                        
-                                    </tr>
-
-                                    <tr >
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                
-                                    </tr>
-
-                    
-                                </thead>
-                            </table>
+                            <a data-toggle="collapse" href="#cardCollpase2" role="button" aria-expanded="false" aria-controls="cardCollpase2">
+                                <i class="mdi mdi-minus"></i>
+                            </a>
+                        
                         </div>
-                    
-                        <div class="form-group row">
-                            <div  class="col-md-6">
-                                Fuente: SIAGIE- MINEDU          
+                        <h5 class="card-title mb-0 text-white"> Reporte de Matrícula {{$tipoDescrip}}- Nivel Primaria al {{$fecha_Matricula_texto}}  </h5>
+                    </div>
+                    <div id="cardCollpase2" class="collapse show">
+                        <div class="card-body">
+                            
+                            <div class="table-responsive">
+                                <table id="grid2" class="table table-striped table-bordered" style="width:3100px">
+                                    <thead > 
+                        
+                                        <tr >
+                                            <th rowspan="4" class="titulo_tabla" style="width:300px">UGEL </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">PROVINCIA </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">DISTRITO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:300px">CENTRO POBLADO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:100px">COD-MODULAR </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:100">ANEXO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:500px">NOMBRE INSTITUCION </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:500px">TIPO GESTION </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">TOTAL ESTUDIANTES MATRICULADOS </th> 
+                                        </tr>
+
+                                        <tr >
+                                            <th colspan="12" class="titulo_tabla" > ESTUDIANTES POR GRADO </th>
+                                        </tr>
+
+                                        <tr >
+                                            <th colspan="2" class="titulo_tabla" > PRIMERO </th>
+                                            <th colspan="2" class="titulo_tabla" > SEGUNDO </th>
+                                            <th colspan="2" class="titulo_tabla" > TERCERO </th>
+                                            <th colspan="2" class="titulo_tabla" > CUARTO </th>
+                                            <th colspan="2" class="titulo_tabla" > QUINTO </th>
+                                            <th colspan="2" class="titulo_tabla" > SEXTO </th>                        
+                                        </tr>
+
+                                        <tr >
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                    
+                                        </tr>
+
+                        
+                                    </thead>
+                                </table>
                             </div>
-                    
-                            <div  class="col-md-6" style="text-align: right">
-                                H: Hombre / M: Mujer   
-                            </div>
-                        </div> 
-                    
+                        
+                            <div class="form-group row">
+                                <div  class="col-md-6">
+                                    Fuente: SIAGIE- MINEDU          
+                                </div>
+                        
+                                <div  class="col-md-6" style="text-align: right">
+                                    H: Hombre / M: Mujer   
+                                </div>
+                            </div> 
+                        
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div> 
+    </div> 
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
 
-            <div class="card">
-                <div class="card-header bg-primary py-3 text-white">
-                    <div class="card-widgets">
-                    
-                        <a data-toggle="collapse" href="#cardCollpase3" role="button" aria-expanded="false" aria-controls="cardCollpase2">
-                            <i class="mdi mdi-minus"></i>
-                        </a>
-                    
-                    </div>
-                    <h5 class="card-title mb-0 text-white"> Reporte de Matrícula de Estudiantes - Nivel Secundaria al {{$fecha_Matricula_texto}}  </h5>
-                </div>
-                <div id="cardCollpase3" class="collapse show">
-                    <div class="card-body">
+                <div class="card">
+                    <div class="card-header bg-primary py-3 text-white">
+                        <div class="card-widgets">
                         
-                        <div class="table-responsive">
-                            <table id="grid3" class="table table-striped table-bordered" style="width:3100px">
-                                <thead > 
-                    
-                                    <tr >
-                                        <th rowspan="4" class="titulo_tabla" style="width:300px">UGEL </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">PROVINCIA </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">DISTRITO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:300px">CENTRO POBLADO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:100px">COD-MODULAR </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:100">ANEXO </th>
-                                        <th rowspan="4" class="titulo_tabla" style="width:500px">NOMBRE INSTITUCION </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:500px">TIPO GESTION </th> 
-                                        <th rowspan="4" class="titulo_tabla" style="width:200px">TOTAL ESTUDIANTES MATRICULADOS </th> 
-                                    </tr>
-
-                                    <tr >
-                                        <th colspan="10" class="titulo_tabla" > ESTUDIANTES POR GRADO </th>
-                                    </tr>
-
-                                    <tr >
-                                        <th colspan="2" class="titulo_tabla" > PRIMERO </th>
-                                        <th colspan="2" class="titulo_tabla" > SEGUNDO </th>
-                                        <th colspan="2" class="titulo_tabla" > TERCERO </th>
-                                        <th colspan="2" class="titulo_tabla" > CUARTO </th>
-                                        <th colspan="2" class="titulo_tabla" > QUINTO </th>
-                                                  
-                                    </tr>
-
-                                    <tr >
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                        <th  class="titulo_tabla" style="width:50px"> H </th>
-                                        <th  class="titulo_tabla" style="width:50px"> M </th>
-                                       
-                                
-                                    </tr>
-
-                    
-                                </thead>
-                            </table>
+                            <a data-toggle="collapse" href="#cardCollpase3" role="button" aria-expanded="false" aria-controls="cardCollpase2">
+                                <i class="mdi mdi-minus"></i>
+                            </a>
+                        
                         </div>
-                    
-                        <div class="form-group row">
-                            <div  class="col-md-6">
-                                Fuente: SIAGIE- MINEDU          
+                        <h5 class="card-title mb-0 text-white"> Reporte de Matrícula {{$tipoDescrip}} - Nivel Secundaria al {{$fecha_Matricula_texto}}  </h5>
+                    </div>
+                    <div id="cardCollpase3" class="collapse show">
+                        <div class="card-body">
+                            
+                            <div class="table-responsive">
+                                <table id="grid3" class="table table-striped table-bordered" style="width:3100px">
+                                    <thead > 
+                        
+                                        <tr >
+                                            <th rowspan="4" class="titulo_tabla" style="width:300px">UGEL </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">PROVINCIA </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">DISTRITO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:300px">CENTRO POBLADO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:100px">COD-MODULAR </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:100">ANEXO </th>
+                                            <th rowspan="4" class="titulo_tabla" style="width:500px">NOMBRE INSTITUCION </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:500px">TIPO GESTION </th> 
+                                            <th rowspan="4" class="titulo_tabla" style="width:200px">TOTAL ESTUDIANTES MATRICULADOS </th> 
+                                        </tr>
+
+                                        <tr >
+                                            <th colspan="10" class="titulo_tabla" > ESTUDIANTES POR GRADO </th>
+                                        </tr>
+
+                                        <tr >
+                                            <th colspan="2" class="titulo_tabla" > PRIMERO </th>
+                                            <th colspan="2" class="titulo_tabla" > SEGUNDO </th>
+                                            <th colspan="2" class="titulo_tabla" > TERCERO </th>
+                                            <th colspan="2" class="titulo_tabla" > CUARTO </th>
+                                            <th colspan="2" class="titulo_tabla" > QUINTO </th>
+                                                    
+                                        </tr>
+
+                                        <tr >
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                            <th  class="titulo_tabla" style="width:50px"> H </th>
+                                            <th  class="titulo_tabla" style="width:50px"> M </th>
+                                        
+                                    
+                                        </tr>
+
+                        
+                                    </thead>
+                                </table>
                             </div>
-                    
-                            <div  class="col-md-6" style="text-align: right">
-                                H: Hombre / M: Mujer   
-                            </div>
-                        </div> 
-                    
+                        
+                            <div class="form-group row">
+                                <div  class="col-md-6">
+                                    Fuente: SIAGIE- MINEDU          
+                                </div>
+                        
+                                <div  class="col-md-6" style="text-align: right">
+                                    H: Hombre / M: Mujer   
+                                </div>
+                            </div> 
+                        
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div> 
-        
+    </div> 
+
+@endif
 
 {{-- *********************************** SCRIPTs ************************ --}}
 
@@ -267,7 +271,7 @@
 
 <script>
     $('#grid').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'I', $gestion ))}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'I', $gestion, $tipo ))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},
@@ -315,7 +319,7 @@
 
 
     $('#grid2').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'P', $gestion ))}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'P', $gestion , $tipo))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},          
@@ -361,7 +365,7 @@
     );
 
     $('#grid3').DataTable({
-        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'S', $gestion ))}}",
+        "ajax": "{{route('Matricula.Institucion_DataTable',array($matricula_id, 'S', $gestion, $tipo ))}}",
         "columns":[             
             {data:'ugel'},{data:'provincia'},{data:'distrito'},{data:'cenPo'},{data:'codModular'},{data:'anexo'},{data:'nombreInstEduc'},{data:'tipoGestion'},
             {data:'total_estudiantes_matriculados'},          

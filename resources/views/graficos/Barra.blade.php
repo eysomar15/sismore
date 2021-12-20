@@ -16,10 +16,10 @@ Highcharts.chart('{{$nombreGraficoBarra}}', {
                 categories: 
                      <?=$categoria_nombres?>
                 ,
-                crosshair: true
+                // crosshair: true
             },
             yAxis: {
-                min: 0,
+                // min: 0,
                 title: {
                     text: '{{$titulo_y}}'
                 }
@@ -35,7 +35,7 @@ Highcharts.chart('{{$nombreGraficoBarra}}', {
 
             plotOptions: {
                 column: {
-                    pointPadding: 0.2,
+                    // pointPadding: 0.2,
                     borderWidth: 0,
                     dataLabels: {
                                 enabled: true,

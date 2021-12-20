@@ -56,7 +56,7 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{number_format(0,0)}}   </span></h4>
+                                <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">{{number_format($locales_educativos,0)}}   </span></h4>
                                 <p class="mb-0 mt-1 text-truncate">Total </p>
                             </div>
                         </div>
@@ -127,6 +127,22 @@
             </div>
 
             <div class="col-md-6 col-xl-6">
+                <div class="alert alert-info"> 
+                        <div id="GraficoBarras_Docentes_Ugeles">      
+                          
+                        </div> 
+                </div>   
+                
+            </div>
+
+            <div class="col-md-6 col-xl-6">
+                <br>
+            </div>
+            <div class="col-md-6 col-xl-6">
+                <br>
+            </div>
+
+            <div class="col-md-6 col-xl-6">
                 <div class="alert alert-info">
                     <div id="barraMatriculaTipoGestion">       
                         {{-- se carga con el scrip lineas abajo --}}
@@ -134,7 +150,20 @@
                 </div> 
             </div>
 
-            
+            <div class="col-md-6 col-xl-6">
+                <div class="alert alert-info">
+                    <div id="GraficoBarras_Instituciones_Distrito">       
+                        {{-- se carga con el scrip lineas abajo --}}
+                    </div>                    
+                </div> 
+            </div>
+
+            <div class="col-md-6 col-xl-6">
+                <br>
+            </div>
+            <div class="col-md-6 col-xl-6">
+                <br>
+            </div>
 
             <div class="col-md-6 col-xl-6">
                 <div class="alert alert-info">
@@ -148,6 +177,8 @@
                 </div>   
                 
             </div>
+
+            
 
           
             <div class="col-md-6 col-xl-6">
@@ -214,7 +245,9 @@
         $(document).ready(function() {
             cargar_Grafico();  
             cargar_GraficoBarra_MatriculaUgel();   
-            cargar_GraficoBarra_MatriculaTipoGestion();       
+            cargar_GraficoBarra_MatriculaTipoGestion();   
+            cargar_GraficoBarras_Docentes_Ugeles();    
+            cargar_GraficoBarras_Instituciones_Distrito();
         });
 
         function cargar_Grafico() {
@@ -255,6 +288,34 @@
                 type: 'post',
             }).done(function (data) {               
                 $('#barraMatriculaTipoGestion').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
+        }
+
+        function cargar_GraficoBarras_Docentes_Ugeles() {            
+            $.ajax({  
+                headers: {
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },                           
+                url: "{{ url('/') }}/CuadroAsigPersonal/Docentes/GraficoBarras_Docentes_Ugeles/"+ {{$ultimo_Importacion_id_dePlaza}},
+                type: 'post',
+            }).done(function (data) {               
+                $('#GraficoBarras_Docentes_Ugeles').html(data);
+            }).fail(function () {
+                alert("Lo sentimos a ocurrido un error");
+            });
+        }
+
+        function cargar_GraficoBarras_Instituciones_Distrito() {            
+            $.ajax({  
+                headers: {
+                     'X-CSRF-TOKEN': $('input[name=_token]').val()
+                },                           
+                url: "{{ url('/') }}/InstEducativa/GraficoBarras_Instituciones_Distrito",
+                type: 'post',
+            }).done(function (data) {               
+                $('#GraficoBarras_Instituciones_Distrito').html(data);
             }).fail(function () {
                 alert("Lo sentimos a ocurrido un error");
             });

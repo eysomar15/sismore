@@ -403,7 +403,7 @@ class CuadroAsigPersonalRepositorio
         return $data;
     }
 
-    public static function docentes($importacion_id)
+    public static function docentes_porUgel($importacion_id)
     { 
         $data = DB::table(
             DB::raw("(
