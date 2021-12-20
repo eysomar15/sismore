@@ -97,7 +97,7 @@
             <div class="col-xl-6">
                 <div class="card card-border card-default">
                     <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title text-default">PROFESORES TITULADOS, POR UGEL</h3>
+                        <h3 class="card-title text-default">PROFESORES TITULADOS EN {{$nivel->id==31?"INICIAL":$nivel->nombre}}, POR UGEL</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">

@@ -75,6 +75,7 @@ class MenuRepositorio
       ->where('v1.sistema_id', $sistema_id)
       ->where('v1.url', '')
       ->where('v1.dependencia')
+      ->where('v1.estado',1)
       ->orderBy('v1.id', 'desc')
       ->get();
     return $query;

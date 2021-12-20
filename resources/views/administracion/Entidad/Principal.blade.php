@@ -97,7 +97,7 @@
                                     <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%">
                                         <thead class="cabecera-dataTable" id="xxx">
                                             <!--th>Nº</th-->
-                                            <th>Nombre</th>
+                                            <th id="opcionesx">Gerencia</th>
                                             <th>Abreviado</th>
                                             <th>Aciones</th>
                                         </thead>
@@ -224,6 +224,15 @@
             $("select").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
+            });
+            $("#entidad").change(function(){
+                $("#opcionesx").html('Gerencia');
+            });
+            $("#entidadgerencia").change(function(){
+                $("#opcionesx").html('Oficina');
+                if($(this).val()==0){
+                    $("#opcionesx").html('Gerencia');
+                }
             });
             listarDT();
             cargar_gerencia('')
