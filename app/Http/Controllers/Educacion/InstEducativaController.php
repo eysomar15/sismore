@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Educacion;
 use App\Http\Controllers\Controller;
 use App\Repositories\Educacion\InstEducativaRepositorio;
+use App\Utilities\Utilitario;
 use Illuminate\Database\Eloquent\Collection;
 
 class InstEducativaController extends Controller
@@ -13,18 +14,27 @@ class InstEducativaController extends Controller
     }
 
     public function principal()
-    {        
-        return view('educacion.InstEducativa.Principal');     
+    {     
+        $importaciones_padronweb = InstEducativaRepositorio::importaciones_padronweb();
+
+        $fecha_version = Utilitario::fecha_formato_texto_completo($importaciones_padronweb->first()->fechaActualizacion ); 
+        
+        $total_tipoGestion = InstEducativaRepositorio::total_tipoGestion();
+
+        $privadas = $total_tipoGestion->first()->privada;
+        $publicas = $total_tipoGestion->first()->publica;
+
+
+        return view('educacion.InstEducativa.Principal',compact('fecha_version','privadas','publicas'));     
     }
 
     public function reporteDistrito()
+    
     {
-        $lista_resumen_porDistrito = InstEducativaRepositorio::resumen_porDistrito();
-        $lista_resumen_porProvincia = InstEducativaRepositorio::resumen_porProvincia();
+        $lista_resumen_porDistrito = InstEducativaRepositorio::resumen_porDistrito_tipoGestion();
+        $lista_resumen_porProvincia = InstEducativaRepositorio::resumen_porProvincia_tipoGestion();
         // $sumatoria_Provincia = $this->sumatoria_Provincia($lista_resumen_porDistrito);
-        $lista_resumen_porRegion = InstEducativaRepositorio::resumen_porRegion();
-
-  
+        $lista_resumen_porRegion = InstEducativaRepositorio::resumen_porRegion();         
         
         return view('educacion.InstEducativa.ReporteDistrito',compact('lista_resumen_porDistrito','lista_resumen_porRegion','lista_resumen_porProvincia'));   
     }

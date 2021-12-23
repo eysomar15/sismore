@@ -12,9 +12,11 @@ use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Educacion\InstEducativaController;
 use App\Http\Controllers\Educacion\MatriculaController;
+use App\Http\Controllers\Educacion\PadronEIBController;
 use App\Http\Controllers\Educacion\PadronWebController;
 use App\Http\Controllers\Educacion\PLazaController;
 use App\Http\Controllers\Educacion\TabletaController;
+use App\Http\Controllers\Educacion\TextosEscolaresController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
 use App\Http\Controllers\Presupuesto\ImporGastosController;
@@ -61,6 +63,12 @@ Route::post('/PadronWeb/Aprobar/procesar/{importacion_id}', [PadronWebController
 
 Route::get('/PadronEIB/Importar', [PadronEIBController::class, 'importar'])->name('PadronEIB.importar');
 Route::post('/PadronEIB/Importar', [PadronEIBController::class, 'guardar'])->name('PadronEIB.guardar');
+
+Route::get('/TextosEscolares/Importar', [TextosEscolaresController::class, 'importar'])->name('TextosEscolares.importar');
+Route::post('/TextosEscolares/Importar', [TextosEscolaresController::class, 'guardar'])->name('TextosEscolares.guardar');
+Route::get('/TextosEscolares/Principal', [TextosEscolaresController::class, 'principal'])->name('TextosEscolares.principal');
+Route::post('/TextosEscolares/Fechas/{anio_id}', [TextosEscolaresController::class, 'Fechas'])->name('TextosEscolares.Fechas');
+Route::post('/TextosEscolares/ReporteUgel/{importacion_id}', [TextosEscolaresController::class, 'ReporteUgel'])->name('TextosEscolares.ReporteUgel');
 
 Route::get('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
 Route::post('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');

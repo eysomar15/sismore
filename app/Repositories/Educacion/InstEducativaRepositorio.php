@@ -26,16 +26,40 @@ class InstEducativaRepositorio
     { 
         $data = DB::table(
                         DB::raw("(
-                                        select  count(distinct codLocal ) as cantidad from 
-                                        edu_institucioneducativa as inst
-                                        inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
-                                        where(inst.estado='ac') and est.codigo = 1 and anexo = 0                   
+                                select  count(distinct codLocal ) as cantidad from 
+                                edu_institucioneducativa as inst
+                                inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
+                                where(inst.estado='ac') and est.codigo = 1 and anexo = 0                   
                                 ) as datos"
                             )
                         )
                 
                     ->get([
                         DB::raw('cantidad')                     
+                    ]);
+
+        return $data;
+    }
+
+    public static function total_tipoGestion()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+                                select 
+                                sum(case when tipGest.id = 20 then 1 else 0 end) as privada,
+                                sum(case when tipGest.id in (16,18,21,22,23) then 1 else 0 end) as publica
+                                from edu_institucioneducativa as inst
+                                inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
+                                inner join edu_tipogestion tipGest on inst.TipoGestion_id = tipGest.id
+                                where inst.estado = 'AC' and anexo = 0
+                                and est.codigo = 1                 
+                                ) as datos"
+                            )
+                        )
+                
+                    ->get([
+                        DB::raw('privada'),
+                        DB::raw('publica')                     
                     ]);
 
         return $data;
@@ -64,6 +88,71 @@ class InstEducativaRepositorio
 
              return $data;
      }
+
+     public static function resumen_porDistrito_tipoGestion()
+    { 
+                $data = DB::table(
+                        DB::raw("(
+                                        select provincia.codigo,provincia.nombre as provincia,distrito.nombre as distrito,
+                                        sum(case when tipGest.id = 20 then 1 else 0 end) as privada,
+                                        sum(case when tipGest.id in (16,18,21,22,23) then 1 else 0 end) as publica
+                                        from edu_institucioneducativa as inst
+                                        inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
+                                        inner join edu_tipogestion tipGest on inst.TipoGestion_id = tipGest.id
+                                        inner join par_centropoblado as cenPo on inst.CentroPoblado_id = cenPo.id
+                                        inner join par_ubigeo as distrito on cenPo.Ubigeo_id = distrito.id
+                                        inner join par_ubigeo as provincia on distrito.dependencia = provincia.id
+                                        where inst.estado = 'AC' and anexo = 0
+                                        and est.codigo = 1
+                                        group by provincia.codigo,provincia.nombre,distrito.nombre                
+                                ) as datos"
+                        )
+                        )
+                
+                ->get([
+                        DB::raw('privada'),
+                        DB::raw('publica') ,
+                        DB::raw('distrito'),
+                        DB::raw('provincia'),
+                        DB::raw('codigo')                 
+                ]);
+
+        return $data;
+     }
+
+     public static function resumen_porProvincia_tipoGestion()
+    { 
+                $data = DB::table(
+                        DB::raw("(
+                                        select region.nombre as region,provincia.codigo,provincia.nombre as provincia,
+                                        sum(case when tipGest.id = 20 then 1 else 0 end) as privada,
+                                        sum(case when tipGest.id in (16,18,21,22,23) then 1 else 0 end) as publica
+                                        from edu_institucioneducativa as inst
+                                        inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
+                                        inner join edu_tipogestion tipGest on inst.TipoGestion_id = tipGest.id
+                                        inner join par_centropoblado as cenPo on inst.CentroPoblado_id = cenPo.id
+                                        inner join par_ubigeo as distrito on cenPo.Ubigeo_id = distrito.id
+                                        inner join par_ubigeo as provincia on distrito.dependencia = provincia.id
+                                        inner join par_ubigeo as region on provincia.dependencia = region.id
+
+                                        where inst.estado = 'AC' and anexo = 0
+                                        and est.codigo = 1
+                                        group by region.nombre,provincia.codigo,provincia.nombre               
+                                ) as datos"
+                        )
+                        )
+                
+                ->get([
+                        DB::raw('privada'),
+                        DB::raw('publica') ,
+                        DB::raw('provincia'),
+                        DB::raw('region'),
+                        DB::raw('codigo')                 
+                ]);
+
+        return $data;
+     }
+
 
      public static function resumen_porProvincia()
      { 
@@ -106,5 +195,24 @@ class InstEducativaRepositorio
                         ]);
 
              return $data;
+     }
+
+     public static function importaciones_padronweb()
+     { 
+        $data = DB::table(
+                        DB::raw("(
+                                        select  distinct imp.fechaActualizacion from edu_padronweb pw
+                                        inner join par_importacion imp on pw.importacion_id = imp.id
+                                        where imp.estado = 'PR'
+                                        order by imp.fechaActualizacion desc                   
+                                ) as datos"
+                        )
+                )
+        
+        ->get([
+                DB::raw('fechaActualizacion')                     
+        ]);
+
+        return $data;
      }
 }

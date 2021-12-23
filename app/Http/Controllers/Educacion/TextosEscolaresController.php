@@ -5,14 +5,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\PadronEIB;
+use App\Models\Educacion\TextosEscolares;
 use App\Models\Parametro\Anio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Educacion\TextosEscolaresRepositorio;
 use App\Utilities\Utilitario;
 use Exception;
 
 
-class PadronEIBController extends Controller
+class TextosEscolaresController extends Controller
 {
     public function __construct()
     {
@@ -24,7 +25,7 @@ class PadronEIBController extends Controller
         $mensaje = "";
         $anios = Anio::orderBy('anio', 'desc')->get();
         
-        return view('Educacion.PadronEIB.Importar',compact('mensaje','anios'));
+        return view('Educacion.TextosEscolares.Importar',compact('mensaje','anios'));
     } 
     
     public function guardar(Request $request)
@@ -42,32 +43,31 @@ class PadronEIBController extends Controller
          foreach ($array as $key => $value) {
              foreach ($value as $row) {
                 if(++$i > 1) break;
-                $cadena =  $cadena
-                .$row['nro'].$row['nombre_dre'].$row['ugel'].$row['codmodular'].$row['anexo'].$row['codlocal']
-                .$row['nombreinsteduc'].$row['nivel_modalidad'].$row['nombre_departamento'].$row['nombre_provincia']
-                .$row['nombre_distrito'].$row['centro_poblado']
-                .$row['formaatencion'].$row['escenario']
-                .$row['nomlenguaoriginaria1'].$row['nomlenguaoriginaria2'].$row['nomlenguaoriginaria3']
-                ;              }
+                    $cadena =  $cadena
+                    .$row['region'].$row['cod_ugel'].$row['ugel'].$row['dotacion'].$row['direccion'].$row['codigo_sigema']
+                    .$row['codigo_siga'].$row['material'].$row['beneficiario'].$row['cantidad_ugel'].$row['peso_unitario']
+                    .$row['peso_total_kg'].$row['volumen_unitario'].$row['fecha_llegada_ugel'].$row['anio'].$row['mes'].$row['tramo']
+                    ;              
+                }
              }
          }catch (Exception $e) {
             $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
-            return view('Educacion.PadronEIB.Importar',compact('mensaje','anios'));            
+            return view('Educacion.TextosEscolares.Importar',compact('mensaje','anios'));            
          }   
 
-         $existeMismaFecha = ImportacionRepositorio :: Importacion_PE($request['fechaActualizacion'],12);
+         $existeMismaFecha = ImportacionRepositorio :: Importacion_PE($request['fechaActualizacion'],17);
 
          if( $existeMismaFecha != null)
          {
              $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";          
-             return view('Educacion.PadronEIB.Importar',compact('mensaje','anios'));            
+             return view('Educacion.TextosEscolares.Importar',compact('mensaje','anios'));            
          }
  
          else
          {
                try{
                    $importacion = Importacion::Create([
-                       'fuenteImportacion_id'=>12, // valor predeterminado
+                       'fuenteImportacion_id'=>17, // valor predeterminado
                        'usuarioId_Crea'=> auth()->user()->id,
                        'usuarioId_Aprueba'=>null,
                        'fechaActualizacion'=>$request['fechaActualizacion'],
@@ -77,19 +77,27 @@ class PadronEIBController extends Controller
 
                    foreach ($array as $key => $value) {
                         foreach ($value as $row) {
-                            $PadronEIB = PadronEIB::Create([
+                            $TextosEscolares = TextosEscolares::Create([
                                 'importacion_id'=>$importacion->id, // valor predeterminado
                                 'anio_id'=> $request['anio'],
+
+                                'region'=> $row['region'],
+                                'cod_ugel'=> $row['cod_ugel'],
                                 'ugel'=> $row['ugel'],
-                                'codModular'=> $row['codmodular'],
-                                'anexo'=> $row['anexo'],
-                                'codLocal'=> $row['codlocal'],
-                                'nombreInstEduc'=> $row['nombreinsteduc'],
-                                'formaAtencion'=> $row['formaatencion'],
-                                'escenario'=> $row['escenario'],
-                                'nomLenguaOriginaria1'=> $row['nomlenguaoriginaria1'],
-                                'nomLenguaOriginaria2'=> $row['nomlenguaoriginaria2'],
-                                'nomLenguaOriginaria3'=> $row['nomlenguaoriginaria3'],
+                                'dotacion'=> $row['dotacion'],
+                                'direccion'=> $row['direccion'],
+                                'codigo_sigema'=> $row['codigo_sigema'],
+                                'codigo_siga'=> $row['codigo_siga'],
+                                'material'=> $row['material'],
+                                'beneficiario'=> $row['beneficiario'],
+                                'cantidad_ugel'=> $row['cantidad_ugel'],
+                                'peso_unitario'=> $row['peso_unitario'],
+                                'peso_total_kg'=> $row['peso_total_kg'],
+                                'volumen_unitario'=> $row['volumen_unitario'],
+                                'fecha_llegada_ugel'=> $row['fecha_llegada_ugel'],
+                                'anio'=> $row['anio'],
+                                'mes'=> $row['mes'],
+                                'tramo'=> $row['tramo'],
                             ]); 
                         }
                     }
@@ -99,7 +107,7 @@ class PadronEIBController extends Controller
                       $importacion->save();
                       
                       $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema";        
-                      return view('Educacion.Tableta.Importar',compact('mensaje','anios'));            
+                      return view('Educacion.TextosEscolares.Importar',compact('mensaje','anios'));            
                   }
          }
 
@@ -159,6 +167,33 @@ class PadronEIBController extends Controller
         }
         
     }    
+
+
+
+    //**************************************************************************************** */
+    public function principal()
+    {
+       
+        $anios =  TextosEscolaresRepositorio ::TextosEscolares_anio();
+
+        $fechas = TextosEscolaresRepositorio ::fechas_TextosEscolares_anio($anios->first()->id);
+              
+        return view('educacion.TextosEscolares.Principal', compact('anios','fechas'));       
+    }
+
+    public function Fechas($anio_id)
+    {
+        $fechas_TextosEscolares = TextosEscolaresRepositorio ::fechas_TextosEscolares_anio($anio_id);      
+        return response()->json(compact('fechas_TextosEscolares'));
+    }
+
+    public function reporteUgel($importacion_id)
+    {
+        $data =  TextosEscolaresRepositorio ::total_porBeneficiario($importacion_id);
+       
+        return view('educacion.TextosEscolares.ReporteUgel',compact('data'));
+    }
+
 
     
     

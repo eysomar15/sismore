@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DISTRIBUCIÓN DE TABLETAS'])
+@extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DISTRIBUCIÓN DE TEXTOS ESCOLARES'])
 
 @section('css')
 
@@ -6,19 +6,7 @@
 
 @section('content')  
 
-<div class="content">
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">      
-                    <div id="barra1">       
-                        {{-- se carga con el scrip lineas abajo --}}
-                    </div> 
-                </div> 
-            </div> 
-        </div> 
-    </div> 
-</div> 
+
 
 
 <div class="content">
@@ -43,7 +31,7 @@
                         <label class="col-md-1 col-form-label">Fecha</label>
                         <div class="col-md-2">
                             <select id="fechas" name="matricula_fechas" class="form-control"  onchange="cargar_resumen();">
-                                @foreach ($fechas_tabletas as $item)
+                                @foreach ($fechas as $item)
                                     <option value="{{ $item->tableta_id }}"> {{ $item->fechaActualizacion }} </option>
                                 @endforeach
                             </select>
@@ -85,33 +73,17 @@
     <script type="text/javascript"> 
         
         $(document).ready(function() {
-            cargar_fechas();
-            cargar_Grafico();
-            //cargar_resumen_matricula();
+            cargar_fechas();        
         });
 
-        function cargar_Grafico() {
-            
-            $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
-                url: "{{ url('/') }}/Tableta/GraficoBarrasPrincipal/"+ $('#anio').val(),
-                type: 'post',
-            }).done(function (data) {               
-                $('#barra1').html(data);
-            }).fail(function () {
-                alert("Lo sentimos a ocurrido un error");
-            });
-        }
-
+        
         function cargar_fechas() {
            
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },
-                url: "{{ url('/') }}/Tableta/Fechas/" + $('#anio').val(),
+                url: "{{ url('/') }}/TextosEscolares/Fechas/" + $('#anio').val(),
                 type: 'post',
                 dataType: 'JSON',
                 success: function(data) {
@@ -120,38 +92,29 @@
                     
                     var options = null;
                     
-                    $.each(data.fechas_tabletas, function(index, value) {
+                    $.each(data.fechas_TextosEscolares, function(index, value) {
                         options += "<option value='" + value.tableta_id + "'>" + value.fechaActualizacion + "</option>";                       
                     });
                     
                     $("#fechas").append(options);                  
-                    cargar_resumen(); 
+                    cargar_resumen_porUgel(); 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                    
                 },
             });
-
-            cargar_Grafico();
             
         }
 
-        function cargar_resumen() {   
-
-            if($('#hoja').val()==1)       
-                cargar_resumen_porUgel();          
-            else         
-                cargar_matricula_porDistrito();                   
-        }
-
         function cargar_resumen_porUgel() { 
-            $('#hoja').val(1);
+           
+            // alert($('#fechas').val());
             $.ajax({  
                 headers: {
                      'X-CSRF-TOKEN': $('input[name=_token]').val()
                 },                           
-                url: "{{ url('/') }}/Tableta/ReporteUgel/" + $('#anio').val() + "/" + $('#fechas').val(),
+                url: "{{ url('/') }}/TextosEscolares/ReporteUgel/"  + $('#fechas').val(),
                 type: 'post',
             }).done(function (data) {               
                 $('#datos01').html(data);
@@ -159,12 +122,9 @@
                 alert("Lo sentimos a ocurrido un error");
             });
            
-        }
+        }      
 
-        function cargar_matricula_porDistrito() {
-            $('#hoja').val(2);
-            
-        }
+       
        
     </script>
     
