@@ -27,6 +27,7 @@ use App\Http\Controllers\Vivienda\EmapacopsaController;
 use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,9 @@ Route::get('/home/{sistemas_id}', [HomeController::class, 'sistema_acceder'])->n
 Route::get('/AEI', [HomeController::class, 'AEI_tempo'])->name('AEI_tempo');
 
 
-
+/* Route::get("/xxxxx", function(){
+    return Redirect::to("https://www.google.com/");
+  }); */
 
 /**************************************** EDUCACION ************************************************/
 Route::get('/PadronWeb/Importar', [PadronWebController::class, 'importar'])->name('PadronWeb.importar');
