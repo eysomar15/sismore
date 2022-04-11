@@ -46,7 +46,6 @@ class CentroPobladoDatassController extends Controller
             //->rawColumns(['action', 'icono', 'estado'])
             ->make(true);
     }
-
     public function infraestructurasanitaria()
     {
         //$ingresos = ImportacionRepositorio::Listar_soloYear();
@@ -89,5 +88,17 @@ class CentroPobladoDatassController extends Controller
         $dato['sac'] = CentroPobladoDatassRepositorio::centropoplado_porServicioAguaContinuo($request->fecha, $request->provincia, $request->distrito);
         $dato['rc'] = CentroPobladoDatassRepositorio::centropoplado_porRealizaCloracionAgua($request->fecha, $request->provincia, $request->distrito);
         return response()->json(compact('dato'));
+    }
+    public function listarDT()
+    {
+        $data = CentroPobladoDatassRepositorio::listar_ultimo();
+        //return response()->json(compact('data'));
+        return  datatables()::of($data)
+            /*->editColumn('icono', '<i class="{{$icono}}"></i>')
+            ->editColumn('estado', function ($data) {
+               return '';
+            })*/
+            //->rawColumns(['action', 'icono', 'estado'])
+            ->make(true);
     }
 }

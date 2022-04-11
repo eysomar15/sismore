@@ -371,7 +371,7 @@ class CentroPobladoRepositotio
         group by v3.nombre 
         order by v3.nombre) AS xxx'))
             //->select(DB::raw('name'), DB::raw('conteo'), DB::raw('cast(y as DOUBLE) y'))
-            ->select(DB::raw('name'),DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
+            ->select(DB::raw('name'), DB::raw('conteo as y'), DB::raw('cast(y as DOUBLE) as conteo'))
             ->get();
         return $query;
     }
@@ -397,13 +397,5 @@ class CentroPobladoRepositotio
             ->get();
         return $query;
     }
-    /* SELECT 
-        v3.nombre AS name,
-        COUNT(v1.id) AS conteo,
-        ROUND(count(v1.id)*100/(SELECT COUNT(id) FROM viv_centropoblado_datass WHERE importacion_id = ' . $importacion_id . ' AND sistema_agua="SI"),2) AS y 
-    FROM viv_centropoblado_datass as v1 
-    INNER JOIN par_ubigeo as v2 ON v2.id = v1.ubigeo_id 
-    INNER JOIN par_ubigeo as v3 ON v3.id = v2.dependencia 
-    WHERE v1.importacion_id = ' . $importacion_id . ' AND v1.sistema_agua="SI" 
-    GROUP BY v3.nombre,v1.sistema_agua */
+   
 }

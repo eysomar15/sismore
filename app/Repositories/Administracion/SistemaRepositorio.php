@@ -14,7 +14,7 @@ class SistemaRepositorio
       ->join('adm_usuario_perfil', 'adm_usuario_perfil.perfil_id', '=', 'adm_perfil.id')
       ->where("adm_usuario_perfil.usuario_id", "=", $usuario_id)
       ->where("adm_perfil.estado", "=", 1)
-      ->orderBy('adm_sistema.nombre')
+      ->orderBy('adm_sistema.pos')
       ->get();
 
     return $data;

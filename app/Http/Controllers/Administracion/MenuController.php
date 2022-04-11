@@ -80,7 +80,7 @@ class MenuController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
-        if ($request->url == '' && $request->dependencia != '') {
+        if ($request->url == '' && $request->dependencia) {
             $data['inputerror'][] = 'url';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
@@ -103,14 +103,14 @@ class MenuController extends Controller
             'sistema_id' => $request->sistema_id,
             'dependencia' => $request->dependencia,
             'nombre' => $request->nombre,
-            'url' => $request->url,
+            'url' => ($request->dependencia ? $request->url : ""),
             'posicion' => $request->posicion,
             'icono' => $request->icono,
             'parametro' => $request->parametro,
             'estado' => '1',
         ]);
 
-        return response()->json(array('status' => true, 'add' => $val/*, 'menu' => $menu*/));
+        return response()->json(array('status' => true));
     }
     public function ajax_update(Request $request)
     {
@@ -122,20 +122,24 @@ class MenuController extends Controller
         $menu->sistema_id = $request->sistema_id;
         $menu->dependencia = $request->dependencia;
         $menu->nombre = $request->nombre;
-        $menu->url = $request->url;
+        $menu->url = $request->url == null ? '' : $request->url;
+        //$menu->url = $request->url;
+        /* if ($request->dependencia) $menu->url = $request->url;
+        elseif ($request->url != '') $menu->url = $request->url;
+        else $menu->url = ''; */
         $menu->posicion = $request->posicion;
         $menu->icono = $request->icono;
         $menu->parametro = $request->parametro;
         //$menu->estado = $request->estado;
         $menu->save();
 
-        return response()->json(array('status' => true, 'update' => $request, 'menu' => $menu));
+        return response()->json(array('status' => true, 'menu' => $request->url));
     }
     public function ajax_delete($menu_id)
     {
         $menu = Menu::find($menu_id);
         $menu->delete();
-        return response()->json(array('status' => true, 'menu' => $menu));
+        return response()->json(array('status' => true));
     }
     public function ajax_estado($menu_id)
     {

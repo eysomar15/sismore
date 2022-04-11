@@ -19,9 +19,9 @@
                             <div class="table-responsive">
                                 <table id="importaciones" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="cabecera-dataTable">                                    
-                                        <th>Codigo</th>
+                                        <!-- <th>Codigo</th> -->
                                         <th>Fuente</th>
-                                        <th>Formato</th>
+                                        <!-- <th>Formato</th> -->
                                         <th>Usuario crea</th>
                                         <th>Usuario aprueba</th>
                                         <th>Fecha version</th>
@@ -75,10 +75,10 @@
         $('#importaciones').DataTable({
             "ajax": "{{route('importacion.importacionesLista_DataTable')}}",
             "columns":[
-                {data:'id'},
+                /* {data:'id'}, */
                 {data:'nombre'},
-                {data:'formato'}, 
-                {data:'usuario'},    
+                /* {data:'formato'},  */
+                {data:'unombre'},    
                 {data:'aprueba'},                 
                 {data:'fechaActualizacion'},
                 {data:'estado'}, 

@@ -10,14 +10,15 @@
     <!-- Plugins css -->
     {{-- <link href="{{ asset('/') }}assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" /> --}}
 
-<style>
-    .centrarmodal{
-        display:flex;
-        justify-content: center;
-        align-items: center;
-        background:#000000c9 !important;
-    }
-</style>
+    <style>
+        .centrarmodal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000000c9 !important;
+        }
+
+    </style>
 @endsection
 
 @section('content')
@@ -49,11 +50,12 @@
                                     <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%">
                                         <thead class="cabecera-dataTable">
                                             <!--th>Nº</th-->
-                                            <th>DNI</th>
-                                            <th>Usuario</th>
+                                            {{-- <th>DNI</th> --}}
+                                            <th>Entidad</th>
                                             <th>Nombre</th>
+                                            <th>Usuario</th>
                                             <th>Perfiles</th>
-                                            <th>Email</th>
+                                            {{-- <th>Registro</th> --}}
                                             <th>Estado</th>
                                             <th>Aciones</th>
                                         </thead>
@@ -71,7 +73,8 @@
 
     <!-- Bootstrap modal -->
     {{-- <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;"> --}}
-    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="overflow:auto">
+    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        style="overflow:auto">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -87,9 +90,9 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <!-- <div class="card-header">
                                         <h3 class="card-title">Datos Personales</h3>
-                                    </div>
+                                    </div> -->
                                     <div class="card-body">
                                         <div class="form">
                                             <div class="form-group">
@@ -150,16 +153,15 @@
 
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    {{-- <div class="col-md-6">
                                                         <label>Tipo<span class="required">*</span></label>
                                                         <select name="tipo" id="tipo" class="form-control">
                                                             <option value="">SELECCIONAR</option>
                                                             <option value="0">ADMINISTRADOR GENERAL</option>
                                                             <option value="1">ADMINISTRADOR LOCAL</option>
-                                                            {{-- <option value="2">ENTIDAD</option> --}}
                                                         </select>
                                                         <span class="help-block"></span>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="col-md-6">
                                                         <label>Entidad<span class="required">*</span></label>
                                                         <select name="unidadejecutora" id="unidadejecutora"
@@ -172,10 +174,6 @@
                                                         </select>
                                                         <span class="help-block"></span>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Gerencia<span class="required">*</span>
                                                             <button type="button" class="btn btn-primary btn-xs"
@@ -188,6 +186,10 @@
                                                         </select>
                                                         <span class="help-block"></span>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Oficinas<span class="required">*</span>
                                                             <button type="button" class="btn btn-primary btn-xs"
@@ -203,33 +205,23 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            {{-- <div class="form-group">
+                                            <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label>Entidad<span class="required">*</span></label>
-                                                        <select id="entidad" name="entidad" class="form-control">
-                                                            <option value="">SELECCIONAR</option>
-                                                        </select>
+                                                        <label>Usuario<span class="required">*</span></label>
+                                                        <input id="usuario" name="usuario" class="form-control"
+                                                            type="text">
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Oficina<span class="required">*</span></label>
-                                                        <input type="text" id="oficina" name="oficina" class="form-control">
+                                                        <label>Password<span class="required"
+                                                                id="password-required">*</span></label>
+                                                        <input id="password" name="password" class="form-control"
+                                                            type="password">
                                                         <span class="help-block"></span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Cargo<span class="required">*</span></label>
-                                                        <input type="text" id="cargo" name="cargo" class="form-control">
-                                                        <span class="help-block"></span>
-                                                    </div>
-
-                                                </div>
-                                            </div> --}}
                                         </div>
                                         <!-- .form -->
                                     </div>
@@ -239,7 +231,7 @@
                             </div>
                             <!-- col -->
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -277,14 +269,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- .form -->
                                     </div>
-                                    <!-- card-body -->
                                 </div>
-                                <!-- card -->
                             </div>
-                            <!-- col -->
-                        </div>
+                        </div> --}}
 
                         {{-- <div class="row">
                             <div class="col-sm-12">
@@ -530,11 +518,11 @@
     {{-- <script src="{{ asset('/') }}assets/js/app.min.js"></script> --}}
     <script>
         /* var id;
-                                                    //.delete nombre con el que se le llamo en el controlador al boton eliminar
-                                                    $(document).on('click', '.delete', function() {
-                                                        id = $(this).attr('id');
-                                                        $('#confirmModalEliminar').modal('show');
-                                                    }); */
+                                                                        //.delete nombre con el que se le llamo en el controlador al boton eliminar
+                                                                        $(document).on('click', '.delete', function() {
+                                                                            id = $(this).attr('id');
+                                                                            $('#confirmModalEliminar').modal('show');
+                                                                        }); */
 
         $(document).ready(function() {
             var save_method = '';
@@ -560,16 +548,16 @@
             tabla_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ route('Usuario.Lista_DataTable') }}",
                 "columns": [{
-                    data: 'dni'
-                }, {
-                    data: 'usuario'
+                    data: 'entidad'
                 }, {
                     data: 'nombrecompleto'
                 }, {
+                    data: 'usuario'
+                }, {
                     data: 'perfiles'
-                }, {
-                    data: 'email'
-                }, {
+                }, /* {
+                    data: 'created_at'
+                },  */{
                     data: 'estado'
                 }, {
                     data: 'action',
@@ -669,7 +657,7 @@
             $('.col-md-6').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_form').modal('show');
-            $('.modal-title').text('Nuevo Usuario');
+            $('#modal_form .modal-title').text('Nuevo Usuario');
             $('#id').val('');
         }
 
@@ -698,15 +686,8 @@
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
-                            if (data.inputerror[i] == "sistemas") {
-                                /* $("#form-group-sistemas").addClass('has-error');
-                                $("#help-block-sistemas").text(data.error_string[i]); */
-                            } else {
-                                $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
-                                $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
-                            }
-
-
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                         }
                     }
                     $('#btnSave').text('Guardar');
@@ -739,7 +720,7 @@
                     $('[name="email"]').val(data.usuario.email);
                     $('[name="celular"]').val(data.usuario.celular);
                     $('[name="usuario"]').val(data.usuario.usuario);
-                    $('[name="tipo"]').val(data.usuario.tipo);
+                    //$('[name="tipo"]').val(data.usuario.tipo);
                     if (data.entidad) {
                         $('[name="unidadejecutora"]').val(data.entidad.entidad_id);
                         $.ajax({
@@ -790,7 +771,7 @@
                         });
                     }
                     $('#modal_form').modal('show');
-                    $('.modal-title').text('Modificar Usuario');
+                    $('#modal_form .modal-title').text('Modificar Usuario');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     toastr.error('Error get data from ajax', 'Mensaje');
@@ -827,7 +808,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_perfil').modal('show');
-            //$('.modal-title').text('Seleccionar Perfil');
+            //$('#modal_perfil .modal-title').text('Seleccionar Perfil');
             $('#usuario_id').val(id);
             $("#perfiles li").remove();
             listarDTperfiles(id);
@@ -959,6 +940,7 @@
                 }
             });
         }); */
+
         function cargar_gerencia(id) {
             $("#entidadoficina option").remove();
             $.ajax({

@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'Bienvenido al SISMORE - Ucayali'])
+@extends('layouts.main',['titlePage'=>'Bienvenido al Sistema de Monitoreo Regional'])
 
 @section('content')
 
@@ -9,8 +9,10 @@
         @include('inicioVivienda')
     @elseif (session('sistema_id')==4)
         @include('inicioAdministrador')
-        @elseif (session('sistema_id')==5)
+    @elseif (session('sistema_id')==5)
         @include('inicioPresupuesto')
+    @elseif (session('sistema_id')==6)
+        @include('inicioTrabajo')
     @else
         <h5>.....</h5>
     @endif

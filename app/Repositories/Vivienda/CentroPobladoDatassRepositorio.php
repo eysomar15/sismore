@@ -17,7 +17,6 @@ class CentroPobladoDatassRepositorio
             ->get();
         return $query;
     }
-
     public static function listar_distrito($provincia)
     {
         $query = CentroPobladoDatass::select('v2.id', 'v2.nombre')
@@ -31,12 +30,32 @@ class CentroPobladoDatassRepositorio
     {
         $query = DB::table(DB::raw('(select distinct ubigeo_cp from viv_centropoblado_datass as v1 
         inner join par_importacion as v2 on v2.id=v1.importacion_id 
-        where v2.estado="PR" and v1.importacion_id=' . $importacion_id.') as tabla'))
+        where v2.estado="PR" and v1.importacion_id=' . $importacion_id . ') as tabla'))
             ->select(DB::raw('count(ubigeo_cp) as conteo'))
             ->first();
         return $query;
     }
-
+    public static function listar_ultimo() //'.$ultimo->importacion_id.' 
+    {
+        $ultimo = DB::table(DB::raw('(select max(v1.importacion_id) as importacion_id from viv_centropoblado_datass v1 
+        inner join par_importacion v2 on v2.id=v1.importacion_id 
+        where v2.estado="PR") as xxx'))->first();
+        $query = DB::table(DB::raw('(select 
+                        v3.nombre provincia,
+                        v2.nombre distrito,
+                        count(v1.id) centropoblado,
+                        SUM(IF(v1.sistema_agua="SI",1,0)) sistema_agua  ,
+                        SUM(IF(v1.sistema_cloracion="SI",1,0)) sistema_cloracion ,
+                        SUM(IF(v1.sistema_disposicion_excretas="SI",1,0)) sistema_disposicion_excretas ,
+                        SUM(v1.total_poblacion) total_poblacion 
+                from viv_centropoblado_datass v1 
+                inner join par_ubigeo v2 on v2.id=v1.ubigeo_id 
+                inner join par_ubigeo v3 on v3.id=v2.dependencia 
+                where v1.importacion_id=356 
+                group by v3.nombre,v2.nombre 
+                order by v3.nombre ) as xx'))->get();
+        return $query;
+    }
     public static function poblacion_servicio_agua($importacion_id, $provincia, $distrito)
     {
         $ubicacion = '';
@@ -309,6 +328,18 @@ class CentroPobladoDatassRepositorio
             group by x1.importacion_id,x1.ubigeo_cp,x1.realiza_cloracion_agua) as datass) as ggg'))
             ->select(DB::raw('cast(conteo as SIGNED) as y'), DB::raw('servicio as name'))
             ->get();
+        return $query;
+    }
+
+    public static function sumas_dashboard($importacion_id)
+    {
+        $query = CentroPobladoDatass::where('importacion_id', $importacion_id)
+            ->select(
+                DB::raw('sum(total_poblacion) as poblacion'),
+                DB::raw('sum(poblacion_servicio_agua) as con_agua'),
+                DB::raw('sum(total_viviendas) as viviendas'),
+                DB::raw('sum(viviendas_conexion) as con_conexion')
+            )->first();
         return $query;
     }
 }

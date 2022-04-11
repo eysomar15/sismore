@@ -10,30 +10,30 @@
          <li class="dropdown notification-list">
              <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#"
                  role="button" aria-haspopup="false" aria-expanded="false">
-                 {{-- <img src="{{ asset('/') }}assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle"> --}}
-                 {{ Auth::user()->usuario }}
+                 <img src="{{ asset('/') }}assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+                 {{ Auth::user()->nombre }}
              </a>
              <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                  <!-- item-->
-                 <div class="dropdown-header noti-title">
-                     <h6 class="text-overflow m-0">Bienvenid@ !</h6>
-                 </div>
+                 {{-- <div class="dropdown-header noti-title">
+                     <h6 class="text-overflow m-0">Bienvenido</h6>
+                 </div> --}}
 
                  <!-- item-->
-                 <a href="javascript:void(0);" class="dropdown-item notify-item">
+                 <a href="#" class="dropdown-item notify-item" onclick="editPerfilUsuario('{{ Auth::user()->id }}')">
                      <i class="mdi mdi-face-profile"></i>
                      <span>Perfil</span>
                  </a>
 
                  <div class="dropdown-divider"></div>
                  <!-- item-->
-                 @if (session()->get('total_sistema')>1)
-                 <a href="{{ route('home') }}" class="dropdown-item notify-item">
-                    <i class="mdi mdi-settings-outline noti-icon"></i>
-                    <span>Cambiar Sistemas</span>
-                </a>
+                 @if (session()->get('total_sistema') > 1)
+                     <a href="{{ route('home') }}" class="dropdown-item notify-item">
+                         <i class="mdi mdi-settings-outline noti-icon"></i>
+                         <span>Cambiar Sistemas</span>
+                     </a>
                  @endif
-                 
+
                  <!-- item-->
                  <a href="{{ route('logout') }}" class="dropdown-item notify-item"
                      onclick="event.preventDefault();  document.getElementById('logout-form').submit();">
@@ -55,6 +55,33 @@
         </li> --}}
 
      </ul>
+
+
+     <!-- LOGO -->
+     <div class="logo-box">
+         <a href="{{ route('home') }}" class="logo text-center logo-dark">
+             <span class="logo-lg">
+                 <!-- <img src="{{ asset('/') }}assets/images/logo-GRU-a1.png" alt="" height="16"> -->
+                 <span class="logo-lg-text-dark">SISMORE</span>
+             </span>
+             <span class="logo-sm">
+                 <span class="logo-lg-text-dark">M</span>
+                 <!-- <img src="{{ asset('/') }}assets/images/logo-GRU-a1.png" alt="" height="25"> -->
+             </span>
+         </a>
+
+         <a href="{{ route('home') }}" class="logo text-center logo-light">
+             <span class="logo-lg">
+                 <img src="{{ asset('/') }}assets/images/logo-light-blanco.png" alt="" height="28">
+                 {{-- inicial --}}
+                 <!-- <span class="logo-lg-text-dark">SISMORE</span> -->
+             </span>
+             <span class="logo-sm">
+                 <!-- <span class="logo-lg-text-dark">M</span> -->
+                 <img src="{{ asset('/') }}assets/images/logo-sm-blanco.png" alt="" height="28">
+             </span>
+         </a>
+     </div>
 
 
      <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
@@ -84,36 +111,10 @@
         </li> --}}
      </ul>
 
-     <!-- LOGO -->
-     <div class="logo-box">
-         <a href="{{ route('home') }}" class="logo text-center logo-dark">
-             <span class="logo-lg">
-                 <img src="{{ asset('/') }}assets/images/logo-GRU-a1.png" alt="" height="16">
-                 <!-- <span class="logo-lg-text-dark">SISMORE</span> -->
-             </span>
-             <span class="logo-sm">
-                 <!-- <span class="logo-lg-text-dark">M</span> -->
-                 <img src="{{ asset('/') }}assets/images/logo-GRU-a1.png" alt="" height="25">
-             </span>
-         </a>
 
-         <a href="{{ route('home') }}" class="logo text-center logo-light">
-             <span class="logo-lg">
-                 <img src="{{ asset('/') }}assets/images/logo-light-blanco.png" alt="" height="28">
-                 {{-- inicial --}}
-                 <!-- <span class="logo-lg-text-dark">SISMORE</span> -->
-             </span>
-             <span class="logo-sm">
-                 <!-- <span class="logo-lg-text-dark">M</span> -->
-                 <img src="{{ asset('/') }}assets/images/logo-light-blanco.png" alt="" height="28">
-             </span>
-         </a>
-     </div>
-
-
-     {{-- <div>
+    <!-- <div>
         <br><h3>SISTEMA DE MONITOREO REGIONAL </h3>
-    </div> --}}
+    </div> -->
 
      <!-- LOGO -->
  </div>

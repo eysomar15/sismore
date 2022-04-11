@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - PADRON WEB DE INSTITUCIONES EDUCATIVAS'])
+@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - TEXTOS ESCOLARES'])
 
 @section('content')
 
@@ -33,14 +33,26 @@
                 <div class="card-body">
                     <div class="form">
 
-                        <form action="{{route('PadronWeb.guardar')}}" method="post" enctype='multipart/form-data'
+                        <form action="{{route('TextosEscolares.guardar')}}" method="post" enctype='multipart/form-data'
                             class="cmxform form-horizontal tasi-form"  >                            
                             @csrf
 
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">Fuente de datos</label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" readonly="readonly" value="ESCALE">
+                                    <input type="text" class="form-control" readonly="readonly" value="TEXTOS ESCOLARES">
+                                </div>
+                            </div>
+                           
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Año Dotación</label>
+                                
+                                <div class="col-md-10">
+                                    <select id="anio" name="anio" class="form-control form-control-sm">
+                                        @foreach ($anios as $item)
+                                            <option value="{{ $item->id }}"> {{ $item->anio }} </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 
@@ -63,7 +75,7 @@
                                 <div class="col-md-10">
                                     <input type="file" name="file" class="form-control" required > 
                                 </div>
-                            </div>
+                            </div>                           
                           
                             <div class="form-group row mb-0">
                                 <div class="offset-lg-2 col-lg-10">

@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class NivelModalidad extends Model
 {
     use HasFactory;
-    protected $table = "edu_nivelModalidad"; 
-    
+    protected $table = "edu_nivelModalidad";
+
     protected $fillable = [
         'codigo',
-        'nombre'];
+        'nombre',
+        'tipo'
+    ];
 }

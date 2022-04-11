@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Administracion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Administracion\Perfil;
-use App\Models\Administracion\Sistema;
 use App\Models\Administracion\Usuario;
 use App\Models\Administracion\UsuarioPerfil;
-use App\Models\Administracion\UsuarioTipo;
 use App\Models\Presupuesto\Entidad;
 use App\Models\Presupuesto\UnidadEjecutora;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
+use App\Repositories\Presupuesto\EntidadRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -37,21 +36,29 @@ class UsuarioController extends Controller
         $data = UsuarioRepositorio::Listar_porperfil(session('perfil_id'));
         return  datatables()::of($data)
             ->addColumn('nombrecompleto', '{{$apellidos}}, {{$nombre}}')
+            ->editColumn('entidad', function ($data) {
+                $ent = EntidadRepositorio::getEntidadOficina($data->entidad);
+                /* return ($ent ? '<span class="badge badge-dark" title="' . $ent->entidad . '">E.' . $ent->entidad_abre . '</span><br>' .
+                    '<span class="badge badge-dark" title="' . $ent->gerente . '">G.' . $ent->gerente_abre . '</span><br>' .
+                    '<span class="badge badge-dark" title="' . $ent->oficina . '">O.' . $ent->oficina_abre . '</span>' : '<span class="badge badge-dark" ">E. </span><br>' .
+                    '<span class="badge badge-dark" >G. </span><br>' .
+                    '<span class="badge badge-dark">O. </span>'); */
+                    return $ent?$ent->entidad_abre:'' ;
+            })
             ->editColumn('estado', function ($data) {
                 if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
                 else return '<span class="badge badge-success">ACTIVO</span>';
-            })
-            ->addColumn('sistemas', function ($data) {
-                return '';
             })
             ->addColumn('perfiles', function ($data) {
                 $perfiles = UsuarioPerfilRepositorio::ListarPerfilSistema($data->id);
                 $datos = '';
                 if ($perfiles)
                     foreach ($perfiles as $item) {
+                        //$datos .='<tr><td>SISTEMA ' . $item->sistema . '</td> <td>' . $item->perfil . '</td></tr>';
                         $datos .= '<span class="badge badge-dark"><i class="' . $item->icono . '"></i> SISTEMA ' . $item->sistema . '</span> 
                         <span class="badge badge-secondary"> ' . $item->perfil . '</span><br/>';
                     }
+                    //$datos .= '</table>';
                 return $datos;
             })
             ->addColumn('action', function ($data) { // '.auth()->user()->usuario.'
@@ -71,7 +78,7 @@ class UsuarioController extends Controller
                 //$acciones .= '&nbsp<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="BORRAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
-            ->rawColumns(['action', 'nombrecompleto', 'sistemas', 'perfiles', 'estado'])
+            ->rawColumns(['action', 'nombrecompleto', 'perfiles', 'estado', 'entidad'])
             ->make(true);
     }
     public function listarSistemasAsignados($usuario_id)
@@ -251,11 +258,11 @@ class UsuarioController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->tipo == '') {
+        /* if ($request->tipo == '') {
             $data['inputerror'][] = 'tipo';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
-        }
+        } */
         $usuarioyy = Usuario::where('usuario', $request->usuario)->first();
         if ($request->usuario == '') {
             $data['inputerror'][] = 'usuario';
@@ -281,7 +288,7 @@ class UsuarioController extends Controller
                 $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
                 $data['status'] = FALSE;
             }
-            if ($request->password2 == '') {
+            /* if ($request->password2 == '') {
                 $data['inputerror'][] = 'password2';
                 $data['error_string'][] = 'Este campo es obligatorio.';
                 $data['status'] = FALSE;
@@ -292,20 +299,139 @@ class UsuarioController extends Controller
                     $data['error_string'][] = 'Confirmar Password es distinto.';
                     $data['status'] = FALSE;
                 }
-            }
+            } */
         } else {
-            if ($request->password != '' || $request->password2 != '') {
+            if ($request->password != '' /* || $request->password2 != '' */) {
                 if (strlen($request->password) < 8) {
                     $data['inputerror'][] = 'password';
                     $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
                     $data['status'] = FALSE;
                 }
-                if ($request->password != $request->password2) {
+                /* if ($request->password != $request->password2) {
                     $data['inputerror'][] = 'password2';
                     $data['error_string'][] = 'Confirmar Password distinto.';
                     $data['status'] = FALSE;
+                } */
+            }
+        }
+        return $data;
+    }
+    private function _validate2($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+        $usuarioxx = Usuario::where('dni', $request->dnip)->first();
+
+        if ($request->dnip == '') {
+            $data['inputerror'][] = 'dnip';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if (strlen($request->dnip) < 8) {
+            $data['inputerror'][] = 'dnip';
+            $data['error_string'][] = 'Este campo necesita 8 digitos.';
+            $data['status'] = FALSE;
+        } else if ($usuarioxx && $request->idp == '') {
+            $data['inputerror'][] = 'dnip';
+            $data['error_string'][] = 'DNI ingresado ya existe.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->nombrep == '') {
+            $data['inputerror'][] = 'nombrep';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->apellidosp == '') {
+            $data['inputerror'][] = 'apellidosp';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->sexop == '') {
+            $data['inputerror'][] = 'sexop';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        /* if ($request->entidadoficinap == '') {
+            $data['inputerror'][] = 'entidadoficinap';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } */
+        $usuarioemail = Usuario::where('email', $request->emailp)->first();
+        if ($request->emailp == '') {
+            $data['inputerror'][] = 'emailp';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if (filter_var($request->emailp, FILTER_VALIDATE_EMAIL) == '') {
+            $data['inputerror'][] = 'emailp';
+            $data['error_string'][] = 'Correo electronico incorrecto.';
+            $data['status'] = FALSE;
+        }
+        $usuarioyy = Usuario::where('usuario', $request->usuariop)->first();
+        if ($request->usuariop == '') {
+            $data['inputerror'][] = 'usuariop';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if ($usuarioyy && $request->idp == '') {
+            $data['inputerror'][] = 'usuariop';
+            $data['error_string'][] = 'USUARIO ingresado ya existe.';
+            $data['status'] = FALSE;
+        } else if ($usuarioyy && $request->idp != $usuarioyy->id) {
+            $data['inputerror'][] = 'usuariop';
+            $data['error_string'][] = 'USUARIO ingresado ya existe.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->idp == '') {
+            if ($request->passwordp == '') {
+                $data['inputerror'][] = 'passwordp';
+                $data['error_string'][] = 'Este campo es obligatorio.';
+                $data['status'] = FALSE;
+            } else if (strlen($request->passwordp) < 8) {
+                $data['inputerror'][] = 'passwordp';
+                $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
+                $data['status'] = FALSE;
+            }
+        } else {
+            if ($request->passwordp != '') {
+                if (strlen($request->passwordp) < 8) {
+                    $data['inputerror'][] = 'passwordp';
+                    $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
+                    $data['status'] = FALSE;
                 }
             }
+        }
+        return $data;
+    }
+    private function _validatepassword($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+        /* $usu = Usuario::find($request->cid);
+        if ($request->cpassword == '') {
+            $data['inputerror'][] = 'cpassword';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if (strlen($request->cpassword) < 8) {
+            $data['inputerror'][] = 'cpassword';
+            $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
+            $data['status'] = FALSE;
+        } else if (Hash::make($request->cpassword) != $usu->password) {
+            $data['inputerror'][] = 'cpassword';
+            $data['error_string'][] = 'Password Anterior Incorrecto.';
+            $data['status'] = FALSE;
+        } */
+        if ($request->cpassword2 == '') {
+            $data['inputerror'][] = 'cpassword2';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if (strlen($request->cpassword2) < 8) {
+            $data['inputerror'][] = 'cpassword2';
+            $data['error_string'][] = 'Password necesita un minimo de 8 digitos.';
+            $data['status'] = FALSE;
         }
         return $data;
     }
@@ -344,12 +470,45 @@ class UsuarioController extends Controller
         $usuario->apellidos = $request->apellidos;
         $usuario->sexo = $request->sexo;
         $usuario->celular = $request->celular;
-        $usuario->tipo = $request->tipo;
+        //$usuario->tipo = $request->tipo;
         $usuario->entidad = $request->entidadoficina;
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);
         $usuario->save();
 
+        return response()->json(array('status' => true/* , 'update' => $request->sistemas */));
+    }
+    public function ajax_updateaux(Request $request)
+    {
+        $val = $this->_validate2($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+        $usuario = Usuario::find($request->idp);
+        $usuario->usuario = $request->usuariop;
+        $usuario->email = $request->emailp;
+        $usuario->dni = $request->dnip;
+        $usuario->nombre = $request->nombrep;
+        $usuario->apellidos = $request->apellidosp;
+        $usuario->sexo = $request->sexop;
+        $usuario->celular = $request->celularp;
+        //$usuario->entidad = $request->entidadoficinap;
+        if ($request->password != '')
+            $usuario->password = Hash::make($request->password);
+        $usuario->save();
+
+        return response()->json(array('status' => true/* , 'update' => $request->sistemas */));
+    }
+    public function ajax_updatepassword(Request $request)
+    {
+        $val = $this->_validatepassword($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+        $usuario = Usuario::find($request->cid);
+        if ($request->cpassword2 != '')
+            $usuario->password = Hash::make($request->cpassword2);
+        $usuario->save();
         return response()->json(array('status' => true/* , 'update' => $request->sistemas */));
     }
     public function ajax_edit($usuario_id)
@@ -369,6 +528,12 @@ class UsuarioController extends Controller
             ->first();
         return response()->json(compact('usuario', 'entidad'));
     }
+    public function ajax_edit_basico($usuario_id)
+    {
+        $usuario = Usuario::select('id', 'usuario', 'email', 'dni', 'nombre', 'apellidos', 'sexo', 'celular', 'estado')
+            ->find($usuario_id);
+        return response()->json(compact('usuario'));
+    }
     public function ajax_delete($usuario_id) //elimina deverdad *o*
     {
         UsuarioPerfil::where('usuario_id', $usuario_id)->delete();
@@ -382,6 +547,42 @@ class UsuarioController extends Controller
         $usuario->estado = $usuario->estado == 1 ? 0 : 1;
         $usuario->save();
         return response()->json(array('status' => true, 'estado' => $usuario->estado));
+    }
+    public function cargarEntidad($tipogobierno_id)
+    {
+        $unidadejecutadora = UnidadEjecutora::where('tipogobierno', $tipogobierno_id)->get();
+        return response()->json(compact('unidadejecutadora'));
+    }
+    private function _validateentidad($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($request->gerencia == '') {
+            $data['inputerror'][] = 'entidad';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        return $data;
+    }
+    public function ajax_add_entidad(Request $request)
+    {
+        $val = $this->_validateentidad($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+
+        $UnidadEjecutora = UnidadEjecutora::Create([
+            'codigo' => $request->codigo,
+            'tipogobierno' => $request->tipogobierno,
+            'unidad_ejecutora' => $request->entidad,
+            'abreviatura' => $request->abreviado,
+        ]);
+
+        return response()->json(array('status' => true, 'codigo' => $UnidadEjecutora->id));
     }
     public function cargarGerencia($entidad_id)
     {

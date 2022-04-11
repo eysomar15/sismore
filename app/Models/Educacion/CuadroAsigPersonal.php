@@ -53,7 +53,7 @@ class CuadroAsigPersonal extends Model
                 'tipo_registro',
                 'ley',
                 'preventiva',
-                'referencia_preventiva',
+                //'referencia_preventiva',
                 'especialidad',
                 'tipo_estudios',
                 'estado_estudios',
