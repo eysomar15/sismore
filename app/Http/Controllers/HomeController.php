@@ -23,6 +23,7 @@ use App\Repositories\Vivienda\CentroPobladoDatassRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -93,9 +94,15 @@ class HomeController extends Controller
             case (5):
                 return $this->presupuesto($sistema_id);
                 break;
+<<<<<<< HEAD
             case (6):
                 return $this->trabajo($sistema_id);
                 break;
+=======
+                case (3):
+                    return Redirect::to("http://sismore.regionucayali.gob.pe/sismore/public/login");
+                //return Redirect::to("https://www.google.com/");
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
             default:
                 return 'Ruta de sistema no establecida';
                 break;

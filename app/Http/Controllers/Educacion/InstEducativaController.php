@@ -15,6 +15,7 @@ class InstEducativaController extends Controller
     }
 
     public function principal()
+<<<<<<< HEAD
     {
         $importaciones_padronweb = InstEducativaRepositorio::importaciones_padronweb();
         //return $importaciones_padronweb;
@@ -24,23 +25,45 @@ class InstEducativaController extends Controller
 
         $total_tipoGestion = InstEducativaRepositorio::total_tipoGestion();
         //return $total_tipoGestion;
+=======
+    {     
+        $importaciones_padronweb = InstEducativaRepositorio::importaciones_padronweb();
+
+        $fecha_version = Utilitario::fecha_formato_texto_completo($importaciones_padronweb->first()->fechaActualizacion ); 
+        
+        $total_tipoGestion = InstEducativaRepositorio::total_tipoGestion();
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
 
         $privadas = $total_tipoGestion->first()->privada;
         $publicas = $total_tipoGestion->first()->publica;
 
 
+<<<<<<< HEAD
         return view('educacion.InstEducativa.Principal', compact('fecha_version', 'privadas', 'publicas'));
     }
 
     public function reporteDistrito()
 
+=======
+        return view('educacion.InstEducativa.Principal',compact('fecha_version','privadas','publicas'));     
+    }
+
+    public function reporteDistrito()
+    
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
     {
         $lista_resumen_porDistrito = InstEducativaRepositorio::resumen_porDistrito_tipoGestion();
         $lista_resumen_porProvincia = InstEducativaRepositorio::resumen_porProvincia_tipoGestion();
         // $sumatoria_Provincia = $this->sumatoria_Provincia($lista_resumen_porDistrito);
+<<<<<<< HEAD
         $lista_resumen_porRegion = InstEducativaRepositorio::resumen_porRegion();
 
         return view('educacion.InstEducativa.ReporteDistrito', compact('lista_resumen_porDistrito', 'lista_resumen_porRegion', 'lista_resumen_porProvincia'));
+=======
+        $lista_resumen_porRegion = InstEducativaRepositorio::resumen_porRegion();         
+        
+        return view('educacion.InstEducativa.ReporteDistrito',compact('lista_resumen_porDistrito','lista_resumen_porRegion','lista_resumen_porProvincia'));   
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
     }
 
     public function sumatoria_Provincia($lista_resumen_porDistrito)
