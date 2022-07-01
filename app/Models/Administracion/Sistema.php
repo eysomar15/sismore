@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Sistema extends Model
 {
     use HasFactory;
-    protected $table = "adm_sistema"; 
-    
+    protected $table = "adm_sistema";
+
     protected $fillable = [
         'nombre',
         'icono',
-        'estado'];
+        'pos',
+        'estado'
+    ];
 }

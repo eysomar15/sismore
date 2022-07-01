@@ -19,18 +19,43 @@ class InstEducativaRepositorio
 
                 return $data;
         } */
+<<<<<<< HEAD
 
 
 
+=======
+
+
+
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         public static function listar()
         {
                 $data = DB::table(
                         DB::raw(
                                 "(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+     public static function cantidad_locales()
+    { 
+        $data = DB::table(
+                        DB::raw("(
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
                                 select  count(distinct codLocal ) as cantidad from 
                                 edu_institucioneducativa as inst
                                 inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
                                 where(inst.estado='ac') and est.codigo = 1 and anexo = 0                   
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
                                 ) as datos"
                         )
                 )
@@ -128,6 +153,7 @@ class InstEducativaRepositorio
                                         sum(case when tipGest.id = 20 then 1 else 0 end) as privada,
                                         sum(case when tipGest.id in (16,18,21,22,23) then 1 else 0 end) as publica
                                         from edu_institucioneducativa as inst
+<<<<<<< HEAD
                                         inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
                                         inner join edu_tipogestion tipGest on inst.TipoGestion_id = tipGest.id
                                         inner join par_centropoblado as cenPo on inst.CentroPoblado_id = cenPo.id
@@ -160,18 +186,68 @@ class InstEducativaRepositorio
                                         sum(case when tipGest.id = 20 then 1 else 0 end) as privada,
                                         sum(case when tipGest.id in (16,18,21,22,23) then 1 else 0 end) as publica
                                         from edu_institucioneducativa as inst
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
                                         inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
                                         inner join edu_tipogestion tipGest on inst.TipoGestion_id = tipGest.id
                                         inner join par_centropoblado as cenPo on inst.CentroPoblado_id = cenPo.id
                                         inner join par_ubigeo as distrito on cenPo.Ubigeo_id = distrito.id
                                         inner join par_ubigeo as provincia on distrito.dependencia = provincia.id
+<<<<<<< HEAD
+=======
+                                        where inst.estado = 'AC' and anexo = 0
+                                        and est.codigo = 1
+                                        group by provincia.codigo,provincia.nombre,distrito.nombre                
+                                ) as datos"
+                        )
+                )
+
+                        ->get([
+                                DB::raw('privada'),
+                                DB::raw('publica'),
+                                DB::raw('distrito'),
+                                DB::raw('provincia'),
+                                DB::raw('codigo')
+                        ]);
+
+                return $data;
+        }
+
+        public static function resumen_porProvincia_tipoGestion()
+        {
+                $data = DB::table(
+                        DB::raw(
+                                "(
+                                        select region.nombre as region,provincia.codigo,provincia.nombre as provincia,
+                                        sum(case when tipGest.id = 20 then 1 else 0 end) as privada,
+                                        sum(case when tipGest.id in (16,18,21,22,23) then 1 else 0 end) as publica
+                                        from edu_institucioneducativa as inst
+                                        inner join edu_estadoinsedu as est on inst.EstadoInsEdu_id = est.id
+                                        inner join edu_tipogestion tipGest on inst.TipoGestion_id = tipGest.id
+                                        inner join par_centropoblado as cenPo on inst.CentroPoblado_id = cenPo.id
+                                        inner join par_ubigeo as distrito on cenPo.Ubigeo_id = distrito.id
+                                        inner join par_ubigeo as provincia on distrito.dependencia = provincia.id
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
                                         inner join par_ubigeo as region on provincia.dependencia = region.id
 
                                         where inst.estado = 'AC' and anexo = 0
                                         and est.codigo = 1
                                         group by region.nombre,provincia.codigo,provincia.nombre               
+<<<<<<< HEAD
                                 ) as datos"
                         )
+=======
+<<<<<<< HEAD
+                                ) as datos"
+                        )
+=======
+=======
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+                                ) as datos"
+                        )
+<<<<<<< HEAD
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
                 )
 
                         ->get([
@@ -204,6 +280,38 @@ class InstEducativaRepositorio
                                 DB::raw('sum( case when est.codigo = 1 then 1 else 0 end ) as activas'),
                                 DB::raw('sum( case when est.codigo = 2 then 1 else 0 end ) as inactivas'),
                                 DB::raw('sum( 1 ) as total')
+<<<<<<< HEAD
+                        ]);
+
+                return $data;
+        }
+
+        public static function resumen_porRegion()
+        {
+                $data = DB::table('edu_institucioneducativa as inst')
+                        ->join('edu_estadoinsedu as est', 'inst.EstadoInsEdu_id', '=', 'est.id')
+                        ->join('par_centropoblado as cenPo', 'inst.CentroPoblado_id', '=', 'cenPo.id')
+                        ->join('par_ubigeo as distrito', 'cenPo.Ubigeo_id', '=', 'distrito.id')
+                        ->join('par_ubigeo as provincia', 'distrito.dependencia', '=', 'provincia.id')
+                        ->join('par_ubigeo as region', 'provincia.dependencia', '=', 'region.id')
+                        ->where('inst.estado', '=', 'ac')
+                        ->groupBy('region.nombre')
+                        ->get([
+                                DB::raw('region.nombre as region'),
+                                DB::raw('sum( case when est.codigo = 1 then 1 else 0 end ) as activas'),
+                                DB::raw('sum( case when est.codigo = 2 then 1 else 0 end ) as inactivas'),
+                                DB::raw('sum( 1 ) as total')
+                        ]);
+
+                return $data;
+        }
+
+        public static function importaciones_padronweb()
+        {
+                $data = DB::table(
+                        DB::raw(
+                                "(
+=======
                         ]);
 
                 return $data;
@@ -249,3 +357,42 @@ class InstEducativaRepositorio
                 return $data;
         }
 }
+<<<<<<< HEAD
+=======
+=======
+             return $data;
+     }
+
+     public static function importaciones_padronweb()
+     { 
+        $data = DB::table(
+                        DB::raw("(
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+                                        select  distinct imp.fechaActualizacion from edu_padronweb pw
+                                        inner join par_importacion imp on pw.importacion_id = imp.id
+                                        where imp.estado = 'PR'
+                                        order by imp.fechaActualizacion desc                   
+                                ) as datos"
+                        )
+                )
+<<<<<<< HEAD
+
+                        ->get([
+                                DB::raw('fechaActualizacion')
+                        ]);
+
+                return $data;
+        }
+}
+=======
+        
+        ->get([
+                DB::raw('fechaActualizacion')                     
+        ]);
+
+        return $data;
+     }
+}
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247

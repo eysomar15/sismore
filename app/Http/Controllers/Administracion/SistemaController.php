@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Parametro\Icono;
 use App\Models\Administracion\Sistema;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class SistemaController extends Controller
@@ -16,11 +17,13 @@ class SistemaController extends Controller
     }
     public function principal()
     {
-        return view('administracion.Sistema.Principal');
+        $posmax = Sistema::select(DB::raw('max(pos) maxpos'))->first()->maxpos;
+        $posmax = $posmax ? $posmax + 1 : 1;
+        return view('administracion.Sistema.Principal', compact('posmax'));
     }
     public function listarDT()
     {
-        $data = Sistema::orderBy('nombre')->get();
+        $data = Sistema::orderBy('pos', 'desc')->get();
         return  datatables()::of($data)
             ->editColumn('icono', '<i class="{{$icono}}"></i>')
             ->editColumn('estado', function ($data) {
@@ -29,12 +32,13 @@ class SistemaController extends Controller
             })
             ->addColumn('action', function ($data) {
                 $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-                //$acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+
                 if ($data->estado == '1') {
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
                 } else {
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
                 }
+                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
             ->rawColumns(['action', 'estado', 'icono'])
@@ -69,6 +73,7 @@ class SistemaController extends Controller
         $perfil = Sistema::Create([
             'nombre' => $request->nombre,
             'icono' => $request->icono,
+            'pos' => $request->pos,
             'estado' => '1',
         ]);
 
@@ -83,6 +88,7 @@ class SistemaController extends Controller
         $sistema = Sistema::find($request->id);
         $sistema->nombre = $request->nombre;
         $sistema->icono = $request->icono;
+        $sistema->pos = $request->pos;
         $sistema->save();
 
         return response()->json(array('status' => true, 'update' => $request));

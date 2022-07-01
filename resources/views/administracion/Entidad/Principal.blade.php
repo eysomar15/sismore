@@ -295,6 +295,31 @@
                 }
             });
         };
+<<<<<<< HEAD
+
+        function borrar(id) {
+            bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
+                if (result === true) {
+                    $.ajax({
+                        url: "{{ url('/') }}/Entidad/ajax_delete/" + id,
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function(data) {
+                            $('#modal_form').modal('hide');
+                            reload_table_principal(); //listarDT();
+                            toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            toastr.error(
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Sistema',
+                                'Mensaje');
+                        }
+                    });
+                }
+            });
+        };
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     
     </script>
 @endsection

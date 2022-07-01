@@ -1,8 +1,6 @@
-@extends('layouts.main',['activePage'=>'usuarios','titlePage'=>'GESTION DE USUARIOS'])
+@extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => 'GESTION DE USUARIOS'])
 
 @section('css')
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
@@ -91,8 +89,13 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <!-- <div class="card-header">
+<<<<<<< HEAD
+                                            <h3 class="card-title">Datos Personales</h3>
+                                        </div> -->
+=======
                                         <h3 class="card-title">Datos Personales</h3>
                                     </div> -->
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
                                     <div class="card-body">
                                         <div class="form">
                                             <div class="form-group">
@@ -507,7 +510,6 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <!-- End Bootstrap modal -->
-
 @endsection
 
 @section('js')
@@ -518,11 +520,19 @@
     {{-- <script src="{{ asset('/') }}assets/js/app.min.js"></script> --}}
     <script>
         /* var id;
+<<<<<<< HEAD
+                                                                            //.delete nombre con el que se le llamo en el controlador al boton eliminar
+                                                                            $(document).on('click', '.delete', function() {
+                                                                                id = $(this).attr('id');
+                                                                                $('#confirmModalEliminar').modal('show');
+                                                                            }); */
+=======
                                                                         //.delete nombre con el que se le llamo en el controlador al boton eliminar
                                                                         $(document).on('click', '.delete', function() {
                                                                             id = $(this).attr('id');
                                                                             $('#confirmModalEliminar').modal('show');
                                                                         }); */
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
 
         $(document).ready(function() {
             var save_method = '';
@@ -548,6 +558,26 @@
             tabla_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ route('Usuario.Lista_DataTable') }}",
                 "columns": [{
+<<<<<<< HEAD
+                        data: 'entidad'
+                    }, {
+                        data: 'nombrecompleto'
+                    }, {
+                        data: 'usuario'
+                    }, {
+                        data: 'perfiles'
+                    },
+                    /* {
+                                       data: 'created_at'
+                                   },  */
+                    {
+                        data: 'estado'
+                    }, {
+                        data: 'action',
+                        orderable: false
+                    }
+                ],
+=======
                     data: 'entidad'
                 }, {
                     data: 'nombrecompleto'
@@ -563,6 +593,7 @@
                     data: 'action',
                     orderable: false
                 }],
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
                 responsive: true,
                 /* autoWidth: false, */
                 order: false,
@@ -1082,5 +1113,4 @@
             });
         }
     </script>
-
 @endsection

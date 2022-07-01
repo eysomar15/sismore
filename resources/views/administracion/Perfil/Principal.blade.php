@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'usuarios','titlePage'=>'GESTION DE PERFIL'])
+@extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => 'GESTION DE PERFIL'])
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -10,43 +10,7 @@
 @section('content')
     <div class="content">
 
-        {{-- <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">FILTRO</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form">
-                            <form>
-                                <input type="hidden" name="fuenteImportacion" value="3">
-                                <div class="col-lg-12">
-                                    <div class="form-group row">
-                                        <label class="col-md-2 col-form-label">SISTEMAS</label>
-                                        <div class="col-md-4">
-                                            <select class="form-control" name="sistema" id="sistema"
-                                                onchange="listarDT();">
-                                                <!--option value="0">Seleccionar</option-->
-                                                @foreach ($sistemas as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </form>
-                        </div>
-                        <!-- .form -->
-                    </div>
-                    <!-- card-body -->
-                </div>
-                <!-- card -->
-            </div>
-            <!-- col -->
-        </div> --}}
-
-        <div class="row">
+         <div class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
@@ -211,7 +175,6 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <!-- End Bootstrap modal -->
-
 @endsection
 
 @section('js')
@@ -343,7 +306,7 @@
                     data: 'nombre',
                 }, {
                     data: 'sistemas',
-                    visible:$('#sistema').val() == 4
+                    visible: $('#sistema').val() == 4
                 }, {
                     data: 'estado'
                 }, {

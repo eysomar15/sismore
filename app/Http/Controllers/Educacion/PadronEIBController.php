@@ -25,7 +25,11 @@ class PadronEIBController extends Controller
         $mensaje = "";
         $anios = Anio::orderBy('anio', 'desc')->get();
 
+<<<<<<< HEAD
+        return view('educacion.PadronEIB.Importar', compact('mensaje', 'anios'));
+=======
         return view('Educacion.PadronEIB.Importar', compact('mensaje', 'anios'));
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     }
 
     public function guardar(Request $request)
@@ -54,6 +58,13 @@ class PadronEIBController extends Controller
         $cadena = '';
 
         // VALIDACION DE LOS FORMATOS DE LOS 04 NIVELES
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
         try {
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
@@ -160,6 +171,82 @@ class PadronEIBController extends Controller
             ->rawColumns(['fechaActualizacion', 'ESTADO'])
             ->toJson();
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+         try{
+         foreach ($array as $key => $value) {
+             foreach ($value as $row) {
+                if(++$i > 1) break;
+                $cadena =  $cadena
+                .$row['nro'].$row['nombre_dre'].$row['ugel'].$row['codmodular'].$row['anexo'].$row['codlocal']
+                .$row['nombreinsteduc'].$row['nivel_modalidad'].$row['nombre_departamento'].$row['nombre_provincia']
+                .$row['nombre_distrito'].$row['centro_poblado']
+                .$row['formaatencion'].$row['escenario']
+                .$row['nomlenguaoriginaria1'].$row['nomlenguaoriginaria2'].$row['nomlenguaoriginaria3']
+                ;              }
+             }
+         }catch (Exception $e) {
+            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
+            return view('Educacion.PadronEIB.Importar',compact('mensaje','anios'));            
+         }   
+
+         $existeMismaFecha = ImportacionRepositorio :: Importacion_PE($request['fechaActualizacion'],12);
+
+         if( $existeMismaFecha != null)
+         {
+             $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";          
+             return view('Educacion.PadronEIB.Importar',compact('mensaje','anios'));            
+         }
+ 
+         else
+         {
+               try{
+                   $importacion = Importacion::Create([
+                       'fuenteImportacion_id'=>12, // valor predeterminado
+                       'usuarioId_Crea'=> auth()->user()->id,
+                       'usuarioId_Aprueba'=>null,
+                       'fechaActualizacion'=>$request['fechaActualizacion'],
+                       'comentario'=>$request['comentario'],
+                       'estado'=>'PE'
+                   ]); 
+
+                   foreach ($array as $key => $value) {
+                        foreach ($value as $row) {
+                            $PadronEIB = PadronEIB::Create([
+                                'importacion_id'=>$importacion->id, // valor predeterminado
+                                'anio_id'=> $request['anio'],
+                                'ugel'=> $row['ugel'],
+                                'codModular'=> $row['codmodular'],
+                                'anexo'=> $row['anexo'],
+                                'codLocal'=> $row['codlocal'],
+                                'nombreInstEduc'=> $row['nombreinsteduc'],
+                                'formaAtencion'=> $row['formaatencion'],
+                                'escenario'=> $row['escenario'],
+                                'nomLenguaOriginaria1'=> $row['nomlenguaoriginaria1'],
+                                'nomLenguaOriginaria2'=> $row['nomlenguaoriginaria2'],
+                                'nomLenguaOriginaria3'=> $row['nomlenguaoriginaria3'],
+                            ]); 
+                        }
+                    }
+                   
+                  }catch (Exception $e) {
+                      $importacion->estado = 'EL';
+                      $importacion->save();
+                      
+                      $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema";        
+                      return view('Educacion.Tableta.Importar',compact('mensaje','anios'));            
+                  }
+         }
+
+         return view('correcto');
+
+    } 
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
 
     public function ListaImportada_DataTable($importacion_id)
     {

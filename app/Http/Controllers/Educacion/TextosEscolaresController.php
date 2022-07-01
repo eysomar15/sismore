@@ -25,7 +25,11 @@ class TextosEscolaresController extends Controller
         $mensaje = "";
         $anios = Anio::orderBy('anio', 'desc')->get();
         
+<<<<<<< HEAD
+        return view('educacion.TextosEscolares.Importar',compact('mensaje','anios'));
+=======
         return view('Educacion.TextosEscolares.Importar',compact('mensaje','anios'));
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     } 
     
     public function guardar(Request $request)

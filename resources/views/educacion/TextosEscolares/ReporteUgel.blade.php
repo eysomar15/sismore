@@ -42,6 +42,13 @@
                                         $suma1=0;$suma2=0;$suma3=0;$suma4=0;$suma5=0;
                                     @endphp
                                 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
                                 @foreach ($data as $item)
                                         
                                     @php
@@ -61,6 +68,33 @@
                                         <td class="columna_derecha">{{number_format($item->cantPurus,0)}}</td>
                                     </tr>
                 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+                                    @foreach ($data as $item)
+                                            
+                                        @php
+                                            $suma1+= $item->cantDRE;   
+                                            $suma2+= $item->cantCoronelPortillo;  
+                                            $suma3+= $item->cantAtalaya;  
+                                            $suma4+= $item->cantPadreAbad;  
+                                            $suma5+= $item->cantPurus;                                        
+                                        @endphp
+                    
+                                        <tr>                                            
+                                            <td>{{$item->beneficiario}}</td>                                    
+                                            <td class="columna_derecha">{{number_format($item->cantDRE,0)}}</td>                                                                           
+                                            <td class="columna_derecha">{{number_format($item->cantCoronelPortillo,0)}}</td>
+                                            <td class="columna_derecha">{{ number_format($item->cantAtalaya,0) }} </td>    
+                                            <td class="columna_derecha">{{number_format($item->cantPadreAbad,0)}}</td>                
+                                            <td class="columna_derecha">{{number_format($item->cantPurus,0)}}</td>
+                                        </tr>
+                    
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
                                     @endforeach
                 
                                     <tr> 

@@ -101,17 +101,17 @@ class IndicadorController extends Controller
             case '11': //PROFESORES   
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $nivel = 31; //31
+                $nivel = 'INICIAL'; // [1, 2, 14]; //31
                 return $this->vistaEducacionCat4($title, $nivel);
             case '12': //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $nivel = 37;
+                $nivel = 'PRIMARIA'; // [7];
                 return $this->vistaEducacionCat4($title, $nivel);
             case 13: //PROFESORES  
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $nivel = 38;
+                $nivel = 'SECUNDARIA'; //[8];
                 return $this->vistaEducacionCat4($title, $nivel);
             case 31: //SERVICIOS BASICOS  
                 $indicador = Indicador::find($indicador_id);
@@ -148,7 +148,7 @@ class IndicadorController extends Controller
             case 40: //ACCESO A TIC
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $nivel_id = '37';
+                $nivel_id = '7';
 
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $fechas = CensoRepositorio::listar_anios();
@@ -157,7 +157,7 @@ class IndicadorController extends Controller
             case 41: //ACCESO A TIC
                 $indicador = Indicador::find($indicador_id);
                 $title = $indicador->nombre;
-                $nivel = '38';
+                $nivel = '8';
 
                 $provincias = Ubigeo::whereRaw('LENGTH(codigo)=4')->get();
                 $fechas = CensoRepositorio::listar_anios();
@@ -192,6 +192,7 @@ class IndicadorController extends Controller
     {
         $gt = GradoRepositorio::buscar_grado1($grado);
         $materias = MateriaRepositorio::buscar_materia3($grado, $tipo);
+
         foreach ($materias as $key => $materia) {
             $materia->indicador = EceRepositorio::listar_indicadoranio(date('Y'), $grado, $tipo, $materia->id, 'asc');
             $materia->previo = 0;
@@ -237,12 +238,14 @@ class IndicadorController extends Controller
     {
         return 'sin informacion';
     }
-    public function vistaEducacionCat4($title, $nivel_id)
+    public function vistaEducacionCat4($title, $nivel)
     {
-        $nivel = NivelModalidad::find($nivel_id);
-
+        //$nivel = NivelModalidad::find($nivel_id);
+        //$nivel =
         $ingresos = ImportacionRepositorio::Listar_dePLaza();
+
         $provincias = PlazaRepositorio::listar_provincia();
+        //return $nivel;
 
         $breadcrumb = [['titulo' => 'Relacion de indicadores', 'url' => route('Clasificador.menu', '01')], ['titulo' => 'Indicadores', 'url' => '']];
         return view('parametro.indicador.educat4', compact('title', 'nivel', 'ingresos', 'provincias', 'breadcrumb'));
@@ -574,12 +577,12 @@ class IndicadorController extends Controller
     {
         switch ($indicador_id) {
             case 40:
-                $nivel = '37';
+                $nivel = '7';
                 $cp = CensoRepositorio::Listar_IE_nivel($provincia, $distrito, $indicador_id, $anio_id, $nivel);
                 break;
             case 41:
             case 39:
-                $nivel = '38';
+                $nivel = '8';
                 $cp = CensoRepositorio::Listar_IE_nivel($provincia, $distrito, $indicador_id, $anio_id, $nivel);
                 break;
             case 42:

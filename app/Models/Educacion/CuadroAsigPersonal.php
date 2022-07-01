@@ -9,7 +9,7 @@ class CuadroAsigPersonal extends Model
 {
     use HasFactory;
 
-    protected $table = "edu_cuadroasigpersonal"; 
+    protected $table = "edu_cuadroasigpersonal";
     public $timestamps = false;
 
     /**
@@ -18,6 +18,57 @@ class CuadroAsigPersonal extends Model
      * @var array
      */
     protected $fillable = [
+<<<<<<< HEAD
+        'importacion_id',
+        'region',
+        'unidad_ejecutora',
+        'organo_intermedio',
+        'provincia',
+        'distrito',
+        'tipo_ie',
+        'gestion',
+        'zona',
+        'codmod_ie',
+        'codigo_local',
+        'clave8',
+        'nivel_educativo',
+        'institucion_educativa',
+        'codigo_plaza',
+        'tipo_trabajador',
+        'sub_tipo_trabajador',
+        'cargo',
+        'situacion_laboral',
+        'motivo_vacante',
+        'documento_identidad',
+        'codigo_modular',
+        'apellido_paterno',
+        'apellido_materno',
+        'nombres',
+        'fecha_ingreso',
+        'categoria_remunerativa',
+        'jornada_laboral',
+        'estado',
+        'fecha_nacimiento',
+        'fecha_inicio',
+        'fecha_termino',
+        'tipo_registro',
+        'ley',
+        'preventiva',
+        //'referencia_preventiva',
+        'especialidad',
+        'tipo_estudios',
+        'estado_estudios',
+        'grado',
+        'mencion',
+        'especialidad_profesional',
+        'fecha_resolucion',
+        'numero_resolucion',
+        'centro_estudios',
+        'celular',
+        'email',
+        'sexo',
+        'desc_superior',
+=======
                 'importacion_id',                
                 'region',
                 'unidad_ejecutora',
@@ -65,6 +116,7 @@ class CuadroAsigPersonal extends Model
                 'centro_estudios',
                 'celular',
                 'email',
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
 
-                            ];
+    ];
 }

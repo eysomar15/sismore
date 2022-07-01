@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Educacion\PLaza;
+use App\Models\Parametro\Anio;
 use App\Repositories\Educacion\PlazaRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +18,11 @@ class PLazaController extends Controller
 
     public function DocentesPrincipal()
     {
+<<<<<<< HEAD
+        $anios = PLazaRepositorio::listar_anios();
+=======
         $anios = PlazaRepositorio::listar_anios();
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return view('educacion.Plaza.DocentesPrincipal', compact('anios'));
     }
 
@@ -45,7 +51,11 @@ class PLazaController extends Controller
     public function datoIndicadorPLaza(Request $request)
     {
         $dato['tt'] = PlazaRepositorio::listar_profesorestitulados($request->fecha, $request->nivel, $request->provincia, $request->distrito);
+<<<<<<< HEAD
+        $dato['tu'] = PlazaRepositorio::listar_profesorestituladougel($request->fecha, $request->nivel, 1);
+=======
         $dato['tu'] = PlazaRepositorio::listar_profesorestituladougel($request->nivel, 1);
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return response()->json(compact('dato'));
     }
 

@@ -24,7 +24,7 @@ class CensoController extends Controller
         $mensaje = "";
         $anios = Anio::orderBy('anio', 'desc')->get();
         
-        return view('Educacion.Censo.Importar',compact('mensaje','anios'));
+        return view('educacion.Censo.Importar',compact('mensaje','anios'));
     } 
     
     public function guardar(Request $request)

@@ -22,6 +22,7 @@ class Usuario extends Model
         'apellidos',
         'sexo',
         'celular',
+        'entidad',
         'unidadejecutora_id ',
     ];
 }

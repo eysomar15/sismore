@@ -15,6 +15,13 @@ class InstEducativaController extends Controller
     }
 
     public function principal()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
     {
         $importaciones_padronweb = InstEducativaRepositorio::importaciones_padronweb();
         //return $importaciones_padronweb;
@@ -24,16 +31,50 @@ class InstEducativaController extends Controller
 
         $total_tipoGestion = InstEducativaRepositorio::total_tipoGestion();
         //return $total_tipoGestion;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+    {     
+        $importaciones_padronweb = InstEducativaRepositorio::importaciones_padronweb();
+
+        $fecha_version = Utilitario::fecha_formato_texto_completo($importaciones_padronweb->first()->fechaActualizacion ); 
+        
+        $total_tipoGestion = InstEducativaRepositorio::total_tipoGestion();
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
 
         $privadas = $total_tipoGestion->first()->privada;
         $publicas = $total_tipoGestion->first()->publica;
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
         return view('educacion.InstEducativa.Principal', compact('fecha_version', 'privadas', 'publicas'));
     }
 
     public function reporteDistrito()
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+        return view('educacion.InstEducativa.Principal',compact('fecha_version','privadas','publicas'));     
+    }
+
+    public function reporteDistrito()
+    
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
     {
         $lista_resumen_porDistrito = InstEducativaRepositorio::resumen_porDistrito_tipoGestion();
         $lista_resumen_porProvincia = InstEducativaRepositorio::resumen_porProvincia_tipoGestion();
@@ -41,6 +82,17 @@ class InstEducativaController extends Controller
         $lista_resumen_porRegion = InstEducativaRepositorio::resumen_porRegion();
 
         return view('educacion.InstEducativa.ReporteDistrito', compact('lista_resumen_porDistrito', 'lista_resumen_porRegion', 'lista_resumen_porProvincia'));
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+        $lista_resumen_porRegion = InstEducativaRepositorio::resumen_porRegion();         
+        
+        return view('educacion.InstEducativa.ReporteDistrito',compact('lista_resumen_porDistrito','lista_resumen_porRegion','lista_resumen_porProvincia'));   
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
+>>>>>>> 699cb9cded8d0f3e1cee6037e6cdaa0c04aec247
     }
 
     public function sumatoria_Provincia($lista_resumen_porDistrito)

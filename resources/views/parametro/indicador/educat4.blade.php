@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'INDICADOR'])
+@extends('layouts.main', ['titlePage' => 'INDICADOR'])
 
 @section('content')
     <div class="content">
@@ -16,12 +16,12 @@
             <div class="col-md-12">
                 <div class="card">
                     <!--div class="card-header">
-                                <h3 class="card-title">Default Buttons</h3>
-                            </div-->
+                                            <h3 class="card-title">Default Buttons</h3>
+                                        </div-->
                     <div class="card-body">
                         <form id="form_opciones" name="form_opciones" action="POST">
                             @csrf
-                            <input type="hidden" name="nivel" id="nivel" value="{{ $nivel->id }}">
+                            <input type="hidden" name="nivel" id="nivel" value="{{ $nivel }}">
                             <div class="form-group row">
                                 <label class="col-md-1 col-form-label">Fecha</label>
                                 <div class="col-md-3">
@@ -97,7 +97,8 @@
             <div class="col-xl-6">
                 <div class="card card-border card-default">
                     <div class="card-header border-default bg-transparent pb-0">
-                        <h3 class="card-title text-default">PROFESORES TITULADOS EN {{$nivel->id==31?"INICIAL":$nivel->nombre}}, POR UGEL</h3>
+                        <h3 class="card-title text-default">PROFESORES TITULADOS EN
+                            {{ $nivel }}, POR UGEL</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -131,11 +132,9 @@
         </div><!-- End row -->
 
     </div>
-
 @endsection
 
 @section('js')
-
     <!-- flot chart -->
     <script src="{{ asset('/') }}assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}assets/libs/highcharts-modules/exporting.js"></script>
@@ -174,7 +173,7 @@
                 success: function(data) {
                     console.log(data);
                     graficaPie(data.dato.tt);
-                    graficarBar(data.dato.tu); 
+                    graficarBar(data.dato.tu);
                     /* TABLAS DIVERSAS */
                     /* ---> */
                     piet = '';
@@ -237,7 +236,7 @@
                     name: 'UGEL',
                     colorByPoint: true,
                     data: datax,
-                    showInLegend:false,
+                    showInLegend: false,
                 }],
                 plotOptions: {
                     series: {
@@ -286,5 +285,4 @@
             });
         }
     </script>
-
 @endsection
