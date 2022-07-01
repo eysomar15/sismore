@@ -98,11 +98,6 @@ class HomeController extends Controller
             case (6):
                 return $this->trabajo($sistema_id);
                 break;
-=======
-                case (3):
-                    return Redirect::to("http://sismore.regionucayali.gob.pe/sismore/public/login");
-                //return Redirect::to("https://www.google.com/");
->>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
             default:
                 return 'Ruta de sistema no establecida';
                 break;
@@ -122,7 +117,7 @@ class HomeController extends Controller
         $instituciones_inactivas = 0;
         $instituciones_total = 0;
 
-       
+               
         return view('home', compact('sistema_id'));
     }
 
