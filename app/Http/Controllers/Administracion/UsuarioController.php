@@ -43,7 +43,11 @@ class UsuarioController extends Controller
                     '<span class="badge badge-dark" title="' . $ent->oficina . '">O.' . $ent->oficina_abre . '</span>' : '<span class="badge badge-dark" ">E. </span><br>' .
                     '<span class="badge badge-dark" >G. </span><br>' .
                     '<span class="badge badge-dark">O. </span>'); */
+<<<<<<< HEAD
                 return $ent ? $ent->entidad_abre : '';
+=======
+                    return $ent?$ent->entidad_abre:'' ;
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
             })
             ->editColumn('estado', function ($data) {
                 if ($data->estado == 0) return '<span class="badge badge-danger">DESABILITADO</span>';
@@ -58,7 +62,11 @@ class UsuarioController extends Controller
                         $datos .= '<span class="badge badge-dark"><i class="' . $item->icono . '"></i> SISTEMA ' . $item->sistema . '</span> 
                         <span class="badge badge-secondary"> ' . $item->perfil . '</span><br/>';
                     }
+<<<<<<< HEAD
                 //$datos .= '</table>';
+=======
+                    //$datos .= '</table>';
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
                 return $datos;
             })
             ->addColumn('action', function ($data) { // '.auth()->user()->usuario.'
@@ -477,6 +485,39 @@ class UsuarioController extends Controller
         $usuario->save();
 
         return response()->json(array('status' => true));
+    }
+    public function ajax_updateaux(Request $request)
+    {
+        $val = $this->_validate2($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+        $usuario = Usuario::find($request->idp);
+        $usuario->usuario = $request->usuariop;
+        $usuario->email = $request->emailp;
+        $usuario->dni = $request->dnip;
+        $usuario->nombre = $request->nombrep;
+        $usuario->apellidos = $request->apellidosp;
+        $usuario->sexo = $request->sexop;
+        $usuario->celular = $request->celularp;
+        //$usuario->entidad = $request->entidadoficinap;
+        if ($request->password != '')
+            $usuario->password = Hash::make($request->password);
+        $usuario->save();
+
+        return response()->json(array('status' => true/* , 'update' => $request->sistemas */));
+    }
+    public function ajax_updatepassword(Request $request)
+    {
+        $val = $this->_validatepassword($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+        $usuario = Usuario::find($request->cid);
+        if ($request->cpassword2 != '')
+            $usuario->password = Hash::make($request->cpassword2);
+        $usuario->save();
+        return response()->json(array('status' => true/* , 'update' => $request->sistemas */));
     }
     public function ajax_updateaux(Request $request)
     {

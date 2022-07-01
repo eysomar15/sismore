@@ -10,7 +10,6 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Indicador;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\PlazaRepositorio;
 use App\Utilities\Utilitario;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -25,146 +24,40 @@ class CuadroAsigPersonalController extends Controller
     public function importar()
     {
         $mensaje = "";
-<<<<<<< HEAD
-        return view('educacion.CuadroAsigPersonal.Importar', compact('mensaje'));
-=======
         return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje'));
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
-    }
-
-    function json_output($status = 200, $msg = 'OK!!', $data = null)
-    {
-        header('Content-Type:application/json');
-        echo json_encode([
-            'status' => $status,
-            'msg' => $msg,
-            'data' => $data
-        ]);
-        die;
     }
 
     public function guardar(Request $request)
     {
+        //return 'ok';
         $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, 2);
         if ($existeMismaFecha != null) {
             $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
-<<<<<<< HEAD
-            $this->json_output(400, $mensaje);
+            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje', 'anios'));
+            $this->json_output(403, $mensaje, null);
         }
 
         $existeMismaFecha = ImportacionRepositorio::Importacion_PR($request->fechaActualizacion, 2);
         if ($existeMismaFecha != null) {
             $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
-            $this->json_output(400, $mensaje);
+            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje'));
+            $this->json_output(403, $mensaje, null);
         }
 
-=======
-            $tipo = 'danger';
-            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje', 'tipo'));
-            $this->json_output(400, $mensaje);
-        }
-
-        $existeMismaFecha = ImportacionRepositorio::Importacion_PR($request->fechaActualizacion, 2);
-        if ($existeMismaFecha != null) {
-            $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
-            $tipo = 'danger';
-            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje', 'tipo'));
-            $this->json_output(400, $mensaje);
-        }
-
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
         $archivo = $request->file('file');
         $array = (new tablaXImport)->toArray($archivo);
-
-<<<<<<< HEAD
-        //$this->json_output(200, 'aqui tamos', $array);
-        
-        if (count($array) != 1) {
-            $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
-        }
+        //return 'total: '.count($array[0]);
+        $i = 0;
+        $cadena = '';
 
         try {
-            foreach ($array as $value) {
-                foreach ($value as $celda => $row) {
-                    if ($celda > 0) break;
-                    $cadena =
-                        $row['unidad_ejecutora'] .
-                        $row['ugel'] .
-                        $row['provincia'] .
-                        $row['distrito'] .
-                        $row['tipo_ie'] . //
-
-                        $row['gestion'] .
-                        $row['zona'] .
-                        $row['codmod_ie'] .
-                        $row['codigo_local'] .
-                        $row['clave8'] .
-
-                        $row['nivel_educativo'] .
-                        $row['institucion_educativa'] .
-                        $row['codigo_plaza'] .
-                        $row['tipo_trabajador'] .
-                        $row['sub_tipo_trabajador'] .
-
-                        $row['cargo'] .
-                        $row['situacion_laboral'] .
-                        $row['motivo_vacante'] .
-                        $row['documento'] .
-                        $row['sexo'] .
-
-                        $row['codmod_docente'] .
-                        $row['apellido_paterno'] .
-                        $row['apellido_materno'] .
-                        $row['nombres'] .
-                        $row['fecha_ingreso'] .
-
-                        $row['categoria_remunerativa'] .
-                        $row['jornada_laboral'] .
-                        $row['estado'] .
-                        $row['fecha_nacimiento'] .
-                        $row['fecha_inicio'] .
-
-                        $row['fecha_termino'] .
-                        $row['tipo_registro'] .
-                        $row['ley'] .
-                        $row['preventiva'] .
-                        $row['especialidad'] .
-
-                        $row['tipo_estudios'] .
-                        $row['estado_estudios'] .
-                        $row['grado'] .
-                        $row['mencion'] .
-                        $row['especialidad_profesional'] .
-
-                        $row['fecha_resolucion'] .
-                        $row['numero_resolucion'] .
-                        $row['centro_estudios'] .
-                        $row['celular'] .
-                        $row['email'] .
-
-                        $row['desc_superior'];
-                }
-            }
-        } catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar.<br>". $e;
-            $this->json_output(403, $mensaje);
-        }
-
-        try {
-=======
-
-        if (count($array) != 1) {
-            $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
-        }
-
-        try {
-            foreach ($array as $value) {
-                foreach ($value as $celda => $row) {
-                    if ($celda > 0) break;
+            foreach ($array as $key => $value) {
+                foreach ($value as $row) {
+                    if (++$i > 1) break;
                     $cadena = // $cadena.$row['region']
                         $row['unidad_ejecutora'] .
-                        $row['ugel'] .
+                        $row['organo_intermedio'] .
                         $row['provincia'] .
                         $row['distrito'] .
                         $row['tipo_ie'] . //
@@ -185,7 +78,7 @@ class CuadroAsigPersonalController extends Controller
                         $row['situacion_laboral'] .
                         $row['motivo_vacante'] .
                         $row['documento'] .
-                        $row['codmod_docente'] .
+                        $row['codigo_modular'] .
 
                         $row['apellido_paterno'] .
                         $row['apellido_materno'] .
@@ -219,15 +112,15 @@ class CuadroAsigPersonalController extends Controller
             }
         } catch (Exception $e) {
             $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";
-            $tipo = 'danger';
-            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje', 'tipo'));
-            $this->json_output(403, $mensaje);
+            $this->json_output(400, $mensaje, null);
+            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje'));
         }
 
+        $this->json_output(200, 'Archivo  subido con exito', null);
+        //return response()->json(array('status' => true));
 
         //else {
         try {
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => 2, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
@@ -239,11 +132,12 @@ class CuadroAsigPersonalController extends Controller
 
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
+                    // echo $row['cen_edu'].'<br>';
                     if ($row['unidad_ejecutora'] != NULL) {
                         $CuadroAsigPersonal = CuadroAsigPersonal::Create([
                             'importacion_id' => $importacion->id, //'region' => 'UCAYALI',
                             'unidad_ejecutora' => $row['unidad_ejecutora'],
-                            'organo_intermedio' => $row['ugel'], // se va cambiar de nombre
+                            'organo_intermedio' => $row['organo_intermedio'], // se va cambiar de nombre
                             'provincia' => $row['provincia'],
                             'distrito' => $row['distrito'],
                             'tipo_ie' => $row['tipo_ie'],
@@ -261,11 +155,7 @@ class CuadroAsigPersonalController extends Controller
                             'situacion_laboral' => $row['situacion_laboral'],
                             'motivo_vacante' => $row['motivo_vacante'],
                             'documento_identidad' => $row['documento'],
-<<<<<<< HEAD
-                            'sexo' => $row['sexo'],
-=======
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
-                            'codigo_modular' => $row['codmod_docente'],
+                            'codigo_modular' => $row['codigo_modular'],
                             'apellido_paterno' => $row['apellido_paterno'],
                             'apellido_materno' => $row['apellido_materno'],
                             'nombres' => $row['nombres'],
@@ -290,10 +180,6 @@ class CuadroAsigPersonalController extends Controller
                             'centro_estudios' => $row['centro_estudios'],
                             'celular' => $row['celular'],
                             'email' => $row['email'],
-<<<<<<< HEAD
-                            'desc_superior' => $row['desc_superior'],
-=======
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
 
                         ]);
                     }
@@ -302,52 +188,20 @@ class CuadroAsigPersonalController extends Controller
         } catch (Exception $e) {
             $importacion->estado = 'EL';
             $importacion->save();
-
-<<<<<<< HEAD
-            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema .<br>". $e;
-=======
-            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema ." . $e;
-            $tipo = 'danger';
-            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje', 'tipo'));
-            $this->json_output(400, $mensaje);
+            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema :" . $e;
+            return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje'));
         }
         //}
 
-        //return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista', $importacion->id);
-        try {
-            $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?,?)', [$importacion->id, auth()->user()->id]);
-        } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
-
-            $mensaje = "Error al procesar la normalizacion de datos.";
-            $tipo = 'danger';
-            //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje', 'tipo'));
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
-            $this->json_output(400, $mensaje);
-        }
-        $mensaje = "Archivo excel subido y Procesado correctamente .";
-        $tipo = 'primary';
-        //return view('Educacion.CuadroAsigPersonal.Importar', compact('mensaje', 'tipo'));
-        $this->json_output(200, $mensaje, '');
+        return redirect()->route('CuadroAsigPersonal.CuadroAsigPersonal_Lista', $importacion->id);
     }
 
-<<<<<<< HEAD
-        try {
-            $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?,?)', [$importacion->id, auth()->user()->id]);
-        } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
-
-            $mensaje = "Error al procesar la normalizacion de datos.<br>". $e;
-            $this->json_output(400, $mensaje);
-        }
-        $mensaje = "Archivo excel subido y Procesado correctamente .";
-        $this->json_output(200, $mensaje, '');
+    public function json_output($status = 200, $msg = 'ok', $data = null)
+    {
+        header('Content-Type: application/json');
+        echo response()->json(['status' => $status, 'msg' => $msg, 'data' => $data]);
     }
 
-=======
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     public function ListarDTImportFuenteTodos()
     {
         $data = ImportacionRepositorio::Listar_FuenteTodos('2');
@@ -357,10 +211,7 @@ class CuadroAsigPersonalController extends Controller
             ->editColumn('estado', function ($query) {
                 return $query->estado == "PR" ? "PROCESADO" : ($query->estado == "PE" ? "PENDIENTE" : "ELIMINADO");
             })
-            ->addColumn('accion', function ($oo) {
-                return '<button type="button" onclick="geteliminar(' . $oo->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
-            })
-            ->rawColumns(['fechaActualizacion', 'estado', 'accion'])
+            ->rawColumns(['fechaActualizacion', 'ESTADO'])
             ->toJson();
     }
 
@@ -464,12 +315,6 @@ class CuadroAsigPersonalController extends Controller
             $importacion_id = $ultima_Plaza->first()->importacion_id;
         }
 
-<<<<<<< HEAD
-
-        $dataCabecera = CuadroAsigPersonalRepositorio::docentes_bilingues($importacion_id);
-        $lista = CuadroAsigPersonalRepositorio::docentes_bilingues_ugel($importacion_id);
-=======
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
 
         $dataCabecera = CuadroAsigPersonalRepositorio::docentes_bilingues($importacion_id);
         $lista = CuadroAsigPersonalRepositorio::docentes_bilingues_ugel($importacion_id);
@@ -477,11 +322,6 @@ class CuadroAsigPersonalController extends Controller
 
         $fecha_version = 'Ultima actualización: ' . $fecha_texto;
 
-<<<<<<< HEAD
-        $fecha_version = 'Ultima actualización: ' . $fecha_texto;
-
-=======
->>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         /************* GRAFICO TORTA*******************/
         $sumaBilingue = 0;
         $sumaTotal = 0;
@@ -556,19 +396,17 @@ class CuadroAsigPersonalController extends Controller
     }
 
     /*********************** DOCENTES ******************************** */
-    public function DocentesPrincipal()
+    /* public function DocentesPrincipal()//ya no se usa
     {
-        //return PlazaRepositorio::listar_anios();
-        //return PlazaRepositorio::listar_meses(2022);
-        //return PlazaRepositorio::listar_importados(2022,2);
-        //$fechas = null;
-        //return PlazaRepositorio::listar_docentes_ugel(373);
-        $anios = PlazaRepositorio::listar_anios(); // CuadroAsigPersonalRepositorio::plazas_anio();
-        /*  if ($anios->first() != null) {
+        $fechas = null;
+        $anios =  CuadroAsigPersonalRepositorio::plazas_anio();
+
+        if ($anios->first() != null) {
             $fechas =  CuadroAsigPersonalRepositorio::plazas_fechas($anios->first()->anio);
-        } */
-        return view('educacion.CuadroAsigPersonal.DocentesPrincipal', compact('anios'));/* , 'fechas' */
-    }
+        }
+
+        return view('educacion.CuadroAsigPersonal.DocentesPrincipal', compact('anios', 'fechas'));
+    } */
 
     public function DocentesReportePrincipal($tipoTrab_id, $importacion_id)
     {

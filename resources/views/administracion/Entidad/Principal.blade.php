@@ -295,6 +295,7 @@
                 }
             });
         };
+<<<<<<< HEAD
 
         function borrar(id) {
             bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
@@ -317,6 +318,8 @@
                 }
             });
         };
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     
     </script>
 @endsection

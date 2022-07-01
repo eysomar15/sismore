@@ -19,13 +19,17 @@ use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use App\Repositories\Educacion\MatriculaRepositorio;
 use App\Repositories\Educacion\NivelModalidadRepositorio;
 use App\Repositories\Educacion\PadronWebRepositorio;
+<<<<<<< HEAD
 use App\Repositories\Educacion\PlazaRepositorio;
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
 use App\Repositories\Educacion\TabletaRepositorio;
 use App\Repositories\Educacion\UgelRepositorio;
 use App\Repositories\Vivienda\CentroPobladoDatassRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -96,6 +100,15 @@ class HomeController extends Controller
             case (5):
                 return $this->presupuesto($sistema_id);
                 break;
+<<<<<<< HEAD
+            case (6):
+                return $this->trabajo($sistema_id);
+                break;
+=======
+                case (3):
+                    return Redirect::to("http://sismore.regionucayali.gob.pe/sismore/public/login");
+                //return Redirect::to("https://www.google.com/");
+>>>>>>> 0bc9114c3ad512a687415929b293da54f93020a4
             default:
                 return 'Ruta de sistema no establecida';
                 break;
@@ -109,8 +122,9 @@ class HomeController extends Controller
         return view('home', compact('sistema_id', 'sistemas'));
     }
 
-    public function presupuesto($sistema_id)
+    public function trabajo($sistema_id)
     {
+<<<<<<< HEAD
         $imp = Importacion::where('fuenteimportacion_id', '7')->select(DB::raw('max(id) as maximo'))->first();
         $data[] = ['name' => 'Centro Poblado', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($imp->maximo)->conteo];
         $data[] = ['name' => 'con sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'][0]->y];
@@ -130,15 +144,19 @@ class HomeController extends Controller
 
         $grafica[] = CentroPobladoRepositotio::listarporprovincias($imp->maximo);/* total de centro poblado por provincia */
         $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($imp->maximo);/* total de centro poblado con servicio de agua(sistema_agua) */
+=======
+        $instituciones_activas = 0;
+        $instituciones_inactivas = 0;
+        $instituciones_total = 0;
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
 
-        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'];
-        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'];
-        /* return $grafica2; */
-        return view('home', compact('sistema_id', 'data', 'data2', 'grafica', 'grafica2'));
+       
+        return view('home', compact('sistema_id'));
     }
 
-    public function vivienda($sistema_id)
+    public function presupuesto($sistema_id)
     {
+<<<<<<< HEAD
         //$imp = Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', '7')->where('estado', 'PR')->first();
         $importacion_id = ImportacionRepositorio::Max_porfuente('7');
         if ($importacion_id) {
@@ -206,6 +224,98 @@ class HomeController extends Controller
             $importacion_id = null;
             return  view('home', compact('importacion_id'));
         }
+=======
+        $imp = Importacion::where('fuenteimportacion_id', '7')->select(DB::raw('max(id) as maximo'))->first();
+        $data[] = ['name' => 'Centro Poblado', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($imp->maximo)->conteo];
+        $data[] = ['name' => 'con sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'][0]->y];
+        $data[] = ['name' => 'con disposición de excretas', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'][0]->y];
+        $data[] = ['name' => 'con sistema de cloración', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 21, $imp->maximo)['indicador2'][0]->y];
+
+        $query = CentroPobladoDatass::where('importacion_id', $imp->maximo)->select(
+            DB::raw('sum(total_poblacion) as poblacion'),
+            DB::raw('sum(poblacion_servicio_agua) as con_agua'),
+            DB::raw('sum(total_viviendas) as viviendas'),
+            DB::raw('sum(viviendas_conexion) as con_conexion')
+        )->first();
+        $data2[] = ['name' => 'población', 'y' => $query->poblacion];/* total_poblacion */
+        $data2[] = ['name' => 'Cobertura de Agua', 'y' => $query->con_agua];/* poblacion_con_servicio_agua */
+        $data2[] = ['name' => 'viviendas', 'y' => $query->con_conexion];/* total_viviendas */
+        $data2[] = ['name' => 'viviendas con conexion', 'y' => $query->con_conexion];/* viviendas_con_conexion */
+
+        $grafica[] = CentroPobladoRepositotio::listarporprovincias($imp->maximo);/* total de centro poblado por provincia */
+        $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($imp->maximo);/* total de centro poblado con servicio de agua(sistema_agua) */
+
+        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'];
+        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'];
+        /* return $grafica2; */
+        return view('home', compact('sistema_id', 'data', 'data2', 'grafica', 'grafica2'));
+    }
+
+    public function vivienda($sistema_id)
+    {
+        //$imp = Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', '7')->where('estado', 'PR')->first();
+        $importacion_id = ImportacionRepositorio::Max_porfuente('7');
+        if ($importacion_id) {
+            $data[] = ['name' => 'Centros Poblados', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($importacion_id)->conteo];
+            $data[] = ['name' => 'Sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $importacion_id)['indicador'][0]->y];
+            $data[] = ['name' => 'Disposicion Escretas', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $importacion_id)['indicador2'][0]->y];
+            $data[] = ['name' => 'Sistema Cloración', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 21, $importacion_id)['indicador2'][0]->y];
+
+            $sumas = CentroPobladoDatassRepositorio::sumas_dashboard($importacion_id);
+            $data2[] = ['name' => 'población', 'y' => $sumas->poblacion];/* total_poblacion */
+            $data2[] = ['name' => 'Cobertura de Agua', 'y' => $sumas->con_agua];/* poblacion_con_servicio_agua */
+            $data2[] = ['name' => 'viviendas', 'y' => $sumas->con_conexion];/* total_viviendas */
+            $data2[] = ['name' => 'Conexion de Agua', 'y' => $sumas->con_conexion];/* viviendas_con_conexion */
+
+            $grafica[] = CentroPobladoRepositotio::listarporprovincias($importacion_id);/* total de centro poblado por provincia */
+            $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($importacion_id);/* total de centro poblado con servicio de agua(sistema_agua) */
+
+            $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $importacion_id)['indicador'];
+            $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $importacion_id)['indicador2'];
+
+            return view('home', compact('sistema_id', 'importacion_id', 'data', 'data2', 'grafica', 'grafica2'));
+        } else {
+            return view('home', compact('sistema_id', 'importacion_id'));
+        }
+    }
+
+
+    public function educacion($sistema_id)
+    {
+        $imp = ImportacionRepositorio::Max_yearPadronWeb();
+        if (count($imp) > 0) {
+            $importacion_id = $imp['id'];
+            $info['se'] = PadronWebRepositorio::count_institucioneducativa($imp['id']);
+            $info['le'] = PadronWebRepositorio::count_localesescolares($imp['id']);
+            $info['tm'] = PadronWebRepositorio::count_matriculados($imp['id']);
+            $info['do'] = PadronWebRepositorio::count_docente($imp['id']);
+            //$info['g1'] = PadronWebRepositorio::grafica_serviciosylocaleseducativosporugel($imp['id']);
+            //$info['g2'] = PadronWebRepositorio::grafica_estudiantesmatriculadospormodalidad($imp['id']);
+            $info['g1'] = PadronWebRepositorio::grafica_estudiantessegunmodalidad($imp['id']);
+            $info['g2'] = PadronWebRepositorio::grafica_docentessegunmodalidad($imp['id']);
+            //$info['g3'] = PadronWebRepositorio::grafica_matriculadosportipogestionyugel($imp['id']);
+            $info['g3'] = PadronWebRepositorio::grafica_matriculadosporugel($imp['id']);
+            $info['g4'] = PadronWebRepositorio::grafica_matriculadosporareageografica($imp['id']);
+            //$info['g5'] = PadronWebRepositorio::grafica_docentesportipogestionyugel($imp['id']);
+            $info['g5'] = PadronWebRepositorio::grafica_docentesporugel($imp['id']);
+            $info['g6'] = PadronWebRepositorio::grafica_docentesporareageografica($imp['id']);
+            $info['g7'] = PadronWebRepositorio::grafica_matriculadosporEBR($imp['id']);
+            $info['g8'] = PadronWebRepositorio::grafica_docentesporEBR($imp['id']);
+
+            $info['g9'] = PadronWebRepositorio::grafica_matriculadosportipogestion($imp['id']);
+            $info['g10'] = PadronWebRepositorio::grafica_docentesportipogestion($imp['id']);
+            //$info['dt1'] = PadronWebRepositorio::listar_nivelmodalidadvstipogestion($imp['id']);
+            //$info['dt2'] = PadronWebRepositorio::listar_nivelmodalidadvsareageografica($imp['id']);
+            $info['dt1'] = PadronWebRepositorio::listar_nivelmodalidadvsugelhombremujer($imp['id']);
+            $info['dt2'] = PadronWebRepositorio::listar_nivelmodalidadvsugeldocentedirectores($imp['id']);
+            $info['dt3'] = PadronWebRepositorio::listar_tipogestionvsprovinciaestudiantesdocente($imp['id']);
+            //return $info;
+            return  view('home', compact('importacion_id', 'info', 'imp'));
+        } else {
+            $importacion_id = null;
+            return  view('home', compact('importacion_id'));
+        }
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     }
     public function educacionx($sistema_id)
     {
@@ -280,6 +390,7 @@ class HomeController extends Controller
             'porcentajeLocales_tieneInternet'
         ));
     }
+
 
     public function AEI_tempo()
     {

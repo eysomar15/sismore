@@ -167,9 +167,13 @@ class PadronWebRepositorio
             ->orderBy('y', 'desc')
             ->select('v3.tipo as name', DB::raw('CAST(SUM(v1.total_alumno) AS SIGNED) as y'))
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
     public static function grafica_docentessegunmodalidad($importacion_id)
@@ -183,9 +187,13 @@ class PadronWebRepositorio
             ->orderBy('y', 'desc')
             ->select('v3.tipo as name', DB::raw('CAST(SUM(v1.total_docente) as SIGNED) as y'))
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
     public static function grafica_matriculadosportipogestionyugel($importacion_id)
@@ -256,9 +264,12 @@ class PadronWebRepositorio
             ->orderBy('y', 'desc')
             ->select('v5.nombre as name',/*  'v4.nombre as gestion', */ DB::raw('CAST(SUM(v1.total_alumno) as SIGNED) as y'))
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
     public static function grafica_docentesportipogestionyugel($importacion_id)
@@ -326,9 +337,12 @@ class PadronWebRepositorio
             ->orderBy('y', 'desc')
             ->select('v5.nombre as name',  DB::raw('CAST(SUM(v1.total_docente) as SIGNED) as y'))
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
     public static function grafica_matriculadosporareageografica($importacion_id)
@@ -344,9 +358,12 @@ class PadronWebRepositorio
                 DB::raw('FORMAT(cast(SUM(v1.total_alumno)  as SIGNED),0) as conteo'),
             )
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
     public static function grafica_docentesporareageografica($importacion_id)
@@ -362,9 +379,12 @@ class PadronWebRepositorio
                 DB::raw('FORMAT(cast(SUM(v1.total_docente)  as SIGNED),0) as conteo'),
             )
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
     public static function listar_nivelmodalidadvstipogestion($importacion_id)
@@ -700,9 +720,12 @@ class PadronWebRepositorio
                 DB::raw('FORMAT(cast(SUM(v1.total_alumno)  as SIGNED),0) as conteo'),
             )
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
 
@@ -723,9 +746,12 @@ class PadronWebRepositorio
                 DB::raw('FORMAT(cast(SUM(v1.total_docente)  as SIGNED),0) as conteo'),
             )
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
 
@@ -746,9 +772,12 @@ class PadronWebRepositorio
                 DB::raw('FORMAT(cast(SUM(v1.total_alumno)  as SIGNED),0) as conteo'),
             )
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
     public static function grafica_docentesportipogestion($importacion_id)
@@ -768,9 +797,12 @@ class PadronWebRepositorio
                 DB::raw('FORMAT(cast(SUM(v1.total_docente)  as SIGNED),0) as conteo'),
             )
             ->get();
+<<<<<<< HEAD
         foreach ($query as $key => $value) {
             $value->y = (int)$value->y;
         }
+=======
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return $query;
     }
 }

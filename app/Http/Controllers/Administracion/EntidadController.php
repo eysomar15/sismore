@@ -20,22 +20,38 @@ class EntidadController extends Controller
     public function principal()
     {
         //$entidad = UnidadEjecutora::all();
+<<<<<<< HEAD
         $tipogobierno = TipoGobierno::all();
+=======
+        $tipogobierno=TipoGobierno::all();
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return view('administracion.Entidad.Principal', compact('tipogobierno'));
     }
 
     public function gerencia()
     {
+<<<<<<< HEAD
         $tipogobierno = TipoGobierno::all();
+=======
+        $tipogobierno=TipoGobierno::all();
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return view('administracion.Entidad.Gerencia', compact('tipogobierno'));
     }
     public function oficina()
     {
+<<<<<<< HEAD
         $tipogobierno = TipoGobierno::all();
         return view('administracion.Entidad.Oficina', compact('tipogobierno'));
     }
 
     public function listarDTentidad($tipogobierno)
+=======
+        $tipogobierno=TipoGobierno::all();
+        return view('administracion.Entidad.Oficina', compact('tipogobierno'));
+    }
+
+    public function listarDTentidad( $tipogobierno)
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     {
         /* if ($dependencia == 0)
             $data = Entidad::select('pres_entidad.*')
@@ -46,9 +62,15 @@ class EntidadController extends Controller
             ->where('pres_entidad.unidadejecutadora_id', $unidadejecutora_id)
             ->where('pres_entidad.dependencia', $dependencia)
             ->get(); */
+<<<<<<< HEAD
         $data = UnidadEjecutora::select('pres_unidadejecutora.*', 'v2.tipogobierno as nombretipogobierno')
             ->join('pres_tipo_gobierno as v2', 'v2.id', '=', 'pres_unidadejecutora.tipogobierno')
             ->where('pres_unidadejecutora.tipogobierno', $tipogobierno)->get();
+=======
+        $data = UnidadEjecutora::select('pres_unidadejecutora.*','v2.tipogobierno as nombretipogobierno')
+        ->join('pres_tipo_gobierno as v2','v2.id','=','pres_unidadejecutora.tipogobierno')
+        ->where('pres_unidadejecutora.tipogobierno', $tipogobierno)->get();
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
         return  datatables()::of($data)
             /* ->editColumn('grupo', function ($data) {
                 if ($data->dependencia) return $data->grupo;
@@ -65,7 +87,47 @@ class EntidadController extends Controller
             ->rawColumns(['action'/* , 'grupo' */])
             ->make(true);
     }
+    private function _validateentidad($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
 
+        if ($request->entidad_codigo == '') {
+            $data['inputerror'][] = 'entidad_codigo';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->entidad_nombre == '') {
+            $data['inputerror'][] = 'entidad_nombre';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->entidad_abreviado == '') {
+            $data['inputerror'][] = 'entidad_abreviado';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        return $data;
+    }
+    public function ajax_add_entidad(Request $request)
+    {
+        $val = $this->_validateentidad($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
+        $entidad = UnidadEjecutora::Create([
+            'codigo' => $request->entidad_codigo,
+            'tipogobierno' => $request->entidad_tipogobierno,
+            'unidad_ejecutora' => $request->entidad_nombre,
+            'abreviatura' => $request->entidad_abreviado,
+        ]);
+        $entidad->save();
+
+<<<<<<< HEAD
     public function listarDTgerencia($entidad_id)
     {
         $data = Entidad::where('unidadejecutadora_id', $entidad_id)->get();
@@ -121,6 +183,9 @@ class EntidadController extends Controller
         $entidad->save();
 
         return response()->json(array('status' => true, 'nuva entidad' => $entidad));
+=======
+        return response()->json(array('status' => true,'nuva entidad'=>$entidad));
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     }
     public function ajax_edit_entidad($entidad_id)
     {
@@ -134,6 +199,7 @@ class EntidadController extends Controller
         if ($val['status'] === FALSE) {
             return response()->json($val);
         }
+<<<<<<< HEAD
         $entidad = UnidadEjecutora::find($request->entidad_id);
         $entidad->codigo = $request->entidad_codigo;
         $entidad->tipogobierno = $request->entidad_tipogobierno;
@@ -155,6 +221,17 @@ class EntidadController extends Controller
         return response()->json(compact('unidadejecutora'));
     }
 
+=======
+        $entidad=UnidadEjecutora::find($request->entidad_id);
+        $entidad->codigo=$request->entidad_codigo;
+        $entidad->tipogobierno=$request->entidad_tipogobierno;
+        $entidad->unidad_ejecutora=$request->entidad_nombre;
+        $entidad->abreviatura=$request->entidad_abreviado;
+        $entidad->save();
+       
+        return response()->json(array('status' => true,'tipo'=>$entidad));
+    }
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     public function cargarGerencia($entidad_id)
     {
         $gerencias = Entidad::where('unidadejecutadora_id', $entidad_id)->where('dependencia')->get();

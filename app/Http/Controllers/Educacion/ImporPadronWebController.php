@@ -26,7 +26,11 @@ class ImporPadronWebController extends Controller
     public function importar()
     {
         $mensaje = "";
+<<<<<<< HEAD
         return view('educacion.ImporPadronWeb.Importar', compact('mensaje'));
+=======
+        return view('Educacion.ImporPadronWeb.Importar', compact('mensaje'));
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
     }
 
     function json_output($status = 200, $msg = 'OK!!', $data = null)
@@ -227,7 +231,11 @@ class ImporPadronWebController extends Controller
             $procesar = DB::select('call edu_pa_procesarPadronWeb(?)', [$importacion->id]);
         } catch (Exception $e) {
             $importacion->estado = 'EL';
+<<<<<<< HEAD
             $importacion->save(); 
+=======
+            $importacion->save();
+>>>>>>> 4465f79f1094a72e3a14a68f37e6ea816b2643da
 
             $mensaje = "Error al procesar la normalizacion de datos." . $e;
             $tipo = 'danger';

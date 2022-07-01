@@ -128,5 +128,41 @@
                 </div>
             </div>
         </div>
+    
+    
     </body>
+
+    
 </html>
+
+
+
+
+
+
+
+{{-- @extends('layouts.main',['activePage'=>'importacion','titlePage'=>'DISTRIBUCIÓN DE TEXTOS ESCOLARES'])
+
+
+@section('content')  
+@endsection 
+
+@section('js')
+
+    <script type="text/javascript"> 
+        
+        $(document).ready(function() {
+            // alert("hola gamb");
+           
+            $.ajax({
+               
+                url: "{{ url('/') }}/AEI",
+                type: 'get',
+                dataType: 'JSON',                
+                
+            });
+        });       
+       
+    </script>
+    
+@endsection --}}
