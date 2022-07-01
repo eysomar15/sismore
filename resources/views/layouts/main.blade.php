@@ -250,6 +250,9 @@
     <script src="{{ asset('/') }}assets/js/bootbox.js"></script>
 
 
+    
+
+
     <!-- flot chart -->
     {{-- <script src="assets/libs/flot-charts/jquery.flot.js"></script>
         <script src="assets/libs/flot-charts/jquery.flot.time.js"></script>

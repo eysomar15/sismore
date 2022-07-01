@@ -27,6 +27,7 @@ class ClasificadorController extends Controller
             $nombre_niv1 = $listaIndicadores->first()->nombre_niv1;           
         } 
         
+        //  return session('sistema_id');
         return  view('parametro.MenuIndicador',compact('nombre_niv1','listaNivel2_deClasificador','listaIndicadores','listaNivel3_deClasificador','clase_codigo'));
     } 
 }

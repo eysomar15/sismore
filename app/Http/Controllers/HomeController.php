@@ -94,10 +94,15 @@ class HomeController extends Controller
             case (5):
                 return $this->presupuesto($sistema_id);
                 break;
-<<<<<<< HEAD
             case (6):
                 return $this->trabajo($sistema_id);
                 break;
+
+            case (3):
+                return Redirect::to("http://sismore.regionucayali.gob.pe/sismore/public/login");
+                break;
+            //return Redirect::to("https://www.google.com/");
+                
             default:
                 return 'Ruta de sistema no establecida';
                 break;
@@ -113,12 +118,29 @@ class HomeController extends Controller
 
     public function trabajo($sistema_id)
     {
-        $instituciones_activas = 0;
-        $instituciones_inactivas = 0;
-        $instituciones_total = 0;
 
-               
-        return view('home', compact('sistema_id'));
+        // $dataCircular = [1.2,2.4,1.5,4.8,6,4.3,5];
+        // $dataCircular2 = [2.2,3.4,8.5,5.8,7,2.3];
+        // $dataCircular3 = [2.8,5.4,8.7,7.8,4,3.3];
+
+        // $puntos = [];        
+        // $total = 0;
+       
+        // $categoria_nombres=[];        
+        //  $recorre = 1; 
+       
+        // $puntos[] = [ 'name'=> 'grupo aaa1' ,'data'=>  $dataCircular];
+        // $puntos[] = [ 'name'=> 'grupo bbb2' ,'data'=>  $dataCircular2];
+        // $puntos[] = [ 'name'=> 'grupo ccc3' ,'data'=>  $dataCircular3];
+
+        // $categoria = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago'];
+   
+
+        //return ["dataCircular" => json_encode($dataCircular)];
+        // return view('home', ["dataLineal" => json_encode($puntos),"categoria_nombres" => json_encode($categoria)],
+        //         compact('sistema_id'));
+
+        return view('home',compact('sistema_id'));
     }
 
     public function presupuesto($sistema_id)

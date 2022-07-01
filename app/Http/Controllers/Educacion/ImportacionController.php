@@ -50,7 +50,10 @@ class ImportacionController extends Controller
                         case('COD09'): $acciones = '<a href="Tableta/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> <i class="fa fa-check"></i> </a>';break;
                         case('COD10'): $acciones = '<a href="Matricula/AprobarConsolidadoAnual/' . $data->id . '"   class="btn btn-info btn-sm"> <i class="fa fa-check"></i> </a>';break; 
                         case('COD11'): $acciones = '<a href="PEmapacopsa/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> <i class="fa fa-check"></i> </a>';break;
-    
+
+                        case('COD18'): $acciones = '<a href="ProEmpleo/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> <i class="fa fa-check"></i> </a>';break;
+                        case('COD19'||'COD20'): $acciones = '<a href="AnuarioEstadistico/Aprobar/' . $data->id . '"   class="btn btn-info btn-sm"> <i class="fa fa-check"></i> </a>';break;
+                       
                         default: $acciones = '<a href="PadronWeb/AprobarNN/' . $data->id . '"   class="btn btn-info btn-sm"> <i class="fa fa-check"></i> </a>';break;
                     }   
                 }          
