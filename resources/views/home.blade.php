@@ -1,4 +1,4 @@
-@extends('layouts.main',['titlePage'=>'Bienvenido al SISMORE - Ucayali'])
+@extends('layouts.main',['titlePage'=>'Bienvenido al Sistema de Monitoreo Regional'])
 
 @section('content')
 

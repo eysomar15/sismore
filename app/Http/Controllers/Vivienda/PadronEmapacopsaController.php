@@ -38,12 +38,29 @@ class PadronEmapacopsaController extends Controller
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
                     if (++$i > 1) break;
-                    $cadena =  $cadena
-                        . $row['cod_dist'] . $row['distrito'] . $row['cod_sector'] . $row['cod_manzana'] . $row['manzana_nombre']
-                        . $row['lote'] . $row['nro_insc'] . $row['nombres'] . $row['ruc'] . $row['direccion']
-                        . $row['urbanizacion'] . $row['tipo_serv'] . $row['tipo_servicio_nombre'] . $row['est_conex']
-                        . $row['estado_conexion_nombre'] . $row['unid_uso'] . $row['sub_categ'] . $row['sub_categoria_nombre']
-                        . $row['tar'] . $row['num_med'] . $row['lect_sec'] . $row['rep_sec'];
+                    $cadena =  $cadena .
+                        $row['cod_dist'] .
+                        $row['distrito'] .
+                        $row['cod_sector'] .
+                        $row['cod_manzana'] .
+                        $row['manzana_nombre'] .
+                        $row['lote'] .
+                        $row['nro_insc'] .
+                        $row['nombres'] .
+                        $row['ruc'] .
+                        $row['direccion'] .
+                        $row['urbanizacion'] .
+                        $row['tipo_serv'] .
+                        $row['tipo_servicio_nombre'] .
+                        $row['est_conex'] .
+                        $row['estado_conexion_nombre'] .
+                        $row['unid_uso'] .
+                        $row['sub_categ'] .
+                        $row['sub_categoria_nombre'] .
+                        $row['tar'] .
+                        $row['num_med'] .
+                        $row['lect_sec'] .
+                        $row['rep_sec'];
                 }
             }
         } catch (Exception $e) {
@@ -52,7 +69,7 @@ class PadronEmapacopsaController extends Controller
         }
         try {
             $importacion = Importacion::Create([
-                'fuenteImportacion_id' =>11, // valor predeterminado
+                'fuenteImportacion_id' => 11, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
                 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
@@ -90,10 +107,12 @@ class PadronEmapacopsaController extends Controller
                 }
             }
         } catch (Exception $e) {
+            $importacion->estado = 'EL';
+            $importacion->save();
             $mensaje = "Error en la carga de datos, comuniquese con el administrador del sistema \n" . $e->getMessage();
-            PadronEmapacopsa::where('importacion_id', $importacion->id)->delete(); //elimina emapacopsa cargados
+            /* PadronEmapacopsa::where('importacion_id', $importacion->id)->delete(); //elimina emapacopsa cargados
             DB::statement('ALTER TABLE viv_padronemapacopsa AUTO_INCREMENT 1'); //*-*
-            $importacion->delete(); // elimina la importacion creada
+            $importacion->delete(); // elimina la importacion creada */
             return view('Vivienda.PadronEmapacopsa.Importar', compact('mensaje'));
         }
 
@@ -117,7 +136,7 @@ class PadronEmapacopsaController extends Controller
 
     public function importarAprobarGuardar($importacion_id)
     {
-        $procesar = DB::select('call viv_pa_procesarEmapacopsa(?)', [$importacion_id]);// que sera esto :o :o :o  XDXDXD
+        $procesar = DB::select('call viv_pa_procesarEmapacopsa(?)', [$importacion_id]); // que sera esto :o :o :o  XDXDXD
         return view('correcto');
     }
 }

@@ -30,7 +30,7 @@ class MatriculaController extends Controller
         $mensaje = "";
         $anios = Anio::orderBy('anio', 'desc')->get();
         
-        return view('Educacion.Matricula.Importar',compact('mensaje','anios'));
+        return view('educacion.Matricula.Importar',compact('mensaje','anios'));
     } 
     
     public function guardar(Request $request)

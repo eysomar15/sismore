@@ -19,7 +19,7 @@
 
 </head>
 
-<body class="" style="background-image: url('{{asset('/')}}/img/fondo1.png');background-size: 100% 100%;">
+<body class="" style="background-image: url('{{asset('/')}}/img/fondo1.jpg');background-size: 100% 100%;">
     <div class="container">
             
         <div class="row"><br> </div>
@@ -63,10 +63,10 @@
                                 <form class="form p-0" method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group mb-3">
-                                        <label for="exampleInputEmail1">Email</label>
-                                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
-                                        name="email" value="{{ old('email') }}" required autocomplete="email"  placeholder="email" autofocus>
-                                        @error('email')
+                                        <label for="exampleInputEmail1">Usuario</label>
+                                        <input id="usuario" type="text" class="form-control @error('usuario') is-invalid @enderror" 
+                                        name="usuario" value="{{ old('usuario') }}" required autocomplete="usuario"  placeholder="usuario" autofocus>
+                                        @error('usuario')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>

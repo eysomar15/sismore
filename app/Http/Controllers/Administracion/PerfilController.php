@@ -51,12 +51,13 @@ class PerfilController extends Controller
                 if ($data->sistema_id == 4)
                     $acciones .= '&nbsp;<a href="#" class="btn btn-purple btn-sm" onclick="sistema(' . $data->id . ')" title="AGREGAR SISTEMAS"> <i class="ion ion-md-cube"></i> </a>';
                 $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="menu(' . $data->id . ')" title="AGREGAR MENU"> <i class="fa fa-list-ul"></i> </a>';
-                //$acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+
                 if ($data->estado == '1') {
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
                 } else {
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
                 }
+                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
 

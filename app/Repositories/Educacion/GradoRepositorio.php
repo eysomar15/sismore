@@ -10,7 +10,7 @@ class GradoRepositorio
 {
     public static function buscar_nivel1()
     {
-        $query = NivelModalidad::whereIn('id', ['37', '38'])->get();
+        $query = NivelModalidad::whereIn('id', ['7', '8'])->get();
         return $query;
     }
     public static function buscar_grado1($grado)

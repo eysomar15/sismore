@@ -13,6 +13,7 @@ class UnidadEjecutora extends Model
 
     protected $fillable = [
         'codigo',
+        'tipogobierno',
         'unidad_ejecutora',
         'abreviatura',
     ];

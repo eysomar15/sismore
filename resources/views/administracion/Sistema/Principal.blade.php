@@ -1,4 +1,4 @@
-@extends('layouts.main',['activePage'=>'usuarios','titlePage'=>'GESTION DE SISTEMAS'])
+@extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => 'GESTION DE SISTEMAS'])
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -40,6 +40,7 @@
                                             <!--th>Nº</th-->
                                             <th>Sistema</th>
                                             <th>Icono</th>
+                                            <th>Posicion</th>
                                             <th>Estado</th>
                                             <th>Aciones</th>
                                         </thead>
@@ -84,7 +85,15 @@
                                 <input id="icono" name="icono" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
-                            
+
+                            <div class="form-group">
+                                <label>Posicion
+                                    <!--span class="required">*</span-->
+                                </label>
+                                <input id="pos" name="pos" class="form-control" type="number" value="{{ $posmax }}">
+                                <span class="help-block"></span>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -96,7 +105,6 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <!-- End Bootstrap modal -->
-
 @endsection
 
 @section('js')
@@ -112,7 +120,7 @@
         $(document).ready(function() {
             var save_method = '';
             var table_principal;
-            
+
             $("input").change(function() {
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().empty();
@@ -160,7 +168,7 @@
                     console.log(data)
                     if (data.status) {
                         $('#modal_form').modal('hide');
-                        reload_table_principal();//listarDT();
+                        reload_table_principal(); //listarDT();
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -193,6 +201,7 @@
                     $('[name="id"]').val(data.sistema.id);
                     $('[name="nombre"]').val(data.sistema.nombre);
                     $('[name="icono"]').val(data.sistema.icono);
+                    $('[name="pos"]').val(data.sistema.pos);
                     $('#modal_form').modal('show');
                     $('.modal-title').text('Modificar Sistema');
                 },
@@ -211,7 +220,7 @@
                         dataType: "JSON",
                         success: function(data) {
                             $('#modal_form').modal('hide');
-                            reload_table_principal();//listarDT();
+                            reload_table_principal(); //listarDT();
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
@@ -225,13 +234,16 @@
         };
 
         function listarDT() {
-            table_principal=$('#dtPrincipal').DataTable({
+            table_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ url('/') }}/Sistema/listarDT/",
                 "columns": [{
                         data: 'nombre'
                     },
                     {
                         data: 'icono'
+                    },
+                    {
+                        data: 'pos'
                     },
                     {
                         data: 'estado'
@@ -288,7 +300,7 @@
                         dataType: "JSON",
                         success: function(data) {
                             console.log(data);
-                            reload_table_principal();//listarDT();
+                            reload_table_principal(); //listarDT();
                             if (data.estado)
                                 toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
                             else

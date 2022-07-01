@@ -6,15 +6,22 @@ use App\Models\Administracion\Sistema;
 use App\Models\Administracion\UsuarioPerfil;
 use App\Models\Educacion\CentroPoblado;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\Matricula;
 use App\Models\Vivienda\CentroPobladoDatass;
 use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\InstEducativaRepositorio;
+use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use App\Repositories\Educacion\MatriculaRepositorio;
+use App\Repositories\Educacion\NivelModalidadRepositorio;
+use App\Repositories\Educacion\PadronWebRepositorio;
+use App\Repositories\Educacion\PlazaRepositorio;
 use App\Repositories\Educacion\TabletaRepositorio;
+use App\Repositories\Educacion\UgelRepositorio;
 use App\Repositories\Vivienda\CentroPobladoDatassRepositorio;
 use App\Repositories\Vivienda\CentroPobladoRepositotio;
 use Illuminate\Http\Request;
@@ -51,13 +58,9 @@ class HomeController extends Controller
             session(['dnisismore$' => $usuario->first()->dni]);
             session(['passwordsismore$' => $usuario->first()->password]);
         }
-
         // return session('dnisismore$');
-
         if ($sistemas->count() == 1)
             return $this->sistema_acceder($sistemas->first()->sistema_id);
-
-
         // return session('usuario_id');
         return view('Access', compact(('sistemas')));
     }
@@ -108,7 +111,6 @@ class HomeController extends Controller
 
     public function presupuesto($sistema_id)
     {
-        //$sistemas = SistemaRepositorio::listar_sistemasconusuarios(1);return $sistemas;
         $imp = Importacion::where('fuenteimportacion_id', '7')->select(DB::raw('max(id) as maximo'))->first();
         $data[] = ['name' => 'Centro Poblado', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($imp->maximo)->conteo];
         $data[] = ['name' => 'con sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'][0]->y];
@@ -122,7 +124,7 @@ class HomeController extends Controller
             DB::raw('sum(viviendas_conexion) as con_conexion')
         )->first();
         $data2[] = ['name' => 'población', 'y' => $query->poblacion];/* total_poblacion */
-        $data2[] = ['name' => 'poblacion con cobertura', 'y' => $query->con_agua];/* poblacion_con_servicio_agua */
+        $data2[] = ['name' => 'Cobertura de Agua', 'y' => $query->con_agua];/* poblacion_con_servicio_agua */
         $data2[] = ['name' => 'viviendas', 'y' => $query->con_conexion];/* total_viviendas */
         $data2[] = ['name' => 'viviendas con conexion', 'y' => $query->con_conexion];/* viviendas_con_conexion */
 
@@ -137,80 +139,73 @@ class HomeController extends Controller
 
     public function vivienda($sistema_id)
     {
-        //$sistemas = SistemaRepositorio::listar_sistemasconusuarios(1);return $sistemas;
-        $imp = Importacion::where('fuenteimportacion_id', '7')->select(DB::raw('max(id) as maximo'))->first();
-        $data[] = ['name' => 'Centro Poblado', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($imp->maximo)->conteo];
-        $data[] = ['name' => 'con sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'][0]->y];
-        $data[] = ['name' => 'con disposición de excretas', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'][0]->y];
-        $data[] = ['name' => 'con sistema de cloración', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 21, $imp->maximo)['indicador2'][0]->y];
+        //$imp = Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', '7')->where('estado', 'PR')->first();
+        $importacion_id = ImportacionRepositorio::Max_porfuente('7');
+        if ($importacion_id) {
+            $data[] = ['name' => 'Centros Poblados', 'y' => CentroPobladoDatassRepositorio::listar_centroPoblado($importacion_id)->conteo];
+            $data[] = ['name' => 'Sistema de agua', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $importacion_id)['indicador'][0]->y];
+            $data[] = ['name' => 'Disposicion Escretas', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $importacion_id)['indicador2'][0]->y];
+            $data[] = ['name' => 'Sistema Cloración', 'y' => CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 21, $importacion_id)['indicador2'][0]->y];
 
-        $query = CentroPobladoDatass::where('importacion_id', $imp->maximo)->select(
-            DB::raw('sum(total_poblacion) as poblacion'),
-            DB::raw('sum(poblacion_servicio_agua) as con_agua'),
-            DB::raw('sum(total_viviendas) as viviendas'),
-            DB::raw('sum(viviendas_conexion) as con_conexion')
-        )->first();
-        $data2[] = ['name' => 'población', 'y' => $query->poblacion];/* total_poblacion */
-        $data2[] = ['name' => 'poblacion con cobertura', 'y' => $query->con_agua];/* poblacion_con_servicio_agua */
-        $data2[] = ['name' => 'viviendas', 'y' => $query->con_conexion];/* total_viviendas */
-        $data2[] = ['name' => 'viviendas con conexion', 'y' => $query->con_conexion];/* viviendas_con_conexion */
+            $sumas = CentroPobladoDatassRepositorio::sumas_dashboard($importacion_id);
+            $data2[] = ['name' => 'población', 'y' => $sumas->poblacion];/* total_poblacion */
+            $data2[] = ['name' => 'Cobertura de Agua', 'y' => $sumas->con_agua];/* poblacion_con_servicio_agua */
+            $data2[] = ['name' => 'viviendas', 'y' => $sumas->con_conexion];/* total_viviendas */
+            $data2[] = ['name' => 'Conexion de Agua', 'y' => $sumas->con_conexion];/* viviendas_con_conexion */
 
-        $grafica[] = CentroPobladoRepositotio::listarporprovincias($imp->maximo);/* total de centro poblado por provincia */
-        $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($imp->maximo);/* total de centro poblado con servicio de agua(sistema_agua) */
+            $grafica[] = CentroPobladoRepositotio::listarporprovincias($importacion_id);/* total de centro poblado por provincia */
+            $grafica[] = CentroPobladoRepositotio::listarporprovinciasconsistemaagua($importacion_id);/* total de centro poblado con servicio de agua(sistema_agua) */
 
-        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $imp->maximo)['indicador'];
-        $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $imp->maximo)['indicador2'];
-        /* return $grafica2; */
-        return view('home', compact('sistema_id', 'data', 'data2', 'grafica', 'grafica2'));
+            $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 20, $importacion_id)['indicador'];
+            $grafica2[] = CentroPobladoRepositotio::ListarSINO_porIndicador(0, 0, 23, $importacion_id)['indicador2'];
+
+            return view('home', compact('sistema_id', 'importacion_id', 'data', 'data2', 'grafica', 'grafica2'));
+        } else {
+            return view('home', compact('sistema_id', 'importacion_id'));
+        }
     }
 
-    
+
     public function educacion($sistema_id)
     {
-        $instituciones_activas = InstEducativaRepositorio::cantidad_activas_inactivas()->first()->activas;
-        $locales_educativos = InstEducativaRepositorio ::cantidad_locales()->first()->cantidad;
+        $imp = ImportacionRepositorio::Max_yearPadronWeb();
+        $imp2 = ImportacionRepositorio::Max_porfuente(8);
+        $imp3 = ImportacionRepositorio::Max_porfuente(2);
+        $mat = Matricula::where('importacion_id', $imp2)->first();
+        //return MatriculaDetalleRepositorio::estudiantes_matriculadosEBR_EBE();
+        if (count($imp) > 0) {
+            $importacion_id = $imp['id'];
 
-        // $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR(11,'whereNotIn',0);
+            $info['se'] = PadronWebRepositorio::count_institucioneducativa($imp['id']);
+            $info['le'] = PadronWebRepositorio::count_localesescolares($imp['id']);
+            $info['tm'] = MatriculaDetalleRepositorio::count_matriculados($mat->id);
+            $info['do'] = PlazaRepositorio::count_docente($imp3);
 
-        // return $lista_total_matricula_EBR;
-        // $docentes_inicial = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->inicial;
-        // $docentes_primaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->primaria;
-        // $docentes_Secundaria = CuadroAsigPersonalRepositorio::docentes_EBR()->first()->Secundaria;
+            $info['g1'] = MatriculaDetalleRepositorio::estudiantes_matriculadosEBR_EBE_anual();
+            $info['g2'] = PlazaRepositorio::docentes_conteo_anual();
 
-        $docentes = CuadroAsigPersonalRepositorio::docentes_total();
-        $ultimo_Importacion_id_dePlaza =  CuadroAsigPersonalRepositorio:: ultima_importacion_dePlaza()->first()->importacion_id;
+            $info['g3'] = MatriculaDetalleRepositorio::estudiantes_matriculados_segungenero();
+            $info['g4'] = PlazaRepositorio::docentes_segungenero_anual();
 
+            $info['g5'] = MatriculaDetalleRepositorio::estudiantes_matriculados_seguntipogestion();
+            $info['g6'] = PlazaRepositorio::docentes_seguntipogestion();
 
+            $info['g7'] = MatriculaDetalleRepositorio::estudiantes_matriculados_segunareageografica();
+            $info['g8'] = PlazaRepositorio::docentes_segunareageograficas();
 
-        $nroDocentes = 0;
+            $info['g9'] = MatriculaDetalleRepositorio::estudiantes_matriculados_segunaugel();
+            $info['g10'] = PlazaRepositorio::docentes_segunugel();
 
-        if($docentes->first()!=null)
-        {
-            $nroDocentes = $docentes->first()->total ;
+            /* $info['dt1'] = PadronWebRepositorio::listar_nivelmodalidadvsugelhombremujer($imp['id']);
+            $info['dt2'] = PadronWebRepositorio::listar_nivelmodalidadvsugeldocentedirectores($imp['id']);
+            $info['dt3'] = PadronWebRepositorio::listar_tipogestionvsprovinciaestudiantesdocente($imp['id']); */
+            $info['dt4'] = MatriculaDetalleRepositorio::listar_estudiantesNivelProvinciaDistrito();
+            //return $info['dt4'];
+            return  view('home', compact('importacion_id', 'info', 'imp'));
+        } else {
+            $importacion_id = null;
+            return  view('home', compact('importacion_id'));
         }
-
-        $matricula_id = 0;
-        $matricula_mas_actual = MatriculaRepositorio::matricula_mas_actual();
-
-        if ($matricula_mas_actual != null) {
-            $matricula_id = $matricula_mas_actual->first()->id;
-        }
-
-        $lista_total_matricula_EBR = MatriculaRepositorio::total_matricula_EBR($matricula_id, 'whereNotIn', 0);
-        $lista_total_matricula_EBR_nivelEducativo = MatriculaRepositorio::total_matricula_EBR_porNivelEducativo($matricula_id);
-
-        $totalMatriculados = 0;
-        foreach ($lista_total_matricula_EBR as $item) {
-            $totalMatriculados += ($item->hombres + $item->mujeres);
-        }
-
-        $matriculadosInicial = $lista_total_matricula_EBR_nivelEducativo->first()->inicial;
-        $matriculadosPrimaria = $lista_total_matricula_EBR_nivelEducativo->first()->primaria;
-        $matriculadosSecundaria = $lista_total_matricula_EBR_nivelEducativo->first()->secundaria;
-
-        
-        return  view('home', compact('instituciones_activas','locales_educativos','nroDocentes','ultimo_Importacion_id_dePlaza',
-        'totalMatriculados', 'matriculadosInicial','matriculadosPrimaria','matriculadosSecundaria','matricula_id'));
     }
     public function educacionx($sistema_id)
     {
